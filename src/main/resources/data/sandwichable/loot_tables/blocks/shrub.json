@@ -1,0 +1,112 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+			{
+              "type": "minecraft:item",
+              "conditions": [
+				{
+				  "condition": "minecraft:block_state_property",
+				  "block": "sandwichable:shrub",
+				  "properties": {
+					"snipped": "false"
+				  }
+				},
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "item": "minecraft:shears"
+                  }
+                }
+              ],
+              "name": "sandwichable:shrub"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+				{
+				  "condition": "minecraft:block_state_property",
+				  "block": "sandwichable:shrub",
+				  "properties": {
+					"snipped": "false"
+				  }
+				},
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": 0.4
+                }
+              ],
+              "functions": [
+                {
+                  "function": "minecraft:apply_bonus",
+                  "enchantment": "minecraft:fortune",
+                  "formula": "minecraft:uniform_bonus_count",
+                  "parameters": {
+                    "bonusMultiplier": 2
+                  }
+                },
+                {
+                  "function": "minecraft:explosion_decay"
+                }
+              ],
+              "name": "sandwichable:lettuce_seeds"
+            },
+			{
+              "type": "minecraft:item",
+              "conditions": [
+				{
+				  "condition": "minecraft:block_state_property",
+				  "block": "sandwichable:shrub",
+				  "properties": {
+					"snipped": "false"
+				  }
+				},
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": 0.6
+                }
+              ],
+              "functions": [
+                {
+                  "function": "minecraft:apply_bonus",
+                  "enchantment": "minecraft:fortune",
+                  "formula": "minecraft:uniform_bonus_count",
+                  "parameters": {
+                    "bonusMultiplier": 2
+                  }
+                },
+                {
+                  "function": "minecraft:explosion_decay"
+                }
+              ],
+              "name": "sandwichable:tomato_seeds"
+            },
+			{
+              "type": "minecraft:item",
+              "conditions": [
+				{
+				  "condition": "minecraft:block_state_property",
+				  "block": "sandwichable:shrub",
+				  "properties": {
+					"snipped": "true"
+				  }
+				}
+              ],
+              "name": "minecraft:stick"
+            }
+          ]
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
+    }
+  ]
+}

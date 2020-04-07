@@ -1,0 +1,7 @@
+{
+	"type": "sandwichable:toasting_recipe",
+	"input": {
+		"item": "minecraft:chorus_fruit"
+	},
+	"output": "minecraft:popped_chorus_fruit"
+}

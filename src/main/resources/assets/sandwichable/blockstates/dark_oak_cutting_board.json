@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "sandwichable:block/dark_oak_cutting_board", "y": 90 },
+		"facing=south": { "model": "sandwichable:block/dark_oak_cutting_board", "y":  270 },
+		"facing=east": { "model": "sandwichable:block/dark_oak_cutting_board" },
+		"facing=west": { "model": "sandwichable:block/dark_oak_cutting_board", "y":  180 }
+    }
+}

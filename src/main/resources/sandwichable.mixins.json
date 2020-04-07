@@ -1,0 +1,13 @@
+{
+	"required": true,
+	"package": "io.github.foundationgames.sandwichable.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
+		"BuiltinModelItemRendererMixin"
+	],
+	"client": [
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

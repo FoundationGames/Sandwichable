@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "snipped=false": { "model": "sandwichable:block/shrub_leafy" },
+        "snipped=true": { "model": "sandwichable:block/shrub_snipped" }
+    }
+}

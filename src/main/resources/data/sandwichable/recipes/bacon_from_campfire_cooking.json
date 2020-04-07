@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient": {
+    "item": "sandwichable:pork_cuts"
+  },
+  "result": "sandwichable:bacon_strips",
+  "experience": 0.4,
+  "cookingtime": 500
+}

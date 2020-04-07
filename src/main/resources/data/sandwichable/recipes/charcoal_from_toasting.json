@@ -1,0 +1,7 @@
+{
+	"type": "sandwichable:toasting_recipe",
+	"input": {
+		"item": "sandwichable:burnt_food"
+	},
+	"output": "minecraft:charcoal"
+}

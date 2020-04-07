@@ -1,0 +1,21 @@
+{
+	"parent": "block/thin_block",
+	"textures": {
+		"0": "block/stripped_acacia_log",
+		"particle": "block/stripped_acacia_log"
+	},
+	"elements": [
+		{
+			"from": [2, 0, 1],
+			"to": [14, 1, 15],
+			"faces": {
+				"north": {"uv": [2, 0, 14, 1], "texture": "#0"},
+				"east": {"uv": [0, 1, 1, 15], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [2, 0, 14, 1], "texture": "#0"},
+				"west": {"uv": [0, 1, 1, 15], "rotation": 90, "texture": "#0"},
+				"up": {"uv": [2, 1, 14, 15], "texture": "#0"},
+				"down": {"uv": [2, 1, 14, 15], "texture": "#0"}
+			}
+		}
+	]
+}

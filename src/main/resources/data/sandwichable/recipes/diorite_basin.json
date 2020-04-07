@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"A A",
+    " A "
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:polished_diorite_slab"
+    }
+  },
+  "result": {
+    "item": "sandwichable:diorite_basin",
+	"count": 1
+  }
+}

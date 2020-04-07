@@ -1,0 +1,53 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 2.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+			  "functions": [
+				{
+				  "function": "minecraft:apply_bonus",
+				  "enchantment": "minecraft:fortune",
+				  "formula": "minecraft:binomial_with_bonus_count",
+				  "parameters": {
+					"extra": 2,
+					"probability": 0.18
+				  }
+			    }
+			  ],
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "sandwichable:tomatoes",
+                  "properties": {
+                    "age": "4"
+                  }
+                }
+              ],
+              "name": "sandwichable:tomato"
+            }
+          ]
+        }
+      ]
+    },
+	{
+      "rolls": 1.0,
+      "entries": [
+        {
+		  "type": "minecraft:item",
+		  "name": "sandwichable:tomato_seeds"
+        }
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "function": "minecraft:explosion_decay"
+    }
+  ]
+}

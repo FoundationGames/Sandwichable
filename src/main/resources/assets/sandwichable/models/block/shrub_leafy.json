@@ -1,0 +1,7 @@
+{
+	"parent": "sandwichable:block/cross_overlay",
+	"textures": {
+		"base": "sandwichable:block/shrub_base",
+		"overlay": "sandwichable:block/shrub_leaves"
+	}
+}

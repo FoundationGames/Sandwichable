@@ -1,0 +1,7 @@
+{
+	"type": "sandwichable:toasting_recipe",
+	"input": {
+		"item": "minecraft:mutton"
+	},
+	"output": "minecraft:cooked_mutton"
+}

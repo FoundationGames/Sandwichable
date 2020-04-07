@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "sandwichable",
+  "version": "${version}",
+
+  "name": "Sandwichable",
+  "description": "Sandwiches. Go nuts.",
+  "authors": [
+    "Me!"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/sandwichable/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.foundationgames.sandwichable.Sandwichable"
+    ],
+	"client": [
+      "io.github.foundationgames.sandwichable.SandwichableClient"
+    ],
+	"rei_plugins_v0": [
+      "io.github.foundationgames.sandwichable.rei.SandwichableREI"
+    ]
+  },
+  "mixins": [
+	"sandwichable.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.15.x"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

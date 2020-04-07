@@ -1,0 +1,48 @@
+{
+	"itemGroup.sandwichable.sandwichable": "Sandwichable",
+	
+	"item.sandwichable.bread_slice": "Bread Slice",
+	"item.sandwichable.toasted_bread_slice": "Toasted Bread Slice",
+	"item.sandwichable.cheese_wheel": "Wheel of Cheese",
+	"item.sandwichable.cheese_slice": "Cheese Slice",
+	"item.sandwichable.tomato": "Tomato",
+	"item.sandwichable.tomato_slice": "Tomato Slice",
+	"item.sandwichable.lettuce_head": "Lettuce Head",
+	"item.sandwichable.lettuce_leaf": "Lettuce Leaf",
+	"item.sandwichable.pork_cuts": "Pork Cuts",
+	"item.sandwichable.bacon_strips": "Bacon Strips",
+	"item.sandwichable.lettuce_seeds": "Lettuce Seeds",
+	"item.sandwichable.tomato_seeds": "Tomato Seeds",
+	"item.sandwichable.burnt_food": "Burnt Food",
+	"item.sandwichable.kitchen_knife": "Kitchen Knife",
+	
+	"block.sandwichable.sandwich_table": "Sandwich Table",
+	"block.sandwichable.sandwich": "Sandwich",
+	"block.sandwichable.zandwich": "Sandwich... ?",
+	"block.sandwichable.hackedsandwich": "Hacked Sandwich",
+	"block.sandwichable.hackedzandwich": "Hacked Sandwich... ?",
+	"block.sandwichable.oak_cutting_board": "Oak Cutting Board",
+	"block.sandwichable.birch_cutting_board": "Birch Cutting Board",
+	"block.sandwichable.spruce_cutting_board": "Spruce Cutting Board",
+	"block.sandwichable.jungle_cutting_board": "Jungle Cutting Board",
+	"block.sandwichable.acacia_cutting_board": "Acacia Cutting Board",
+	"block.sandwichable.dark_oak_cutting_board": "Dark Oak Cutting Board",
+	"block.sandwichable.toaster": "Redstone Toaster",
+	"block.sandwichable.andesite_basin": "Andesite Basin",
+	"block.sandwichable.granite_basin": "Granite Basin",
+	"block.sandwichable.diorite_basin": "Diorite Basin",
+	"block.sandwichable.shrub": "Shrub",
+	
+	"sandwich.tooltip.ellipsis": "...",
+	"sandwich.tooltip.zandwich": "Is this even a sandwich?",
+	"sandwich.tooltip.bigsandwich": "The epitome of sandwiches.",
+	"sandwich.tooltip.hacked": "Unknown origin...",
+	
+	"category.sandwichable.cutting_board": "Cutting",
+	"category.sandwichable.toasting": "Toasting",
+	
+	"category.sandwichable.toasting.time": "12 sec",
+	
+	"message.sandwichtable.bottombread": "Bottom item must be bread",
+	"message.sandwichtable.topbread": "Top item must be bread"
+}
