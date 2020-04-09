@@ -1,0 +1,48 @@
+{
+	"itemGroup.sandwichable.sandwichable": "Sandwichable",
+	
+	"item.sandwichable.bread_slice": "Brotscheibe",
+	"item.sandwichable.toasted_bread_slice": "Getoastete Brotscheibe",
+	"item.sandwichable.cheese_wheel": "Käselaib",
+	"item.sandwichable.cheese_slice": "Käsescheibe",
+	"item.sandwichable.tomato": "Tomate",
+	"item.sandwichable.tomato_slice": "Tomatenscheibe",
+	"item.sandwichable.lettuce_head": "Kopfsalat",
+	"item.sandwichable.lettuce_leaf": "Kopfsalat-Blatt",
+	"item.sandwichable.pork_cuts": "Schweinefleisch-Zuschnitte",
+	"item.sandwichable.bacon_strips": "Speckstreifen",
+	"item.sandwichable.lettuce_seeds": "Salatsamen",
+	"item.sandwichable.tomato_seeds": "Tomatensamen",
+	"item.sandwichable.burnt_food": "Verbranntes Essen",
+	"item.sandwichable.kitchen_knife": "Küchenmesser",
+	
+	"block.sandwichable.sandwich_table": "Sandwich-Tisch",
+	"block.sandwichable.sandwich": "Sandwich",
+	"block.sandwichable.zandwich": "Sandwich... ?",
+	"block.sandwichable.hackedsandwich": "Gehacktes Sandwich",
+	"block.sandwichable.hackedzandwich": "Gehacktes Sandwich... ?",
+	"block.sandwichable.oak_cutting_board": "Eichenholz-Schneidebrett",
+	"block.sandwichable.birch_cutting_board": "Birkenholz-Schneidebrett",
+	"block.sandwichable.spruce_cutting_board": "Fichtenholz-Schneidebrett",
+	"block.sandwichable.jungle_cutting_board": "Tropenholz-Schneidebrett",
+	"block.sandwichable.acacia_cutting_board": "Akazienholz-Schneidebrett",
+	"block.sandwichable.dark_oak_cutting_board": "Schwarzeichenholz-Schneidebrett",
+	"block.sandwichable.toaster": "Redstone-Toaster",
+	"block.sandwichable.andesite_basin": "Andesit-Becken",
+	"block.sandwichable.granite_basin": "Granit-Becken",
+	"block.sandwichable.diorite_basin": "Diorit-Becken",
+	"block.sandwichable.shrub": "Strauch",
+	
+	"sandwich.tooltip.ellipsis": "...",
+	"sandwich.tooltip.zandwich": "Ist das überhaupt ein Sandwich?",
+	"sandwich.tooltip.bigsandwich": "Der Inbegriff von Sandwiches.",
+	"sandwich.tooltip.hacked": "Unbekannte Herkunft...",
+	
+	"category.sandwichable.cutting_board": "Schneiden",
+	"category.sandwichable.toasting": "Toasten",
+	
+	"category.sandwichable.toasting.time": "12 Sek.",
+	
+	"message.sandwichtable.bottombread": "Unterster Gegenstand muss Brot sein",
+	"message.sandwichtable.topbread": "Oberster Gegenstand muss Brot sein"
+}
