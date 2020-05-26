@@ -1,0 +1,16 @@
+{
+  "name": "Making a Cutting Board",
+  "icon": "sandwichable:oak_cutting_board",
+  "category": "cutting",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "text",
+      "text": "To craft a cutting board, you will need 2 stripped logs of your choice. Place them side-by-side in the grid to recieve a cutting board."
+    },
+	{
+      "type": "crafting",
+      "recipe": "sandwichable:oak_cutting_board"
+    }
+  ]
+}

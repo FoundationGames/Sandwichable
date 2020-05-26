@@ -1,0 +1,8 @@
+{
+	"type": "sandwichable:cutting_recipe",
+	"input": {
+		"item": "sandwichable:intoxicating_cheese_wheel"
+	},
+	"outputItem": "sandwichable:intoxicating_cheese_slice",
+	"outputCount": "5"
+}

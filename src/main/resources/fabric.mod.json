@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "sandwichable",
+  "version": "${version}",
+
+  "name": "Sandwichable",
+  "description": "Sandwiches. Go nuts.",
+  "authors": [
+    "FoundationGames"
+  ],
+  "contact": {
+    "homepage": "https://github.com/FoundationGames/Sandwichable",
+    "sources": "https://github.com/FoundationGames/Sandwichable"
+  },
+
+  "license": "MIT License",
+  "icon": "assets/sandwichable/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.foundationgames.sandwichable.Sandwichable"
+    ],
+	"client": [
+      "io.github.foundationgames.sandwichable.SandwichableClient"
+    ],
+	"rei_plugins_v0": [
+      "io.github.foundationgames.sandwichable.rei.SandwichableREI"
+    ],
+    "modmenu": [
+      "io.github.foundationgames.sandwichable.modmenu.SandwichableModMenu"
+    ]
+  },
+  "mixins": [
+	"sandwichable.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.15.x"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

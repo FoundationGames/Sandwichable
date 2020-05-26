@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "sandwichable:salt_rock"
+    }
+  ],
+  "result": {
+    "item": "sandwichable:salt",
+    "count": 2
+  }
+}

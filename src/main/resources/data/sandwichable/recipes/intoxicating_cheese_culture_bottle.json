@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:glass_bottle"
+    },
+	{
+      "item": "minecraft:red_mushroom"
+    }
+  ],
+  "result": {
+    "item": "sandwichable:intoxicating_cheese_culture_bottle",
+    "count": 1
+  }
+}

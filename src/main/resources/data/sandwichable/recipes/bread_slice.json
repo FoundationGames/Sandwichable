@@ -1,0 +1,8 @@
+{
+	"type": "sandwichable:cutting_recipe",
+	"input": {
+		"item": "minecraft:bread"
+	},
+	"outputItem": "sandwichable:bread_slice",
+	"outputCount": "4"
+}

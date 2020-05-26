@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient": {
+    "item": "sandwichable:chopped_carrot"
+  },
+  "result": "sandwichable:cooked_chopped_carrot",
+  "experience": 0.4,
+  "cookingtime": 400
+}

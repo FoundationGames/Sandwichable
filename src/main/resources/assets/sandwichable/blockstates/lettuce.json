@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "age=0": { "model": "sandwichable:block/lettuce_stage0" },
+        "age=1": { "model": "sandwichable:block/lettuce_stage1" },
+        "age=2": { "model": "sandwichable:block/lettuce_stage2" },
+        "age=3": { "model": "sandwichable:block/lettuce_stage3" },
+		"age=4": { "model": "sandwichable:block/lettuce_stage4" }
+    }
+}

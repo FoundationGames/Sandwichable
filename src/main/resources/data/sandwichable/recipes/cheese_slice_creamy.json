@@ -1,0 +1,8 @@
+{
+	"type": "sandwichable:cutting_recipe",
+	"input": {
+		"item": "sandwichable:creamy_cheese_wheel"
+	},
+	"outputItem": "sandwichable:creamy_cheese_slice",
+	"outputCount": "5"
+}

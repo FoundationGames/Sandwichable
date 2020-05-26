@@ -1,0 +1,17 @@
+{
+	"required": true,
+	"package": "io.github.foundationgames.sandwichable.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
+		"BuiltinModelItemRendererMixin",
+		"StructurePoolRegistryMixin",
+		"PointOfInterestTypeMixin",
+		"VillagerProfessionMixin",
+		"AccessorStructurePool"
+	],
+	"client": [
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

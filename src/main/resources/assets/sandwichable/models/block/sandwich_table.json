@@ -1,0 +1,8 @@
+{
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "top": "sandwichable:block/sandwich_table_top",
+        "side": "sandwichable:block/sandwich_table_side",
+        "bottom": "sandwichable:block/sandwich_table_bottom"
+    }
+}

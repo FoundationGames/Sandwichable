@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "on=false": { "model": "sandwichable:block/desalinator_off" },
+        "on=true": { "model": "sandwichable:block/desalinator_on" }
+    }
+}

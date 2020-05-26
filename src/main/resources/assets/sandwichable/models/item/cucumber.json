@@ -1,0 +1,9 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "sandwichable:item/cucumber",
+		"layer1": "sandwichable:item/cucumber",
+		"layer2": "sandwichable:item/cucumber",
+		"layer3": "sandwichable:item/cucumber"
+    }
+}

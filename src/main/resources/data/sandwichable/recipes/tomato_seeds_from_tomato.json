@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "sandwichable:tomato"
+    }
+  ],
+  "result": {
+    "item": "sandwichable:tomato_seeds",
+    "count": 2
+  }
+}

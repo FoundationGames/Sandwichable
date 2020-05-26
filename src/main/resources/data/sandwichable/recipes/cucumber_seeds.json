@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "sandwichable:cucumber"
+    }
+  ],
+  "result": {
+    "item": "sandwichable:cucumber_seeds",
+    "count": 2
+  }
+}

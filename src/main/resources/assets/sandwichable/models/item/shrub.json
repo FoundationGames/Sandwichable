@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "sandwichable:block/shrub_leaves",
+		"layer1": "sandwichable:block/shrub_base"
+    }
+}

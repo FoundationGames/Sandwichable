@@ -1,0 +1,8 @@
+{
+	"type": "sandwichable:cutting_recipe",
+	"input": {
+		"item": "sandwichable:pickled_cucumber"
+	},
+	"outputItem": "sandwichable:pickle_chips",
+	"outputCount": "2"
+}

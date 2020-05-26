@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:glass_bottle"
+    },
+	{
+      "item": "minecraft:egg"
+    }
+  ],
+  "result": {
+    "item": "sandwichable:mayonnaise_bottle",
+    "count": 1
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Starter Trades",
+  "icon": "minecraft:emerald",
+  "category": "trading",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "text",
+      "text": "A novice sandwich maker villager will start by purchasing sandwich ingredients such as bread and vegetables. After leveling up, they may present you with an apple sandwich. They may also be in need of better ingredients such as meat, or a bucket to get milk for cheese."
+    }
+  ]
+}

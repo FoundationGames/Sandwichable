@@ -1,0 +1,6 @@
+{
+    "parent": "block/crop",
+    "textures": {
+        "crop": "sandwichable:block/onions_stage1"
+    }
+}

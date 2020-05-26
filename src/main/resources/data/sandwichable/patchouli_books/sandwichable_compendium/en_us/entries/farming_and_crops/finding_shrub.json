@@ -1,0 +1,12 @@
+{
+  "name": "Finding a Shrub",
+  "icon": "sandwichable:shrub",
+  "category": "farming_and_crops",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "text",
+      "text": "To obtain some new crops, you will need to find a shrub. They are commonly found on grass. Breaking a shrub with your fist will yield lettuce or tomato seeds, or nothing at all. Breaking it with shears will give you the item itself. Right clicking it with shears will remove its leaves. Shrubs will die if you plant them on sand or toast them. They can also be potted."
+    }
+  ]
+}

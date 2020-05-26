@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ABA",
+    "CDC",
+    "EFE"
+  ],
+  "key": {
+    "A": {
+      "tag": "minecraft:planks"
+    },
+    "B": {
+      "item": "minecraft:redstone"
+    },
+    "C": {
+      "item": "minecraft:iron_ingot"
+    },
+    "D": {
+      "item": "minecraft:cauldron"
+    },
+	"E": {
+      "item": "minecraft:smooth_stone"
+    },
+	"F": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "item": "sandwichable:desalinator",
+	"count": 1
+  }
+}

@@ -1,0 +1,7 @@
+{
+	"type": "sandwichable:toasting_recipe",
+	"input": {
+		"item": "sandwichable:shrub"
+	},
+	"output": "minecraft:dead_bush"
+}

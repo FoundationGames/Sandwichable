@@ -1,0 +1,8 @@
+{
+	"type": "sandwichable:cutting_recipe",
+	"input": {
+		"item": "minecraft:apple"
+	},
+	"outputItem": "sandwichable:apple_slices",
+	"outputCount": "2"
+}

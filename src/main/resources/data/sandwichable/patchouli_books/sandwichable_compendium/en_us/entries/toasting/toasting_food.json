@@ -1,0 +1,12 @@
+{
+  "name": "Toasting Food",
+  "icon": "sandwichable:toasted_bread_slice",
+  "category": "toasting",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Now that your toaster is set up, you can start toasting food, no fuel needed! Right click with an item in hand to place it in the toaster. Right click with an empty hand to remove an item. Sneak and right-click (with an empty hand, holding an item doesn't work in minecraft) to start toasting. You will hear a *Ding!* when done."
+    }
+  ]
+}

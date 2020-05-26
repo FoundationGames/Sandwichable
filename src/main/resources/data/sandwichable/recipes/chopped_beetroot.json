@@ -1,0 +1,8 @@
+{
+	"type": "sandwichable:cutting_recipe",
+	"input": {
+		"item": "minecraft:beetroot"
+	},
+	"outputItem": "sandwichable:chopped_beetroot",
+	"outputCount": "2"
+}

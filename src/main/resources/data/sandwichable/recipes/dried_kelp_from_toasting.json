@@ -1,0 +1,7 @@
+{
+	"type": "sandwichable:toasting_recipe",
+	"input": {
+		"item": "minecraft:kelp"
+	},
+	"output": "minecraft:dried_kelp"
+}

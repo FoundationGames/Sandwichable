@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient": {
+    "item": "sandwichable:chopped_beetroot"
+  },
+  "result": "sandwichable:cooked_chopped_beetroot",
+  "experience": 0.4,
+  "cookingtime": 400
+}
