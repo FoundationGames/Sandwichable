@@ -37,31 +37,33 @@ public class DesalinatorContainer extends Container {
 
     @Override
     public ItemStack transferSlot(PlayerEntity player, int invSlot) {
-        ItemStack newStack = ItemStack.EMPTY;
+        ItemStack itemStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
         if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
-            newStack = originalStack.copy();
+            ItemStack slotStack = slot.getStack();
+            itemStack = slotStack.copy();
             if (invSlot < this.inventory.getInvSize()) {
-                if(invSlot == 0) {
-                    if (newStack.getItem().equals(Items.REDSTONE)) {
-                        if (this.insertItem(originalStack, 0, 1, false) && !this.insertItem(originalStack, 0, 1, false)) {
-                            return ItemStack.EMPTY;
-                        }
-                    }
+                if (!this.insertItem(slotStack, this.inventory.getInvSize(), 38, true)) {
+                    return ItemStack.EMPTY;
                 }
-            } else if (!this.insertItem(originalStack, 0, this.inventory.getInvSize(), false)) {
+            } else if (!this.insertItem(slotStack, 0, this.inventory.getInvSize(), false)) {
                 return ItemStack.EMPTY;
             }
 
-            if (originalStack.isEmpty()) {
+            if (slotStack.isEmpty()) {
                 slot.setStack(ItemStack.EMPTY);
             } else {
                 slot.markDirty();
             }
+
+            if (slotStack.getCount() == itemStack.getCount()) {
+                return ItemStack.EMPTY;
+            }
+
+            slot.onTakeItem(player, slotStack);
         }
 
-        return newStack;
+        return itemStack;
     }
 
     private class OutputSlot extends Slot {
