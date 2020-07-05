@@ -41,7 +41,7 @@
 	"item.sandwichable.tomato_seeds": "番茄种子",
 	"item.sandwichable.cucumber_seeds": "黄瓜种子",
 	"item.sandwichable.onion_seeds": "洋葱种子",
-	"item.sandwichable.burnt_food": "烧焦的食物",
+	"item.sandwichable.burnt_food": "烤焦的食物",
 	"item.sandwichable.kitchen_knife": "菜刀",
 	"item.sandwichable.fermenting_milk_bucket": "发酵牛奶桶",
 	"block.sandwichable.pickle_jar": "泡菜坛",
@@ -80,7 +80,7 @@
 	"block.sandwichable.salty_sand": "盐沙",
 	"block.sandwichable.desalinator": "红石海水淡化机",
 	
-	"entity.minecraft.villager.sandwich_maker": "三明治机",
+	"entity.minecraft.villager.sandwich_maker": "三明治生产商",
 	
 	"sandwich.tooltip.ellipsis": "...",
 	"sandwich.tooltip.zandwich": "这是三明治吗？",
