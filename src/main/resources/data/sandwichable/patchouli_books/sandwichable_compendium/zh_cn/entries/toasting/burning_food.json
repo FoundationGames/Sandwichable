@@ -1,0 +1,12 @@
+{
+  "name": "燃烧食物",
+  "icon": "sandwichable:burnt_food",
+  "category": "toasting",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "text",
+      "text": "多余的食物有一个很有的用途: 燃烧！ 不是用火，而是用烤面包机。 将熟食或无法煮熟的食物放进去会使其烤焦。烤焦的食物并非一无是处，再烤一次可变为木炭！"
+    }
+  ]
+}

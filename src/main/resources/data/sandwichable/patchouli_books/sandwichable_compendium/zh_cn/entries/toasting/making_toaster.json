@@ -1,0 +1,16 @@
+{
+  "name": "制作烤面包机",
+  "icon": "sandwichable:toaster",
+  "category": "toasting",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "text",
+      "text": "你需要一台烤面包机来烤面包！你需要三个木板，一个红石粉，2块铁锭和一个拉杆，排列方式如图。"
+    },
+	{
+      "type": "crafting",
+      "recipe": "sandwichable:toaster"
+    }
+  ]
+}
