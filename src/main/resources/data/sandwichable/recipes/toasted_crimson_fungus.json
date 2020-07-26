@@ -1,0 +1,7 @@
+{
+	"type": "sandwichable:toasting_recipe",
+	"input": {
+		"item": "minecraft:crimson_fungus"
+	},
+	"output": "sandwichable:toasted_crimson_fungus"
+}

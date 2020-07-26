@@ -1,0 +1,8 @@
+{
+	"type": "sandwichable:cutting_recipe",
+	"input": {
+		"item": "sandwichable:toasted_warped_fungus"
+	},
+	"outputItem": "sandwichable:sliced_toasted_warped_fungus",
+	"outputCount": "2"
+}

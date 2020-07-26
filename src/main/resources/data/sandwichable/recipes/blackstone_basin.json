@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"A A",
+    " A "
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:polished_blackstone_slab"
+    }
+  },
+  "result": {
+    "item": "sandwichable:blackstone_basin",
+	"count": 1
+  }
+}

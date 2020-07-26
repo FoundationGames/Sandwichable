@@ -1,0 +1,7 @@
+{
+	"type": "sandwichable:toasting_recipe",
+	"input": {
+		"item": "minecraft:warped_fungus"
+	},
+	"output": "sandwichable:toasted_warped_fungus"
+}

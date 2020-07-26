@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"A A",
+    " A "
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:polished_basalt"
+    }
+  },
+  "result": {
+    "item": "sandwichable:basalt_basin",
+	"count": 2
+  }
+}
