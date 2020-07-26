@@ -11,10 +11,11 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.network.ServerItemCooldownManager;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -47,7 +48,7 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
             } else if(size >= 127 && hacked) {
                 return new TranslatableText("block.sandwichable.hackedsandwich").formatted(Formatting.AQUA);
             } else if(size >= 127) {
-                return super.getName(stack).formatted(Formatting.AQUA);
+                return ((MutableText)super.getName(stack)).formatted(Formatting.AQUA);
             } else if(size <= 2) {
                 return new TranslatableText("block.sandwichable.zandwich");
             } else if (hacked) {
@@ -96,7 +97,7 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
             int a = 0; while(foods.get(a) != ItemStack.EMPTY) { a++; }
             int i = 0; while(i < a && i < 5) {
                 if(i != 4) {
-                    tooltip.add(foods.get(i).getName().formatted(Formatting.BLUE));
+                    tooltip.add(((MutableText)foods.get(i).getName()).formatted(Formatting.BLUE));
                 } else {
                     tooltip.add(new TranslatableText("sandwich.tooltip.ellipsis").formatted(Formatting.BLUE));
                 }

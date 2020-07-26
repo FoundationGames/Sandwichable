@@ -7,6 +7,7 @@ import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry;
 import me.sargunvohra.mcmods.autoconfig1u.serializer.PartitioningSerializer.GlobalData;
 import me.sargunvohra.mcmods.autoconfig1u.shadowed.blue.endless.jankson.Comment;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
+import net.minecraft.block.enums.Instrument;
 import net.minecraft.client.gui.screen.Screen;
 
 import java.util.Arrays;
@@ -23,8 +24,8 @@ public class SandwichableConfig implements ConfigData {
     public boolean showInfoTooltips = true;
 
     @ConfigEntry.Category(value = "gameplay")
+    //@ConfigEntry.Gui.Excluded
     public TooltipKeyBind infoTooltipKeyBind = TooltipKeyBind.SHIFT;
-
 
     @ConfigEntry.Category(value = "world_gen")
     @ConfigEntry.Gui.CollapsibleObject

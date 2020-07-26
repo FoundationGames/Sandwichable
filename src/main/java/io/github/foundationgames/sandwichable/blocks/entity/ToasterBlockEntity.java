@@ -6,20 +6,21 @@ import io.github.foundationgames.sandwichable.blocks.ToasterBlock;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.recipe.ToastingRecipe;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.BasicInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Tickable;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.explosion.Explosion;
 import java.util.Optional;
@@ -42,8 +43,8 @@ public class ToasterBlockEntity extends BlockEntity implements Tickable, BlockEn
     }
 
     @Override
-    public void fromTag(CompoundTag tag) {
-        super.fromTag(tag);
+    public void fromTag(BlockState state, CompoundTag tag) {
+        super.fromTag(state, tag);
         items = DefaultedList.ofSize(2, ItemStack.EMPTY);
         toastProgress = tag.getInt("toastProgress");
         toasting = tag.getBoolean("toasting");
@@ -65,7 +66,7 @@ public class ToasterBlockEntity extends BlockEntity implements Tickable, BlockEn
 
     @Override
     public void fromClientTag(CompoundTag compoundTag) {
-        this.fromTag(compoundTag);
+        this.fromTag(world.getBlockState(pos), compoundTag);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class ToasterBlockEntity extends BlockEntity implements Tickable, BlockEn
 
     private void explode() {
         world.removeBlock(pos, true);
-        world.createExplosion(world.getClosestPlayer(pos.getX(), pos.getZ(), 8), pos.getX(), pos.getY(), pos.getZ(), 2.2F, true, Explosion.DestructionType.DESTROY);
+        world.createExplosion(world.getClosestPlayer(pos.getX(), pos.getZ(), 8, 10, false), pos.getX(), pos.getY(), pos.getZ(), 2.2F, true, Explosion.DestructionType.DESTROY);
     }
 
     public Direction getToasterFacing() {
@@ -120,7 +121,7 @@ public class ToasterBlockEntity extends BlockEntity implements Tickable, BlockEn
 
     private void toastItems() {
         for (int i = 0; i < 2; i++) {
-            BasicInventory inv = new BasicInventory(items.get(i));
+            SimpleInventory inv = new SimpleInventory(items.get(i));
             Optional<ToastingRecipe> match = world.getRecipeManager().getFirstMatch(ToastingRecipe.Type.INSTANCE, inv, world);
 
             if(match.isPresent()) {

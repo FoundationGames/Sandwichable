@@ -16,7 +16,6 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.util.math.Matrix4f;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.BlockStateParticleEffect;

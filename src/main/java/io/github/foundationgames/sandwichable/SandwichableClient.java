@@ -2,7 +2,7 @@ package io.github.foundationgames.sandwichable;
 
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.blocks.ShrubBlock;
-import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorContainer;
+import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
 import io.github.foundationgames.sandwichable.blocks.entity.container.screen.DesalinatorScreen;
 import io.github.foundationgames.sandwichable.blocks.entity.renderer.*;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
@@ -15,12 +15,10 @@ import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegi
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.color.world.BiomeColors;
 import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.potion.PotionUtil;
 import net.minecraft.text.TranslatableText;
 
 public class SandwichableClient implements ClientModInitializer {
@@ -49,7 +47,7 @@ public class SandwichableClient implements ClientModInitializer {
         },
         ItemsRegistry.SPREAD);
 
-        ScreenProviderRegistry.INSTANCE.<DesalinatorContainer>registerFactory(Util.id("desalinator"), (container) -> new DesalinatorScreen(container, MinecraftClient.getInstance().player.inventory, new TranslatableText("container.sandwichable.desalinator")));
+        ScreenProviderRegistry.INSTANCE.<DesalinatorScreenHandler>registerFactory(Util.id("desalinator"), (container) -> new DesalinatorScreen(container, MinecraftClient.getInstance().player.inventory, new TranslatableText("container.sandwichable.desalinator")));
 
         BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.SHRUB, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.POTTED_SHRUB, RenderLayer.getCutout());

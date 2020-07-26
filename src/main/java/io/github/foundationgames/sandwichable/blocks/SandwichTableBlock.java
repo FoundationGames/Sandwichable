@@ -21,13 +21,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 public class SandwichTableBlock extends Block implements BlockEntityProvider {
@@ -59,7 +58,7 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
                     ItemStack foodToBeAdded = player.getStackInHand(hand);
                     ((SandwichTableBlockEntity) blockEntity).addFood(player, foodToBeAdded);
                 } else {
-                    player.addChatMessage(new TranslatableText("message.sandwichtable.bottombread"), true);
+                    player.sendMessage(new TranslatableText("message.sandwichtable.bottombread"), true);
                 }
             } else if(((SandwichTableBlockEntity)blockEntity).getFoodListSize() > 0 && player.getStackInHand(hand).isEmpty()){
                 if(!player.isSneaking()) {
@@ -81,7 +80,7 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
                     sBlockEntity.setFoodList(DefaultedList.ofSize(128, ItemStack.EMPTY));
                     world.spawnEntity(itemEntity);
                 } else {
-                    player.addChatMessage(new TranslatableText("message.sandwichtable.topbread"), true);
+                    player.sendMessage(new TranslatableText("message.sandwichtable.topbread"), true);
                 }
             }
         }
@@ -89,7 +88,7 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
     }
 
     @Override
-    public void onBlockRemoved(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity be = world.getBlockEntity(pos);
             if (be instanceof SandwichTableBlockEntity) {
@@ -98,10 +97,10 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
                     ItemEntity item = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, blockEntity.getFoodList().get(i).getItem() instanceof SpreadItem ? ItemStack.EMPTY : blockEntity.getFoodList().get(i));
                     world.spawnEntity(item);
                 }
-                world.updateHorizontalAdjacent(pos, this);
+                world.updateNeighbors(pos, this);
             }
 
-            super.onBlockRemoved(state, world, pos, newState, moved);
+            super.onStateReplaced(state, world, pos, newState, moved);
         }
     }
 }

@@ -38,8 +38,8 @@ public class PickleJarBlockEntity extends BlockEntity implements Tickable, Block
     }
 
     @Override
-    public void fromTag(CompoundTag tag) {
-        super.fromTag(tag);
+    public void fromTag(BlockState state, CompoundTag tag) {
+        super.fromTag(state, tag);
         this.fluid = PickleJarFluid.fromString(tag.getString("pickleJarFluid"));
         this.numItems = tag.getInt("numItems");
         this.areItemsPickled = tag.getBoolean("areItemsPickled");
@@ -173,7 +173,7 @@ public class PickleJarBlockEntity extends BlockEntity implements Tickable, Block
 
     @Override
     public void fromClientTag(CompoundTag compoundTag) {
-        this.fromTag(compoundTag);
+        this.fromTag(world.getBlockState(pos), compoundTag);
     }
 
     @Override

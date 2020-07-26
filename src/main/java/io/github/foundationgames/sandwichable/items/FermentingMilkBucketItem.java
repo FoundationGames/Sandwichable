@@ -57,8 +57,8 @@ public class FermentingMilkBucketItem extends InfoTooltipItem {
         if(stack.getTag() != null) {
             if(stack.getTag().getCompound("bucketData") != null) {
                 CompoundTag tag = stack.getTag().getCompound("bucketData").copy();
-                int pct = 0;
-                CheeseType type = CheeseType.REGULAR;
+                int pct;
+                CheeseType type;
                 pct = tag.getInt("percentFermented");
                 type = CheeseRegistry.INSTANCE.basinContentFromString(tag.getString("basinContent")).getCheeseType();
                 tooltip.add(new TranslatableText("fermenting_milk_bucket.tooltip.pct_fermented", pct).formatted(Formatting.BLUE));

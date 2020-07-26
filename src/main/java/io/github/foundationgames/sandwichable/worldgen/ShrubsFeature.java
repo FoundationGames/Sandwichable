@@ -1,6 +1,6 @@
 package io.github.foundationgames.sandwichable.worldgen;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.blocks.ShrubBlock;
 import io.github.foundationgames.sandwichable.config.SandwichableConfig;
@@ -11,9 +11,9 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.Heightmap;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.chunk.ChunkGeneratorConfig;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
 
@@ -22,12 +22,12 @@ import java.util.function.Function;
 
 public class ShrubsFeature extends Feature<DefaultFeatureConfig> {
 
-    public ShrubsFeature(Function<Dynamic<?>, ? extends DefaultFeatureConfig> configDeserializer) {
-        super(configDeserializer);
+    public ShrubsFeature(Codec<DefaultFeatureConfig> codec) {
+        super(codec);
     }
 
     @Override
-    public boolean generate(IWorld world, ChunkGenerator<? extends ChunkGeneratorConfig> generator, Random random, BlockPos bpos, DefaultFeatureConfig config) {
+    public boolean generate(ServerWorldAccess world, StructureAccessor accessor, ChunkGenerator generator, Random random, BlockPos bpos, DefaultFeatureConfig config) {
 
         SandwichableConfig sconfig = AutoConfig.getConfigHolder(SandwichableConfig.class).getConfig();
 

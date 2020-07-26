@@ -2,12 +2,13 @@ package io.github.foundationgames.sandwichable.blocks.entity;
 
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.DefaultedList;
+import net.minecraft.util.collection.DefaultedList;
 
 public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityClientSerializable {
 
@@ -26,8 +27,8 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
     }
 
     @Override
-    public void fromTag(CompoundTag tag) {
-        super.fromTag(tag);
+    public void fromTag(BlockState state, CompoundTag tag) {
+        super.fromTag(state, tag);
         DefaultedList<ItemStack> list = DefaultedList.ofSize(1, ItemStack.EMPTY);
         Inventories.fromTag(tag, list);
         setItem(list.get(0));
@@ -42,7 +43,7 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
 
     @Override
     public void fromClientTag(CompoundTag compoundTag) {
-        this.fromTag(compoundTag);
+        this.fromTag(world.getBlockState(pos), compoundTag);
     }
 
     @Override

@@ -4,7 +4,7 @@ import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.DefaultedList;
+import net.minecraft.util.collection.DefaultedList;
 
 public class SandwichableGroupIconBuilder {
     public static ItemStack getIcon() {

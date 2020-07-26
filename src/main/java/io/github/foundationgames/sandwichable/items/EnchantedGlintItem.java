@@ -9,5 +9,5 @@ public class EnchantedGlintItem extends InfoTooltipItem {
     }
 
     @Override
-    public boolean hasEnchantmentGlint(ItemStack stack) { return true; }
+    public boolean hasGlint(ItemStack stack) { return true; }
 }

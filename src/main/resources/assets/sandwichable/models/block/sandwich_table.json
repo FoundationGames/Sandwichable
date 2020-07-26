@@ -1,8 +1,12 @@
 {
-    "parent": "block/cube_bottom_top",
+    "parent": "block/cube",
     "textures": {
-        "top": "sandwichable:block/sandwich_table_top",
-        "side": "sandwichable:block/sandwich_table_side",
-        "bottom": "sandwichable:block/sandwich_table_bottom"
+		"particle": "sandwichable:block/sandwich_table_side_0",
+        "up": "sandwichable:block/sandwich_table_top",
+        "north": "sandwichable:block/sandwich_table_side_0",
+		"south": "sandwichable:block/sandwich_table_side_0",
+		"east": "sandwichable:block/sandwich_table_side_1",
+		"west": "sandwichable:block/sandwich_table_side_1",
+        "down": "sandwichable:block/sandwich_table_bottom"
     }
 }

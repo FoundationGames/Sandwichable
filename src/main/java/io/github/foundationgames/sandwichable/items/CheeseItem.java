@@ -2,6 +2,8 @@ package io.github.foundationgames.sandwichable.items;
 
 import io.github.foundationgames.sandwichable.Sandwichable;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.FoodComponent;

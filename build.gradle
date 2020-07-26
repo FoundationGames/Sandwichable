@@ -24,10 +24,10 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	
-	modImplementation "me.shedaniel:RoughlyEnoughItems:3.6.15"
-	include "me.sargunvohra.mcmods:autoconfig1u:2.2.0"
+	modImplementation "me.shedaniel:RoughlyEnoughItems:4.10.3"
+	modImplementation "io.github.prospector:modmenu:1.14.5+build.30"
 
-	modRuntime "com.github.Vazkii:Patchouli:1.15-fabric-SNAPSHOT"
+	include "me.sargunvohra.mcmods:autoconfig1u:3.2.0-unstable"
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.

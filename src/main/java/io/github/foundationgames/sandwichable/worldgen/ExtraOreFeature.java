@@ -1,12 +1,14 @@
 package io.github.foundationgames.sandwichable.worldgen;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.Dynamic;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Heightmap;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.WorldAccess;
+import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.chunk.ChunkGeneratorConfig;
 import net.minecraft.world.gen.feature.Feature;
 
 import java.util.BitSet;
@@ -14,11 +16,12 @@ import java.util.Random;
 import java.util.function.Function;
 
 public class ExtraOreFeature extends Feature<ExtraOreFeatureConfig> {
-    public ExtraOreFeature(Function<Dynamic<?>, ? extends ExtraOreFeatureConfig> configFactory) {
-        super(configFactory);
+
+    public ExtraOreFeature(Codec<ExtraOreFeatureConfig> codec) {
+        super(codec);
     }
 
-    public boolean generate(IWorld iWorld, ChunkGenerator<? extends ChunkGeneratorConfig> chunkGenerator, Random random, BlockPos blockPos, ExtraOreFeatureConfig config) {
+    public boolean generate(ServerWorldAccess iWorld, StructureAccessor accessor, ChunkGenerator generator, Random random, BlockPos blockPos, ExtraOreFeatureConfig config) {
         float f = random.nextFloat() * 3.1415927F;
         float g = (float)config.size / 8.0F;
         int i = MathHelper.ceil(((float)config.size / 16.0F * 2.0F + 1.0F) / 2.0F);
@@ -45,7 +48,7 @@ public class ExtraOreFeature extends Feature<ExtraOreFeatureConfig> {
         return false;
     }
 
-    protected boolean generateVeinPart(IWorld world, Random random, ExtraOreFeatureConfig config, double startX, double endX, double startZ, double endZ, double startY, double endY, int x, int y, int z, int size, int i) {
+    protected boolean generateVeinPart(ServerWorldAccess world, Random random, ExtraOreFeatureConfig config, double startX, double endX, double startZ, double endZ, double startY, double endY, int x, int y, int z, int size, int i) {
         int j = 0;
         BitSet bitSet = new BitSet(size * i * size);
         BlockPos.Mutable mutable = new BlockPos.Mutable();

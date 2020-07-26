@@ -3,15 +3,11 @@ package io.github.foundationgames.sandwichable.blocks;
 import io.github.foundationgames.sandwichable.blocks.entity.CuttingBoardBlockEntity;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.EntityContext;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.BasicInventory;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ItemStackParticleEffect;
@@ -28,8 +24,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 
 import java.util.Optional;
 
@@ -47,7 +43,7 @@ public class CuttingBoardBlock extends HorizontalFacingBlock implements BlockEnt
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, EntityContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
         switch(state.get(FACING)) {
             case NORTH:
             case SOUTH:
@@ -61,12 +57,12 @@ public class CuttingBoardBlock extends HorizontalFacingBlock implements BlockEnt
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockView view, BlockPos pos, EntityContext context) {
+    public VoxelShape getCollisionShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
         return this.getOutlineShape(state, view, pos, context);
     }
 
     @Override
-    public void onBroken(IWorld world, BlockPos pos, BlockState state) {
+    public void onBroken(WorldAccess world, BlockPos pos, BlockState state) {
         if (world.getBlockEntity(pos) instanceof CuttingBoardBlockEntity) {
             CuttingBoardBlockEntity blockEntity = (CuttingBoardBlockEntity)world.getBlockEntity(pos);
             ItemEntity item = new ItemEntity(world.getWorld(), pos.getX()+0.5, pos.getY()+0.3, pos.getZ()+0.5, blockEntity.getItem());
@@ -80,7 +76,7 @@ public class CuttingBoardBlock extends HorizontalFacingBlock implements BlockEnt
         if(world.getBlockEntity(pos) instanceof CuttingBoardBlockEntity && !stack.getItem().equals(BlocksRegistry.SANDWICH.asItem())) {
             CuttingBoardBlockEntity blockEntity = (CuttingBoardBlockEntity) world.getBlockEntity(pos);
             if(stack.getItem() == ItemsRegistry.KITCHEN_KNIFE || player.getStackInHand(Hand.OFF_HAND).getItem() == ItemsRegistry.KITCHEN_KNIFE && blockEntity.getItem() != ItemStack.EMPTY) {
-                BasicInventory inv = new BasicInventory(blockEntity.getItem());
+                SimpleInventory inv = new SimpleInventory(blockEntity.getItem());
                 Optional<CuttingRecipe> match = world.getRecipeManager().getFirstMatch(CuttingRecipe.Type.INSTANCE, inv, world);
 
                 if (match.isPresent()) {
@@ -123,22 +119,22 @@ public class CuttingBoardBlock extends HorizontalFacingBlock implements BlockEnt
     }
 
     @Override
-    public void onBlockRemoved(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity be = world.getBlockEntity(pos);
             if (be instanceof CuttingBoardBlockEntity) {
                 CuttingBoardBlockEntity blockEntity = (CuttingBoardBlockEntity)world.getBlockEntity(pos);
                 ItemEntity item = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, blockEntity.getItem());
                 world.spawnEntity(item);
-                world.updateHorizontalAdjacent(pos, this);
+                world.updateNeighbors(pos, this);
             }
 
-            super.onBlockRemoved(state, world, pos, newState, moved);
+            super.onStateReplaced(state, world, pos, newState, moved);
         }
     }
 
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return (BlockState)this.getDefaultState().with(FACING, ctx.getPlayerFacing());
+        return this.getDefaultState().with(FACING, ctx.getPlayerFacing());
     }
 
     static {

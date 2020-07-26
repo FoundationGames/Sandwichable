@@ -1,6 +1,6 @@
 package io.github.foundationgames.sandwichable.recipe;
 
-import net.minecraft.inventory.BasicInventory;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
@@ -10,7 +10,7 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
-public class CuttingRecipe implements Recipe<BasicInventory> {
+public class CuttingRecipe implements Recipe<SimpleInventory> {
 
     private final Ingredient input;
     private final ItemStack output;
@@ -32,12 +32,12 @@ public class CuttingRecipe implements Recipe<BasicInventory> {
     }
 
     @Override
-    public boolean matches(BasicInventory inv, World world) {
-        return input.test(inv.getInvStack(0));
+    public boolean matches(SimpleInventory inv, World world) {
+        return input.test(inv.getStack(0));
     }
 
     @Override
-    public ItemStack craft(BasicInventory inv) {
+    public ItemStack craft(SimpleInventory inv) {
         return getOutput();
     }
 

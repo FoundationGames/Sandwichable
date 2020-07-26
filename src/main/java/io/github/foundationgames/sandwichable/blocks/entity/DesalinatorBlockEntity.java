@@ -2,27 +2,25 @@ package io.github.foundationgames.sandwichable.blocks.entity;
 
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.blocks.DesalinatorBlock;
-import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorContainer;
+import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.LockableContainerBlockEntity;
-import net.minecraft.container.Container;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Tickable;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.biome.Biome;
 
@@ -43,8 +41,8 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     @Override
-    public void fromTag(CompoundTag tag) {
-        super.fromTag(tag);
+    public void fromTag(BlockState state, CompoundTag tag) {
+        super.fromTag(state, tag);
         this.inventory = DefaultedList.ofSize(2, ItemStack.EMPTY);
         waterAmount = tag.getInt("waterAmount");
         evaporateProgress = tag.getInt("evaporateProgress");
@@ -162,45 +160,47 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
         return burning;
     }
 
+    public boolean isWaterSaline() { return world.getBiome(pos).getCategory() == Biome.Category.OCEAN || world.getBiome(pos).getCategory() == Biome.Category.BEACH; }
+
     @Override
     protected Text getContainerName() {
         return new TranslatableText("container.sandwichable.desalinator");
     }
 
     @Override
-    protected Container createContainer(int syncId, PlayerInventory playerInventory) {
-        return new DesalinatorContainer(syncId, playerInventory, this);
+    protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
+        return new DesalinatorScreenHandler(syncId, playerInventory, this);
     }
 
     @Override
-    public int getInvSize() {
+    public int size() {
         return 2;
     }
 
     @Override
-    public boolean isInvEmpty() {
+    public boolean isEmpty() {
         return this.inventory.get(0).isEmpty() && this.inventory.get(1).isEmpty();
     }
 
     @Override
-    public ItemStack getInvStack(int slot) {
+    public ItemStack getStack(int slot) {
         return this.inventory.get(slot);
     }
 
     @Override
-    public ItemStack takeInvStack(int slot, int amount) {
-        this.markDirty();
-        return this.inventory.get(slot).split(amount);
-    }
-
-    @Override
-    public ItemStack removeInvStack(int slot) {
+    public ItemStack removeStack(int slot) {
         this.markDirty();
         return this.inventory.remove(slot);
     }
 
     @Override
-    public void setInvStack(int slot, ItemStack stack) {
+    public ItemStack removeStack(int slot, int amount) {
+        this.markDirty();
+        return this.inventory.get(slot).split(amount);
+    }
+
+    @Override
+    public void setStack(int slot, ItemStack stack) {
         if(slot == 0) {
             if(stack.getItem() == Items.REDSTONE) {
                 this.inventory.set(slot, stack);
@@ -210,7 +210,7 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     @Override
-    public int[] getInvAvailableSlots(Direction side) {
+    public int[] getAvailableSlots(Direction side) {
         if(side == Direction.DOWN) {
             return new int[] {1};
         } else {
@@ -219,7 +219,7 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     @Override
-    public boolean canInsertInvStack(int slot, ItemStack stack, Direction dir) {
+    public boolean canInsert(int slot, ItemStack stack, Direction dir) {
         if(slot == 0) {
             return stack.getItem() == Items.REDSTONE;
         }
@@ -227,18 +227,18 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     @Override
-    public boolean canExtractInvStack(int slot, ItemStack stack, Direction dir) {
+    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
         return slot == 1;
     }
 
     @Override
-    public boolean canPlayerUseInv(PlayerEntity player) {
+    public boolean canPlayerUse(PlayerEntity player) {
         return true;
     }
 
     @Override
     public void fromClientTag(CompoundTag compoundTag) {
-        this.fromTag(compoundTag);
+        this.fromTag(world.getBlockState(pos), compoundTag);
     }
 
     @Override

@@ -8,6 +8,7 @@ import io.github.foundationgames.sandwichable.items.CheeseType;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.CheeseRegistry;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ItemEntity;
@@ -49,12 +50,14 @@ public class BasinBlockEntity extends BlockEntity implements Tickable, BlockEnti
         map.put(CheeseType.CREAMY, ItemsRegistry.CHEESE_WHEEL_CREAMY);
         map.put(CheeseType.INTOXICATING, ItemsRegistry.CHEESE_WHEEL_INTOXICATING);
         map.put(CheeseType.SOUR, ItemsRegistry.CHEESE_WHEEL_SOUR);
+        map.put(CheeseType.CANDESCENT, ItemsRegistry.CHEESE_WHEEL_CANDESCENT);
+        map.put(CheeseType.WARPED_BLEU, ItemsRegistry.CHEESE_WHEEL_WARPED_BLEU);
         return map;
     }
 
     @Override
-    public void fromTag(CompoundTag tag) {
-        super.fromTag(tag);
+    public void fromTag(BlockState state, CompoundTag tag) {
+        super.fromTag(state, tag);
         fermentProgress = tag.getInt("fermentProgress");
         content = CheeseRegistry.INSTANCE.basinContentFromString(tag.getString("basinContent") == null ? "air" : tag.getString("basinContent"));
 //      Handle update from v1.0.1 to v1.0.2 {
@@ -74,7 +77,7 @@ public class BasinBlockEntity extends BlockEntity implements Tickable, BlockEnti
 
     @Override
     public void fromClientTag(CompoundTag compoundTag) {
-        this.fromTag(compoundTag);
+        this.fromTag(world.getBlockState(pos), compoundTag);
     }
 
     @Override

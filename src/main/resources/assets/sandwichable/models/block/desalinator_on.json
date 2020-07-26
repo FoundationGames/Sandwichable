@@ -1,11 +1,10 @@
 {
-	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
 		"0": "sandwichable:block/desalinator_bottom",
 		"1": "sandwichable:block/desalinator_side_on",
 		"2": "sandwichable:block/desalinator_top_on",
-		"particle": "sandwichable:block/desalinator_bottom"
+		"particle": "sandwichable:block/desalinator_side_on"
 	},
 	"elements": [
 		{

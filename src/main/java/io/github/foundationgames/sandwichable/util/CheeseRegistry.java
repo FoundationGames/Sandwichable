@@ -26,6 +26,8 @@ public class CheeseRegistry {
         this.typeToCheeseItemStack.put(CheeseType.CREAMY, new ItemStack(ItemsRegistry.CHEESE_WHEEL_CREAMY, 1));
         this.typeToCheeseItemStack.put(CheeseType.INTOXICATING, new ItemStack(ItemsRegistry.CHEESE_WHEEL_INTOXICATING, 1));
         this.typeToCheeseItemStack.put(CheeseType.SOUR, new ItemStack(ItemsRegistry.CHEESE_WHEEL_SOUR, 1));
+        this.typeToCheeseItemStack.put(CheeseType.CANDESCENT, new ItemStack(ItemsRegistry.CHEESE_WHEEL_CANDESCENT, 1));
+        this.typeToCheeseItemStack.put(CheeseType.WARPED_BLEU, new ItemStack(ItemsRegistry.CHEESE_WHEEL_WARPED_BLEU, 1));
     }
 
     public void register(CheeseType type) {

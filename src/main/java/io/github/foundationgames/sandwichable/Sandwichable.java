@@ -47,12 +47,6 @@ public class Sandwichable implements ModInitializer {
     public static final Tag<Item> BREADS = TagRegistry.item(Util.id("breads"));
     public static final Tag<Item> METAL_ITEMS = TagRegistry.item(Util.id("metal_items"));
 
-    private static final Feature<DefaultFeatureConfig> SHRUBS = Registry.register(
-            Registry.FEATURE,
-            Util.id("shrubs"),
-            new ShrubsFeature(DefaultFeatureConfig::deserialize)
-    );
-
     @Override
     public void onInitialize() {
         AutoConfig.register(SandwichableConfig.class, GsonConfigSerializer::new);
@@ -72,7 +66,7 @@ public class Sandwichable implements ModInitializer {
 
         Registry.BIOME.forEach(biome -> biome.addFeature(
             GenerationStep.Feature.RAW_GENERATION,
-            new ShrubsFeature(DefaultFeatureConfig::deserialize).configure(
+            new ShrubsFeature(DefaultFeatureConfig.CODEC).configure(
                 new DefaultFeatureConfig()
             )
         ));
@@ -81,7 +75,7 @@ public class Sandwichable implements ModInitializer {
             if(biome.getCategory() == Biome.Category.OCEAN || biome.getCategory() == Biome.Category.BEACH) {
                 biome.addFeature(
                     GenerationStep.Feature.UNDERGROUND_ORES,
-                    new ExtraOreFeature(ExtraOreFeatureConfig::deserialize).configure(
+                    new ExtraOreFeature(ExtraOreFeatureConfig.CODEC).configure(
                         new ExtraOreFeatureConfig(Blocks.SAND.getDefaultState(), BlocksRegistry.SALTY_SAND.getDefaultState(), config.saltySandGenOptions.veinSize)
                     ).createDecoratedFeature(
                         Decorator.COUNT_RANGE.configure(
@@ -95,7 +89,7 @@ public class Sandwichable implements ModInitializer {
         ContainerProviderRegistry.INSTANCE.registerFactory(Util.id("desalinator"), (syncId, identifier, player, buf) -> {
             final World world = player.world;
             final BlockPos pos = buf.readBlockPos();
-            return world.getBlockState(pos).createContainerFactory(player.world, pos).createMenu(syncId, player.inventory, player);
+            return world.getBlockState(pos).createScreenHandlerFactory(player.world, pos).createMenu(syncId, player.inventory, player);
         });
     }
 }

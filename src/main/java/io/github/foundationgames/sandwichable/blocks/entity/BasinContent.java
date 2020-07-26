@@ -14,7 +14,11 @@ public enum BasinContent {
     FERMENTING_MILK_INTOXICATING("fermenting_milk_intoxicating", BasinContentType.FERMENTING_MILK, CheeseType.INTOXICATING),
     CHEESE_INTOXICATING("cheese_intoxicating", BasinContentType.CHEESE, CheeseType.INTOXICATING),
     FERMENTING_MILK_SOUR("fermenting_milk_sour", BasinContentType.FERMENTING_MILK, CheeseType.SOUR),
-    CHEESE_SOUR("cheese_sour", BasinContentType.CHEESE, CheeseType.SOUR);
+    CHEESE_SOUR("cheese_sour", BasinContentType.CHEESE, CheeseType.SOUR),
+    FERMENTING_MILK_CANDESCENT("fermenting_milk_candescent", BasinContentType.FERMENTING_MILK, CheeseType.CANDESCENT),
+    CHEESE_CANDESCENT("cheese_candescent", BasinContentType.CHEESE, CheeseType.CANDESCENT),
+    FERMENTING_MILK_WARPED_BLEU("fermenting_milk_warped_bleu", BasinContentType.FERMENTING_MILK, CheeseType.WARPED_BLEU),
+    CHEESE_WARPED_BLEU("cheese_warped_bleu", BasinContentType.CHEESE, CheeseType.WARPED_BLEU);
 
     private CheeseType cheeseType;
     private String name;

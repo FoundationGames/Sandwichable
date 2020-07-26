@@ -5,6 +5,8 @@ import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.items.SpreadRegistry;
 import io.github.foundationgames.sandwichable.items.spread.SpreadItem;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,10 +16,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Tickable;
+import net.minecraft.util.collection.DefaultedList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +55,7 @@ public class SandwichTableBlockEntity extends BlockEntity implements BlockEntity
             }
         }
         if(this.getFoodListSize() >= 127) {
-            player.addChatMessage(new TranslatableText("message.sandwichtable.fullsandwich").formatted(Formatting.RED), true);
+            player.sendMessage(new TranslatableText("message.sandwichtable.fullsandwich").formatted(Formatting.RED), true);
         }
     }
 
@@ -89,8 +91,8 @@ public class SandwichTableBlockEntity extends BlockEntity implements BlockEntity
     }
 
     @Override
-    public void fromTag(CompoundTag tag) {
-        super.fromTag(tag);
+    public void fromTag(BlockState state, CompoundTag tag) {
+        super.fromTag(state, tag);
         DefaultedList<ItemStack> list = DefaultedList.ofSize(128, ItemStack.EMPTY);
         Inventories.fromTag(tag, list);
         setFoodList(list);
@@ -116,7 +118,7 @@ public class SandwichTableBlockEntity extends BlockEntity implements BlockEntity
 
     @Override
     public void fromClientTag(CompoundTag compoundTag) {
-        this.fromTag(compoundTag);
+        this.fromTag(world.getBlockState(pos), compoundTag);
     }
 
     @Override
