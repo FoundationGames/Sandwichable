@@ -1,14 +1,12 @@
 package io.github.foundationgames.sandwichable.villager;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
-import io.github.foundationgames.sandwichable.mixin.PointOfInterestTypeMixin;
-import io.github.foundationgames.sandwichable.mixin.VillagerProfessionMixin;
 import io.github.foundationgames.sandwichable.util.Util;
+import net.fabricmc.fabric.api.object.builder.v1.villager.VillagerProfessionBuilder;
+import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.Item;
@@ -31,31 +29,24 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class SandwichMakerProfession {
-    private static Identifier poiId = Util.id("sandwich_maker_poi");
-    private static Identifier professionId = Util.id("sandwich_maker");
 
-    private static PointOfInterestType poiType = PointOfInterestTypeMixin.create(
-        poiId.toString(),
-        Util.getAllStatesOf(BlocksRegistry.SANDWICH_TABLE),
-        1,
-        1
+    public static final PointOfInterestType SANDWICH_MAKER_POI = PointOfInterestHelper.register(
+            Util.id("sandwich_maker_poi"),
+            1,
+            1,
+            BlocksRegistry.SANDWICH_TABLE
     );
-    private static VillagerProfession profession = VillagerProfessionMixin.create(
-        professionId.toString(),
-        poiType,
-        ImmutableSet.of(),
-        ImmutableSet.of(),
-        SoundEvents.ENTITY_ITEM_FRAME_REMOVE_ITEM
-    );
+    public static final VillagerProfession SANDWICH_MAKER = VillagerProfessionBuilder.create()
+            .id(Util.id("sandwich_maker"))
+            .workstation(SANDWICH_MAKER_POI)
+            .workSound(SoundEvents.ENTITY_ITEM_FRAME_REMOVE_ITEM)
+            .build()
+    ;
 
     public static void init() {
-        for(BlockState state : Util.getAllStatesOf(BlocksRegistry.SANDWICH_TABLE)) {
-            PointOfInterestTypeMixin.sandwichTableStatesMap().put(state, poiType);
-        }
-        Registry.register(Registry.POINT_OF_INTEREST_TYPE, poiId, poiType);
-        Registry.register(Registry.VILLAGER_PROFESSION, professionId, profession);
+        Registry.register(Registry.VILLAGER_PROFESSION, Util.id("sandwich_maker"), SANDWICH_MAKER);
         TradeOffers.PROFESSION_TO_LEVELED_TRADE.put(
-            profession, Util.copyToFastUtilMap(ImmutableMap.of(
+                SANDWICH_MAKER, Util.copyToFastUtilMap(ImmutableMap.of(
                 1,
                     new TradeOffers.Factory[]{
                         new SandwichMakerProfession.BuyForOneEmeraldFactory(Items.WHEAT, 20, 16, 2),

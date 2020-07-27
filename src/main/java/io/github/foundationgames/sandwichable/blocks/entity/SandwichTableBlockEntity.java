@@ -15,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
@@ -126,5 +127,11 @@ public class SandwichTableBlockEntity extends BlockEntity implements BlockEntity
         return this.toTag(compoundTag);
     }
 
-
+    @Override
+    public void sync() {
+        if(world != null && world.getServer().getWorld(world.getRegistryKey()) != null) {
+            ServerWorld sworld = world.getServer().getWorld(world.getRegistryKey());
+            if(sworld != null && sworld.getBlockEntity(pos) instanceof SandwichTableBlockEntity) this.fromClientTag(sworld.getBlockEntity(this.pos).toTag(new CompoundTag()));
+        }
+    }
 }

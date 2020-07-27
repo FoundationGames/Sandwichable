@@ -104,8 +104,8 @@ public class BasinBlockEntity extends BlockEntity implements Tickable, BlockEnti
             return ActionResult.SUCCESS;
         }
         if(content == BasinContent.AIR && playerStack.getItem() instanceof CheeseItem) {
-            if(!player.isCreative()) { playerStack.decrement(1); }
             content = CheeseRegistry.INSTANCE.cheeseFromCheeseType(((CheeseItem)playerStack.getItem()).getCheeseType());
+            if(!player.isCreative()) { playerStack.decrement(1); }
             return ActionResult.SUCCESS;
         }
         if(playerStack.getItem().equals(Items.MILK_BUCKET) && content == BasinContent.AIR) {

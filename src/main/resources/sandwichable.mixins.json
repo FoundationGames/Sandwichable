@@ -4,9 +4,8 @@
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
 		"StructurePoolRegistryMixin",
-		"PointOfInterestTypeMixin",
-		"VillagerProfessionMixin",
-		"AccessorStructurePool"
+		"AccessorStructurePool",
+		"ComposterHelper"
 	],
 	"client": [
 		"BuiltinModelItemRendererMixin"

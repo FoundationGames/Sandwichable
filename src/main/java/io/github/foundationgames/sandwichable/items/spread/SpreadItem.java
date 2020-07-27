@@ -17,9 +17,9 @@ public class SpreadItem extends Item {
 
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
-        if(user instanceof PlayerEntity && stack.getTag().getString("spreadType") != null) {
+        if(user instanceof PlayerEntity && stack.getTag().contains("spreadType")) {
             SpreadType type = SpreadRegistry.INSTANCE.deserialize(stack.getTag().getString("spreadType"));
-            ((PlayerEntity)user).getHungerManager().add(type.getHunger(), type.getSaturationModifier());
+            if(!((PlayerEntity)user).isCreative()) ((PlayerEntity)user).getHungerManager().add(type.getHunger(), type.getSaturationModifier());
             for(StatusEffectInstance effect : type.getStatusEffects()) {
                 user.addStatusEffect(effect);
             }
