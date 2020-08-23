@@ -3,8 +3,8 @@
 	"package": "io.github.foundationgames.sandwichable.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
-		"StructurePoolRegistryMixin",
-		"AccessorStructurePool",
+		"StructurePoolsMixin",
+		"StructurePoolAccess",
 		"ComposterHelper"
 	],
 	"client": [

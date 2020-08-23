@@ -151,6 +151,7 @@ public class BasinBlockEntity extends BlockEntity implements Tickable, BlockEnti
             fermentProgress = 0;
             return ActionResult.SUCCESS;
         }
+        markDirty();
         return ActionResult.PASS;
     }
 
@@ -170,12 +171,14 @@ public class BasinBlockEntity extends BlockEntity implements Tickable, BlockEnti
             content = CheeseRegistry.INSTANCE.fermentingMilkFromCheeseType(type);
             fermentProgress = 0;
         }
+        markDirty();
     }
     public void finishFermenting() {
         if(content.getContentType() == BasinContentType.FERMENTING_MILK) {
             fermentProgress = 0;
             content = CheeseRegistry.INSTANCE.cheeseFromCheeseType(content.getCheeseType());
         }
+        markDirty();
     }
 
     private int tickN = 0;

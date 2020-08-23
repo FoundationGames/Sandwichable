@@ -1,5 +1,7 @@
 package io.github.foundationgames.sandwichable.items;
 
+import io.github.foundationgames.sandwichable.config.SandwichableConfig;
+import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
@@ -56,6 +58,21 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
             }
         }
         return super.getName(stack);
+    }
+
+    @Override
+    public int getMaxUseTime(ItemStack stack) {
+        SandwichableConfig config = AutoConfig.getConfigHolder(SandwichableConfig.class).getConfig();
+        return config.baseSandwichEatTime + (config.slowEatingLargeSandwiches ? getFoodListSize(stack) : 0);
+    }
+
+    public int getFoodListSize(ItemStack stack) {
+        CompoundTag tag = stack.getSubTag("BlockEntityTag");
+        DefaultedList<ItemStack> foods = DefaultedList.ofSize(128, ItemStack.EMPTY);
+        Inventories.fromTag(tag, foods);
+        int i=0;
+        while(foods.get(i)!=ItemStack.EMPTY) {i++;}
+        return i;
     }
 
     @Override

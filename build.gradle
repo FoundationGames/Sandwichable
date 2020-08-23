@@ -24,8 +24,11 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	
-	modImplementation "me.shedaniel:RoughlyEnoughItems:4.10.3"
-	modImplementation "io.github.prospector:modmenu:1.14.5+build.30"
+	modImplementation "me.shedaniel:RoughlyEnoughItems:5.2.3"
+	modImplementation "io.github.prospector:modmenu:1.14.6+build.31"
+
+	modCompile "me.shedaniel.cloth.api:cloth-dynamic-registry-api-v1:1.2.1"
+	include "me.shedaniel.cloth.api:cloth-dynamic-registry-api-v1:1.2.1"
 
 	include "me.sargunvohra.mcmods:autoconfig1u:3.2.0-unstable"
 

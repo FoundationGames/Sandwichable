@@ -49,7 +49,6 @@ public class Sandwichable implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        AutoConfig.register(SandwichableConfig.class, GsonConfigSerializer::new);
 
         BlocksRegistry.init();
         ItemsRegistry.init();
@@ -61,30 +60,6 @@ public class Sandwichable implements ModInitializer {
 
         Registry.register(Registry.RECIPE_SERIALIZER, ToastingRecipeSerializer.ID, ToastingRecipeSerializer.INSTANCE);
         Registry.register(Registry.RECIPE_TYPE, Util.id(ToastingRecipe.Type.ID), ToastingRecipe.Type.INSTANCE);
-
-        SandwichableConfig config = AutoConfig.getConfigHolder(SandwichableConfig.class).getConfig();
-
-        Registry.BIOME.forEach(biome -> biome.addFeature(
-            GenerationStep.Feature.RAW_GENERATION,
-            new ShrubsFeature(DefaultFeatureConfig.CODEC).configure(
-                new DefaultFeatureConfig()
-            )
-        ));
-
-        Registry.BIOME.forEach(biome -> {
-            if(biome.getCategory() == Biome.Category.OCEAN || biome.getCategory() == Biome.Category.BEACH) {
-                biome.addFeature(
-                    GenerationStep.Feature.UNDERGROUND_ORES,
-                    new ExtraOreFeature(ExtraOreFeatureConfig.CODEC).configure(
-                        new ExtraOreFeatureConfig(Blocks.SAND.getDefaultState(), BlocksRegistry.SALTY_SAND.getDefaultState(), config.saltySandGenOptions.veinSize)
-                    ).createDecoratedFeature(
-                        Decorator.COUNT_RANGE.configure(
-                            new RangeDecoratorConfig(config.saltySandGenOptions.rarity, 0, 0, config.saltySandGenOptions.maxGenHeight)
-                        )
-                    )
-                );
-            }
-        });
 
         ContainerProviderRegistry.INSTANCE.registerFactory(Util.id("desalinator"), (syncId, identifier, player, buf) -> {
             final World world = player.world;

@@ -4,6 +4,7 @@ import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.items.SpreadRegistry;
 import io.github.foundationgames.sandwichable.items.spread.SpreadItem;
+import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -37,7 +38,7 @@ public class SandwichTableBlockEntity extends BlockEntity implements BlockEntity
         int i=0;
         while(this.foods.get(i)!=ItemStack.EMPTY && i < this.foods.size()-1) {i++;}
         ItemStack stack;
-        if(!player.isCreative() && getFoodListSize() <= 127) {
+        if(!player.isCreative() && !(getFoodListSize() >= 127)) {
             stack = playerStack.split(1);
         } else {
             stack = playerStack.copy();
@@ -125,13 +126,5 @@ public class SandwichTableBlockEntity extends BlockEntity implements BlockEntity
     @Override
     public CompoundTag toClientTag(CompoundTag compoundTag) {
         return this.toTag(compoundTag);
-    }
-
-    @Override
-    public void sync() {
-        if(world != null && world.getServer().getWorld(world.getRegistryKey()) != null) {
-            ServerWorld sworld = world.getServer().getWorld(world.getRegistryKey());
-            if(sworld != null && sworld.getBlockEntity(pos) instanceof SandwichTableBlockEntity) this.fromClientTag(sworld.getBlockEntity(this.pos).toTag(new CompoundTag()));
-        }
     }
 }

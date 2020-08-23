@@ -46,7 +46,7 @@ public class ShrubBlock extends PlantBlock {
         super.scheduledTick(state, world, pos, random);
         if(world.getBlockState(pos.down()).getBlock().equals(Blocks.SAND)) {
             if (!state.get(SNIPPED)) {
-                Util.scatterDroppedBlockDust(world.getWorld(), pos, this, 2, 30);
+                Util.scatterDroppedBlockDust(world, pos, this, 2, 30);
                 world.setBlockState(pos, this.getDefaultState().with(SNIPPED, true));
             } else if (state.get(SNIPPED)) {
                 world.setBlockState(pos, Blocks.DEAD_BUSH.getDefaultState());

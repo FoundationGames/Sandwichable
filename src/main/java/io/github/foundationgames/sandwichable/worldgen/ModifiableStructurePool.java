@@ -1,11 +1,13 @@
 package io.github.foundationgames.sandwichable.worldgen;
 
-import io.github.foundationgames.sandwichable.mixin.AccessorStructurePool;
+import com.mojang.datafixers.util.Pair;
+import io.github.foundationgames.sandwichable.mixin.StructurePoolAccess;
 import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.structure.pool.StructurePoolElement;
 
+import java.util.List;
+
 public class ModifiableStructurePool {
-    //Huge thanks to Draylar for help with this; https://github.com/Draylar/structurized
 
     private final StructurePool pool;
 
@@ -14,13 +16,18 @@ public class ModifiableStructurePool {
     }
 
     public void addStructurePoolElement(StructurePoolElement element) {
-        ((AccessorStructurePool)pool).getElements().add(element);
+        addStructurePoolElement(element, 1);
     }
 
     public void addStructurePoolElement(StructurePoolElement element, int weight) {
         for (int i = 0; i < weight; i++) {
-            ((AccessorStructurePool)pool).getElements().add(element);
+            ((StructurePoolAccess)pool).getElements().add(element);
         }
+        ((StructurePoolAccess)pool).getElementCounts().add(Pair.of(element, weight));
+    }
+
+    public List<StructurePoolElement> getElements() {
+        return ((StructurePoolAccess)pool).getElements();
     }
 
     public StructurePool getStructurePool() {

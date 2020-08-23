@@ -24,6 +24,9 @@
 	"client": [
       "io.github.foundationgames.sandwichable.SandwichableClient"
     ],
+    "cloth-early-init": [
+      "io.github.foundationgames.sandwichable.SandwichableEarly"
+    ],
 	"rei_plugins_v0": [
       "io.github.foundationgames.sandwichable.rei.SandwichableREI"
     ],

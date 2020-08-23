@@ -7,6 +7,7 @@ import io.github.foundationgames.sandwichable.blocks.entity.SandwichBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.SandwichTableBlockEntity;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.items.spread.SpreadItem;
+import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -83,6 +84,7 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
                     player.sendMessage(new TranslatableText("message.sandwichtable.topbread"), true);
                 }
             }
+            Util.sync(((SandwichTableBlockEntity)blockEntity), world);
         }
         return ActionResult.SUCCESS;
     }

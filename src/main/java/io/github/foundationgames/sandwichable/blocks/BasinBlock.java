@@ -4,6 +4,7 @@ import io.github.foundationgames.sandwichable.blocks.entity.BasinBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.BasinContentType;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.CheeseRegistry;
+import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -69,6 +70,7 @@ public class BasinBlock extends Block implements BlockEntityProvider {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if(world.getBlockEntity(pos) instanceof BasinBlockEntity) {
+            Util.sync((BasinBlockEntity)world.getBlockEntity(pos), world);
             return ((BasinBlockEntity)world.getBlockEntity(pos)).onBlockUse(player, hand);
         }
         return ActionResult.FAIL;

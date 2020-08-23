@@ -1,7 +1,9 @@
 package io.github.foundationgames.sandwichable.blocks;
 
 import io.github.foundationgames.sandwichable.blocks.entity.CuttingBoardBlockEntity;
+import io.github.foundationgames.sandwichable.blocks.entity.SandwichTableBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.ToasterBlockEntity;
+import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
@@ -122,6 +124,7 @@ public class ToasterBlock extends HorizontalFacingBlock implements BlockEntityPr
             } else {
                 if(!blockEntity.isToasting()) { blockEntity.startToasting(); } else { blockEntity.stopToasting(); }
             }
+            Util.sync(blockEntity, world);
         }
         return ActionResult.SUCCESS;
     }

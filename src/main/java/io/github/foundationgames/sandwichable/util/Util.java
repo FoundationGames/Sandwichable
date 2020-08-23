@@ -6,9 +6,12 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import io.github.foundationgames.sandwichable.config.SandwichableConfig;
 import io.github.foundationgames.sandwichable.events.StructurePoolAddCallback;
+import io.github.foundationgames.sandwichable.worldgen.ModifiableStructurePool;
+import io.github.foundationgames.sandwichable.worldgen.StructurePoolHelper;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
+import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.Screen;
@@ -21,10 +24,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.structure.pool.SinglePoolElement;
-import net.minecraft.structure.pool.StructurePool;
-import net.minecraft.structure.pool.StructurePoolBasedGenerator;
-import net.minecraft.structure.pool.StructurePoolElement;
+import net.minecraft.structure.Structure;
+import net.minecraft.structure.pool.*;
+import net.minecraft.structure.processor.StructureProcessorList;
+import net.minecraft.structure.processor.StructureProcessorLists;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -46,8 +49,6 @@ public class Util {
     public static Identifier id(String name) {
         return new Identifier(MOD_ID, name);
     }
-
-    public static Identifier idd(String name) { return new Identifier(MOD_ID+":"+name); }
 
     public static void scatterBlockDust(World world, BlockPos pos, Block block, int intensity, int density) {
         Random random = new Random();
@@ -72,21 +73,19 @@ public class Util {
             world.addParticle(new BlockStateParticleEffect(ParticleTypes.BLOCK, block.getDefaultState()), pos.getX()+0.5+ox, pos.getY()+0.5+oy, pos.getZ()+0.5+oz, 0.0D, -0.3D, 0.0D);
         }
     }
-    public static Set<BlockState> getAllStatesOf(Block block) {
-        return ImmutableSet.copyOf(block.getStateManager().getStates());
-    }
-    public static void so(Object obj) {
-        System.out.println(obj);
-    }
     public static Int2ObjectMap<TradeOffers.Factory[]> copyToFastUtilMap(ImmutableMap<Integer, TradeOffers.Factory[]> immutableMap) {
         return new Int2ObjectOpenHashMap(immutableMap);
     }
-    public static void addStructureToPool(String poolID, String elementID, int weight) {
-        StructurePoolAddCallback.EVENT.register(structurePool -> {
-            if(structurePool.getStructurePool().getId().toString().equals(poolID)) {
-                structurePool.addStructurePoolElement(new SinglePoolElement(elementID), weight);
-            }
-        });
+    public static StructurePool tryAddElementToPool(Identifier targetPool, StructurePool pool, String elementId, StructurePool.Projection projection, int weight) {
+        if(targetPool.equals(pool.getId())) {
+            ModifiableStructurePool modPool = new ModifiableStructurePool(pool);
+            modPool.addStructurePoolElement(StructurePoolElement.method_30426(elementId, StructureProcessorLists.EMPTY).apply(projection), weight);
+            return modPool.getStructurePool();
+        }
+        return pool;
+    }
+    public static void sync(BlockEntityClientSerializable be, World world) {
+        if(!world.isClient) be.sync();
     }
     public static float pxToFlt(double d) {
         return (float) 1 / (float) 16 * (float) d;

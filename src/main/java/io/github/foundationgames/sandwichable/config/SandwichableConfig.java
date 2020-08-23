@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 @Config(name = "sandwichable")
 @Config.Gui.Background("minecraft:textures/block/spruce_planks.png")
 @Config.Gui.CategoryBackground(category = "gameplay", background = "minecraft:textures/block/oak_planks.png")
+@Config.Gui.CategoryBackground(category = "server_gameplay", background = "minecraft:textures/block/crimson_planks.png")
 @Config.Gui.CategoryBackground(category = "world_gen", background = "minecraft:textures/block/smooth_stone.png")
 public class SandwichableConfig implements ConfigData {
 
@@ -24,8 +25,12 @@ public class SandwichableConfig implements ConfigData {
     public boolean showInfoTooltips = true;
 
     @ConfigEntry.Category(value = "gameplay")
-    //@ConfigEntry.Gui.Excluded
     public TooltipKeyBind infoTooltipKeyBind = TooltipKeyBind.SHIFT;
+
+    @ConfigEntry.Category(value = "server_gameplay")
+    public boolean slowEatingLargeSandwiches = true;
+    @ConfigEntry.Category(value = "server_gameplay")
+    public int baseSandwichEatTime = 32;
 
     @ConfigEntry.Category(value = "world_gen")
     @ConfigEntry.Gui.CollapsibleObject

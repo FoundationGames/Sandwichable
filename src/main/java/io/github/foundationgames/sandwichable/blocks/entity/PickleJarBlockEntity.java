@@ -3,6 +3,7 @@ package io.github.foundationgames.sandwichable.blocks.entity;
 import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
+import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -132,6 +133,7 @@ public class PickleJarBlockEntity extends BlockEntity implements Tickable, Block
             this.markDirty();
             return ActionResult.SUCCESS;
         }
+        Util.sync(this, world);
         return ActionResult.PASS;
     }
 

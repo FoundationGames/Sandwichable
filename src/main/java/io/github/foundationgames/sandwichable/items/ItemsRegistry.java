@@ -152,6 +152,7 @@ public class ItemsRegistry {
         registerItem(MAYONNAISE, "mayonnaise_bottle");
         registerItem(APPLE_SLICES, "apple_slices");
         ComposterHelper.registerCompostable(0.3f, APPLE_SLICES);
+        registerItem(GOLDEN_APPLE_SLICES, "golden_apple_slices");
         registerItem(ENCHANTED_GOLDEN_APPLE_SLICES, "enchanted_golden_apple_slices");
         registerItem(CHEESE_CULTURE_REGULAR, "regular_cheese_culture_bottle");
         registerItem(CHEESE_CULTURE_CREAMY, "creamy_cheese_culture_bottle");

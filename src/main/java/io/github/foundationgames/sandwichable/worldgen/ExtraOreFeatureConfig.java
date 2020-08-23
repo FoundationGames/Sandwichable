@@ -9,9 +9,9 @@ public class ExtraOreFeatureConfig implements FeatureConfig {
 
     public static final Codec<ExtraOreFeatureConfig> CODEC = RecordCodecBuilder.create((instance) ->
         instance.group(
-            BlockState.CODEC.fieldOf("state").forGetter((oreFeatureConfig) -> oreFeatureConfig.target),
             BlockState.CODEC.fieldOf("state").forGetter((oreFeatureConfig) -> oreFeatureConfig.state),
-            Codec.INT.fieldOf("size").withDefault(0).forGetter((oreFeatureConfig) -> oreFeatureConfig.size)
+            BlockState.CODEC.fieldOf("target").forGetter((oreFeatureConfig) -> oreFeatureConfig.target),
+            Codec.INT.fieldOf("size").orElse(0).forGetter((oreFeatureConfig) -> oreFeatureConfig.size)
         )
     .apply(instance, ExtraOreFeatureConfig::new));
 

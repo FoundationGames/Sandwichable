@@ -1,8 +1,10 @@
 package io.github.foundationgames.sandwichable.blocks;
 
+import io.github.foundationgames.sandwichable.blocks.entity.BasinBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.CuttingBoardBlockEntity;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
+import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
@@ -65,8 +67,8 @@ public class CuttingBoardBlock extends HorizontalFacingBlock implements BlockEnt
     public void onBroken(WorldAccess world, BlockPos pos, BlockState state) {
         if (world.getBlockEntity(pos) instanceof CuttingBoardBlockEntity) {
             CuttingBoardBlockEntity blockEntity = (CuttingBoardBlockEntity)world.getBlockEntity(pos);
-            ItemEntity item = new ItemEntity(world.getWorld(), pos.getX()+0.5, pos.getY()+0.3, pos.getZ()+0.5, blockEntity.getItem());
-            world.getWorld().spawnEntity(item);
+            ItemEntity item = new ItemEntity((World)world, pos.getX()+0.5, pos.getY()+0.3, pos.getZ()+0.5, blockEntity.getItem());
+            world.spawnEntity(item);
         }
     }
 
@@ -103,6 +105,8 @@ public class CuttingBoardBlock extends HorizontalFacingBlock implements BlockEnt
                     world.spawnEntity(item);
                 }
             }
+            blockEntity.markDirty();
+            Util.sync(blockEntity, world);
         }
         return ActionResult.SUCCESS;
     }

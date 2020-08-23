@@ -84,12 +84,6 @@ public class SandwichMakerProfession {
                     }
             ))
         );
-        //Huge thanks to Draylar for help with this; https://github.com/Draylar/structurized
-        Util.addStructureToPool("minecraft:village/plains/houses", "minecraft:village/plains/houses/plains_sandwich_stand", 2);
-        Util.addStructureToPool("minecraft:village/savanna/houses", "minecraft:village/savanna/houses/savanna_sandwich_stand", 2);
-        Util.addStructureToPool("minecraft:village/desert/houses", "minecraft:village/desert/houses/desert_sandwich_stand", 2);
-        Util.addStructureToPool("minecraft:village/taiga/houses", "minecraft:village/taiga/houses/taiga_sandwich_stand", 2);
-        Util.addStructureToPool("minecraft:village/snowy/houses", "minecraft:village/snowy/houses/snowy_sandwich_stand", 2);
     }
 
     static class BuyForOneEmeraldFactory implements TradeOffers.Factory {
@@ -222,6 +216,5 @@ public class SandwichMakerProfession {
     }
 
     static {
-        StructurePoolBasedGenerator.REGISTRY.add(new StructurePool(new Identifier("village/plains/houses"), new Identifier("empty"), new ArrayList<>(), StructurePool.Projection.RIGID));
     }
 }
