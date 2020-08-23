@@ -1,0 +1,12 @@
+{
+  "name": "不该烤的食物",
+  "icon": "minecraft:flint_and_steel",
+  "category": "toasting",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "text",
+      "text": "和现实生活里一样，你不会将任何金属或和水有关的物品放到烤面包机里。如果你这么做的话会..."
+    }
+  ]
+}
