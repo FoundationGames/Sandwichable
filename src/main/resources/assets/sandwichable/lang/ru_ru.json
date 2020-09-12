@@ -119,9 +119,9 @@
 	
 	"desalinator.tooltip.filled": "Заполненный",
 	"desalinator.tooltip.maxCapacity": "Максимальная Вместимость:",
-	"desalinator.tooltip.saline": "Salinity Level HIGH",
-	"desalinator.tooltip.notSaline": "Salinity Level LOW",
-	"desalinator.tooltip.moveToSaltyBiome": "Please move to a saltwater biome!",
+	"desalinator.tooltip.saline": "Высокий уровень солености",
+	"desalinator.tooltip.notSaline": "Низкий уровень солености",
+	"desalinator.tooltip.moveToSaltyBiome": "Пожалуйста, переезжайте в биом с морской водой!",
 	
 	"category.sandwichable.cutting_board": "Резка",
 	"category.sandwichable.toasting": "Поджаривание",
@@ -143,6 +143,9 @@
 	"text.autoconfig.sandwichable.category.gameplay": "Игровой процесс",
 	"text.autoconfig.sandwichable.option.showInfoTooltips": "Показать Информацию Всплывающих Подсказкок",
 	"text.autoconfig.sandwichable.option.infoTooltipKeyBind": "Информация Подсказкок Управления",
+	"text.autoconfig.sandwichable.category.server_gameplay": "Игровой Процесс На Стороне Сервера",
+	"text.autoconfig.sandwichable.option.slowEatingLargeSandwiches": "Размер Бутерброда Замедляет Время Приема Пищи",
+	"text.autoconfig.sandwichable.option.baseSandwichEatTime": "Время Еды Основания Сэндвича",
 	"text.autoconfig.sandwichable.category.world_gen": "Генерация в Мире",
 	"text.autoconfig.sandwichable.option.saltySandGenOptions": "Генерация Соленого Песка",
 	"text.autoconfig.sandwichable.option.saltySandGenOptions.rarity": "Редкость",
