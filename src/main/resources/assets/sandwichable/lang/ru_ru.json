@@ -119,6 +119,9 @@
 	
 	"desalinator.tooltip.filled": "Заполненный",
 	"desalinator.tooltip.maxCapacity": "Максимальная Вместимость:",
+	"desalinator.tooltip.saline": "Salinity Level HIGH",
+	"desalinator.tooltip.notSaline": "Salinity Level LOW",
+	"desalinator.tooltip.moveToSaltyBiome": "Please move to a saltwater biome!",
 	
 	"category.sandwichable.cutting_board": "Резка",
 	"category.sandwichable.toasting": "Поджаривание",
