@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "item": "sandwichable:sandwich"
+    },
+    "title": {
+      "translate": "advancements.sandwichable.root.title"
+    },
+    "description": {
+      "translate": "advancements.sandwichable.root.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "sandwichable:textures/block/sandwich_table_top.png"
+  },
+  "criteria": {
+    "raw_materials": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "sandwichable:raw_materials"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "raw_materials"
+    ]
+  ]
+}

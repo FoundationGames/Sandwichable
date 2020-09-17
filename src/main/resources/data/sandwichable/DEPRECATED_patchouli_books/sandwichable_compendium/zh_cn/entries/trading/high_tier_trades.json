@@ -1,0 +1,12 @@
+{
+  "name": "高级交易",
+  "icon": "minecraft:diamond",
+  "category": "trading",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "text",
+      "text": "三明治制作商升级后会与你交易更好的三明治，比如BLT和鸡肉三明治。他们的顶级交易物是金苹果三明治。"
+    }
+  ]
+}

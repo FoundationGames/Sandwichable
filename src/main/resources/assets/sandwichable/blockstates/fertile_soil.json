@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "solid=false": { "model": "sandwichable:block/fertile_soil" },
+		"solid=true": { "model": "sandwichable:block/fertile_soil_solid" }
+    }
+}

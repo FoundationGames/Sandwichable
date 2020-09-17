@@ -1,0 +1,16 @@
+{
+  "name": "种植番茄",
+  "icon": "sandwichable:tomato",
+  "category": "farming_and_crops",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "text",
+      "text": "番茄种子可生长为番茄作物。在其成熟后破坏会获得一些番茄和一粒番茄种子。你可以用番茄制作为两粒种子，或用番茄片制作为一粒种子。"
+    },
+	{
+      "type": "crafting",
+      "recipe": "sandwichable:tomato_seeds_from_tomato"
+    }
+  ]
+}

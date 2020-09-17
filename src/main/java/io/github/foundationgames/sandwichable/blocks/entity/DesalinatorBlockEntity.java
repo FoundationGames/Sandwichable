@@ -32,7 +32,7 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     private boolean burning = false;
     private boolean evaporating = false;
     public static final int maxWaterAmount = 4;
-    public static final int evaporateTime = 400;
+    public static final int evaporateTime = 115;
     public static final int fuelBurnTime = 495;
 
     public DesalinatorBlockEntity() {

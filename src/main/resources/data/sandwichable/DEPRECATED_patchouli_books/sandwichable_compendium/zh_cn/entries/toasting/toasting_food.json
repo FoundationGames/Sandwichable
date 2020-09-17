@@ -1,0 +1,12 @@
+{
+  "name": "烤制食物",
+  "icon": "sandwichable:toasted_bread_slice",
+  "category": "toasting",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "text",
+      "text": "现在你准备好了你的烤面包机，你可以开始烤制食物了，你不需要添加燃料！手持物品右击它来放入物品。空手右击取回物品。空手潜行右击开始烤制。烤熟后你会听到*叮！*的声音。"
+    }
+  ]
+}

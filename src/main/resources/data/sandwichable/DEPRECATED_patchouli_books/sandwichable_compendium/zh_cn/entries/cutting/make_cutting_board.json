@@ -1,0 +1,16 @@
+{
+  "name": "制作一块砧板",
+  "icon": "sandwichable:oak_cutting_board",
+  "category": "cutting",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "text",
+      "text": "你需要两个去皮原木来合成砧板。将它们并排放置来合成砧板。"
+    },
+	{
+      "type": "crafting",
+      "recipe": "sandwichable:oak_cutting_board"
+    }
+  ]
+}

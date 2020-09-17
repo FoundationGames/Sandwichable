@@ -48,6 +48,7 @@ public class BlocksRegistry {
 
     public static final Block SHRUB = new ShrubBlock(FabricBlockSettings.copy(Blocks.DEAD_BUSH).build());
     public static final Block SALTY_SAND = new SandBlock(14406560, FabricBlockSettings.copy(Blocks.SAND).build());
+    public static final Block FERTILE_SOIL = new FertileSoilBlock(FabricBlockSettings.copy(Blocks.FARMLAND).build());
 
     public static final Block POTTED_SHRUB = new PottedShrubBlock(SHRUB, FabricBlockSettings.copy(Blocks.POTTED_DEAD_BUSH).build());
 
@@ -81,6 +82,7 @@ public class BlocksRegistry {
         registerBlock(PICKLE_JAR, "pickle_jar");
 
         registerBlock(SALTY_SAND, "salty_sand", Sandwichable.SANDWICHABLE_ITEMS);
+        registerBlock(FERTILE_SOIL, "fertile_soil", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(DESALINATOR, "desalinator", Sandwichable.SANDWICHABLE_ITEMS);
 
         registerSandwich(SANDWICH, "sandwich");

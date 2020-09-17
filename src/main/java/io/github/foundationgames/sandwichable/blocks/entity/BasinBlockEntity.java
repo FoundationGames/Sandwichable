@@ -95,7 +95,7 @@ public class BasinBlockEntity extends BlockEntity implements Tickable, BlockEnti
         }
         if(content == BasinContent.MILK && playerStack.getItem() instanceof CheeseCultureItem) {
             this.startFermenting(((CheeseCultureItem)playerStack.getItem()).getCheeseType());
-            this.createCheeseParticle(this.world, this.pos, this.rng, 8, content.getCheeseType().getParticleColorRGB());
+            createCheeseParticle(this.world, this.pos, this.rng, 8, content.getCheeseType().getParticleColorRGB());
             world.playSound(null, pos, SoundEvents.ITEM_HONEY_BOTTLE_DRINK, SoundCategory.BLOCKS, 1.0F, 1.0F);
             if(!player.isCreative()) {
                 playerStack.decrement(1);
@@ -103,7 +103,7 @@ public class BasinBlockEntity extends BlockEntity implements Tickable, BlockEnti
             }
             return ActionResult.SUCCESS;
         }
-        if(content == BasinContent.AIR && playerStack.getItem() instanceof CheeseItem) {
+        if(content == BasinContent.AIR && playerStack.getItem() instanceof CheeseItem && !((CheeseItem)playerStack.getItem()).isSlice()) {
             content = CheeseRegistry.INSTANCE.cheeseFromCheeseType(((CheeseItem)playerStack.getItem()).getCheeseType());
             if(!player.isCreative()) { playerStack.decrement(1); }
             return ActionResult.SUCCESS;

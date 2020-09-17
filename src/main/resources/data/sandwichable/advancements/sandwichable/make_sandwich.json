@@ -1,0 +1,33 @@
+{
+	"parent": "sandwichable:sandwichable/root",
+	"display": {
+		"icon": {
+			"item": "sandwichable:bread_slice"
+		},
+		"title": {
+			"translate": "advancements.sandwichable.make_sandwich.title"
+		},
+		"description": {
+			"translate": "advancements.sandwichable.make_sandwich.description"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": true,
+		"hidden": false
+	},
+	"criteria": {
+		"make_sandwich": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{ "item": "sandwichable:sandwich" }
+				]
+			}
+		}
+	},
+	"requirements": [
+		[
+			"make_sandwich"
+		]
+	]
+}

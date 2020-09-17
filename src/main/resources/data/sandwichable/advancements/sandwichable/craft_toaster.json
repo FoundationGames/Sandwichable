@@ -1,0 +1,33 @@
+{
+	"parent": "sandwichable:sandwichable/root",
+	"display": {
+		"icon": {
+			"item": "sandwichable:toaster"
+		},
+		"title": {
+			"translate": "advancements.sandwichable.craft_toaster.title"
+		},
+		"description": {
+			"translate": "advancements.sandwichable.craft_toaster.description"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": true,
+		"hidden": false
+	},
+	"criteria": {
+		"craft_toaster": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{ "item": "sandwichable:toaster" }
+				]
+			}
+		}
+	},
+	"requirements": [
+		[
+			"craft_toaster"
+		]
+	]
+}

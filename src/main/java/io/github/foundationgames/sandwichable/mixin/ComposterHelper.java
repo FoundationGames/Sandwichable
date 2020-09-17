@@ -11,6 +11,6 @@ import java.util.Map;
 public interface ComposterHelper {
     @Invoker("registerCompostableItem")
     static void registerCompostable(float levelIncreaseChance, ItemConvertible item) {
-        throw new AssertionError("dummy method body");
+        throw new AssertionError();
     }
 }

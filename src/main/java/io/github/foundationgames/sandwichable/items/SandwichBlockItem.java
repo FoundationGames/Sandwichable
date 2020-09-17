@@ -1,5 +1,7 @@
 package io.github.foundationgames.sandwichable.items;
 
+import io.github.foundationgames.mealapi.util.PlayerFullnessManager;
+import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.config.SandwichableConfig;
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
 import net.minecraft.block.Block;
@@ -75,34 +77,35 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
         return i;
     }
 
+    public List<ItemStack> getFoodList(ItemStack stack) {
+        CompoundTag tag = stack.getSubTag("BlockEntityTag");
+        DefaultedList<ItemStack> foods = DefaultedList.ofSize(128, ItemStack.EMPTY);
+        Inventories.fromTag(tag, foods);
+        return foods;
+    }
+
     @Override
     public ItemStack finishUsing(ItemStack istack, World world, LivingEntity user) {
         ItemStack stack = istack.copy();
+        int fullness = 0;
         if(stack.getTag() != null) {
-            CompoundTag tag = stack.getSubTag("BlockEntityTag");
-            DefaultedList<ItemStack> foods = DefaultedList.ofSize(128, ItemStack.EMPTY);
-            Inventories.fromTag(tag, foods);
-            ItemStack food;
-            ItemStack finishStack;
-            ItemCooldownManager cooldownManager;
-            for (int i = 0; i < foods.size(); i++) {
-                food = foods.get(i);
-                if(food.isFood()) {
-                    //System.out.println(food.getItem().finishUsing(stack, world, user));
-                    finishStack = food.getItem().finishUsing(food, world, user);
-                    if(user instanceof PlayerEntity) {
-                        if(!((PlayerEntity)user).isCreative() && !finishStack.getItem().equals(Items.AIR)) {
-                            ((PlayerEntity)user).giveItemStack(finishStack);
-                        }
-                        cooldownManager = ((PlayerEntity)user).getItemCooldownManager();
-                        if(cooldownManager.isCoolingDown(food.getItem())) {
+            for (ItemStack food : ((SandwichBlockItem)BlocksRegistry.SANDWICH.asItem()).getFoodList(stack)) {
+                if (food.isFood()) {
+                    food.getItem().finishUsing(food, world, user);
+                    if (user instanceof PlayerEntity) {
+                        ItemCooldownManager cooldownManager = ((PlayerEntity)user).getItemCooldownManager();
+                        if (cooldownManager.isCoolingDown(food.getItem())) {
                             cooldownManager.set(this, 20);
                         }
                     }
                     user.eatFood(world, food);
                 }
+                if(food.getItem() instanceof SandwichIngredientItem) {
+                    fullness += ((SandwichIngredientItem)food.getItem()).fullness;
+                }
             }
         }
+        if(user instanceof PlayerEntity) PlayerFullnessManager.addFullness((PlayerEntity)user, fullness, istack);
         return super.finishUsing(stack, world, user);
     }
 

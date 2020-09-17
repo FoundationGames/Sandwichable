@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "top": "sandwichable:block/fertile_soil_top",
+    "bottom": "block/dirt",
+    "side": "sandwichable:block/fertile_soil_side"
+  }
+}

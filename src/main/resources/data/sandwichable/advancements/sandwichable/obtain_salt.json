@@ -1,0 +1,33 @@
+{
+	"parent": "sandwichable:sandwichable/create_desalinator",
+	"display": {
+		"icon": {
+			"item": "sandwichable:salt"
+		},
+		"title": {
+			"translate": "advancements.sandwichable.obtain_salt.title"
+		},
+		"description": {
+			"translate": "advancements.sandwichable.obtain_salt.description"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": true,
+		"hidden": false
+	},
+	"criteria": {
+		"craft_desalinator": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{ "item": "sandwichable:salt" }
+				]
+			}
+		}
+	},
+	"requirements": [
+		[
+			"craft_desalinator"
+		]
+	]
+}

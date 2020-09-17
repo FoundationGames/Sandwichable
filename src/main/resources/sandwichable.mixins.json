@@ -3,12 +3,18 @@
 	"package": "io.github.foundationgames.sandwichable.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
+		"PistonBlockMixin",
+		"CropBlockMixin",
 		"StructurePoolsMixin",
 		"StructurePoolAccess",
+		"BuiltinBiomesAccess",
+		"BiomeLayerAccess",
+		"BiomeSourceAccess",
 		"ComposterHelper"
 	],
 	"client": [
-		"BuiltinModelItemRendererMixin"
+		"BuiltinModelItemRendererMixin",
+		"ScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

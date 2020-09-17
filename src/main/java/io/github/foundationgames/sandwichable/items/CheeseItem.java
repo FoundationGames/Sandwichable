@@ -50,6 +50,10 @@ public class CheeseItem extends InfoTooltipItem {
         return type;
     }
 
+    public boolean isSlice() {
+        return isSlice;
+    }
+
     @Override
     public String getTranslationKey() {
         return "item.sandwichable.cheese" + ( isSlice ? "_slice" : "_wheel" );

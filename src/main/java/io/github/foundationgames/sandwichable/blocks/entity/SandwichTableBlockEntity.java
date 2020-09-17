@@ -6,6 +6,7 @@ import io.github.foundationgames.sandwichable.items.SpreadRegistry;
 import io.github.foundationgames.sandwichable.items.spread.SpreadItem;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -37,11 +38,12 @@ public class SandwichTableBlockEntity extends BlockEntity implements BlockEntity
     public void addFood(PlayerEntity player, ItemStack playerStack) {
         int i=0;
         while(this.foods.get(i)!=ItemStack.EMPTY && i < this.foods.size()-1) {i++;}
-        ItemStack stack;
-        if(!player.isCreative() && !(getFoodListSize() >= 127)) {
-            stack = playerStack.split(1);
-        } else {
-            stack = playerStack.copy();
+        ItemStack stack = playerStack.copy();
+        stack.setCount(1);
+        if(getFoodListSize() >= 127) {
+            stack = ItemStack.EMPTY;
+        } else if(!player.abilities.creativeMode) {
+            playerStack.decrement(1);
         }
         if (i < this.foods.size()-1) {
             if(SpreadRegistry.INSTANCE.itemHasSpread(stack.getItem())) {
@@ -59,6 +61,13 @@ public class SandwichTableBlockEntity extends BlockEntity implements BlockEntity
         if(this.getFoodListSize() >= 127) {
             player.sendMessage(new TranslatableText("message.sandwichtable.fullsandwich").formatted(Formatting.RED), true);
         }
+    }
+
+    public void addTopStackFrom(ItemStack stack) {
+        int i=0;
+        while(this.foods.get(i)!=ItemStack.EMPTY && i < this.foods.size()-1) {i++;}
+        ItemStack nstack = stack.split(1);
+        this.foods.set(i, nstack);
     }
 
     public ItemStack removeTopFood() {
