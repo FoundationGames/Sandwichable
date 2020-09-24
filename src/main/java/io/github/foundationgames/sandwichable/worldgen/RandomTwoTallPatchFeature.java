@@ -1,24 +1,16 @@
 package io.github.foundationgames.sandwichable.worldgen;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.RandomPatchFeatureConfig;
-import net.minecraft.world.gen.placer.BlockPlacer;
-import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 
-import java.util.List;
 import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class RandomTwoTallPatchFeature extends Feature<RandomTwoTallPatchFeatureConfig> {
     public RandomTwoTallPatchFeature(Codec<RandomTwoTallPatchFeatureConfig> configCodec) {
@@ -41,7 +33,7 @@ public class RandomTwoTallPatchFeature extends Feature<RandomTwoTallPatchFeature
             mutable.set(mutable.add(0, config.yOffset, 0).mutableCopy());
             BlockPos placePos = mutable.down();
             BlockState downState = world.getBlockState(placePos);
-            if ((!config.canReplace && world.isAir(mutable)) || (config.canReplace && world.getBlockState(mutable).isSolidBlock(world, mutable) && (world.getBlockState(mutable.add(0, 1, 0)).isAir()) && (world.getBlockState(mutable.add(0, 2, 0)).isAir())) && (config.whitelist.isEmpty() || config.whitelist.contains(downState.getBlock())) && !config.blacklist.contains(downState) && !config.blacklist.contains(world.getBlockState(mutable)) && (!config.needsWater || world.getFluidState(placePos.west()).isIn(FluidTags.WATER) || world.getFluidState(placePos.east()).isIn(FluidTags.WATER) || world.getFluidState(placePos.north()).isIn(FluidTags.WATER) || world.getFluidState(placePos.south()).isIn(FluidTags.WATER))) {
+            if (world.getStructures(ChunkSectionPos.from(pos), ConfiguredFeaturesRegistry.MARKET_FEATURE).count() < 1 && ((!config.canReplace && world.isAir(mutable)) || (config.canReplace && world.getBlockState(mutable).isSolidBlock(world, mutable) && (world.getBlockState(mutable.add(0, 1, 0)).isAir()) && (world.getBlockState(mutable.add(0, 2, 0)).isAir())) && (config.whitelist.isEmpty() || config.whitelist.contains(downState.getBlock())) && !config.blacklist.contains(downState) && !config.blacklist.contains(world.getBlockState(mutable)) && (!config.needsWater || world.getFluidState(placePos.west()).isIn(FluidTags.WATER) || world.getFluidState(placePos.east()).isIn(FluidTags.WATER) || world.getFluidState(placePos.north()).isIn(FluidTags.WATER) || world.getFluidState(placePos.south()).isIn(FluidTags.WATER)))) {
                 config.blockPlacer.generate(world, mutable, bottomState, random);
                 config.blockPlacer.generate(world, mutable.add(0, 1, 0), topState, random);
                 ++placeCount;

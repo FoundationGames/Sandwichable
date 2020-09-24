@@ -14,11 +14,15 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry;
+import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.color.world.BiomeColors;
 import net.minecraft.client.color.world.FoliageColors;
+import net.minecraft.client.color.world.GrassColors;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.item.DyeableItem;
+import net.minecraft.item.Items;
 import net.minecraft.text.TranslatableText;
 
 public class SandwichableClient implements ClientModInitializer {
@@ -35,7 +39,7 @@ public class SandwichableClient implements ClientModInitializer {
 
         ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> !state.get(ShrubBlock.SNIPPED) ? BiomeColors.getGrassColor(view, pos) : FoliageColors.getDefaultColor(), BlocksRegistry.SHRUB, BlocksRegistry.POTTED_SHRUB);
 
-        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> tintIndex == 0 ? FoliageColors.getDefaultColor() : FoliageColors.getSpruceColor(), BlocksRegistry.SHRUB.asItem());
+        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> tintIndex > 0 ? -1 : GrassColors.getColor(0.5D, 1.0D), BlocksRegistry.SHRUB.asItem());
 
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
             if(stack.getOrCreateTag().getString("spreadType") != null) {
@@ -60,5 +64,7 @@ public class SandwichableClient implements ClientModInitializer {
         if(FabricLoader.getInstance().isModLoaded("roughlyenoughitems")) {
             System.out.println("FOUND REI");
         }
+
+        FabricModelPredicateProviderRegistry.register(Items.FILLED_MAP, Util.id("mysterious_map"), (stack, world, entity) -> stack.hasTag() && stack.getTag().getBoolean("IsMysterious") ? 1f : 0f);
     }
 }

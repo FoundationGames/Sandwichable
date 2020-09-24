@@ -1,0 +1,100 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "min": 1.0,
+        "max": 3.0,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "name": "sandwichable:regular_cheese_culture_bottle"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "sandwichable:creamy_cheese_culture_bottle"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "name": "sandwichable:intoxicating_cheese_culture_bottle"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 1.0,
+        "max": 2.0,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "name": "minecraft:milk_bucket"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 1.0,
+        "max": 4.0,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{bucketData:{percentFermented:50,fermentProgressActual:1800,basinContent:\"fermenting_milk_regular\"}}"
+            }
+          ],
+          "name": "sandwichable:fermenting_milk_bucket"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{bucketData:{percentFermented:50,fermentProgressActual:1800,basinContent:\"fermenting_milk_creamy\"}}"
+            }
+          ],
+          "name": "sandwichable:fermenting_milk_bucket"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{bucketData:{percentFermented:50,fermentProgressActual:1800,basinContent:\"fermenting_milk_intoxicating\"}}"
+            }
+          ],
+          "name": "sandwichable:fermenting_milk_bucket"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "name": "sandwichable:cheese_slice"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "sandwichable:creamy_cheese_slice"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "name": "sandwichable:intoxicating_cheese_slice"
+        }
+      ]
+    }
+  ]
+}

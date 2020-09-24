@@ -1,0 +1,276 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+	{
+      "rolls": {
+        "min": 1.0,
+        "max": 4.0,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+		{
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "sandwichable:apple_slices"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 1,
+          "name": "sandwichable:golden_apple_slices"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "sandwichable:sweet_berry_jam_bottle"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "sandwichable:mayonnaise_bottle"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "sandwichable:chopped_carrot"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 3,
+          "name": "sandwichable:pickle_chips"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 4,
+          "name": "sandwichable:chicken_filet"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 4,
+          "name": "sandwichable:pork_cuts"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "sandwichable:bacon_strips"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 4,
+          "name": "sandwichable:cheese_slice"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minecraft:stick"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 4,
+          "name": "sandwichable:tomato"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 3,
+          "name": "sandwichable:onion"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 4,
+          "name": "sandwichable:cucumber"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 3,
+		  "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "sandwichable:lettuce_leaf"
+        }
+      ]
+    },
+	{
+      "rolls": {
+        "min": 1.0,
+        "max": 4.0,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+		{
+          "type": "minecraft:item",
+          "weight": 5,
+		  "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "sandwichable:bread_slice"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 4,
+		  "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "sandwichable:toasted_bread_slice"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 3,
+		  "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:bread"
+        }
+	  ]
+	},
+	{
+      "rolls": {
+        "min": 0.0,
+        "max": 2.0,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+		{
+          "type": "minecraft:item",
+          "weight": 5,
+		  "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:wheat"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 4,
+		  "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "sandwichable:shrub"
+        }
+	  ]
+	},
+	{
+      "rolls": {
+        "min": 0.0,
+        "max": 2.0,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+		{
+          "type": "minecraft:item",
+          "weight": 3,
+		  "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "sandwichable:tomato_seeds"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 3,
+		  "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "sandwichable:lettuce_seeds"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 3,
+		  "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "sandwichable:onion_seeds"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 3,
+		  "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "sandwichable:cucumber_seeds"
+        },
+		{
+          "type": "minecraft:item",
+          "weight": 5,
+		  "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:wheat_seeds"
+        }
+	  ]
+	}
+  ]
+}

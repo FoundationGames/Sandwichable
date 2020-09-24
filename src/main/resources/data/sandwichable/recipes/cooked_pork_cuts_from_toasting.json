@@ -3,5 +3,5 @@
 	"input": {
 		"item": "sandwichable:pork_cuts"
 	},
-	"output": "sandwichable:bacon_strips"
+	"output": "sandwichable:cooked_pork_cuts"
 }

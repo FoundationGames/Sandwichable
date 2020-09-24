@@ -1,6 +1,7 @@
 package io.github.foundationgames.sandwichable.config;
 
 import io.github.foundationgames.sandwichable.Sandwichable;
+import io.github.foundationgames.sandwichable.blocks.DesalinatorBlock;
 import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
 import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
 import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry;
@@ -32,6 +33,10 @@ public class SandwichableConfig implements ConfigData {
     @ConfigEntry.Category(value = "server_gameplay")
     public int baseSandwichEatTime = 32;
 
+    @ConfigEntry.Category(value = "server_gameplay")
+    @ConfigEntry.Gui.Excluded
+    public DesalinatorOptions desalinatorOptions = new DesalinatorOptions();
+
     @ConfigEntry.Category(value = "world_gen")
     @ConfigEntry.Gui.CollapsibleObject
     public SaltySandGenOptions saltySandGenOptions = new SaltySandGenOptions();
@@ -53,11 +58,14 @@ public class SandwichableConfig implements ConfigData {
         public int spawnTries = 10;
     }
     public static class DesalinatorOptions {
-        //FUTURE UPDATE
         @ConfigEntry.Gui.Excluded
-        public String[] saltyBiomes = new String[] {
-            "category=OCEANS",
-            "category=BEACHES"
+        public String[] saltyBiomeIds = new String[] {
+            "sandwichable:vegetable_forest"
+        };
+        @ConfigEntry.Gui.Excluded
+        public String[] saltyBiomeCategories = new String[] {
+                "ocean",
+                "beach"
         };
     }
 

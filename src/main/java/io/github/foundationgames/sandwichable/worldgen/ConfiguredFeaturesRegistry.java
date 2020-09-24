@@ -1,20 +1,26 @@
 package io.github.foundationgames.sandwichable.worldgen;
 
 import com.google.common.collect.Collections2;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import com.ibm.icu.impl.CollectionSet;
 import io.github.foundationgames.sandwichable.SandwichableEarly;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
+import io.github.foundationgames.sandwichable.mixin.StructureFeatureAccess;
+import io.github.foundationgames.sandwichable.util.Util;
+import net.fabricmc.fabric.api.structure.v1.FabricStructureBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CropBlock;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.Util;
+import net.minecraft.structure.PlainsVillageData;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
+import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.UniformIntDistribution;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.size.ThreeLayersFeatureSize;
@@ -28,6 +34,10 @@ import java.util.*;
 import java.util.function.Supplier;
 
 public class ConfiguredFeaturesRegistry {
+    public static final StructureFeature<StructurePoolFeatureConfig> MARKET_FEATURE = new AbandonedMarketFeature(StructurePoolFeatureConfig.CODEC);
+
+    public static final ConfiguredStructureFeature<StructurePoolFeatureConfig, ? extends StructureFeature<StructurePoolFeatureConfig>> ABANDONED_MARKET =
+            Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, "abandoned_market", MARKET_FEATURE.configure(new StructurePoolFeatureConfig(() -> AbandonedMarketData.START_POOL, 6)));
 
     private static final Supplier<WeightedBlockStateProvider> CROPS_LIST_CREATOR = () -> {
         WeightedBlockStateProvider p = new WeightedBlockStateProvider();
@@ -41,17 +51,18 @@ public class ConfiguredFeaturesRegistry {
         }
         p.addState(Blocks.AIR.getDefaultState(), 3);
         p.addState(BlocksRegistry.SHRUB.getDefaultState(), 2);
-        p.addState(Blocks.OAK_LEAVES.getDefaultState(), 2);
-        p.addState(Blocks.DARK_OAK_LEAVES.getDefaultState(), 1);
-        p.addState(Blocks.BIRCH_LEAVES.getDefaultState(), 1);
+        p.addState(Blocks.OAK_LEAVES.getDefaultState().with(Properties.PERSISTENT, true), 2);
+        p.addState(Blocks.DARK_OAK_LEAVES.getDefaultState().with(Properties.PERSISTENT, true), 1);
+        p.addState(Blocks.BIRCH_LEAVES.getDefaultState().with(Properties.PERSISTENT, true), 1);
         return p;
     };
 
     private static final Supplier<Set<BlockState>> BLACKLISTED_VEGETABLE_STATES = () -> {
-        Set<BlockState> set = new HashSet<BlockState>();
+        Set<BlockState> set = new HashSet<>();
         set.addAll(Blocks.CARVED_PUMPKIN.getStateManager().getStates());
         set.addAll(Blocks.JACK_O_LANTERN.getStateManager().getStates());
         set.add(Blocks.PUMPKIN.getDefaultState());
+        set.add(Blocks.MELON.getDefaultState());
         set.add(Blocks.MOSSY_COBBLESTONE.getDefaultState());
         return ImmutableSet.copyOf(set);
     };
@@ -77,15 +88,15 @@ public class ConfiguredFeaturesRegistry {
                     CROPS_LIST_CREATOR.get(),
                     new SimpleBlockStateProvider(BlocksRegistry.FERTILE_SOIL.getDefaultState()),
                     SimpleBlockPlacer.INSTANCE
-            ).yOffset(-1).canReplace().tries(100).whitelist(ImmutableSet.of(Blocks.GRASS_BLOCK, Blocks.DIRT)).build()
+            ).yOffset(-1).canReplace().tries(150).whitelist(ImmutableSet.of(Blocks.GRASS_BLOCK, Blocks.DIRT)).build()
     ).decorate(ConfiguredFeatures.Decorators.SQUARE_HEIGHTMAP_SPREAD_DOUBLE.repeat(2)));
 
     public static final ConfiguredFeature<?, ?> LEAF_PILE = Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, "sandwichable_leaf_pile", Feature.BLOCK_PILE.configure(
             new BlockPileFeatureConfig(
                     new WeightedBlockStateProvider()
-                            .addState(Blocks.OAK_LEAVES.getDefaultState(), 6)
-                            .addState(Blocks.BIRCH_LEAVES.getDefaultState(), 4)
-                            .addState(Blocks.DARK_OAK_LEAVES.getDefaultState(), 2)
+                            .addState(Blocks.OAK_LEAVES.getDefaultState().with(Properties.PERSISTENT, true), 6)
+                            .addState(Blocks.BIRCH_LEAVES.getDefaultState().with(Properties.PERSISTENT, true), 4)
+                            .addState(Blocks.DARK_OAK_LEAVES.getDefaultState().with(Properties.PERSISTENT, true), 2)
             )
     ).decorate(ConfiguredFeatures.Decorators.SQUARE_HEIGHTMAP_SPREAD_DOUBLE.repeat(60)));
 
@@ -104,5 +115,11 @@ public class ConfiguredFeaturesRegistry {
     ).withChance(0.06f).feature.get());
 
     public static void init() {
+        FabricStructureBuilder.create(Util.id("abandoned_market"), MARKET_FEATURE)
+                .step(GenerationStep.Feature.SURFACE_STRUCTURES)
+                .defaultConfig(32, 8, 265358979)
+                .superflatFeature(ABANDONED_MARKET)
+                .adjustsSurface()
+        .register();
     }
 }

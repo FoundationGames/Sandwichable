@@ -3,7 +3,10 @@ package io.github.foundationgames.sandwichable.blocks.entity;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.blocks.DesalinatorBlock;
 import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
+import io.github.foundationgames.sandwichable.config.SandwichableConfig;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
+import io.github.foundationgames.sandwichable.util.Util;
+import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.LockableContainerBlockEntity;
@@ -19,13 +22,17 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.BuiltinRegistries;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 
 public class DesalinatorBlockEntity extends LockableContainerBlockEntity implements SidedInventory, Tickable, BlockEntityClientSerializable {
     private DefaultedList<ItemStack> inventory;
+    private Boolean isSaltyCached = null;
     private int waterAmount = 0;
     private int evaporateProgress = 0;
     private int fuelBurnProgress = 0;
@@ -160,7 +167,35 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
         return burning;
     }
 
-    public boolean isWaterSaline() { return world.getBiome(pos).getCategory() == Biome.Category.OCEAN || world.getBiome(pos).getCategory() == Biome.Category.BEACH; }
+    public boolean isWaterSaline() {
+        if(isSaltyCached == null) {
+            SandwichableConfig cfg = AutoConfig.getConfigHolder(SandwichableConfig.class).getConfig();
+            String[] ids = cfg.desalinatorOptions.saltyBiomeIds;
+            String[] cats = cfg.desalinatorOptions.saltyBiomeCategories;
+            for(String id : ids) {
+                Identifier bid = Identifier.tryParse(id);
+                System.out.println(bid);
+                if(bid != null) {
+                    boolean b = BuiltinRegistries.BIOME.get(bid).equals(world.getBiome(pos));
+                    System.out.println(BuiltinRegistries.BIOME.getId(world.getBiome(pos)));
+                    isSaltyCached = b;
+                    if(b) return true;
+                }
+            }
+            for(String cat : cats) {
+                Biome.Category category = Biome.Category.byName(cat);
+                if(category != null) {
+                    boolean b = world.getBiome(pos).getCategory() == category;
+                    isSaltyCached = b;
+                    if(b) return true;
+                }
+            }
+            return false;
+        } else {
+            return isSaltyCached;
+        }
+        //return world.getBiome(pos).getCategory() == Biome.Category.OCEAN || world.getBiome(pos).getCategory() == Biome.Category.BEACH || world.getBiome(pos) == BuiltinRegistries.BIOME.get(Util.id("vegetable_forest"));
+    }
 
     @Override
     protected Text getContainerName() {

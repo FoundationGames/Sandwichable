@@ -32,7 +32,7 @@ public class ShrubBlock extends PlantBlock {
     @Override
     protected boolean canPlantOnTop(BlockState floor, BlockView view, BlockPos pos) {
         Block block = floor.getBlock();
-        return block == Blocks.GRASS_BLOCK || block == Blocks.DIRT || block == Blocks.COARSE_DIRT || block == Blocks.PODZOL || block == Blocks.FARMLAND || block == Blocks.SAND;
+        return block == Blocks.GRASS_BLOCK || block == Blocks.DIRT || block == Blocks.COARSE_DIRT || block == Blocks.PODZOL || block == Blocks.FARMLAND || block == Blocks.SAND || block == BlocksRegistry.FERTILE_SOIL;
     }
 
     public static boolean canGenerateOn(BlockState state, WorldView world, BlockPos pos) {

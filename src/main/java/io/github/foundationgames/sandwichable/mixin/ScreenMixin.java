@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Matrix4f;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,8 +32,8 @@ import java.util.List;
 public class ScreenMixin extends AbstractParentElement {
 
     //@Shadow public void fillGradient(Matrix4f matrix, BufferBuilder bufferBuilder, int xStart, int yStart, int xEnd, int yEnd, int z, -267386864, -267386864);
-    @Shadow TextRenderer textRenderer;
-    @Shadow List<Element> children = Lists.newArrayList();
+    @Shadow protected TextRenderer textRenderer;
+    @Final @Shadow protected List<Element> children = Lists.newArrayList();
 
     private static ItemStack stack = null;
 
@@ -73,7 +74,7 @@ public class ScreenMixin extends AbstractParentElement {
             if(builder != null) {
                 fillGradient(matrix4f, builder, xs, ys, xs + length, ys + 1, 400, 0xee203e5a, 0xee203e5a);
                 fillGradient(matrix4f, builder, xs, ys+1, xs + length, ys+9, 400, 0xe44788c9, 0xe43c74aa);
-                fillGradient(matrix4f, builder, xs + length, ys + 1, xs + length + 1, ys + 8, 400, 0xee203e5a, 0xee172d41);
+                fillGradient(matrix4f, builder, xs + length, ys + 1, xs + length + 1, ys + 9, 400, 0xee203e5a, 0xee172d41);
                 fillGradient(matrix4f, builder, xs, ys + 9, xs + length, ys + 10, 400, 0xee172d41, 0xee172d41);
             }
         }

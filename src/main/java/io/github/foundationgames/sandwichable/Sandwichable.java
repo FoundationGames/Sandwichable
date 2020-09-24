@@ -17,15 +17,16 @@ import io.github.foundationgames.sandwichable.worldgen.ConfiguredFeaturesRegistr
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
+import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
 import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.item.ModelPredicateProvider;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.*;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
@@ -39,7 +40,7 @@ public class Sandwichable implements ModInitializer {
     public static final ItemGroup SANDWICHABLE_ITEMS = FabricItemGroupBuilder.build(Util.id("sandwichable"), SandwichableGroupIconBuilder::getIcon);
 
     public static final Tag<Item> BREADS = TagRegistry.item(Util.id("breads"));
-    public static final Tag<Item> SANDWICHABLEITEMS = TagRegistry.item(Util.id("sandwichable_items"));
+    public static final Tag<Item> SANDWICHABLE_ITEMS_TAG = TagRegistry.item(Util.id("sandwichable_items"));
     public static final Tag<Item> METAL_ITEMS = TagRegistry.item(Util.id("metal_items"));
 
     @Override
@@ -94,7 +95,6 @@ public class Sandwichable implements ModInitializer {
                 DispenserBlock.registerBehavior(item, foodBehavior);
             }
         }
-        ConfiguredFeaturesRegistry.init();
         BiomesRegistry.init();
     }
 }

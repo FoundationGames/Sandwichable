@@ -97,7 +97,7 @@ public class SandwichTableBlockEntity extends BlockEntity implements BlockEntity
 
     public int getFoodListSize() {
         int i=0;
-        while(this.foods.get(i)!=ItemStack.EMPTY) {i++;}
+        while(this.foods.get(i)!=ItemStack.EMPTY && i < this.foods.size()) {i++;}
         return i;
     }
 

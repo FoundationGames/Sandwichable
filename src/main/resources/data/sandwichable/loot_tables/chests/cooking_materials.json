@@ -1,0 +1,82 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "min": 5.0,
+        "max": 8.0,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "sandwichable:chopped_carrot"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "sandwichable:chopped_onion"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "sandwichable:tomato_slice"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "sandwichable:chopped_beetroot"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "name": "sandwichable:pork_cuts"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "name": "sandwichable:chicken_filet"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "sandwichable:cod_filet"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "sandwichable:salmon_filet"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 1.0,
+        "max": 1.0,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "name": "minecraft:flint_and_steel"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 2.0,
+        "max": 2.0,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "name": "minecraft:coal"
+        }
+      ]
+    }
+  ]
+}

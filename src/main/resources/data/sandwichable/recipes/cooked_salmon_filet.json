@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "sandwichable:salmon_filet"
+  },
+  "result": "sandwichable:cooked_salmon_filet",
+  "experience": 0.17,
+  "cookingtime": 100
+}

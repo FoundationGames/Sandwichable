@@ -30,6 +30,8 @@ public class SandwichableEarly implements EarlyInitializer {
 
         SandwichableConfig config = AutoConfig.getConfigHolder(SandwichableConfig.class).getConfig();
 
+        AbandonedMarketData.init();
+
         DynamicRegistryCallback.callback(Registry.BIOME_KEY).register((manager, key, biome) -> {
             if(biome.getCategory() == Biome.Category.OCEAN || biome.getCategory() == Biome.Category.BEACH) {
                 BiomesRegistry.registerFeature(manager, biome, GenerationStep.Feature.UNDERGROUND_ORES, () -> SALTY_SAND_FEATURE.configure(
@@ -40,5 +42,7 @@ public class SandwichableEarly implements EarlyInitializer {
                 BiomesRegistry.registerFeature(manager, biome, GenerationStep.Feature.UNDERGROUND_ORES, () -> SHRUBS_FEATURE.configure(new DefaultFeatureConfig()));
             }
         });
+
+        ConfiguredFeaturesRegistry.init();
     }
 }

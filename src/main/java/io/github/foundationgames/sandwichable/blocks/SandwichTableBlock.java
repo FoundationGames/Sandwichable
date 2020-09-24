@@ -102,8 +102,8 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
         BlockEntity be = world.getBlockEntity(pos);
         if(be instanceof SandwichTableBlockEntity) {
             SandwichTableBlockEntity blockEntity = (SandwichTableBlockEntity)be;
-            if(blockEntity.getFoodListSize() > 0){
-                if(Sandwichable.BREADS.contains(blockEntity.getTopFood().getItem())){
+            if(blockEntity.getFoodListSize() > 0) {
+                if(Sandwichable.BREADS.contains(blockEntity.getTopFood().getItem()) && blockEntity.getFoodListSize() > 1){
                     ItemStack item = new ItemStack(BlocksRegistry.SANDWICH);
                     CompoundTag tag = blockEntity.serializeSandwich(new CompoundTag());
                     if(!tag.isEmpty()) {
@@ -115,7 +115,7 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
                     world.spawnEntity(itemEntity);
                 } else {
                     for(ItemStack stack : blockEntity.getFoodList()) {
-                        if(!stack.isEmpty()) {
+                        if(!stack.isEmpty() && stack.getItem() != ItemsRegistry.SPREAD) {
                             ItemEntity item = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, stack);
                             world.spawnEntity(item);
                             blockEntity.setFoodList(DefaultedList.ofSize(128, ItemStack.EMPTY));

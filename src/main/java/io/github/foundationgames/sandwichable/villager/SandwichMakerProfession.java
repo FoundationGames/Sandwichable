@@ -4,28 +4,34 @@ import com.google.common.collect.ImmutableMap;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
+import io.github.foundationgames.sandwichable.worldgen.ConfiguredFeaturesRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.villager.VillagerProfessionBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
+import net.minecraft.item.map.MapIcon;
+import net.minecraft.item.map.MapState;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.structure.pool.*;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
+import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.poi.PointOfInterestType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
 
 public class SandwichMakerProfession {
@@ -50,17 +56,14 @@ public class SandwichMakerProfession {
                 1,
                     new TradeOffers.Factory[]{
                         new SandwichMakerProfession.BuyForOneEmeraldFactory(Items.WHEAT, 20, 16, 2),
-                        new SandwichMakerProfession.BuyForOneEmeraldFactory(Items.BREAD, 6, 12, 2),
-                        new SandwichMakerProfession.BuyForOneEmeraldFactory(ItemsRegistry.TOMATO, 18, 16, 2),
-                        new SandwichMakerProfession.BuyForOneEmeraldFactory(ItemsRegistry.LETTUCE_HEAD, 14, 16, 2),
-                        new SandwichMakerProfession.SellItemFactory(ItemsRegistry.BREAD_SLICE, 1, 10, 16, 1)
+                        new SandwichMakerProfession.SellMarketMapFactory()
                     },
                 2,
                     new TradeOffers.Factory[]{
                         new SandwichMakerProfession.SellSandwichFactory(5, SellableSandwiches.APPLE.getItems(), 6, 7),
                         new SandwichMakerProfession.BuyForOneEmeraldFactory(Items.BUCKET, 1, 12, 5),
                         new SandwichMakerProfession.BuyForOneEmeraldFactory(Items.PORKCHOP, 18, 12, 3),
-                        new SandwichMakerProfession.SellItemFactory(ItemsRegistry.CHEESE_SLICE_REGULAR, 2, 10, 4, 1),
+                        new SandwichMakerProfession.SellItemFactory(ItemsRegistry.CHEESE_SLICE_REGULAR, 2, 10, 4, 1)
                     },
                 3,
                     new TradeOffers.Factory[]{
@@ -80,7 +83,7 @@ public class SandwichMakerProfession {
                 5,
                     new TradeOffers.Factory[]{
                         new SandwichMakerProfession.SellSandwichFactory(25, SellableSandwiches.GOLDEN_APPLE.getItems(), 6, 17),
-                        new SandwichMakerProfession.SellCheeseFactory(4, 12, 6),
+                        new SandwichMakerProfession.SellCheeseFactory(4, 12, 6)
                     }
             ))
         );
@@ -120,7 +123,7 @@ public class SandwichMakerProfession {
         }
 
         public SellItemFactory(Item item, int price, int count, int experience) {
-            this((ItemStack)(new ItemStack(item)), price, count, 12, experience);
+            this(new ItemStack(item), price, count, 12, experience);
         }
 
         public SellItemFactory(Item item, int price, int count, int maxUses, int experience) {
@@ -187,8 +190,32 @@ public class SandwichMakerProfession {
         }
     }
 
-    enum SellableSandwiches {
+    static class SellMarketMapFactory implements TradeOffers.Factory {
 
+        public SellMarketMapFactory() {}
+
+        @Nullable
+        public TradeOffer create(Entity entity, Random random) {
+            if (!(entity.world instanceof ServerWorld)) {
+                return null;
+            } else {
+                ServerWorld serverWorld = (ServerWorld)entity.world;
+                BlockPos blockPos = serverWorld.locateStructure(ConfiguredFeaturesRegistry.MARKET_FEATURE, entity.getBlockPos(), 100, false);
+                if (blockPos != null) {
+                    ItemStack map = FilledMapItem.createMap(serverWorld, blockPos.getX(), blockPos.getZ(), (byte)2, true, true);
+                    map.getOrCreateTag().putBoolean("IsMysterious", true);
+                    FilledMapItem.fillExplorationMap(serverWorld, map);
+                    MapState.addDecorationsTag(map, blockPos, "+", MapIcon.Type.RED_X);
+                    map.setCustomName(new TranslatableText("filled_map." + ConfiguredFeaturesRegistry.MARKET_FEATURE.getName().toLowerCase(Locale.ROOT)).formatted(Formatting.RESET));
+                    return new TradeOffer(new ItemStack(Items.BREAD, 7), ItemStack.EMPTY, map, 1, 9, 0.1F);
+                } else {
+                    return null;
+                }
+            }
+        }
+    }
+
+    enum SellableSandwiches {
         APPLE(new Item[]{Items.BREAD, Items.APPLE, Items.BREAD}),
         BACON_LETTUCE_TOMATO(new Item[]{ItemsRegistry.BREAD_SLICE, ItemsRegistry.BACON_STRIPS, ItemsRegistry.LETTUCE_LEAF, ItemsRegistry.TOMATO_SLICE, ItemsRegistry.BREAD_SLICE}),
         CHICKEN_CHEESE(new Item[]{ItemsRegistry.TOASTED_BREAD_SLICE, ItemsRegistry.CHEESE_SLICE_REGULAR, Items.COOKED_CHICKEN, ItemsRegistry.LETTUCE_LEAF, ItemsRegistry.TOASTED_BREAD_SLICE}),

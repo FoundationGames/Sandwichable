@@ -38,7 +38,7 @@ public class BiomesRegistry {
         spawnBuilder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.RABBIT, 20, 4, 6));
         DefaultBiomeFeatures.addBatsAndMonsters(spawnBuilder);
         DefaultBiomeFeatures.addDefaultUndergroundStructures(genBuilder);
-        genBuilder.structureFeature(ConfiguredStructureFeatures.RUINED_PORTAL);
+        genBuilder.structureFeature(ConfiguredFeaturesRegistry.ABANDONED_MARKET);
         DefaultBiomeFeatures.addLandCarvers(genBuilder);
         DefaultBiomeFeatures.addDungeons(genBuilder);
         DefaultBiomeFeatures.addMossyRocks(genBuilder);
@@ -56,7 +56,6 @@ public class BiomesRegistry {
         genBuilder.feature(GenerationStep.Feature.LOCAL_MODIFICATIONS, ConfiguredFeaturesRegistry.VEGETABLE_PATCH);
         genBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, ConfiguredFeaturesRegistry.COMMON_PUMPKIN_PATCH);
         genBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, ConfiguredFeatures.PATCH_MELON);
-        //genBuilder.feature(GenerationStep.Feature.VEGETAL_DECORATION, Feature.BLOCK_PILE.configure(new BlockPileFeatureConfig(new SimpleBlockStateProvider(Blocks.OAK_LEAVES.getDefaultState()))).decorate(ConfiguredFeatures.Decorators.SQUARE_HEIGHTMAP_SPREAD_DOUBLE).repeat(50));
         DefaultBiomeFeatures.addFrozenTopLayer(genBuilder);
         return new Biome.Builder().precipitation(Biome.Precipitation.RAIN).category(Biome.Category.FOREST).depth(0.1f).scale(0.12f).temperature(0.75f).downfall(0.8F).effects(new BiomeEffects.Builder().grassColor(0x89bd40).foliageColor(0xc79d12).waterColor(0x409ad6).waterFogColor(0x0fabff).fogColor(12638463).skyColor(0x7eb9ed).moodSound(BiomeMoodSound.CAVE).build()).spawnSettings(spawnBuilder.build()).generationSettings(genBuilder.build()).build();
     };
