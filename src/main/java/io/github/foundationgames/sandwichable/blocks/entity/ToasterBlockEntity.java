@@ -25,7 +25,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.explosion.Explosion;
 import java.util.Optional;
 
-public class ToasterBlockEntity extends BlockEntity implements Tickable, BlockEntityClientSerializable {
+public class ToasterBlockEntity extends BlockEntity implements SidedInventory, Tickable, BlockEntityClientSerializable {
 
     private DefaultedList<ItemStack> items = DefaultedList.ofSize(2, ItemStack.EMPTY);
     private static int toastTime = 240;
@@ -206,5 +206,64 @@ public class ToasterBlockEntity extends BlockEntity implements Tickable, BlockEn
         if(currentlyPowered && !previouslyPowered) {
             if(!toasting) {startToasting(); }
         }
+    }
+
+    @Override
+    public int[] getAvailableSlots(Direction side) {
+        return items.get(0).isEmpty() ? new int[]{0, 1} : new int[]{1};
+    }
+
+    @Override
+    public boolean canInsert(int slot, ItemStack stack, Direction dir) {
+        return items.get(slot).isEmpty();
+    }
+
+    @Override
+    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+        return true;
+    }
+
+    @Override
+    public int size() {
+        return 2;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return items.isEmpty();
+    }
+
+    @Override
+    public ItemStack getStack(int slot) {
+        return items.get(slot);
+    }
+
+    @Override
+    public ItemStack removeStack(int slot, int amount) {
+        return removeStack(slot);
+    }
+
+    @Override
+    public ItemStack removeStack(int slot) {
+        ItemStack stack = items.get(slot).copy();
+        items.set(slot, ItemStack.EMPTY);
+        sync();
+        return stack;
+    }
+
+    @Override
+    public void setStack(int slot, ItemStack stack) {
+        items.set(slot, stack);
+        sync();
+    }
+
+    @Override
+    public boolean canPlayerUse(PlayerEntity player) {
+        return false;
+    }
+
+    @Override
+    public void clear() {
+        items.clear();
     }
 }

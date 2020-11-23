@@ -130,4 +130,9 @@ public class Util {
             }
         }
     }
+
+    public static int getSaltyWaterColor() {
+        //return 0x56c7d1;
+        return 0x6ce0eb;
+    }
 }

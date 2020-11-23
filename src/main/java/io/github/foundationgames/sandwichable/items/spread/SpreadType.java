@@ -35,9 +35,9 @@ public class SpreadType {
         SpreadRegistry.INSTANCE.register("mayonnaise", MAYONNAISE);
     }
 
-    private int hunger;
-    private float saturation;
-    private int color;
+    private final int hunger;
+    private final float saturation;
+    private final int color;
     List<StatusEffectInstance> effects;
     ItemConvertible container;
     ItemConvertible resultContainer;

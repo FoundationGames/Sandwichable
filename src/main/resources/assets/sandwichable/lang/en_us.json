@@ -88,6 +88,8 @@
 	"block.sandwichable.onions": "Onion Crop",
 	"block.sandwichable.potted_shrub": "Potted Shrub",
 	"block.sandwichable.salty_sand": "Salty Sand",
+	"block.sandwichable.salty_rocks": "Salty Rocks",
+	"block.sandwichable.salty_stone": "Salty Stone",
 	"block.sandwichable.desalinator": "Redstone Desalinator",
 	
 	"entity.minecraft.villager.sandwich_maker": "Sandwich Maker",
@@ -121,7 +123,7 @@
 	"desalinator.tooltip.maxCapacity": "Max Capacity:",
 	"desalinator.tooltip.saline": "Salinity Level HIGH",
 	"desalinator.tooltip.notSaline": "Salinity Level LOW",
-	"desalinator.tooltip.moveToSaltyBiome": "Please move to a saltwater biome!",
+	"desalinator.tooltip.moveToSaltyBiome": "Please move to a saltwater area or biome!",
 	
 	"category.sandwichable.cutting_board": "Cutting",
 	"category.sandwichable.toasting": "Toasting",

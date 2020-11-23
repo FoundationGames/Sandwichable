@@ -61,6 +61,13 @@ public class SandwichTableBlockEntity extends BlockEntity implements BlockEntity
         }
     }
 
+    public void addTopStackFrom(ItemStack stack) {
+        int i=0;
+        while(this.foods.get(i)!=ItemStack.EMPTY && i < this.foods.size()-1) {i++;}
+        ItemStack nstack = stack.split(1);
+        this.foods.set(i, nstack);
+    }
+
     public ItemStack removeTopFood() {
         ItemStack r;
         int i=0;

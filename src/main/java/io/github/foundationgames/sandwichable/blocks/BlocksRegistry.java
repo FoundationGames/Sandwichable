@@ -6,13 +6,13 @@ import io.github.foundationgames.sandwichable.items.InfoTooltipBlockItem;
 import io.github.foundationgames.sandwichable.items.SandwichBlockItem;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SandBlock;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.registry.Registry;
 
 public class BlocksRegistry {
@@ -43,13 +43,19 @@ public class BlocksRegistry {
     public static final Block TOASTER = new ToasterBlock(FabricBlockSettings.copy(Blocks.STONECUTTER).build());
 
     public static final Block DESALINATOR = new DesalinatorBlock(FabricBlockSettings.copy(Blocks.STONECUTTER).lightLevel(13).build());
+    public static final Block SALTY_SAND = new SandBlock(14406560, FabricBlockSettings.copy(Blocks.SAND).build());
+
+    public static final Block SALTY_STONE = new Block(AbstractBlock.Settings.of(Material.ORGANIC_PRODUCT, MaterialColor.GRASS).strength(1.7f, 6.5f).sounds(BlockSoundGroup.STONE));
+    public static final Block SALTY_ROCKS = new Block(AbstractBlock.Settings.of(Material.ORGANIC_PRODUCT, MaterialColor.GRASS).strength(1.7f, 6.5f).sounds(BlockSoundGroup.STONE));
 
     public static final Block PICKLE_JAR = new PickleJarBlock(FabricBlockSettings.copy(Blocks.GLASS_PANE).build());
 
     public static final Block SHRUB = new ShrubBlock(FabricBlockSettings.copy(Blocks.DEAD_BUSH).build());
-    public static final Block SALTY_SAND = new SandBlock(14406560, FabricBlockSettings.copy(Blocks.SAND).build());
 
     public static final Block POTTED_SHRUB = new PottedShrubBlock(SHRUB, FabricBlockSettings.copy(Blocks.POTTED_DEAD_BUSH).build());
+
+    public static class SaltyAirBlock extends AirBlock { public SaltyAirBlock(Settings settings) { super(settings); } }
+    public static final Block SALTY_AIR = new SaltyAirBlock(FabricBlockSettings.copy(Blocks.CAVE_AIR).build());
 
     public static BlockEntityType<SandwichTableBlockEntity> SANDWICHTABLE_BLOCKENTITY;
     public static BlockEntityType<SandwichBlockEntity> SANDWICH_BLOCKENTITY;
@@ -73,6 +79,12 @@ public class BlocksRegistry {
         registerBlock(JUNGLE_CUTTING_BOARD, "jungle_cutting_board", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(ACACIA_CUTTING_BOARD, "acacia_cutting_board", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(DARK_OAK_CUTTING_BOARD, "dark_oak_cutting_board", Sandwichable.SANDWICHABLE_ITEMS);
+        FuelRegistry.INSTANCE.add(OAK_CUTTING_BOARD, 320);
+        FuelRegistry.INSTANCE.add(BIRCH_CUTTING_BOARD, 320);
+        FuelRegistry.INSTANCE.add(SPRUCE_CUTTING_BOARD, 320);
+        FuelRegistry.INSTANCE.add(JUNGLE_CUTTING_BOARD, 320);
+        FuelRegistry.INSTANCE.add(ACACIA_CUTTING_BOARD, 320);
+        FuelRegistry.INSTANCE.add(DARK_OAK_CUTTING_BOARD, 320);
         registerBlock(CRIMSON_CUTTING_BOARD, "crimson_cutting_board", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(WARPED_CUTTING_BOARD, "warped_cutting_board", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(SHRUB, "shrub", Sandwichable.SANDWICHABLE_ITEMS);
@@ -81,6 +93,8 @@ public class BlocksRegistry {
         registerBlock(PICKLE_JAR, "pickle_jar");
 
         registerBlock(SALTY_SAND, "salty_sand", Sandwichable.SANDWICHABLE_ITEMS);
+        registerBlock(SALTY_STONE, "salty_stone", Sandwichable.SANDWICHABLE_ITEMS);
+        registerBlock(SALTY_ROCKS, "salty_rocks", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(DESALINATOR, "desalinator", Sandwichable.SANDWICHABLE_ITEMS);
 
         registerSandwich(SANDWICH, "sandwich");

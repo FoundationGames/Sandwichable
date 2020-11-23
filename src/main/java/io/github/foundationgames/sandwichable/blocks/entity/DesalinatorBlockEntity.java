@@ -1,5 +1,6 @@
 package io.github.foundationgames.sandwichable.blocks.entity;
 
+import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.blocks.DesalinatorBlock;
 import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
@@ -32,7 +33,7 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     private boolean burning = false;
     private boolean evaporating = false;
     public static final int maxWaterAmount = 4;
-    public static final int evaporateTime = 400;
+    public static final int evaporateTime = 185;
     public static final int fuelBurnTime = 495;
 
     public DesalinatorBlockEntity() {
@@ -62,7 +63,7 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
 
     private void finishEvaporating() {
         waterAmount--;
-        if(world.getBiome(pos).getCategory() == Biome.Category.OCEAN || world.getBiome(pos).getCategory() == Biome.Category.BEACH) {
+        if(isWaterSaline()) {
             if(this.inventory.get(1).isEmpty()) {
                 this.inventory.set(1, new ItemStack(ItemsRegistry.SALT));
             } else {
@@ -160,7 +161,7 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
         return burning;
     }
 
-    public boolean isWaterSaline() { return world.getBiome(pos).getCategory() == Biome.Category.OCEAN || world.getBiome(pos).getCategory() == Biome.Category.BEACH; }
+    public boolean isWaterSaline() { return world.getBiome(pos).getCategory() == Biome.Category.OCEAN || world.getBiome(pos).getCategory() == Biome.Category.BEACH || world.getBlockState(pos.down()).getBlock().isIn(Sandwichable.SALT_PRODUCING_BLOCKS); }
 
     @Override
     protected Text getContainerName() {

@@ -20,6 +20,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -29,6 +30,8 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class SandwichTableBlock extends Block implements BlockEntityProvider {
     public SandwichTableBlock(Settings settings) {
@@ -87,6 +90,41 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
             Util.sync(((SandwichTableBlockEntity)blockEntity), world);
         }
         return ActionResult.SUCCESS;
+    }
+
+    @Override
+    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        super.scheduledTick(state, world, pos, random);
+        ejectSandwich(world, pos);
+    }
+
+    public void ejectSandwich(World world, BlockPos pos) {
+        BlockEntity be = world.getBlockEntity(pos);
+        if(be instanceof SandwichTableBlockEntity) {
+            SandwichTableBlockEntity blockEntity = (SandwichTableBlockEntity)be;
+            if(blockEntity.getFoodListSize() > 0) {
+                if(Sandwichable.BREADS.contains(blockEntity.getTopFood().getItem()) && blockEntity.getFoodListSize() > 1){
+                    ItemStack item = new ItemStack(BlocksRegistry.SANDWICH);
+                    CompoundTag tag = blockEntity.serializeSandwich(new CompoundTag());
+                    if(!tag.isEmpty()) {
+                        item.putSubTag("BlockEntityTag", tag);
+                    }
+                    ItemEntity itemEntity = new ItemEntity(world, pos.getX()+0.5, pos.getY()+1.2, pos.getZ()+0.5, item);
+                    itemEntity.setToDefaultPickupDelay();
+                    blockEntity.setFoodList(DefaultedList.ofSize(128, ItemStack.EMPTY));
+                    world.spawnEntity(itemEntity);
+                } else {
+                    for(ItemStack stack : blockEntity.getFoodList()) {
+                        if(!stack.isEmpty() && stack.getItem() != ItemsRegistry.SPREAD) {
+                            ItemEntity item = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, stack);
+                            world.spawnEntity(item);
+                            blockEntity.setFoodList(DefaultedList.ofSize(128, ItemStack.EMPTY));
+                        }
+                    }
+                }
+            }
+            Util.sync(blockEntity, world);
+        }
     }
 
     @Override

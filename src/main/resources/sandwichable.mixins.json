@@ -1,16 +1,18 @@
 {
-	"required": true,
-	"package": "io.github.foundationgames.sandwichable.mixin",
-	"compatibilityLevel": "JAVA_8",
-	"mixins": [
-		"StructurePoolsMixin",
-		"StructurePoolAccess",
-		"ComposterHelper"
-	],
-	"client": [
-		"BuiltinModelItemRendererMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
+  "required": true,
+  "package": "io.github.foundationgames.sandwichable.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "ClientWorldMixin",
+    "ComposterHelper",
+    "PistonBlockMixin",
+    "StructurePoolAccess",
+    "StructurePoolsMixin"
+  ],
+  "client": [
+    "BuiltinModelItemRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
 	}
 }
