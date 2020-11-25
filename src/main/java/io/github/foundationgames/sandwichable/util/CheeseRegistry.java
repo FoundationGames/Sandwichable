@@ -1,13 +1,13 @@
 package io.github.foundationgames.sandwichable.util;
 
 import com.google.common.collect.Maps;
+import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.entity.BasinContent;
 import io.github.foundationgames.sandwichable.blocks.entity.BasinContentType;
 import io.github.foundationgames.sandwichable.items.CheeseType;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
 
 import java.util.Map;
 
@@ -19,15 +19,15 @@ public class CheeseRegistry {
     private Map<String, BasinContent> basinContents = Maps.newHashMap();
     private Map<CheeseType, BasinContent> typeToCheese = Maps.newHashMap();
     private Map<CheeseType, BasinContent> typeToFermentingMilk = Maps.newHashMap();
-    private Map<CheeseType, ItemStack> typeToCheeseItemStack = Maps.newHashMap();
+    private Map<CheeseType, Item> typeToCheeseItem = Maps.newHashMap();
 
     private CheeseRegistry() {
-        this.typeToCheeseItemStack.put(CheeseType.REGULAR, new ItemStack(ItemsRegistry.CHEESE_WHEEL_REGULAR, 1));
-        this.typeToCheeseItemStack.put(CheeseType.CREAMY, new ItemStack(ItemsRegistry.CHEESE_WHEEL_CREAMY, 1));
-        this.typeToCheeseItemStack.put(CheeseType.INTOXICATING, new ItemStack(ItemsRegistry.CHEESE_WHEEL_INTOXICATING, 1));
-        this.typeToCheeseItemStack.put(CheeseType.SOUR, new ItemStack(ItemsRegistry.CHEESE_WHEEL_SOUR, 1));
-        this.typeToCheeseItemStack.put(CheeseType.CANDESCENT, new ItemStack(ItemsRegistry.CHEESE_WHEEL_CANDESCENT, 1));
-        this.typeToCheeseItemStack.put(CheeseType.WARPED_BLEU, new ItemStack(ItemsRegistry.CHEESE_WHEEL_WARPED_BLEU, 1));
+        this.typeToCheeseItem.put(CheeseType.REGULAR, ItemsRegistry.CHEESE_WHEEL_REGULAR);
+        this.typeToCheeseItem.put(CheeseType.CREAMY, ItemsRegistry.CHEESE_WHEEL_CREAMY);
+        this.typeToCheeseItem.put(CheeseType.INTOXICATING, ItemsRegistry.CHEESE_WHEEL_INTOXICATING);
+        this.typeToCheeseItem.put(CheeseType.SOUR, ItemsRegistry.CHEESE_WHEEL_SOUR);
+        this.typeToCheeseItem.put(CheeseType.CANDESCENT, ItemsRegistry.CHEESE_WHEEL_CANDESCENT);
+        this.typeToCheeseItem.put(CheeseType.WARPED_BLEU, ItemsRegistry.CHEESE_WHEEL_WARPED_BLEU);
     }
 
     public void register(CheeseType type) {
@@ -51,7 +51,11 @@ public class CheeseRegistry {
         return this.typeToCheese.get(type);
     }
     public ItemStack cheeseItemFromCheeseType(CheeseType type) {
-        return this.typeToCheeseItemStack.get(type);
+        if(type == null) {
+            Sandwichable.LOG.error("NULL CheeseType");
+            return ItemStack.EMPTY;
+        }
+        return new ItemStack(this.typeToCheeseItem.get(type));
     }
     public BasinContent fermentingMilkFromCheeseType(CheeseType type) {
         return this.typeToFermentingMilk.get(type);

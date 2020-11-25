@@ -2,29 +2,18 @@ package io.github.foundationgames.sandwichable.blocks.entity;
 
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
-import io.github.foundationgames.sandwichable.items.SpreadRegistry;
-import io.github.foundationgames.sandwichable.items.spread.SpreadItem;
-import io.github.foundationgames.sandwichable.util.Util;
+import io.github.foundationgames.sandwichable.util.SpreadRegistry;
+import io.github.foundationgames.sandwichable.items.SpreadItem;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SandwichTableBlockEntity extends BlockEntity implements BlockEntityClientSerializable {
 
@@ -47,10 +36,10 @@ public class SandwichTableBlockEntity extends BlockEntity implements BlockEntity
             if(SpreadRegistry.INSTANCE.itemHasSpread(stack.getItem())) {
                 ItemStack spread = new ItemStack(ItemsRegistry.SPREAD, 1);
                 SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem()).onPour(stack, spread);
-                spread.getOrCreateTag().putString("spreadType", SpreadRegistry.INSTANCE.serialize(SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem())));
+                spread.getOrCreateTag().putString("spreadType", SpreadRegistry.INSTANCE.asString(SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem())));
                 this.foods.set(i, spread);
                 if(!player.isCreative()) {
-                    player.giveItemStack(new ItemStack(SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem()).getResultItem(), 1));
+                    player.giveItemStack(SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem()).getResultItem());
                 }
             } else {
                 this.foods.set(i, stack);

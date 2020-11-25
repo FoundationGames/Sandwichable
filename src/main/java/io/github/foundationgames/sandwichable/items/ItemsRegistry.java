@@ -2,14 +2,10 @@ package io.github.foundationgames.sandwichable.items;
 
 import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
-import io.github.foundationgames.sandwichable.items.spread.SpreadItem;
 import io.github.foundationgames.sandwichable.mixin.ComposterHelper;
 import io.github.foundationgames.sandwichable.util.Util;
-import net.minecraft.block.ComposterBlock;
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.AliasedBlockItem;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;

@@ -7,32 +7,31 @@ import io.github.foundationgames.sandwichable.items.CheeseItem;
 import io.github.foundationgames.sandwichable.items.CheeseType;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.CheeseRegistry;
+import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.Map;
 import java.util.Random;
 
-public class BasinBlockEntity extends BlockEntity implements Tickable, BlockEntityClientSerializable {
+public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tickable, BlockEntityClientSerializable {
 
     private int fermentProgress = 0;
     public static final int fermentTime = 3600;
@@ -91,74 +90,47 @@ public class BasinBlockEntity extends BlockEntity implements Tickable, BlockEnti
             ItemEntity cheese = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, new ItemStack(cheeseTypeToItem().get(content.getCheeseType()), 1));
             world.spawnEntity(cheese);
             content = BasinContent.AIR;
+            update();
             return ActionResult.SUCCESS;
         }
         if(content == BasinContent.MILK && playerStack.getItem() instanceof CheeseCultureItem) {
             this.startFermenting(((CheeseCultureItem)playerStack.getItem()).getCheeseType());
-            this.createCheeseParticle(this.world, this.pos, this.rng, 8, content.getCheeseType().getParticleColorRGB());
+            createCheeseParticle(this.world, this.pos, this.rng, 8, content.getCheeseType().getParticleColorRGB());
             world.playSound(null, pos, SoundEvents.ITEM_HONEY_BOTTLE_DRINK, SoundCategory.BLOCKS, 1.0F, 1.0F);
             if(!player.isCreative()) {
                 playerStack.decrement(1);
                 player.giveItemStack(new ItemStack(Items.GLASS_BOTTLE, 1));
             }
+            update();
             return ActionResult.SUCCESS;
         }
-        if(content == BasinContent.AIR && playerStack.getItem() instanceof CheeseItem) {
-            content = CheeseRegistry.INSTANCE.cheeseFromCheeseType(((CheeseItem)playerStack.getItem()).getCheeseType());
+        if(content == BasinContent.AIR && playerStack.getItem() instanceof CheeseItem && !((CheeseItem)playerStack.getItem()).isSlice()) {
+            insertCheese(playerStack.copy());
             if(!player.isCreative()) { playerStack.decrement(1); }
+            update();
             return ActionResult.SUCCESS;
         }
-        if(playerStack.getItem().equals(Items.MILK_BUCKET) && content == BasinContent.AIR) {
+        if((playerStack.getItem() == Items.MILK_BUCKET || playerStack.getItem() == ItemsRegistry.FERMENTING_MILK_BUCKET) && content == BasinContent.AIR) {
+            ItemStack result = insertMilk(playerStack);
+            if(result.equals(playerStack)) return ActionResult.PASS;
             if(!player.isCreative()) { player.setStackInHand(hand, new ItemStack(Items.BUCKET, 1)); }
-            content = BasinContent.MILK;
-            world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 0.8F, 1.0F);
+            update();
             return ActionResult.SUCCESS;
         }
-        if(playerStack.getItem().equals(ItemsRegistry.FERMENTING_MILK_BUCKET) && content == BasinContent.AIR) {
-            if(!player.isCreative()) { player.setStackInHand(hand, new ItemStack(Items.BUCKET, 1)); }
-            if(playerStack.getTag() != null) {
-                if(playerStack.getTag().getCompound("bucketData") != null) {
-                    CompoundTag tag = playerStack.getTag().getCompound("bucketData");
-                    content = CheeseRegistry.INSTANCE.basinContentFromString(tag.getString("basinContent"));
-                    fermentProgress = tag.getInt("fermentProgressActual");
-                }
-            } else {
-                return ActionResult.PASS;
+        if(playerStack.getItem().equals(Items.BUCKET) && this.getContent().getContentType().isLiquid) {
+            ItemStack result = extractMilk();
+            update();
+            if(!result.isEmpty()) {
+                playerStack.decrement(1);
+                player.giveItemStack(result);
+                return ActionResult.SUCCESS;
             }
-            world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 0.8F, 1.0F);
-            return ActionResult.SUCCESS;
+            return ActionResult.PASS;
         }
-        if(playerStack.getItem().equals(Items.BUCKET) && content == BasinContent.MILK) {
-            playerStack.decrement(1);
-            player.giveItemStack(new ItemStack(Items.MILK_BUCKET, 1));
-            content = BasinContent.AIR;
-            world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 0.8F, 1.0F);
-            return ActionResult.SUCCESS;
-        }
-        if(playerStack.getItem().equals(Items.BUCKET) && content.getContentType() == BasinContentType.FERMENTING_MILK) {
-            ItemStack stack = new ItemStack(ItemsRegistry.FERMENTING_MILK_BUCKET, 1);
-            CompoundTag tag = new CompoundTag();
-            tag.putInt("fermentProgressActual", fermentProgress);
-            float a = (float)fermentProgress/fermentTime; a *= 100;
-            int x = Math.round(a);
-            tag.putInt("percentFermented", x);
-            tag.putString("basinContent", content.toString());
-            stack.getOrCreateTag().put("bucketData", tag);
-            playerStack.decrement(1);
-            player.giveItemStack(stack);
-            world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 0.8F, 1.0F);
-            content = BasinContent.AIR;
-            fermentProgress = 0;
-            return ActionResult.SUCCESS;
-        }
-        markDirty();
+        update();
         return ActionResult.PASS;
     }
 
-    public int getComparatorOutput() {
-        float f = (float)this.fermentProgress / BasinBlockEntity.fermentTime;
-        return (int)(f*15);
-    }
     public int getFermentProgress() {
         return fermentProgress;
     }
@@ -171,6 +143,7 @@ public class BasinBlockEntity extends BlockEntity implements Tickable, BlockEnti
             content = CheeseRegistry.INSTANCE.fermentingMilkFromCheeseType(type);
             fermentProgress = 0;
         }
+        update();
         markDirty();
     }
     public void finishFermenting() {
@@ -178,7 +151,62 @@ public class BasinBlockEntity extends BlockEntity implements Tickable, BlockEnti
             fermentProgress = 0;
             content = CheeseRegistry.INSTANCE.cheeseFromCheeseType(content.getCheeseType());
         }
+        update();
         markDirty();
+    }
+    public ItemStack insertMilk(ItemStack milk) {
+        ItemStack r = milk;
+        if(milk.getItem() == Items.MILK_BUCKET) {
+            content = BasinContent.MILK;
+            r = new ItemStack(Items.BUCKET);
+        }
+        else if(milk.getItem() == ItemsRegistry.FERMENTING_MILK_BUCKET) {
+            if(milk.getTag() != null && milk.getTag().getCompound("bucketData") != null) {
+                CompoundTag tag = milk.getTag().getCompound("bucketData");
+                content = CheeseRegistry.INSTANCE.basinContentFromString(tag.getString("basinContent"));
+                fermentProgress = tag.getInt("fermentProgressActual");
+            }
+            r = new ItemStack(Items.BUCKET);
+        }
+        update();
+        world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 0.8F, 1.0F);
+        return r;
+    }
+    public ItemStack extractMilk() {
+        if(content == BasinContent.MILK) {
+            emptyBasin();
+            world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 0.8F, 1.0F);
+            update();
+            return new ItemStack(Items.MILK_BUCKET);
+        } else if(content.getContentType() == BasinContentType.FERMENTING_MILK) {
+            world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 0.8F, 1.0F);
+            ItemStack stack = new ItemStack(ItemsRegistry.FERMENTING_MILK_BUCKET);
+            CompoundTag tag = new CompoundTag();
+            tag.putInt("fermentProgressActual", fermentProgress);
+            float a = (float)fermentProgress/fermentTime; a *= 100;
+            int x = Math.round(a);
+            tag.putInt("percentFermented", x);
+            tag.putString("basinContent", content.toString());
+            stack.getOrCreateTag().put("bucketData", tag);
+            emptyBasin();
+            update();
+            return stack;
+        }
+        return ItemStack.EMPTY;
+    }
+
+    public void insertCheese(ItemStack cheese) {
+        if(cheese.getItem() instanceof CheeseItem && !((CheeseItem)cheese.getItem()).isSlice()) {
+            content = CheeseRegistry.INSTANCE.cheeseFromCheeseType(((CheeseItem)cheese.getItem()).getCheeseType());
+            cheese.decrement(1);
+        }
+        update();
+    }
+
+    public void emptyBasin() {
+        content = BasinContent.AIR;
+        fermentProgress = 0;
+        update();
     }
 
     private int tickN = 0;
@@ -199,11 +227,79 @@ public class BasinBlockEntity extends BlockEntity implements Tickable, BlockEnti
         if(tickN < 60) { tickN++; } else if(tickN == 60) { tickN = 0; }
     }
 
+    public void update() {
+        world.updateComparators(pos, world.getBlockState(pos).getBlock());
+        Util.sync(this, world);
+        markDirty();
+    }
+
     private static void createCheeseParticle(World world, BlockPos pos, Random random, int count, float[] color) {
         for (int i = 0; i < count; i++) {
             double ox = ((double) random.nextInt(10) / 16);
             double oz = ((double) random.nextInt(10) / 16);
             world.addParticle(new DustParticleEffect(color[0], color[1], color[2], 1.0F), pos.getX() + ox + 0.2, pos.getY() + 0.4, pos.getZ() + oz + 0.2, 0.0D, 0.09D, 0.0D);
         }
+    }
+
+    @Override
+    public int[] getAvailableSlots(Direction side) {
+        return new int[]{0};
+    }
+
+    @Override
+    public boolean canInsert(int slot, ItemStack stack, Direction dir) {
+        return isEmpty() && (stack.getItem() instanceof CheeseItem && !((CheeseItem)stack.getItem()).isSlice());
+    }
+
+    @Override
+    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+        return true;
+    }
+
+    @Override
+    public int size() {
+        return 1;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this.getContent() == BasinContent.AIR;
+    }
+
+    @Override
+    public ItemStack getStack(int slot) {
+        return this.getContent().getContentType() == BasinContentType.CHEESE ? new ItemStack(cheeseTypeToItem().get(this.content.getCheeseType())) : ItemStack.EMPTY;
+    }
+
+    @Override
+    public ItemStack removeStack(int slot, int amount) {
+        return removeStack(slot);
+    }
+
+    @Override
+    public ItemStack removeStack(int slot) {
+        ItemStack r = getStack(slot);
+        emptyBasin();
+        update();
+        return r;
+    }
+
+    @Override
+    public void setStack(int slot, ItemStack stack) {
+        if(stack.getItem() instanceof CheeseItem && !((CheeseItem)stack.getItem()).isSlice()) {
+            insertCheese(stack);
+        }
+        update();
+    }
+
+    @Override
+    public boolean canPlayerUse(PlayerEntity player) {
+        return false;
+    }
+
+    @Override
+    public void clear() {
+        emptyBasin();
+        update();
     }
 }

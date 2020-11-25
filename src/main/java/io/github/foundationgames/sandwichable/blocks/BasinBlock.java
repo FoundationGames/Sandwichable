@@ -51,7 +51,18 @@ public class BasinBlock extends Block implements BlockEntityProvider {
         return this.getOutlineShape(state, view, pos, ctx);
     }
 
+    @Override
+    public boolean hasComparatorOutput(BlockState state) {
+        return true;
+    }
 
+    @Override
+    public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+        if(world.getBlockEntity(pos) instanceof BasinBlockEntity) {
+            return ((BasinBlockEntity)world.getBlockEntity(pos)).getContent().getContentType() == BasinContentType.CHEESE ? 15 : 0;
+        }
+        return super.getComparatorOutput(state, world, pos);
+    }
 
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {

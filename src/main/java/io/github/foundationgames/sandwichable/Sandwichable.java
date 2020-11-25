@@ -1,11 +1,12 @@
 package io.github.foundationgames.sandwichable;
 
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
+import io.github.foundationgames.sandwichable.blocks.entity.BasinBlockEntity;
+import io.github.foundationgames.sandwichable.blocks.entity.BasinContent;
 import io.github.foundationgames.sandwichable.blocks.entity.SandwichTableBlockEntity;
-import io.github.foundationgames.sandwichable.config.SandwichableConfig;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.items.SandwichableGroupIconBuilder;
-import io.github.foundationgames.sandwichable.items.SpreadRegistry;
+import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.items.spread.SpreadType;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipeSerializer;
@@ -13,45 +14,24 @@ import io.github.foundationgames.sandwichable.recipe.ToastingRecipe;
 import io.github.foundationgames.sandwichable.recipe.ToastingRecipeSerializer;
 import io.github.foundationgames.sandwichable.util.Util;
 import io.github.foundationgames.sandwichable.villager.SandwichMakerProfession;
-import io.github.foundationgames.sandwichable.worldgen.ExtraOreFeature;
-import io.github.foundationgames.sandwichable.worldgen.ExtraOreFeatureConfig;
-import io.github.foundationgames.sandwichable.worldgen.ShrubsFeature;
-import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
-import me.sargunvohra.mcmods.autoconfig1u.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.item.*;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.Tag;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStep;
-import net.minecraft.world.gen.decorator.Decorator;
-import net.minecraft.world.gen.decorator.RangeDecoratorConfig;
-import net.minecraft.world.gen.feature.DefaultFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.OreFeature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Sandwichable implements ModInitializer {
 
@@ -60,6 +40,8 @@ public class Sandwichable implements ModInitializer {
     public static final Tag<Item> BREADS = TagRegistry.item(Util.id("breads"));
     public static final Tag<Item> METAL_ITEMS = TagRegistry.item(Util.id("metal_items"));
     public static final Tag<Block> SALT_PRODUCING_BLOCKS = TagRegistry.block(Util.id("salt_producing_blocks"));
+
+    public static final Logger LOG = LogManager.getLogger("Sandwichable");
 
     @Override
     public void onInitialize() {
@@ -80,8 +62,8 @@ public class Sandwichable implements ModInitializer {
             return world.getBlockState(pos).createScreenHandlerFactory(player.world, pos).createMenu(syncId, player.inventory, player);
         });
 
+        ItemDispenserBehavior defaultBehavior = new ItemDispenserBehavior();
         DispenserBehavior foodBehavior = new ItemDispenserBehavior() {
-            private final ItemDispenserBehavior defaultBehavior = new ItemDispenserBehavior();
             @Override
             protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
                 BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
@@ -93,10 +75,10 @@ public class Sandwichable implements ModInitializer {
                                 ItemStack spread = new ItemStack(ItemsRegistry.SPREAD, 1);
                                 SpreadType type = SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem());
                                 type.onPour(stack, spread);
-                                spread.getOrCreateTag().putString("spreadType", SpreadRegistry.INSTANCE.serialize(SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem())));
+                                spread.getOrCreateTag().putString("spreadType", SpreadRegistry.INSTANCE.asString(type));
                                 ((SandwichTableBlockEntity)be).addTopStackFrom(spread);
                                 Util.sync((SandwichTableBlockEntity)be, pointer.getWorld());
-                                return new ItemStack(type.getResultItem());
+                                return type.getResultItem();
                             }
                             else ((SandwichTableBlockEntity)be).addTopStackFrom(stack);
                             Util.sync((SandwichTableBlockEntity)be, pointer.getWorld());
@@ -104,13 +86,40 @@ public class Sandwichable implements ModInitializer {
                         }
                     }
                 }
-                return this.defaultBehavior.dispense(pointer, stack);
+                return defaultBehavior.dispense(pointer, stack);
             }
         };
         for(ItemConvertible item : Registry.ITEM) {
-            if(item.asItem().isFood() && item.asItem() != BlocksRegistry.SANDWICH.asItem()) {
+            if((item.asItem().isFood() || SpreadRegistry.INSTANCE.itemHasSpread(item)) && item.asItem() != BlocksRegistry.SANDWICH.asItem()) {
                 DispenserBlock.registerBehavior(item, foodBehavior);
             }
         }
+        ItemDispenserBehavior milkBehavior = new ItemDispenserBehavior() {
+            @Override
+            protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
+                BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
+                ServerWorld world = pointer.getWorld();
+                if(world.getBlockEntity(pos) instanceof BasinBlockEntity) {
+                    BasinBlockEntity be = (BasinBlockEntity)world.getBlockEntity(pos);
+                    if(be.getContent() == BasinContent.AIR) {
+                        return be.insertMilk(stack);
+                    }
+                }
+                return defaultBehavior.dispense(pointer, stack);
+            }
+        };
+        DispenserBlock.registerBehavior(Items.MILK_BUCKET, milkBehavior);
+        DispenserBlock.registerBehavior(ItemsRegistry.FERMENTING_MILK_BUCKET, milkBehavior);
+        DispenserBlock.registerBehavior(Items.BUCKET, (pointer, stack) -> {
+            BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
+            ServerWorld world = pointer.getWorld();
+            if(world.getBlockEntity(pos) instanceof BasinBlockEntity) {
+                BasinBlockEntity be = (BasinBlockEntity)world.getBlockEntity(pos);
+                if(be.getContent().getContentType().isLiquid) {
+                    return be.extractMilk();
+                }
+            }
+            return defaultBehavior.dispense(pointer, stack);
+        });
     }
 }

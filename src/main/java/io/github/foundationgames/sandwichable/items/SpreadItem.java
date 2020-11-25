@@ -1,6 +1,7 @@
-package io.github.foundationgames.sandwichable.items.spread;
+package io.github.foundationgames.sandwichable.items;
 
-import io.github.foundationgames.sandwichable.items.SpreadRegistry;
+import io.github.foundationgames.sandwichable.items.spread.SpreadType;
+import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,9 +19,9 @@ public class SpreadItem extends Item {
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
         if(user instanceof PlayerEntity && stack.getTag().contains("spreadType")) {
-            SpreadType type = SpreadRegistry.INSTANCE.deserialize(stack.getTag().getString("spreadType"));
+            SpreadType type = SpreadRegistry.INSTANCE.fromString(stack.getTag().getString("spreadType"));
             if(!((PlayerEntity)user).isCreative()) ((PlayerEntity)user).getHungerManager().add(type.getHunger(), type.getSaturationModifier());
-            for(StatusEffectInstance effect : type.getStatusEffects()) {
+            for(StatusEffectInstance effect : type.getStatusEffects(stack)) {
                 user.addStatusEffect(effect);
             }
             type.finishUsing(stack, world, user);
@@ -32,9 +33,25 @@ public class SpreadItem extends Item {
     public String getTranslationKey(ItemStack stack) {
         if(stack.getTag() != null) {
             if(stack.getTag().getString("spreadType") != null) {
-                return ("item.sandwichable.spread."+stack.getTag().getString("spreadType"));
+                String stype = stack.getTag().getString("spreadType");
+                if(SpreadRegistry.INSTANCE.fromString(stype) != null) {
+                    return SpreadRegistry.INSTANCE.fromString(stype).getTranslationKey(stype, stack);
+                }
             }
         }
         return super.getTranslationKey(stack);
+    }
+
+    @Override
+    public boolean hasGlint(ItemStack stack) {
+        if(stack.getTag() != null) {
+            if(stack.getTag().getString("spreadType") != null) {
+                String stype = stack.getTag().getString("spreadType");
+                if(SpreadRegistry.INSTANCE.fromString(stype) != null) {
+                    return SpreadRegistry.INSTANCE.fromString(stype).hasGlint(stack);
+                }
+            }
+        }
+        return super.hasGlint(stack);
     }
 }

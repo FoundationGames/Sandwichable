@@ -1,14 +1,12 @@
 package io.github.foundationgames.sandwichable.blocks;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import io.github.foundationgames.sandwichable.Sandwichable;
-import io.github.foundationgames.sandwichable.blocks.entity.SandwichBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.SandwichTableBlockEntity;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
-import io.github.foundationgames.sandwichable.items.spread.SpreadItem;
+import io.github.foundationgames.sandwichable.items.SpreadItem;
+import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
-import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -16,15 +14,12 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -57,7 +52,7 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
                 Inventories.fromTag(tag, sandwichlist);
                 player.getStackInHand(hand).decrement(1);
                 ((SandwichTableBlockEntity)blockEntity).setFoodList(sandwichlist);
-            } else if(!player.getStackInHand(hand).isEmpty() && player.getStackInHand(hand).isFood() && player.getStackInHand(hand).getItem() != BlocksRegistry.SANDWICH.asItem()) {
+            } else if(!player.getStackInHand(hand).isEmpty() && (player.getStackInHand(hand).isFood() || SpreadRegistry.INSTANCE.itemHasSpread(player.getStackInHand(hand).getItem())) && player.getStackInHand(hand).getItem() != BlocksRegistry.SANDWICH.asItem()) {
                 if (Sandwichable.BREADS.contains(((SandwichTableBlockEntity)blockEntity).getFoodList().get(0).getItem()) || Sandwichable.BREADS.contains(player.getStackInHand(hand).getItem())) {
                     ItemStack foodToBeAdded = player.getStackInHand(hand);
                     ((SandwichTableBlockEntity) blockEntity).addFood(player, foodToBeAdded);

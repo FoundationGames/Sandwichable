@@ -6,7 +6,7 @@ import io.github.foundationgames.sandwichable.blocks.entity.container.Desalinato
 import io.github.foundationgames.sandwichable.blocks.entity.container.screen.DesalinatorScreen;
 import io.github.foundationgames.sandwichable.blocks.entity.renderer.*;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
-import io.github.foundationgames.sandwichable.items.SpreadRegistry;
+import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -17,6 +17,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.color.world.BiomeColors;
 import net.minecraft.client.color.world.FoliageColors;
+import net.minecraft.client.color.world.GrassColors;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.TranslatableText;
 
@@ -32,12 +33,12 @@ public class SandwichableClient implements ClientModInitializer {
 
         ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> !state.get(ShrubBlock.SNIPPED) ? BiomeColors.getGrassColor(view, pos) : FoliageColors.getDefaultColor(), BlocksRegistry.SHRUB, BlocksRegistry.POTTED_SHRUB);
 
-        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> tintIndex == 0 ? FoliageColors.getDefaultColor() : FoliageColors.getSpruceColor(), BlocksRegistry.SHRUB.asItem());
+        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> tintIndex > 0 ? -1 : GrassColors.getColor(0.5D, 1.0D), BlocksRegistry.SHRUB.asItem());
 
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
             if(stack.getOrCreateTag().getString("spreadType") != null) {
-                if(SpreadRegistry.INSTANCE.deserialize(stack.getOrCreateTag().getString("spreadType")) != null) {
-                    return SpreadRegistry.INSTANCE.deserialize(stack.getOrCreateTag().getString("spreadType")).getColor();
+                if(SpreadRegistry.INSTANCE.fromString(stack.getOrCreateTag().getString("spreadType")) != null) {
+                    return SpreadRegistry.INSTANCE.fromString(stack.getOrCreateTag().getString("spreadType")).getColor(stack);
                 }
             }
             return 0xFFFFFF;
@@ -53,9 +54,5 @@ public class SandwichableClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.CUCUMBERS, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.ONIONS, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.PICKLE_JAR, RenderLayer.getCutout());
-
-        if(FabricLoader.getInstance().isModLoaded("roughlyenoughitems")) {
-            System.out.println("FOUND REI");
-        }
     }
 }

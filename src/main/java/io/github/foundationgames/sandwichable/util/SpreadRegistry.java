@@ -1,10 +1,14 @@
-package io.github.foundationgames.sandwichable.items;
+package io.github.foundationgames.sandwichable.util;
 
 import com.google.common.collect.Maps;
 import io.github.foundationgames.sandwichable.items.spread.SpreadType;
 import net.minecraft.item.ItemConvertible;
-import net.minecraft.util.Identifier;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Pair;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SpreadRegistry {
@@ -12,7 +16,7 @@ public class SpreadRegistry {
 
     private final Map<String, SpreadType> idToSpreadType = Maps.newHashMap();
     private final Map<SpreadType, String> spreadTypeToString = Maps.newHashMap();
-    private final Map<ItemConvertible, SpreadType> spreadContainerToType = Maps.newHashMap();
+    private final Map<ItemConvertible, SpreadType> spreadContainerToType = new HashMap<>();
 
     private SpreadRegistry() {}
 
@@ -31,10 +35,10 @@ public class SpreadRegistry {
         return spreadContainerToType.containsKey(item);
     }
 
-    public SpreadType deserialize(String id) {
+    public SpreadType fromString(String id) {
         return idToSpreadType.get(id);
     }
-    public String serialize(SpreadType type) {
+    public String asString(SpreadType type) {
         return spreadTypeToString.get(type);
     }
 }

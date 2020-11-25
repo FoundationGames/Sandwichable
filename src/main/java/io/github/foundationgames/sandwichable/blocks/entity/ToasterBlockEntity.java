@@ -5,6 +5,7 @@ import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.blocks.ToasterBlock;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.recipe.ToastingRecipe;
+import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -210,7 +211,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
 
     @Override
     public int[] getAvailableSlots(Direction side) {
-        return items.get(0).isEmpty() ? new int[]{0, 1} : new int[]{1};
+        return new int[]{0, 1};
     }
 
     @Override
@@ -247,14 +248,14 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
     public ItemStack removeStack(int slot) {
         ItemStack stack = items.get(slot).copy();
         items.set(slot, ItemStack.EMPTY);
-        sync();
+        Util.sync(this, world);
         return stack;
     }
 
     @Override
     public void setStack(int slot, ItemStack stack) {
         items.set(slot, stack);
-        sync();
+        Util.sync(this, world);
     }
 
     @Override
@@ -265,5 +266,6 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
     @Override
     public void clear() {
         items.clear();
+        Util.sync(this, world);
     }
 }

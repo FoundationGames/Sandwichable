@@ -2,13 +2,14 @@ package io.github.foundationgames.sandwichable.items.spread;
 
 import com.google.common.collect.ImmutableList;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
-import io.github.foundationgames.sandwichable.items.SpreadRegistry;
-import net.minecraft.client.MinecraftClient;
+import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.potion.Potion;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class SpreadType {
     public static final SpreadType FERMENTING_MILK;
     public static final SpreadType SWEET_BERRY_JAM;
     public static final SpreadType MAYONNAISE;
+    public static final SpreadType POTION;
 
     public static void init() {
         SpreadRegistry.INSTANCE.register("mushroom_stew", MUSHROOM_STEW);
@@ -33,6 +35,7 @@ public class SpreadType {
         SpreadRegistry.INSTANCE.register("fermenting_milk", FERMENTING_MILK);
         SpreadRegistry.INSTANCE.register("sweet_berry_jam", SWEET_BERRY_JAM);
         SpreadRegistry.INSTANCE.register("mayonnaise", MAYONNAISE);
+        SpreadRegistry.INSTANCE.register("potion", POTION);
     }
 
     private final int hunger;
@@ -54,14 +57,16 @@ public class SpreadType {
         this(hunger, saturationModifier, color, ImmutableList.of(), container, resultContainer);
     }
 
-    public int getColor() { return color; };
+    public int getColor(ItemStack stack) { return color; };
     public int getHunger() { return hunger; };
     public float getSaturationModifier() { return saturation; };
-    public List<StatusEffectInstance> getStatusEffects() { return effects; };
+    public List<StatusEffectInstance> getStatusEffects(ItemStack stack) { return effects; };
     public ItemConvertible getContainingItem() { return container; };
-    public ItemConvertible getResultItem() { return resultContainer; };
+    public ItemStack getResultItem() { return new ItemStack(resultContainer); };
     public void finishUsing(ItemStack stack, World world, LivingEntity user) {};
     public void onPour(ItemStack container, ItemStack spread) {};
+    public String getTranslationKey(String id, ItemStack stack) { return "item.sandwichable.spread."+id; };
+    public boolean hasGlint(ItemStack stack) { return false; }
 
     static {
         MUSHROOM_STEW = new SpreadType(6, 0.6F, 0xAD7451, Items.MUSHROOM_STEW, Items.BOWL);
@@ -72,5 +77,6 @@ public class SpreadType {
         FERMENTING_MILK = new FermentingMilkSpreadType();
         SWEET_BERRY_JAM = new SpreadType(5, 0.5F, 0xF00024, ItemsRegistry.SWEET_BERRY_JAM, Items.GLASS_BOTTLE);
         MAYONNAISE = new SpreadType(4, 0.6F, 0xFFD5B5, ItemsRegistry.MAYONNAISE, Items.GLASS_BOTTLE);
+        POTION = new PotionSpreadType();
     }
 }
