@@ -29,6 +29,14 @@ public class SandwichBlock extends Block implements BlockEntityProvider {
     }
 
     @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
+        super.neighborUpdate(state, world, pos, block, fromPos, notify);
+        if(!canPlaceAt(state, world, pos)) {
+            world.breakBlock(pos, true);
+        }
+    }
+
+    @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
         if (view.getBlockEntity(pos) instanceof SandwichBlockEntity) {
             SandwichBlockEntity blockEntity = (SandwichBlockEntity)view.getBlockEntity(pos);

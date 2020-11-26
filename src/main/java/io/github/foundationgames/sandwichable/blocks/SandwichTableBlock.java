@@ -38,10 +38,6 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
         return new SandwichTableBlockEntity();
     }
 
-    public ImmutableList<BlockState> getStates() {
-        return this.stateManager.getStates();
-    }
-
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         BlockEntity blockEntity = world.getBlockEntity(pos);

@@ -10,6 +10,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -21,11 +22,12 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class PickleJarBlockEntity extends BlockEntity implements Tickable, BlockEntityClientSerializable {
+public class PickleJarBlockEntity extends BlockEntity implements SidedInventory, Tickable, BlockEntityClientSerializable {
 
     private PickleJarFluid fluid = PickleJarFluid.AIR;
     private int numItems = 0;
@@ -66,7 +68,7 @@ public class PickleJarBlockEntity extends BlockEntity implements Tickable, Block
                 playerStack.decrement(1);
             }
             numItems++;
-            this.markDirty();
+            update();
             return ActionResult.SUCCESS;
         }
         //add pickle
@@ -75,7 +77,7 @@ public class PickleJarBlockEntity extends BlockEntity implements Tickable, Block
                 playerStack.decrement(1);
             }
             numItems++;
-            this.markDirty();
+            update();
             return ActionResult.SUCCESS;
         }
         //add water
@@ -85,7 +87,7 @@ public class PickleJarBlockEntity extends BlockEntity implements Tickable, Block
             }
             world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 0.8F, 1.0F);
             fluid = PickleJarFluid.WATER;
-            this.markDirty();
+            update();
             return ActionResult.SUCCESS;
         }
         //take water
@@ -96,7 +98,7 @@ public class PickleJarBlockEntity extends BlockEntity implements Tickable, Block
             }
             world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 0.8F, 1.0F);
             fluid = PickleJarFluid.AIR;
-            this.markDirty();
+            update();
             return ActionResult.SUCCESS;
         }
         //add salt
@@ -106,7 +108,7 @@ public class PickleJarBlockEntity extends BlockEntity implements Tickable, Block
             }
             world.playSound(null, pos, SoundEvents.ENTITY_PLAYER_SPLASH, SoundCategory.BLOCKS, 0.8F, 1.0F);
             this.startPickling();
-            this.markDirty();
+            update();
             return ActionResult.SUCCESS;
         }
 
@@ -117,7 +119,7 @@ public class PickleJarBlockEntity extends BlockEntity implements Tickable, Block
             ItemEntity item = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.05, pos.getZ()+0.5, new ItemStack(ItemsRegistry.CUCUMBER));
             item.setToDefaultPickupDelay();
             world.spawnEntity(item);
-            this.markDirty();
+            update();
             return ActionResult.SUCCESS;
         }
         //take pickle
@@ -130,10 +132,10 @@ public class PickleJarBlockEntity extends BlockEntity implements Tickable, Block
                 this.fluid = PickleJarFluid.AIR;
                 this.areItemsPickled = false;
             }
-            this.markDirty();
+            update();
             return ActionResult.SUCCESS;
         }
-        Util.sync(this, world);
+        update();
         return ActionResult.PASS;
     }
 
@@ -155,6 +157,15 @@ public class PickleJarBlockEntity extends BlockEntity implements Tickable, Block
 
     private void startPickling() {
         this.fluid = PickleJarFluid.PICKLING_BRINE;
+    }
+
+    private void emptyWater() {
+        if(this.getFluid() == PickleJarFluid.WATER) {
+            this.fluid = PickleJarFluid.AIR;
+            for (int i = 0; i < numItems; i++) {
+
+            }
+        }
     }
 
     private void finishPickling() {
@@ -181,5 +192,83 @@ public class PickleJarBlockEntity extends BlockEntity implements Tickable, Block
     @Override
     public CompoundTag toClientTag(CompoundTag compoundTag) {
         return this.toTag(compoundTag);
+    }
+
+    public void update() {
+        world.updateComparators(pos, world.getBlockState(pos).getBlock());
+        Util.sync(this, world);
+        markDirty();
+    }
+
+    @Override
+    public int[] getAvailableSlots(Direction side) {
+        return new int[] {0, 1, 2, 3};
+    }
+
+    @Override
+    public boolean canInsert(int slot, ItemStack stack, Direction dir) {
+        slot = slot + 1;
+         return slot > numItems && isInsertable(stack);
+    }
+
+    @Override
+    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+        return numItems > 0;
+    }
+
+    @Override
+    public int size() {
+        return 4;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return numItems <= 0;
+    }
+
+    @Override
+    public ItemStack getStack(int slot) {
+        slot = slot + 1;
+        ItemStack stack = getFluid() == PickleJarFluid.WATER && !areItemsPickled ? new ItemStack(ItemsRegistry.CUCUMBER) : getFluid() == PickleJarFluid.PICKLED_BRINE && areItemsPickled ? new ItemStack(ItemsRegistry.PICKLED_CUCUMBER) : ItemStack.EMPTY;
+        ItemStack r = numItems > 0 ? slot <= numItems ? stack : ItemStack.EMPTY : ItemStack.EMPTY;
+        return r;
+    }
+
+    @Override
+    public ItemStack removeStack(int slot, int amount) {
+        ItemStack stack = getStack(slot);
+        if(numItems > 0) numItems--;
+        if(numItems == 0 && getFluid() == PickleJarFluid.PICKLED_BRINE) fluid = PickleJarFluid.AIR;
+        update();
+        return stack;
+    }
+
+    @Override
+    public ItemStack removeStack(int slot) {
+        return removeStack(slot, 1);
+    }
+
+    @Override
+    public void setStack(int slot, ItemStack stack) {
+        if(isInsertable(stack)) numItems++;
+        update();
+    }
+
+    @Override
+    public boolean canPlayerUse(PlayerEntity player) {
+        return false;
+    }
+
+    @Override
+    public void clear() {
+        numItems = 0;
+        update();
+    }
+
+    private boolean isInsertable(ItemStack stack) {
+        if(numItems < 4) {
+            return (stack.getItem() == ItemsRegistry.CUCUMBER && fluid == PickleJarFluid.WATER && !areItemsPickled) || (stack.getItem() == ItemsRegistry.PICKLED_CUCUMBER && fluid == PickleJarFluid.PICKLED_BRINE && areItemsPickled);
+        }
+        return false;
     }
 }

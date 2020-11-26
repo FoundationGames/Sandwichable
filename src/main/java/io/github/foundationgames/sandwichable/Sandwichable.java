@@ -1,9 +1,7 @@
 package io.github.foundationgames.sandwichable;
 
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
-import io.github.foundationgames.sandwichable.blocks.entity.BasinBlockEntity;
-import io.github.foundationgames.sandwichable.blocks.entity.BasinContent;
-import io.github.foundationgames.sandwichable.blocks.entity.SandwichTableBlockEntity;
+import io.github.foundationgames.sandwichable.blocks.entity.*;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.items.SandwichableGroupIconBuilder;
 import io.github.foundationgames.sandwichable.util.SpreadRegistry;
@@ -117,6 +115,17 @@ public class Sandwichable implements ModInitializer {
                 BasinBlockEntity be = (BasinBlockEntity)world.getBlockEntity(pos);
                 if(be.getContent().getContentType().isLiquid) {
                     return be.extractMilk();
+                }
+            }
+            return defaultBehavior.dispense(pointer, stack);
+        });
+        DispenserBlock.registerBehavior(Items.BUCKET, (pointer, stack) -> {
+            BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
+            ServerWorld world = pointer.getWorld();
+            if(world.getBlockEntity(pos) instanceof PickleJarBlockEntity) {
+                PickleJarBlockEntity be = (PickleJarBlockEntity)world.getBlockEntity(pos);
+                if(be.getFluid() == PickleJarFluid.WATER) {
+                    be.
                 }
             }
             return defaultBehavior.dispense(pointer, stack);

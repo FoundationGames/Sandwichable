@@ -15,11 +15,11 @@ public class CheeseRegistry {
 
     public static final CheeseRegistry INSTANCE = new CheeseRegistry();
 
-    private Map<String, CheeseType> cheeseTypes = Maps.newHashMap();
-    private Map<String, BasinContent> basinContents = Maps.newHashMap();
-    private Map<CheeseType, BasinContent> typeToCheese = Maps.newHashMap();
-    private Map<CheeseType, BasinContent> typeToFermentingMilk = Maps.newHashMap();
-    private Map<CheeseType, Item> typeToCheeseItem = Maps.newHashMap();
+    private final Map<String, CheeseType> cheeseTypes = Maps.newHashMap();
+    private final Map<String, BasinContent> basinContents = Maps.newHashMap();
+    private final Map<CheeseType, BasinContent> typeToCheese = Maps.newHashMap();
+    private final Map<CheeseType, BasinContent> typeToFermentingMilk = Maps.newHashMap();
+    private final Map<CheeseType, Item> typeToCheeseItem = Maps.newHashMap();
 
     private CheeseRegistry() {
         this.typeToCheeseItem.put(CheeseType.REGULAR, ItemsRegistry.CHEESE_WHEEL_REGULAR);
