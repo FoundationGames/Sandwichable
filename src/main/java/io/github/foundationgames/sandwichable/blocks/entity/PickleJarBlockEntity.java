@@ -85,9 +85,7 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
             if(!player.isCreative()) {
                 player.setStackInHand(hand, new ItemStack(Items.BUCKET, 1));
             }
-            world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 0.8F, 1.0F);
-            fluid = PickleJarFluid.WATER;
-            update();
+            fillWater(true);
             return ActionResult.SUCCESS;
         }
         //take water
@@ -96,9 +94,7 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
                 playerStack.decrement(1);
                 player.giveItemStack(new ItemStack(Items.WATER_BUCKET, 1));
             }
-            world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 0.8F, 1.0F);
-            fluid = PickleJarFluid.AIR;
-            update();
+            emptyWater(true);
             return ActionResult.SUCCESS;
         }
         //add salt
@@ -106,7 +102,6 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
             if(!player.isCreative()) {
                 playerStack.decrement(1);
             }
-            world.playSound(null, pos, SoundEvents.ENTITY_PLAYER_SPLASH, SoundCategory.BLOCKS, 0.8F, 1.0F);
             this.startPickling();
             update();
             return ActionResult.SUCCESS;
@@ -116,7 +111,7 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
         //take cucumber
         if(fluid == PickleJarFluid.WATER && !areItemsPickled && numItems > 0) {
             numItems--;
-            ItemEntity item = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.05, pos.getZ()+0.5, new ItemStack(ItemsRegistry.CUCUMBER));
+            ItemEntity item = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, new ItemStack(ItemsRegistry.CUCUMBER));
             item.setToDefaultPickupDelay();
             world.spawnEntity(item);
             update();
@@ -155,16 +150,30 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
         return pickleProgress;
     }
 
-    private void startPickling() {
+    public void startPickling() {
         this.fluid = PickleJarFluid.PICKLING_BRINE;
+        world.playSound(null, pos, SoundEvents.BLOCK_BREWING_STAND_BREW, SoundCategory.BLOCKS, 0.8F, 1.67F);
     }
 
-    private void emptyWater() {
+    public void emptyWater(boolean withBucket) {
         if(this.getFluid() == PickleJarFluid.WATER) {
-            this.fluid = PickleJarFluid.AIR;
             for (int i = 0; i < numItems; i++) {
-
+                ItemStack stack = areItemsPickled ? new ItemStack(ItemsRegistry.PICKLED_CUCUMBER) : new ItemStack(ItemsRegistry.CUCUMBER);
+                ItemEntity item = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, stack);
+                world.spawnEntity(item);
             }
+            this.fluid = PickleJarFluid.AIR;
+            this.numItems = 0;
+            if(withBucket) world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 0.8F, 1.0F);
+        }
+        update();
+    }
+
+    public void fillWater(boolean withBucket) {
+        if(this.getFluid() == PickleJarFluid.AIR) {
+            if(withBucket) world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 0.8F, 1.0F);
+            fluid = PickleJarFluid.WATER;
+            update();
         }
     }
 

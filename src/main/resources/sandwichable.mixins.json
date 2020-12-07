@@ -10,7 +10,8 @@
     "StructurePoolsMixin"
   ],
   "client": [
-    "BuiltinModelItemRendererMixin"
+    "BuiltinModelItemRendererMixin",
+    "ItemRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

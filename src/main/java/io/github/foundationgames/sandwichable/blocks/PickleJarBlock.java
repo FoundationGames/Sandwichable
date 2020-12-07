@@ -68,6 +68,19 @@ public class PickleJarBlock extends Block implements BlockEntityProvider {
     }
 
     @Override
+    public boolean hasComparatorOutput(BlockState state) {
+        return true;
+    }
+
+    @Override
+    public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+        if(world.getBlockEntity(pos) instanceof PickleJarBlockEntity) {
+            return ((PickleJarBlockEntity)world.getBlockEntity(pos)).areItemsPickled() ? 15 : 0;
+        }
+        return super.getComparatorOutput(state, world, pos);
+    }
+
+    @Override
     public BlockEntity createBlockEntity(BlockView view) {
         return new PickleJarBlockEntity();
     }

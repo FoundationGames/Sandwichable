@@ -118,6 +118,8 @@
 	
 	"fermenting_milk_bucket.tooltip.pct_fermented": "%d%% Fermented",
 	"fermenting_milk_bucket.tooltip.no_properties": "No Properties",
+
+	"cheese_culture_bottle.tooltip.uses": "Uses: %d/10",
 	
 	"desalinator.tooltip.filled": "Filled",
 	"desalinator.tooltip.maxCapacity": "Max Capacity:",

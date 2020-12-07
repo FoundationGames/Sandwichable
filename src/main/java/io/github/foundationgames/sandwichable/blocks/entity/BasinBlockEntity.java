@@ -98,8 +98,8 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
             createCheeseParticle(this.world, this.pos, this.rng, 8, content.getCheeseType().getParticleColorRGB());
             world.playSound(null, pos, SoundEvents.ITEM_HONEY_BOTTLE_DRINK, SoundCategory.BLOCKS, 1.0F, 1.0F);
             if(!player.isCreative()) {
-                playerStack.decrement(1);
-                player.giveItemStack(new ItemStack(Items.GLASS_BOTTLE, 1));
+                CheeseCultureItem culture = (CheeseCultureItem)playerStack.getItem();
+                player.setStackInHand(hand, culture.deplete(playerStack, 1));
             }
             update();
             return ActionResult.SUCCESS;

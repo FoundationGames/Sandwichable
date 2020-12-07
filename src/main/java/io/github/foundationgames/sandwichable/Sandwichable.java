@@ -125,7 +125,33 @@ public class Sandwichable implements ModInitializer {
             if(world.getBlockEntity(pos) instanceof PickleJarBlockEntity) {
                 PickleJarBlockEntity be = (PickleJarBlockEntity)world.getBlockEntity(pos);
                 if(be.getFluid() == PickleJarFluid.WATER) {
-                    be.
+                    be.emptyWater(true);
+                    return new ItemStack(Items.WATER_BUCKET);
+                }
+            }
+            return defaultBehavior.dispense(pointer, stack);
+        });
+        DispenserBlock.registerBehavior(Items.WATER_BUCKET, (pointer, stack) -> {
+            BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
+            ServerWorld world = pointer.getWorld();
+            if(world.getBlockEntity(pos) instanceof PickleJarBlockEntity) {
+                PickleJarBlockEntity be = (PickleJarBlockEntity)world.getBlockEntity(pos);
+                if(be.getFluid() == PickleJarFluid.AIR) {
+                    be.fillWater(true);
+                    return new ItemStack(Items.BUCKET);
+                }
+            }
+            return defaultBehavior.dispense(pointer, stack);
+        });
+        DispenserBlock.registerBehavior(ItemsRegistry.SALT, (pointer, stack) -> {
+            BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
+            ServerWorld world = pointer.getWorld();
+            if(world.getBlockEntity(pos) instanceof PickleJarBlockEntity) {
+                PickleJarBlockEntity be = (PickleJarBlockEntity)world.getBlockEntity(pos);
+                if(be.getFluid() == PickleJarFluid.WATER && be.getItemCount() > 0) {
+                    be.startPickling();
+                    stack.decrement(1);
+                    return stack;
                 }
             }
             return defaultBehavior.dispense(pointer, stack);
