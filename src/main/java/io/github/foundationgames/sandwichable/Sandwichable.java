@@ -1,8 +1,12 @@
 package io.github.foundationgames.sandwichable;
 
+import io.github.foundationgames.mealapi.api.MealItemRegistry;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.blocks.entity.*;
+import io.github.foundationgames.sandwichable.blocks.entity.container.BottleCrateScreenHandler;
+import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
+import io.github.foundationgames.sandwichable.items.SandwichBlockItem;
 import io.github.foundationgames.sandwichable.items.SandwichableGroupIconBuilder;
 import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.items.spread.SpreadType;
@@ -14,14 +18,18 @@ import io.github.foundationgames.sandwichable.util.Util;
 import io.github.foundationgames.sandwichable.villager.SandwichMakerProfession;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
+import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.math.BlockPointer;
@@ -41,6 +49,18 @@ public class Sandwichable implements ModInitializer {
 
     public static final Logger LOG = LogManager.getLogger("Sandwichable");
 
+    public static final ScreenHandlerType<BottleCrateScreenHandler> BOTTLE_CRATE_HANDLER = ScreenHandlerRegistry.registerExtended(Util.id("bottle_crate_handler"), (syncId, playerInv, buf) -> {
+        BlockEntity be = playerInv.player.getEntityWorld().getBlockEntity(buf.readBlockPos());
+        if(be instanceof BottleCrateBlockEntity) return new BottleCrateScreenHandler(syncId, playerInv, (BottleCrateBlockEntity)be);
+        return null;
+    });
+
+    public static final ScreenHandlerType<DesalinatorScreenHandler> DESALINATOR_HANDLER = ScreenHandlerRegistry.registerExtended(Util.id("desalinator_handler"), (syncId, playerInv, buf) -> {
+        BlockEntity be = playerInv.player.getEntityWorld().getBlockEntity(buf.readBlockPos());
+        if(be instanceof DesalinatorBlockEntity) return new DesalinatorScreenHandler(syncId, playerInv, (DesalinatorBlockEntity)be);
+        return null;
+    });
+
     @Override
     public void onInitialize() {
         BlocksRegistry.init();
@@ -53,12 +73,6 @@ public class Sandwichable implements ModInitializer {
 
         Registry.register(Registry.RECIPE_SERIALIZER, ToastingRecipeSerializer.ID, ToastingRecipeSerializer.INSTANCE);
         Registry.register(Registry.RECIPE_TYPE, Util.id(ToastingRecipe.Type.ID), ToastingRecipe.Type.INSTANCE);
-
-        ContainerProviderRegistry.INSTANCE.registerFactory(Util.id("desalinator"), (syncId, identifier, player, buf) -> {
-            final World world = player.world;
-            final BlockPos pos = buf.readBlockPos();
-            return world.getBlockState(pos).createScreenHandlerFactory(player.world, pos).createMenu(syncId, player.inventory, player);
-        });
 
         ItemDispenserBehavior defaultBehavior = new ItemDispenserBehavior();
         DispenserBehavior foodBehavior = new ItemDispenserBehavior() {
@@ -156,5 +170,22 @@ public class Sandwichable implements ModInitializer {
             }
             return defaultBehavior.dispense(pointer, stack);
         });
+
+        MealItemRegistry.register(BlocksRegistry.SANDWICH.asItem(), Sandwichable::calculateSandwichFullness);
+    }
+
+    private static int calculateSandwichFullness(PlayerEntity player, ItemStack stack) {
+        int mh = 20 - player.getHungerManager().getFoodLevel();
+        float ms = 20.0f - player.getHungerManager().getSaturationLevel();
+        int hl = 0;
+        for(ItemStack item : ((SandwichBlockItem)BlocksRegistry.SANDWICH.asItem()).getFoodList(stack)) {
+            if(item.isFood()) {
+                int h = item.getItem().getFoodComponent().getHunger();
+                hl += (h + ((float)h * item.getItem().getFoodComponent().getSaturationModifier() * 2.0F));
+            }
+        }
+        hl -= (mh + ms);
+        hl *= 1.25;
+        return hl;
     }
 }

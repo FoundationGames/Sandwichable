@@ -13,6 +13,7 @@ group = project.maven_group
 repositories {
 	jcenter()
 	maven { url "https://jitpack.io" }
+	flatDir name: "local-repo", dirs: "./localjars"
 }
 
 dependencies {
@@ -31,6 +32,12 @@ dependencies {
 	include "me.shedaniel.cloth.api:cloth-dynamic-registry-api-v1:1.2.1"
 
 	include "me.sargunvohra.mcmods:autoconfig1u:3.2.0-unstable"
+
+	modImplementation "com.github.FoundationGames:MealAPI:6d355d58dd"
+	include "com.github.FoundationGames:MealAPI:6d355d58dd"
+
+	//YOU WILL NEED TO COPY THE "localjars" FOLDER TO THIS PROJECT FROM https://github.com/FoundationGames/MealAPI/tree/master/localjars
+	modImplementation "local-repo:appleskin-1.0.11-dev"
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.

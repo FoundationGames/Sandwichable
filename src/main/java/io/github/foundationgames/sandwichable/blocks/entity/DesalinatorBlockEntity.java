@@ -6,6 +6,7 @@ import io.github.foundationgames.sandwichable.blocks.DesalinatorBlock;
 import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.LockableContainerBlockEntity;
 import net.minecraft.client.MinecraftClient;
@@ -16,8 +17,10 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -26,7 +29,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.biome.Biome;
 
-public class DesalinatorBlockEntity extends LockableContainerBlockEntity implements SidedInventory, Tickable, BlockEntityClientSerializable {
+public class DesalinatorBlockEntity extends LockableContainerBlockEntity implements ExtendedScreenHandlerFactory, SidedInventory, Tickable, BlockEntityClientSerializable {
     private DefaultedList<ItemStack> inventory;
     private int waterAmount = 0;
     private int evaporateProgress = 0;
@@ -251,5 +254,10 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     @Override
     public void clear() {
         this.inventory.clear();
+    }
+
+    @Override
+    public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
+        buf.writeBlockPos(pos);
     }
 }

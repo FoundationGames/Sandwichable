@@ -41,8 +41,9 @@ public class DesalinatorBlock extends BlockWithEntity implements Waterloggable {
         if (!world.isClient) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof DesalinatorBlockEntity) {
-                ContainerProviderRegistry.INSTANCE.openContainer(Util.id("desalinator"), player, buf -> buf.writeBlockPos(pos));
+                player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
             }
+            return ActionResult.CONSUME;
         }
         return ActionResult.SUCCESS;
     }
@@ -55,8 +56,8 @@ public class DesalinatorBlock extends BlockWithEntity implements Waterloggable {
                 ItemScatterer.spawn(world, pos, ((DesalinatorBlockEntity)blockEntity));
                 world.updateNeighbors(pos, this);
             }
-            super.onStateReplaced(state, world, pos, newState, moved);
         }
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     @Override

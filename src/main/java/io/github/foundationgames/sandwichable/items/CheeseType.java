@@ -10,8 +10,8 @@ public enum CheeseType {
     CREAMY("creamy", 4, 0.5F, new float[] {0.98F, 0.94F, 0.83F}),
     INTOXICATING("intoxicating", 2, 1.1F, new float[] {1.0F, 0.78F, 0.56F}),
     SOUR("sour", 3, 0.9F, new float[] {0.97F, 0.83F, 0.72F}),
-    CANDESCENT("candescent", 4, 0.9F, new float[] {1.0F, 0.56F, 0.0F}),
-    WARPED_BLEU("warped_bleu", 4, 1.05F, new float[] {0.33F, 0.54F, 0.67F});
+    CANDESCENT("candescent", 5, 0.9F, new float[] {1.0F, 0.56F, 0.0F}),
+    WARPED_BLEU("warped_bleu", 5, 1.05F, new float[] {0.33F, 0.54F, 0.67F});
 
     String id;
     int hunger;

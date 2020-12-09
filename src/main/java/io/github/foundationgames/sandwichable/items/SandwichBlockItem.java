@@ -36,6 +36,13 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
         return false;
     }
 
+    public List<ItemStack> getFoodList(ItemStack stack) {
+        CompoundTag tag = stack.getSubTag("BlockEntityTag");
+        DefaultedList<ItemStack> foods = DefaultedList.ofSize(128, ItemStack.EMPTY);
+        Inventories.fromTag(tag, foods);
+        return foods;
+    }
+
     @Override
     public Text getName(ItemStack stack) {
         if(stack.getTag() != null) {

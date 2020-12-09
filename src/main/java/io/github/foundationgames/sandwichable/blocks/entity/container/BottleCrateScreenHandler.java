@@ -1,38 +1,42 @@
 package io.github.foundationgames.sandwichable.blocks.entity.container;
 
 import io.github.foundationgames.sandwichable.Sandwichable;
+import io.github.foundationgames.sandwichable.items.BottleCrateStorable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 
-public class DesalinatorScreenHandler extends ScreenHandler {
+public class BottleCrateScreenHandler extends ScreenHandler {
     public final Inventory inventory;
 
-    public DesalinatorScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory) {
-        super(Sandwichable.DESALINATOR_HANDLER, syncId);
+    public BottleCrateScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory) {
+        super(Sandwichable.BOTTLE_CRATE_HANDLER, syncId);
         this.inventory = inventory;
-        checkSize(inventory, 2);
+        checkSize(inventory, 21);
         inventory.onOpen(playerInventory.player);
-        this.addSlot(new FuelSlot(inventory, 0, 80, 49));
-        this.addSlot(new OutputSlot(inventory, 1, 101, 16));
-
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 7; j++) {
+                this.addSlot(new BottleSlot(inventory, (i * 7) + j, 26 + j * 18, 20 + i * 18));
+            }
+        }
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 91 + i * 18));
             }
         }
         for (int j = 0; j < 9; j++) {
-            this.addSlot(new Slot(playerInventory, j, 8 + j * 18, 142));
+            this.addSlot(new Slot(playerInventory, j, 8 + j * 18, 149));
         }
     }
 
     @Override
     public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+        return inventory.canPlayerUse(player);
     }
 
     @Override
@@ -43,7 +47,7 @@ public class DesalinatorScreenHandler extends ScreenHandler {
             ItemStack slotStack = slot.getStack();
             itemStack = slotStack.copy();
             if (invSlot < this.inventory.size()) {
-                if (!this.insertItem(slotStack, this.inventory.size(), 38, true)) {
+                if (!this.insertItem(slotStack, this.inventory.size(), 57, true)) {
                     return ItemStack.EMPTY;
                 }
             } else if (!this.insertItem(slotStack, 0, this.inventory.size(), false)) {
@@ -66,25 +70,14 @@ public class DesalinatorScreenHandler extends ScreenHandler {
         return itemStack;
     }
 
-    private static class OutputSlot extends Slot {
-        public OutputSlot(Inventory inventory, int invSlot, int xPosition, int yPosition) {
-            super(inventory, invSlot, xPosition, yPosition);
+    private static class BottleSlot extends Slot {
+        public BottleSlot(Inventory inventory, int index, int x, int y) {
+            super(inventory, index, x, y);
         }
 
         @Override
         public boolean canInsert(ItemStack stack) {
-            return false;
-        }
-    }
-
-    private static class FuelSlot extends Slot {
-        public FuelSlot(Inventory inventory, int invSlot, int xPosition, int yPosition) {
-            super(inventory, invSlot, xPosition, yPosition);
-        }
-
-        @Override
-        public boolean canInsert(ItemStack stack) {
-            return stack.getItem().equals(Items.REDSTONE);
+            return stack.getItem() instanceof BottleCrateStorable || stack.getItem() == Items.GLASS_BOTTLE;
         }
     }
 }
