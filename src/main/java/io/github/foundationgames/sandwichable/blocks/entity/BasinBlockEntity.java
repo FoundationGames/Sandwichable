@@ -94,13 +94,8 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
             return ActionResult.SUCCESS;
         }
         if(content == BasinContent.MILK && playerStack.getItem() instanceof CheeseCultureItem) {
-            this.startFermenting(((CheeseCultureItem)playerStack.getItem()).getCheeseType());
-            createCheeseParticle(this.world, this.pos, this.rng, 8, content.getCheeseType().getParticleColorRGB());
-            world.playSound(null, pos, SoundEvents.ITEM_HONEY_BOTTLE_DRINK, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            if(!player.isCreative()) {
-                CheeseCultureItem culture = (CheeseCultureItem)playerStack.getItem();
-                player.setStackInHand(hand, culture.deplete(playerStack, 1));
-            }
+            ItemStack s = addCheeseCulture(playerStack);
+            if(!player.isCreative()) player.setStackInHand(hand, s);
             update();
             return ActionResult.SUCCESS;
         }
@@ -146,6 +141,7 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
         update();
         markDirty();
     }
+
     public void finishFermenting() {
         if(content.getContentType() == BasinContentType.FERMENTING_MILK) {
             fermentProgress = 0;
@@ -154,6 +150,7 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
         update();
         markDirty();
     }
+
     public ItemStack insertMilk(ItemStack milk) {
         ItemStack r = milk;
         if(milk.getItem() == Items.MILK_BUCKET) {
@@ -172,6 +169,7 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
         world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 0.8F, 1.0F);
         return r;
     }
+
     public ItemStack extractMilk() {
         if(content == BasinContent.MILK) {
             emptyBasin();
@@ -195,6 +193,20 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
         return ItemStack.EMPTY;
     }
 
+    public ItemStack addCheeseCulture(ItemStack stack) {
+        if(content.getContentType() == BasinContentType.MILK) {
+            if(stack.getItem() instanceof CheeseCultureItem) {
+                CheeseCultureItem culture = (CheeseCultureItem)stack.getItem();
+                this.startFermenting(culture.getCheeseType());
+                createCheeseParticle(this.world, this.pos, this.rng, 8, content.getCheeseType().getParticleColorRGB());
+                world.playSound(null, pos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 0.82F, 1.0F);
+                world.playSound(null, pos, SoundEvents.ITEM_HONEY_BOTTLE_DRINK, SoundCategory.BLOCKS, 1.0F, 1.5F);
+                return culture.deplete(stack, 1);
+            }
+        }
+        return stack;
+    }
+
     public void insertCheese(ItemStack cheese) {
         if(cheese.getItem() instanceof CheeseItem && !((CheeseItem)cheese.getItem()).isSlice()) {
             content = CheeseRegistry.INSTANCE.cheeseFromCheeseType(((CheeseItem)cheese.getItem()).getCheeseType());
@@ -209,22 +221,16 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
         update();
     }
 
-    private int tickN = 0;
-
     @Override
     public void tick() {
         if(content != null) {
             if (content.getContentType() == BasinContentType.FERMENTING_MILK) {
                 fermentProgress++;
             }
-            if (content.getContentType() == BasinContentType.CHEESE && tickN % 15 == 0) {
-                createCheeseParticle(this.world, this.pos, this.rng, 1, content.getCheeseType().getParticleColorRGB());
-            }
         }
         if(fermentProgress >= fermentTime) {
             finishFermenting();
         }
-        if(tickN < 60) { tickN++; } else if(tickN == 60) { tickN = 0; }
     }
 
     public void update() {
@@ -233,7 +239,7 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
         markDirty();
     }
 
-    private static void createCheeseParticle(World world, BlockPos pos, Random random, int count, float[] color) {
+    public static void createCheeseParticle(World world, BlockPos pos, Random random, int count, float[] color) {
         for (int i = 0; i < count; i++) {
             double ox = ((double) random.nextInt(10) / 16);
             double oz = ((double) random.nextInt(10) / 16);

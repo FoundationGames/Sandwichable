@@ -24,6 +24,8 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 public class BasinBlock extends Block implements BlockEntityProvider {
     public static final VoxelShape SHAPE;
 
@@ -54,6 +56,15 @@ public class BasinBlock extends Block implements BlockEntityProvider {
     @Override
     public boolean hasComparatorOutput(BlockState state) {
         return true;
+    }
+
+    @Override
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+        super.randomDisplayTick(state, world, pos, random);
+        if(world.getBlockEntity(pos) instanceof BasinBlockEntity) {
+            BasinBlockEntity be = (BasinBlockEntity)world.getBlockEntity(pos);
+            if(be.getContent().getContentType() == BasinContentType.CHEESE) be.createCheeseParticle(world, pos, random, random.nextInt(2) + 1, be.getContent().getCheeseType().getParticleColorRGB());
+        }
     }
 
     @Override

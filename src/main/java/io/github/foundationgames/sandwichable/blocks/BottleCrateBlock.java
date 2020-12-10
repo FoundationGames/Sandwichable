@@ -4,8 +4,11 @@ import io.github.foundationgames.sandwichable.blocks.entity.BottleCrateBlockEnti
 import io.github.foundationgames.sandwichable.blocks.entity.DesalinatorBlockEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -58,14 +61,12 @@ public class BottleCrateBlock extends BlockWithEntity {
     }
 
     @Override
-    public boolean hasRandomTicks(BlockState state) {
-        return true;
-    }
-
-    @Override
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if(world.getBlockEntity(pos) instanceof BottleCrateBlockEntity) {
-            ((BottleCrateBlockEntity)world.getBlockEntity(pos)).tickItems(random);
+    public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
+        if (itemStack.hasCustomName()) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof BottleCrateBlockEntity) {
+                ((BottleCrateBlockEntity)blockEntity).setCustomName(itemStack.getName());
+            }
         }
     }
 
@@ -89,6 +90,16 @@ public class BottleCrateBlock extends BlockWithEntity {
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         return getDefaultState().with(FACING, ctx.getPlayerLookDirection().getOpposite());
+    }
+
+    @Override
+    public boolean hasComparatorOutput(BlockState state) {
+        return true;
+    }
+
+    @Override
+    public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+        return ScreenHandler.calculateComparatorOutput(world.getBlockEntity(pos));
     }
 
     @Override

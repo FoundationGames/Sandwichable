@@ -28,16 +28,16 @@ dependencies {
 	modImplementation "me.shedaniel:RoughlyEnoughItems:5.2.3"
 	modImplementation "io.github.prospector:modmenu:1.14.6+build.31"
 
-	modCompile "me.shedaniel.cloth.api:cloth-dynamic-registry-api-v1:1.2.1"
+	modImplementation "me.shedaniel.cloth.api:cloth-dynamic-registry-api-v1:1.2.1"
 	include "me.shedaniel.cloth.api:cloth-dynamic-registry-api-v1:1.2.1"
 
 	include "me.sargunvohra.mcmods:autoconfig1u:3.2.0-unstable"
 
-	modImplementation "com.github.FoundationGames:MealAPI:6d355d58dd"
-	include "com.github.FoundationGames:MealAPI:6d355d58dd"
+	modImplementation "com.github.FoundationGames:MealAPI:dc0ef8b8ba"
+	//include "com.github.FoundationGames:MealAPI:aea3ebc43d"
 
 	//YOU WILL NEED TO COPY THE "localjars" FOLDER TO THIS PROJECT FROM https://github.com/FoundationGames/MealAPI/tree/master/localjars
-	modImplementation "local-repo:appleskin-1.0.11-dev"
+	modApi "local-repo:appleskin-1.0.11-dev"
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.

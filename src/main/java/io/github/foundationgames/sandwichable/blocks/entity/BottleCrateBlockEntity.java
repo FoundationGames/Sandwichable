@@ -30,13 +30,13 @@ import java.util.List;
 import java.util.Random;
 
 public class BottleCrateBlockEntity extends LockableContainerBlockEntity implements Tickable, ExtendedScreenHandlerFactory, SidedInventory, BlockEntityClientSerializable {
-    private DefaultedList<ItemStack> items;
+    private DefaultedList<ItemStack> inventory;
     private final Random random = new Random();
     private int growthTicks = randomTime();
 
     public BottleCrateBlockEntity() {
         super(BlocksRegistry.BOTTLECRATE_BLOCKENTITY);
-        items = DefaultedList.ofSize(21, ItemStack.EMPTY);
+        this.inventory = DefaultedList.ofSize(21, ItemStack.EMPTY);
     }
 
     private void update() {
@@ -46,10 +46,10 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     private void updateBlockState() {
-        if(!world.isClient()) {
+        if(world != null && !world.isClient()) {
             int state = 0;
             int filledSlots = 0;
-            for(ItemStack item : items) filledSlots += item.isEmpty() ? 0 : 1;
+            for(ItemStack item : inventory) filledSlots += item.isEmpty() ? 0 : 1;
             if(filledSlots > 0) {
                 state = Math.round(((float)filledSlots / 21) * 3) + 1;
             }
@@ -67,22 +67,22 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     private int randomTime() {
-        return this.random.nextInt(1500) + 1000;
+        return this.random.nextInt(1000) + 500;
     }
 
     @Override
     public void fromTag(BlockState state, CompoundTag tag) {
         super.fromTag(state, tag);
-        this.items = DefaultedList.ofSize(21, ItemStack.EMPTY);
-        Inventories.fromTag(tag, items);
+        this.inventory = DefaultedList.ofSize(21, ItemStack.EMPTY);
         this.growthTicks = tag.getInt("growthTicks");
+        Inventories.fromTag(tag, this.inventory);
         updateBlockState();
     }
 
     @Override
     public CompoundTag toTag(CompoundTag tag) {
         super.toTag(tag);
-        Inventories.toTag(tag, this.items);
+        Inventories.toTag(tag, this.inventory);
         tag.putInt("growthTicks", growthTicks);
         return tag;
     }
@@ -119,17 +119,17 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
 
     @Override
     public boolean isEmpty() {
-        return items.isEmpty();
+        return inventory.isEmpty();
     }
 
     @Override
     public ItemStack getStack(int slot) {
-        return items.get(slot);
+        return inventory.get(slot);
     }
 
     @Override
     public ItemStack removeStack(int slot, int amount) {
-        ItemStack r = items.get(slot).split(amount);
+        ItemStack r = inventory.get(slot).split(amount);
         update();
         updateBlockState();
         return r;
@@ -137,7 +137,7 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
 
     @Override
     public ItemStack removeStack(int slot) {
-        ItemStack r = items.remove(slot);
+        ItemStack r = inventory.remove(slot);
         update();
         updateBlockState();
         return r;
@@ -145,7 +145,7 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
 
     @Override
     public void setStack(int slot, ItemStack stack) {
-        items.set(slot, stack);
+        inventory.set(slot, stack);
         update();
         updateBlockState();
     }
@@ -157,7 +157,7 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
 
     @Override
     public void clear() {
-        items.clear();
+        inventory.clear();
         update();
         updateBlockState();
     }

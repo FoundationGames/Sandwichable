@@ -5,6 +5,7 @@ import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.blocks.entity.*;
 import io.github.foundationgames.sandwichable.blocks.entity.container.BottleCrateScreenHandler;
 import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
+import io.github.foundationgames.sandwichable.items.CheeseCultureItem;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.items.SandwichBlockItem;
 import io.github.foundationgames.sandwichable.items.SandwichableGroupIconBuilder;
@@ -104,6 +105,19 @@ public class Sandwichable implements ModInitializer {
         for(ItemConvertible item : Registry.ITEM) {
             if((item.asItem().isFood() || SpreadRegistry.INSTANCE.itemHasSpread(item)) && item.asItem() != BlocksRegistry.SANDWICH.asItem()) {
                 DispenserBlock.registerBehavior(item, foodBehavior);
+            }
+            if(item instanceof CheeseCultureItem) {
+                DispenserBlock.registerBehavior(item, (pointer, stack) -> {
+                    BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
+                    ServerWorld world = pointer.getWorld();
+                    if(world.getBlockEntity(pos) instanceof BasinBlockEntity) {
+                        BasinBlockEntity be = (BasinBlockEntity)world.getBlockEntity(pos);
+                        if(be.getContent().getContentType() == BasinContentType.MILK) {
+                            return be.addCheeseCulture(stack);
+                        }
+                    }
+                    return defaultBehavior.dispense(pointer, stack);
+                });
             }
         }
         ItemDispenserBehavior milkBehavior = new ItemDispenserBehavior() {

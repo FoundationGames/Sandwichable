@@ -27,7 +27,7 @@ public class SandwichTableBlockEntity extends BlockEntity implements BlockEntity
         int i=0;
         while(this.foods.get(i)!=ItemStack.EMPTY && i < this.foods.size()-1) {i++;}
         ItemStack stack;
-        if(!player.isCreative() && !(getFoodListSize() >= 127)) {
+        if(!player.abilities.creativeMode && !(getFoodListSize() >= 127)) {
             stack = playerStack.split(1);
         } else {
             stack = playerStack.copy();
