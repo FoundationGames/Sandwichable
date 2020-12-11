@@ -36,7 +36,7 @@ dependencies {
 	modImplementation "com.github.FoundationGames:MealAPI:dc0ef8b8ba"
 	//include "com.github.FoundationGames:MealAPI:aea3ebc43d"
 
-	//YOU WILL NEED TO COPY THE "localjars" FOLDER TO THIS PROJECT FROM https://github.com/FoundationGames/MealAPI/tree/master/localjars
+	//YOU WILL NEED TO CREATE A "localjars" FOLDER IN THIS PROJECT, AND BUILD AN APPLESKIN DEV JAR TO PUT IN IT
 	modApi "local-repo:appleskin-1.0.11-dev"
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.

@@ -26,7 +26,7 @@ public class SandwichBlockEntity extends BlockEntity implements BlockEntityClien
 
     public int getFoodListSize() {
         int i=0;
-        while(this.foods.get(i)!=ItemStack.EMPTY) {i++;}
+        while(this.foods.get(i)!=ItemStack.EMPTY && i < 128) {i++;}
         return i;
     }
 

@@ -5,6 +5,8 @@ import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.blocks.entity.*;
 import io.github.foundationgames.sandwichable.blocks.entity.container.BottleCrateScreenHandler;
 import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
+import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
+import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
 import io.github.foundationgames.sandwichable.items.CheeseCultureItem;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.items.SandwichBlockItem;
@@ -17,10 +19,13 @@ import io.github.foundationgames.sandwichable.recipe.ToastingRecipe;
 import io.github.foundationgames.sandwichable.recipe.ToastingRecipeSerializer;
 import io.github.foundationgames.sandwichable.util.Util;
 import io.github.foundationgames.sandwichable.villager.SandwichMakerProfession;
+import io.netty.buffer.Unpooled;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
+import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.block.Block;
@@ -28,17 +33,25 @@ import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.List;
 
 public class Sandwichable implements ModInitializer {
 
@@ -66,6 +79,7 @@ public class Sandwichable implements ModInitializer {
     public void onInitialize() {
         BlocksRegistry.init();
         ItemsRegistry.init();
+        EntitiesRegistry.init();
         SandwichMakerProfession.init();
         SpreadType.init();
 
@@ -95,6 +109,23 @@ public class Sandwichable implements ModInitializer {
                             }
                             else ((SandwichTableBlockEntity)be).addTopStackFrom(stack);
                             Util.sync((SandwichTableBlockEntity)be, pointer.getWorld());
+                            return stack;
+                        }
+                    }
+                } else {
+                    List<SandwichTableMinecartEntity> list = pointer.getWorld().getEntitiesByClass(SandwichTableMinecartEntity.class, new Box(pos), EntityPredicates.EXCEPT_SPECTATOR);
+                    if(list.size() > 0) {
+                        SandwichTableMinecartEntity e = list.get(0);
+                        if(e.getFoodList().get(0).getItem().isIn(Sandwichable.BREADS) || stack.getItem().isIn(Sandwichable.BREADS)) {
+                            if(SpreadRegistry.INSTANCE.itemHasSpread(stack.getItem())) {
+                                ItemStack spread = new ItemStack(ItemsRegistry.SPREAD, 1);
+                                SpreadType type = SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem());
+                                type.onPour(stack, spread);
+                                spread.getOrCreateTag().putString("spreadType", SpreadRegistry.INSTANCE.asString(type));
+                                e.addTopStackFrom(spread);
+                                return type.getResultItem();
+                            }
+                            else e.addTopStackFrom(stack);
                             return stack;
                         }
                     }
@@ -183,6 +214,20 @@ public class Sandwichable implements ModInitializer {
                 }
             }
             return defaultBehavior.dispense(pointer, stack);
+        });
+
+        ServerSidePacketRegistry.INSTANCE.register(Util.id("request_sandwich_table_cart_sync"), (ctx, buf) -> {
+            Entity e = ctx.getPlayer().getEntityWorld().getEntityById(buf.readInt());
+            ctx.getTaskQueue().execute(() -> {
+                if(e instanceof SandwichTableMinecartEntity) {
+                    PacketByteBuf nbuf = new PacketByteBuf(Unpooled.buffer());
+                    nbuf.writeInt(e.getEntityId());
+                    CompoundTag t = new CompoundTag();
+                    ((SandwichTableMinecartEntity)e).writeSandwichTableData(t);
+                    nbuf.writeCompoundTag(t);
+                    ServerSidePacketRegistry.INSTANCE.sendToPlayer(ctx.getPlayer(), Util.id("sync_sandwich_table_cart"), nbuf);
+                }
+            });
         });
 
         MealItemRegistry.register(BlocksRegistry.SANDWICH.asItem(), Sandwichable::calculateSandwichFullness);

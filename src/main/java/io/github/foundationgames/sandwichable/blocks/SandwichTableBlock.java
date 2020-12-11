@@ -1,6 +1,5 @@
 package io.github.foundationgames.sandwichable.blocks;
 
-import com.google.common.collect.ImmutableList;
 import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.entity.SandwichTableBlockEntity;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
@@ -66,7 +65,7 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
                 } else if(Sandwichable.BREADS.contains(((SandwichTableBlockEntity)blockEntity).getTopFood().getItem())){
                     SandwichTableBlockEntity sBlockEntity = (SandwichTableBlockEntity)world.getBlockEntity(pos);
                     ItemStack item = new ItemStack(BlocksRegistry.SANDWICH);
-                    CompoundTag tag = sBlockEntity.serializeSandwich(new CompoundTag());
+                    CompoundTag tag = sBlockEntity.sandwichToTag(new CompoundTag());
                     if(!tag.isEmpty()) {
                         item.putSubTag("BlockEntityTag", tag);
                     }
@@ -96,7 +95,7 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
             if(blockEntity.getFoodListSize() > 0) {
                 if(Sandwichable.BREADS.contains(blockEntity.getTopFood().getItem()) && blockEntity.getFoodListSize() > 1){
                     ItemStack item = new ItemStack(BlocksRegistry.SANDWICH);
-                    CompoundTag tag = blockEntity.serializeSandwich(new CompoundTag());
+                    CompoundTag tag = blockEntity.sandwichToTag(new CompoundTag());
                     if(!tag.isEmpty()) {
                         item.putSubTag("BlockEntityTag", tag);
                     }

@@ -84,7 +84,7 @@ public class SandwichTableBlockEntity extends BlockEntity implements BlockEntity
 
     public int getFoodListSize() {
         int i=0;
-        while(this.foods.get(i)!=ItemStack.EMPTY) {i++;}
+        while(this.foods.get(i)!=ItemStack.EMPTY && i < 128) {i++;}
         return i;
     }
 
@@ -103,12 +103,12 @@ public class SandwichTableBlockEntity extends BlockEntity implements BlockEntity
         return tag;
     }
 
-    public CompoundTag serializeSandwich(CompoundTag tag) {
+    public CompoundTag sandwichToTag(CompoundTag tag) {
         Inventories.toTag(tag, this.foods);
         return tag;
     }
 
-    public void deserializeSandwich(CompoundTag tag) {
+    public void sandwichFromTag(CompoundTag tag) {
         DefaultedList<ItemStack> list = DefaultedList.ofSize(128, ItemStack.EMPTY);
         Inventories.fromTag(tag, list);
         setFoodList(list);

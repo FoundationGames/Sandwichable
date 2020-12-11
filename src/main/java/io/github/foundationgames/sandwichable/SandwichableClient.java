@@ -7,21 +7,29 @@ import io.github.foundationgames.sandwichable.blocks.entity.container.Desalinato
 import io.github.foundationgames.sandwichable.blocks.entity.container.screen.BottleCrateScreen;
 import io.github.foundationgames.sandwichable.blocks.entity.container.screen.DesalinatorScreen;
 import io.github.foundationgames.sandwichable.blocks.entity.renderer.*;
+import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
+import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
+import io.github.foundationgames.sandwichable.entity.render.SandwichTableMinecartEntityRenderer;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
+import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.color.world.BiomeColors;
 import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.client.color.world.GrassColors;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.entity.MinecartEntityRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.TranslatableText;
 
 public class SandwichableClient implements ClientModInitializer {
@@ -58,5 +66,17 @@ public class SandwichableClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.CUCUMBERS, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.ONIONS, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.PICKLE_JAR, RenderLayer.getCutout());
+
+        EntityRendererRegistry.INSTANCE.register(EntitiesRegistry.SANDWICH_TABLE_MINECART, (dispatcher, context) -> new SandwichTableMinecartEntityRenderer(dispatcher));
+
+        ClientSidePacketRegistry.INSTANCE.register(Util.id("sync_sandwich_table_cart"), (ctx, buf) -> {
+            Entity e = ctx.getPlayer().getEntityWorld().getEntityById(buf.readInt());
+            CompoundTag tag = buf.readCompoundTag();
+            ctx.getTaskQueue().execute(() -> {
+                if(e instanceof SandwichTableMinecartEntity) {
+                    ((SandwichTableMinecartEntity)e).readSandwichTableData(tag);
+                }
+            });
+        });
     }
 }

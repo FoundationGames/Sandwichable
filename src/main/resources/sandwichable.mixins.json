@@ -12,6 +12,7 @@
   ],
   "client": [
     "BuiltinModelItemRendererMixin",
+    "ClientPlayNetworkHandlerMixin",
     "ItemRendererMixin"
   ],
   "injectors": {

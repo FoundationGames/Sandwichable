@@ -2,6 +2,7 @@ package io.github.foundationgames.sandwichable.items;
 
 import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
+import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
 import io.github.foundationgames.sandwichable.mixin.ComposterHelper;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -9,6 +10,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.item.MinecartItem;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.registry.Registry;
 
@@ -94,6 +96,7 @@ public class ItemsRegistry {
     public static final Item BURNT_FOOD = new InfoTooltipItem(new Item.Settings().food(BURNTFOOD).group(Sandwichable.SANDWICHABLE_ITEMS));
 
     public static final Item KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item SANDWICH_TABLE_MINECART = new CustomMinecartItem(EntitiesRegistry.SANDWICH_TABLE_MINECART, new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item FERMENTING_MILK_BUCKET = new FermentingMilkBucketItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
 
     public static final Item LETTUCE_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.LETTUCE, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
@@ -183,6 +186,7 @@ public class ItemsRegistry {
         registerItem(ONION_SEEDS, "onion_seeds");
         ComposterHelper.registerCompostable(0.3f, ONION_SEEDS);
         registerItem(BURNT_FOOD, "burnt_food");
+        registerItem(SANDWICH_TABLE_MINECART, "sandwich_table_minecart");
         registerItem(FERMENTING_MILK_BUCKET, "fermenting_milk_bucket");
         registerItem(SPREAD, "spread");
     }

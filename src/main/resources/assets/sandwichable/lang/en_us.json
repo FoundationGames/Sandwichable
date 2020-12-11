@@ -47,6 +47,7 @@
 	"item.sandwichable.onion_seeds": "Onion Seeds",
 	"item.sandwichable.burnt_food": "Burnt Food",
 	"item.sandwichable.kitchen_knife": "Kitchen Knife",
+	"item.sandwichable.sandwich_table_minecart": "Minecart with Sandwich Table",
 	"item.sandwichable.fermenting_milk_bucket": "Fermenting Milk Bucket",
 	"block.sandwichable.pickle_jar": "Pickle Jar",
 	"item.sandwichable.salt_rock": "Salt Rock",
@@ -94,7 +95,8 @@
 	"block.sandwichable.desalinator": "Redstone Desalinator",
 	
 	"entity.minecraft.villager.sandwich_maker": "Sandwich Maker",
-	
+	"entity.sandwichable.sandwich_table_minecart": "Minecart with Sandwich Table",
+
 	"sandwich.tooltip.ellipsis": "...",
 	"sandwich.tooltip.zandwich": "Is this even a sandwich?",
 	"sandwich.tooltip.bigsandwich": "The epitome of sandwiches.",
@@ -203,6 +205,7 @@
 	"block.sandwichable.pickle_jar.info": "Used to pickle cucumbers. Can be done by filling with water, placing cucumbers inside, and placing salt in the water. Cucumbers will pickle after roughly one minute. Can be broken while pickling to save the state of the jar, and can be used to store pickled cucumbers in style.",
 	"item.sandwichable.salt_rock.info": "Found in salty sand, and can be crafted into Salt.",
 	"item.sandwichable.salt.info": "An item used to pickle cucumbers. Used by interacting with a cucumber-filled Pickle Jar, and waiting roughly one minute.",
+	"item.sandwichable.sandwich_table_minecart.info": "A minecart with a Sandwich Table in it. Can be used like a normal Sandwich Table, but now moves on rails. Sandwiches can be ejected off the cart with an activator rail, and items can be put on top with dispensers just like a Sandwich Table.",
 	
 	"block.sandwichable.sandwich_table.info": "Used to make sandwiches. Can be done by placing items on top, with bread on the bottom and top of the stack. To remove an item, interact with an empty hand. To remove a finished sandwich, interact with an empty hand while sneaking.",
 	"block.sandwichable.sandwich.info": "A stack of items cased in bread, which can be consumed all at once to restore as much hunger as the items inside restore combined.",
