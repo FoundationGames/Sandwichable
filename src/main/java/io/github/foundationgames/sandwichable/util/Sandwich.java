@@ -1,6 +1,5 @@
 package io.github.foundationgames.sandwichable.util;
 
-import com.google.common.collect.ImmutableList;
 import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
@@ -17,10 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -81,8 +77,23 @@ public class Sandwich {
         return foods.size();
     }
 
-    public void cacheFoodValues() {
+    public void putDisplayValues(CompoundTag tag) {
+        CompoundTag displayValues = new CompoundTag();
+        int h = 0;
+        float s = 0;
+        for(ItemStack item : foods) {
+            if(item.getItem().isFood()) {
+                h += item.getItem().getFoodComponent().getHunger();
+                s += ((float)h * item.getItem().getFoodComponent().getSaturationModifier() * 2.0F);
+            }
+        }
+        displayValues.putInt("hunger", h);
+        displayValues.putFloat("saturation", s);
+        tag.put("DisplayValues", displayValues);
+    }
 
+    public static DisplayValues getDisplayValues(CompoundTag displayValuesTag) {
+        return new DisplayValues(displayValuesTag.getInt("hunger"), displayValuesTag.getFloat("saturation"));
     }
 
     public CompoundTag addToTag(CompoundTag tag) {
@@ -123,14 +134,23 @@ public class Sandwich {
         return Sandwichable.BREADS.contains(getTopFood().getItem());
     }
 
+    public ItemStack createSandwich() {
+        if(isComplete()) {
+            ItemStack item = new ItemStack(BlocksRegistry.SANDWICH);
+            CompoundTag tag = addToTag(new CompoundTag());
+            putDisplayValues(tag);
+            if(!tag.isEmpty()) {
+                item.putSubTag("BlockEntityTag", tag);
+            }
+            return item;
+        }
+        return ItemStack.EMPTY;
+    }
+
     public void ejectSandwich(World world, Vec3d pos) {
         if(getSize() > 0) {
             if(isComplete()){
-                ItemStack item = new ItemStack(BlocksRegistry.SANDWICH);
-                CompoundTag tag = addToTag(new CompoundTag());
-                if(!tag.isEmpty()) {
-                    item.putSubTag("BlockEntityTag", tag);
-                }
+                ItemStack item = createSandwich();
                 ItemEntity itemEntity = new ItemEntity(world, pos.getX(), pos.getY()+1.2, pos.getZ(), item);
                 itemEntity.setToDefaultPickupDelay();
                 clearFoodList();
@@ -184,6 +204,24 @@ public class Sandwich {
         for (ItemStack food : foods) {
             MinecraftClient.getInstance().getItemRenderer().renderItem(food, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
             matrices.translate(0.0 + xPush, 0.0 + zPush, -0.034 - yPush);
+        }
+    }
+
+    public static class DisplayValues {
+        private final int hunger;
+        private final float saturation;
+
+        public DisplayValues(int hunger, float saturation) {
+            this.hunger = hunger;
+            this.saturation = saturation;
+        }
+
+        public int getHunger() {
+            return hunger;
+        }
+
+        public float getSaturation() {
+            return saturation;
         }
     }
 }

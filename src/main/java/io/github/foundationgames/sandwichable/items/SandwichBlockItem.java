@@ -7,13 +7,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.FoxEntity;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.network.ServerItemCooldownManager;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -43,6 +41,15 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
         CompoundTag tag = stack.getOrCreateSubTag("BlockEntityTag");
         cache.setFromTag(tag);
         return cache.getFoodList();
+    }
+
+    public Sandwich.DisplayValues getDisplayValues(ItemStack stack) {
+        CompoundTag tag = stack.getOrCreateSubTag("BlockEntityTag");
+        cache.setFromTag(tag);
+        if(!tag.contains("DisplayValues")) {
+            cache.putDisplayValues(tag);
+        }
+        return Sandwich.getDisplayValues(tag.getCompound("DisplayValues"));
     }
 
     @Override

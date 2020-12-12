@@ -1,7 +1,9 @@
 package io.github.foundationgames.sandwichable;
 
+import com.google.gson.internal.$Gson$Preconditions;
 import io.github.foundationgames.mealapi.api.MealItemRegistry;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
+import io.github.foundationgames.sandwichable.blocks.SandwichBlock;
 import io.github.foundationgames.sandwichable.blocks.entity.*;
 import io.github.foundationgames.sandwichable.blocks.entity.container.BottleCrateScreenHandler;
 import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
@@ -256,7 +258,11 @@ public class Sandwichable implements ModInitializer {
     }
 
     private static int calculateSandwichFullness(PlayerEntity player, ItemStack stack) {
+        Sandwich.DisplayValues vals = ((SandwichBlockItem)BlocksRegistry.SANDWICH.asItem()).getDisplayValues(stack);
         int mh = 20 - player.getHungerManager().getFoodLevel();
+        float ms = 20.0f - player.getHungerManager().getSaturationLevel();
+        return (int)(((vals.getHunger() + vals.getSaturation()) - (mh + ms)) * 1.25);
+        /*int mh = 20 - player.getHungerManager().getFoodLevel();
         float ms = 20.0f - player.getHungerManager().getSaturationLevel();
         int hl = 0;
         ItemStack item;
@@ -270,6 +276,6 @@ public class Sandwichable implements ModInitializer {
         }
         hl -= (mh + ms);
         hl *= 1.25;
-        return hl;
+        return hl;*/
     }
 }
