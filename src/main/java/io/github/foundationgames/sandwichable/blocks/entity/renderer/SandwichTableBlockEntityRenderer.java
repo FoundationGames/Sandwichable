@@ -28,15 +28,14 @@ public class SandwichTableBlockEntityRenderer extends BlockEntityRenderer<Sandwi
 
         matrices.push();
 
-        DefaultedList<ItemStack> foodList = blockEntity.getFoodList();
-
         matrices.translate(0.5, 1.017, 0.3772);
         int lightAbove = WorldRenderer.getLightmapCoordinates(blockEntity.getWorld(), blockEntity.getPos().up());
-        matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion((90)));
+        blockEntity.getSandwich().render(matrices, vertexConsumers, lightAbove, overlay);
+        /*matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion((90)));
         for (ItemStack stack : foodList) {
             MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.GROUND, lightAbove, overlay, matrices, vertexConsumers);
             matrices.translate(0.0, 0.0, -0.034);
-        }
+        }*/
 
         matrices.pop();
     }

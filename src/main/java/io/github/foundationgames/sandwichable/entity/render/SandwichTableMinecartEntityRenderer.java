@@ -25,7 +25,7 @@ public class SandwichTableMinecartEntityRenderer extends MinecartEntityRenderer<
         super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
         matrices.push();
 
-        DefaultedList<ItemStack> foodList = entity.getFoodList();
+        //DefaultedList<ItemStack> foodList = entity.getFoodList();
 
         double d = MathHelper.lerp(tickDelta, entity.lastRenderX, entity.getX());
         double e = MathHelper.lerp(tickDelta, entity.lastRenderY, entity.getY());
@@ -56,13 +56,14 @@ public class SandwichTableMinecartEntityRenderer extends MinecartEntityRenderer<
         matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(o));
 
         int lightAbove = WorldRenderer.getLightmapCoordinates(entity.getEntityWorld(), entity.getBlockPos().up());
-        matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(90));
-        //matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(yaw));
-        matrices.translate(0, -0.125, -1.048);
+        matrices.translate(0, 1.048, -0.125);
+        /*matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(90));
+        matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(yaw));
         for (ItemStack stack : foodList) {
             MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.GROUND, lightAbove, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers);
             matrices.translate(0.0, 0.0, -0.034);
-        }
+        }*/
+        entity.getSandwich().render(matrices, vertexConsumers, lightAbove, OverlayTexture.DEFAULT_UV);
 
         matrices.pop();
     }

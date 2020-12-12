@@ -13,7 +13,8 @@
   "client": [
     "BuiltinModelItemRendererMixin",
     "ClientPlayNetworkHandlerMixin",
-    "ItemRendererMixin"
+    "ItemRendererMixin",
+    "MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

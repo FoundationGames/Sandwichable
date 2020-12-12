@@ -4,6 +4,7 @@ package io.github.foundationgames.sandwichable.mixin;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.blocks.SandwichBlock;
 import io.github.foundationgames.sandwichable.blocks.entity.SandwichBlockEntity;
+import io.github.foundationgames.sandwichable.util.Sandwich;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
@@ -30,6 +31,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BuiltinModelItemRenderer.class)
 public class BuiltinModelItemRendererMixin {
+    private static final Sandwich cache = new Sandwich();
+
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/BlockItem;getBlock()Lnet/minecraft/block/Block;", shift = At.Shift.AFTER), method = "render")
     private void renderSandwichGui(ItemStack stack, ModelTransformation.Mode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci) {
         if(stack.getItem() == (BlocksRegistry.SANDWICH).asItem()) {
@@ -37,14 +40,17 @@ public class BuiltinModelItemRendererMixin {
             if(stack.getTag() != null) {
                 if(stack.getTag().contains("BlockEntityTag")) {
                     CompoundTag tag = stack.getSubTag("BlockEntityTag");
-                    DefaultedList<ItemStack> foodList = DefaultedList.ofSize(128, ItemStack.EMPTY);
+                    /*DefaultedList<ItemStack> foodList = DefaultedList.ofSize(128, ItemStack.EMPTY);
                     Inventories.fromTag(tag, foodList);
                     matrices.translate(0.5, 0.017, 0.4);
                     matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion((90)));
                     for (int i = 0; i < foodList.size(); i++) {
                         MinecraftClient.getInstance().getItemRenderer().renderItem(foodList.get(i), ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
                         matrices.translate(0.0, 0.0, -0.034);
-                    }
+                    }*/
+                    matrices.translate(0.5, 0.017, 0.4);
+                    cache.setFromTag(tag);
+                    cache.render(matrices, vertexConsumers, light, overlay);
                 }
             } else {
                 matrices.translate(0.5, 0.017, 0.4);

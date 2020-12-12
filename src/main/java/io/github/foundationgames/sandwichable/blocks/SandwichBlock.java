@@ -9,6 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -40,7 +41,8 @@ public class SandwichBlock extends Block implements BlockEntityProvider {
     public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
         if (view.getBlockEntity(pos) instanceof SandwichBlockEntity) {
             SandwichBlockEntity blockEntity = (SandwichBlockEntity)view.getBlockEntity(pos);
-            double size = blockEntity.getFoodListSize() * 0.6D;
+            double size = 10;
+            if(blockEntity != null) size = blockEntity.getSandwich().getSize() * 0.6D;
             return Block.createCuboidShape(4.0D, 0.0D, 4.0D, 12.0D, size, 12.0D);
         }
         return Block.createCuboidShape(4.0D, 0.0D, 4.0D, 12.0D, 8.0D, 12.0D);
@@ -65,14 +67,15 @@ public class SandwichBlock extends Block implements BlockEntityProvider {
     public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         if (world.getBlockEntity(pos) instanceof SandwichBlockEntity && !player.isCreative()) {
             SandwichBlockEntity blockEntity = (SandwichBlockEntity)world.getBlockEntity(pos);
-            ItemStack item = new ItemStack(BlocksRegistry.SANDWICH);
+            /*ItemStack item = new ItemStack(BlocksRegistry.SANDWICH);
             CompoundTag tag = blockEntity.serializeSandwich(new CompoundTag());
             if(!tag.isEmpty()) {
                 item.putSubTag("BlockEntityTag", tag);
             }
             ItemEntity itemEntity = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, item);
             itemEntity.setToDefaultPickupDelay();
-            world.spawnEntity(itemEntity);
+            world.spawnEntity(itemEntity);*/
+            blockEntity.getSandwich().ejectSandwich(world, new Vec3d(pos.getX()+0.5, pos.getY() - 0.7, pos.getZ() + 0.5));
         }
         super.onBreak(world, pos, state, player);
     }
@@ -82,7 +85,7 @@ public class SandwichBlock extends Block implements BlockEntityProvider {
         if (world.getBlockEntity(pos) instanceof SandwichBlockEntity) {
             SandwichBlockEntity blockEntity = (SandwichBlockEntity)world.getBlockEntity(pos);
             ItemStack item = new ItemStack(BlocksRegistry.SANDWICH);
-            CompoundTag tag = blockEntity.serializeSandwich(new CompoundTag());
+            CompoundTag tag = blockEntity.getSandwich().addToTag(new CompoundTag());
             if(!tag.isEmpty()) {
                 item.putSubTag("BlockEntityTag", tag);
             }

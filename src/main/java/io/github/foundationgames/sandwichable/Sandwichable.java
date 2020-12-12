@@ -11,6 +11,7 @@ import io.github.foundationgames.sandwichable.items.CheeseCultureItem;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.items.SandwichBlockItem;
 import io.github.foundationgames.sandwichable.items.SandwichableGroupIconBuilder;
+import io.github.foundationgames.sandwichable.util.Sandwich;
 import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.items.spread.SpreadType;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
@@ -94,7 +95,28 @@ public class Sandwichable implements ModInitializer {
             @Override
             protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
                 BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
-                if(pointer.getWorld().getBlockState(pos).getBlock() == BlocksRegistry.SANDWICH_TABLE) {
+                World world = pointer.getWorld();
+                Sandwich sandwich = null;
+                Runnable sync = () -> {};
+                if(world.getBlockEntity(pos) instanceof SandwichTableBlockEntity) {
+                    sandwich = ((SandwichTableBlockEntity)world.getBlockEntity(pos)).getSandwich();
+                    sync = () -> Util.sync(((SandwichTableBlockEntity)world.getBlockEntity(pos)), pointer.getWorld());
+                } else {
+                    List<SandwichTableMinecartEntity> list = pointer.getWorld().getEntitiesByClass(SandwichTableMinecartEntity.class, new Box(pos), EntityPredicates.EXCEPT_SPECTATOR);
+                    if(list.size() > 0) {
+                        sandwich = list.get(0).getSandwich();
+                        sync = () -> list.get(0).sync();
+                    }
+                }
+                if(sandwich != null) {
+                    ItemStack r = sandwich.addTopFoodFrom(stack);
+                    if(r != null) {
+                        sync.run();
+                        return r.isEmpty() ? stack : r;
+                    }
+                }
+                return defaultBehavior.dispense(pointer, stack);
+                /*if(pointer.getWorld().getBlockState(pos).getBlock() == BlocksRegistry.SANDWICH_TABLE) {
                     BlockEntity be = pointer.getWorld().getBlockEntity(pos);
                     if(be instanceof SandwichTableBlockEntity) {
                         if(((SandwichTableBlockEntity)be).getFoodList().get(0).getItem().isIn(Sandwichable.BREADS) || stack.getItem().isIn(Sandwichable.BREADS)) {
@@ -130,7 +152,7 @@ public class Sandwichable implements ModInitializer {
                         }
                     }
                 }
-                return defaultBehavior.dispense(pointer, stack);
+                return defaultBehavior.dispense(pointer, stack);*/
             }
         };
         for(ItemConvertible item : Registry.ITEM) {
@@ -237,8 +259,11 @@ public class Sandwichable implements ModInitializer {
         int mh = 20 - player.getHungerManager().getFoodLevel();
         float ms = 20.0f - player.getHungerManager().getSaturationLevel();
         int hl = 0;
-        for(ItemStack item : ((SandwichBlockItem)BlocksRegistry.SANDWICH.asItem()).getFoodList(stack)) {
-            if(item.isFood()) {
+        ItemStack item;
+        List<ItemStack> l = ((SandwichBlockItem)BlocksRegistry.SANDWICH.asItem()).getFoodList(stack);
+        for(int i = 0; i < ((SandwichBlockItem)BlocksRegistry.SANDWICH.asItem()).getFoodListSize(stack); i++) {
+            item = l.get(i);
+            if(item.getItem().isFood()) {
                 int h = item.getItem().getFoodComponent().getHunger();
                 hl += (h + ((float)h * item.getItem().getFoodComponent().getSaturationModifier() * 2.0F));
             }

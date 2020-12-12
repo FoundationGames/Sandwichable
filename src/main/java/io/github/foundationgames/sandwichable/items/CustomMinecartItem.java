@@ -88,7 +88,7 @@ public class CustomMinecartItem extends Item {
                 double offset = 0.0D;
                 if (shape.isAscending()) offset = 0.5D;
                 AbstractMinecartEntity minecart = minecartType.create(world);
-                minecart.setPos(pos.getX() + 0.5, pos.getY() + 0.0625 + offset, pos.getZ());
+                minecart.setPos(pos.getX() + 0.5, pos.getY() + 0.0625 + offset, pos.getZ() + 0.5);
                 if (stack.hasCustomName()) {
                     minecart.setCustomName(stack.getName());
                 }

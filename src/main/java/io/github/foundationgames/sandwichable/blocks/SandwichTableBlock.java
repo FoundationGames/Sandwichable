@@ -22,6 +22,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
@@ -41,16 +42,13 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if(blockEntity instanceof SandwichTableBlockEntity) {
-            if(player.getStackInHand(hand).getItem().equals(BlocksRegistry.SANDWICH.asItem()) && player.getStackInHand(hand).getTag() != null && ((SandwichTableBlockEntity)blockEntity).getFoodListSize() == 0) {
-                DefaultedList<ItemStack> sandwichlist = DefaultedList.ofSize(128, ItemStack.EMPTY);
+            SandwichTableBlockEntity sBlockEntity = (SandwichTableBlockEntity)world.getBlockEntity(pos);
+            /*if(player.getStackInHand(hand).getItem().equals(BlocksRegistry.SANDWICH.asItem()) && player.getStackInHand(hand).getTag() != null && sBlockEntity.getSandwich().isEmpty()) {
                 CompoundTag tag = player.getStackInHand(hand).getSubTag("BlockEntityTag");
-                Inventories.fromTag(tag, sandwichlist);
-                player.getStackInHand(hand).decrement(1);
-                ((SandwichTableBlockEntity)blockEntity).setFoodList(sandwichlist);
+                sBlockEntity.getSandwich().setFromTag(tag);
+                Util.sync(sBlockEntity, world);
             } else if(!player.getStackInHand(hand).isEmpty() && (player.getStackInHand(hand).isFood() || SpreadRegistry.INSTANCE.itemHasSpread(player.getStackInHand(hand).getItem())) && player.getStackInHand(hand).getItem() != BlocksRegistry.SANDWICH.asItem()) {
-                if (Sandwichable.BREADS.contains(((SandwichTableBlockEntity)blockEntity).getFoodList().get(0).getItem()) || Sandwichable.BREADS.contains(player.getStackInHand(hand).getItem())) {
-                    ItemStack foodToBeAdded = player.getStackInHand(hand);
-                    ((SandwichTableBlockEntity) blockEntity).addFood(player, foodToBeAdded);
+                if() {
                 } else {
                     player.sendMessage(new TranslatableText("message.sandwichtable.bottombread"), true);
                 }
@@ -63,7 +61,6 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
                         ((SandwichTableBlockEntity) blockEntity).removeTopFood();
                     }
                 } else if(Sandwichable.BREADS.contains(((SandwichTableBlockEntity)blockEntity).getTopFood().getItem())){
-                    SandwichTableBlockEntity sBlockEntity = (SandwichTableBlockEntity)world.getBlockEntity(pos);
                     ItemStack item = new ItemStack(BlocksRegistry.SANDWICH);
                     CompoundTag tag = sBlockEntity.sandwichToTag(new CompoundTag());
                     if(!tag.isEmpty()) {
@@ -76,8 +73,9 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
                 } else {
                     player.sendMessage(new TranslatableText("message.sandwichtable.topbread"), true);
                 }
-            }
-            Util.sync(((SandwichTableBlockEntity)blockEntity), world);
+            }*/
+            sBlockEntity.getSandwich().interact(world, new Vec3d(pos.getX()+0.5, pos.getY(), pos.getZ()+0.5), player, hand);
+            Util.sync(sBlockEntity, world);
         }
         return ActionResult.SUCCESS;
     }
@@ -92,7 +90,7 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
         BlockEntity be = world.getBlockEntity(pos);
         if(be instanceof SandwichTableBlockEntity) {
             SandwichTableBlockEntity blockEntity = (SandwichTableBlockEntity)be;
-            if(blockEntity.getFoodListSize() > 0) {
+            /*if(blockEntity.getFoodListSize() > 0) {
                 if(Sandwichable.BREADS.contains(blockEntity.getTopFood().getItem()) && blockEntity.getFoodListSize() > 1){
                     ItemStack item = new ItemStack(BlocksRegistry.SANDWICH);
                     CompoundTag tag = blockEntity.sandwichToTag(new CompoundTag());
@@ -112,7 +110,7 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
                         }
                     }
                 }
-            }
+            }*/
             Util.sync(blockEntity, world);
         }
     }
@@ -123,13 +121,13 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
             BlockEntity be = world.getBlockEntity(pos);
             if (be instanceof SandwichTableBlockEntity) {
                 SandwichTableBlockEntity blockEntity = (SandwichTableBlockEntity)world.getBlockEntity(pos);
-                for(int i=0;i<blockEntity.getFoodListSize();i++) {
+                /*for(int i=0;i<blockEntity.getFoodListSize();i++) {
                     ItemEntity item = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, blockEntity.getFoodList().get(i).getItem() instanceof SpreadItem ? ItemStack.EMPTY : blockEntity.getFoodList().get(i));
                     world.spawnEntity(item);
-                }
+                }*/
+                blockEntity.getSandwich().ejectSandwich(world, new Vec3d(pos.getX()+0.5, pos.getY(), pos.getZ()+0.5));
                 world.updateNeighbors(pos, this);
             }
-
             super.onStateReplaced(state, world, pos, newState, moved);
         }
     }
