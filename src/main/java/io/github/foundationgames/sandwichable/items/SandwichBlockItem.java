@@ -111,23 +111,6 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
                     user.eatFood(world, food);
                 }
             }
-            /*for (int i = 0; i < foods.size(); i++) {
-                food = foods.get(i);
-                if(food.isFood()) {
-                    //System.out.println(food.getItem().finishUsing(stack, world, user));
-                    finishStack = food.getItem().finishUsing(food, world, user);
-                    if(user instanceof PlayerEntity) {
-                        if(!((PlayerEntity)user).isCreative() && !finishStack.getItem().equals(Items.AIR)) {
-                            ((PlayerEntity)user).giveItemStack(finishStack);
-                        }
-                        cooldownManager = ((PlayerEntity)user).getItemCooldownManager();
-                        if(cooldownManager.isCoolingDown(food.getItem())) {
-                            cooldownManager.set(this, 20);
-                        }
-                    }
-                    user.eatFood(world, food);
-                }
-            }*/
         }
         return super.finishUsing(stack, world, user);
     }
@@ -135,10 +118,10 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
         if(stack.getTag() != null) {
-            DefaultedList<ItemStack> foods = DefaultedList.ofSize(128, ItemStack.EMPTY);
-            Inventories.fromTag(Objects.requireNonNull(stack.getSubTag("BlockEntityTag")), foods);
-            int a = 0; while(foods.get(a) != ItemStack.EMPTY) { a++; }
-            int i = 0; while(i < a && i < 5) {
+            cache.setFromTag(stack.getTag());
+            int size = cache.getSize();
+            List<ItemStack> foods = cache.getFoodList();
+            int i = 0; while(i < size && i < 5) {
                 if(i != 4) {
                     tooltip.add(((MutableText)foods.get(i).getName()).formatted(Formatting.BLUE));
                 } else {
@@ -146,10 +129,9 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
                 }
                 i++;
             }
-            int size = 0;
             boolean hacked = false;
-            while(foods.get(size)!=ItemStack.EMPTY) {
-                size++; if (!foods.get(size).isFood() && !foods.get(size).isEmpty()) {
+            for(int it = 0; it < foods.size() && !hacked; it++) {
+                if(!foods.get(it).isFood()) {
                     hacked = true;
                 }
             }

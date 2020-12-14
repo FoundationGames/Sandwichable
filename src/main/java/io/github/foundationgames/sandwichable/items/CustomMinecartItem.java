@@ -8,10 +8,8 @@ import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.block.enums.RailShape;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.item.MinecartItem;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPointer;
@@ -19,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-public class CustomMinecartItem extends Item {
+public class CustomMinecartItem extends InfoTooltipItem {
     private static final DispenserBehavior DISPENSER_BEHAVIOR = new ItemDispenserBehavior() {
         private final ItemDispenserBehavior defaultBehavior = new ItemDispenserBehavior();
 

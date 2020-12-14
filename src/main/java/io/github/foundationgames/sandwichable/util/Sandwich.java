@@ -84,9 +84,10 @@ public class Sandwich {
         for(ItemStack item : foods) {
             if(item.getItem().isFood()) {
                 h += item.getItem().getFoodComponent().getHunger();
-                s += ((float)h * item.getItem().getFoodComponent().getSaturationModifier() * 2.0F);
+                s += item.getItem().getFoodComponent().getSaturationModifier();
             }
         }
+        s /= Math.max(foods.size(), 1);
         displayValues.putInt("hunger", h);
         displayValues.putFloat("saturation", s);
         tag.put("DisplayValues", displayValues);
@@ -161,9 +162,9 @@ public class Sandwich {
                         ItemEntity item = new ItemEntity(world, pos.getX(), pos.getY() + 1.2, pos.getZ(), stack);
                         item.setToDefaultPickupDelay();
                         world.spawnEntity(item);
-                        clearFoodList();
                     }
                 }
+                clearFoodList();
             }
         }
     }

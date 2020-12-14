@@ -39,17 +39,14 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
 
     public SandwichTableMinecartEntity(World world) {
         super(EntitiesRegistry.SANDWICH_TABLE_MINECART, world);
-        sync();
     }
 
     public SandwichTableMinecartEntity(World world, double x, double y, double z) {
         super(EntitiesRegistry.SANDWICH_TABLE_MINECART, world, x, y, z);
-        sync();
     }
 
     public SandwichTableMinecartEntity(EntityType<SandwichTableMinecartEntity> type, World world) {
         super(type, world);
-        sync();
     }
 
     @Override
@@ -76,17 +73,22 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
     }
 
     public void sync() {
-        PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-        buf.writeInt(getEntityId());
         if(!world.isClient) {
+            PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+            buf.writeInt(getEntityId());
             CompoundTag t = new CompoundTag();
             writeSandwichTableData(t);
             buf.writeCompoundTag(t);
             for(PlayerEntity player : world.getPlayers()) {
                 ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, Util.id("sync_sandwich_table_cart"), buf);
             }
-            //System.out.println("synced to all clients, "+t);
-        } else {
+        }
+    }
+
+    public void clientSync() {
+        if(world.isClient) {
+            PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+            buf.writeInt(getEntityId());
             ClientSidePacketRegistry.INSTANCE.sendToServer(Util.id("request_sandwich_table_cart_sync"), buf);
         }
     }
@@ -101,52 +103,20 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
 
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
-        /*if(player.getStackInHand(hand).getItem().equals(BlocksRegistry.SANDWICH.asItem()) && player.getStackInHand(hand).getTag() != null && this.getFoodListSize() == 0) {
-            DefaultedList<ItemStack> sandwichlist = DefaultedList.ofSize(128, ItemStack.EMPTY);
-            CompoundTag tag = player.getStackInHand(hand).getSubTag("BlockEntityTag");
-            Inventories.fromTag(tag, sandwichlist);
-            player.getStackInHand(hand).decrement(1);
-            this.setFoodList(sandwichlist);
-        } else if(!player.getStackInHand(hand).isEmpty() && (player.getStackInHand(hand).isFood() || SpreadRegistry.INSTANCE.itemHasSpread(player.getStackInHand(hand).getItem())) && player.getStackInHand(hand).getItem() != BlocksRegistry.SANDWICH.asItem()) {
-            if (Sandwichable.BREADS.contains(this.getFoodList().get(0).getItem()) || Sandwichable.BREADS.contains(player.getStackInHand(hand).getItem())) {
-                ItemStack foodToBeAdded = player.getStackInHand(hand);
-                this.addFood(player, foodToBeAdded);
-            } else {
-                player.sendMessage(new TranslatableText("message.sandwichtable.bottombread"), true);
-            }
-        } else if(this.getFoodListSize() > 0 && player.getStackInHand(hand).isEmpty()){
-            if(!player.isSneaking()) {
-                if (!player.isCreative()) {
-                    ItemEntity item = new ItemEntity(world, getPos().getX(), getPos().getY() + 1.2, getPos().getZ(), this.removeTopFood());
-                    world.spawnEntity(item);
-                } else {
-                    this.removeTopFood();
-                }
-            } else if(Sandwichable.BREADS.contains(this.getTopFood().getItem())){
-                ItemStack item = new ItemStack(BlocksRegistry.SANDWICH);
-                CompoundTag tag = this.sandwichToTag(new CompoundTag());
-                if(!tag.isEmpty()) {
-                    item.putSubTag("BlockEntityTag", tag);
-                }
-                ItemEntity itemEntity = new ItemEntity(world, getPos().getX(), getPos().getY()+1.2, getPos().getZ(), item);
-                itemEntity.setToDefaultPickupDelay();
-                this.setFoodList(DefaultedList.ofSize(128, ItemStack.EMPTY));
-                world.spawnEntity(itemEntity);
-            } else {
-                player.sendMessage(new TranslatableText("message.sandwichtable.topbread"), true);
-            }
-        }*/
         sandwich.interact(world, getPos(), player, hand);
         sync();
         return ActionResult.SUCCESS;
     }
 
-
+    @Override
+    public void setEntityId(int id) {
+        super.setEntityId(id);
+        clientSync();
+    }
 
     @Override
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
-        sync();
     }
 
     @Override
@@ -154,6 +124,7 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
         super.dropItems(damageSource);
         if (!damageSource.isExplosive() && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
             this.dropItem(BlocksRegistry.SANDWICH_TABLE);
+            this.sandwich.ejectSandwich(world, getPos());
         }
     }
 

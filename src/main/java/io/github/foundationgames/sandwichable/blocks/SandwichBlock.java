@@ -4,7 +4,6 @@ package io.github.foundationgames.sandwichable.blocks;
 import io.github.foundationgames.sandwichable.blocks.entity.SandwichBlockEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -67,14 +66,6 @@ public class SandwichBlock extends Block implements BlockEntityProvider {
     public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         if (world.getBlockEntity(pos) instanceof SandwichBlockEntity && !player.isCreative()) {
             SandwichBlockEntity blockEntity = (SandwichBlockEntity)world.getBlockEntity(pos);
-            /*ItemStack item = new ItemStack(BlocksRegistry.SANDWICH);
-            CompoundTag tag = blockEntity.serializeSandwich(new CompoundTag());
-            if(!tag.isEmpty()) {
-                item.putSubTag("BlockEntityTag", tag);
-            }
-            ItemEntity itemEntity = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, item);
-            itemEntity.setToDefaultPickupDelay();
-            world.spawnEntity(itemEntity);*/
             blockEntity.getSandwich().ejectSandwich(world, new Vec3d(pos.getX()+0.5, pos.getY() - 0.7, pos.getZ() + 0.5));
         }
         super.onBreak(world, pos, state, player);

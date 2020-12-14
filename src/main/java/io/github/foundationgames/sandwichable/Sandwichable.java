@@ -241,15 +241,11 @@ public class Sandwichable implements ModInitializer {
         });
 
         ServerSidePacketRegistry.INSTANCE.register(Util.id("request_sandwich_table_cart_sync"), (ctx, buf) -> {
-            Entity e = ctx.getPlayer().getEntityWorld().getEntityById(buf.readInt());
+            int id = buf.readInt();
+            Entity e = ctx.getPlayer().getEntityWorld().getEntityById(id);
             ctx.getTaskQueue().execute(() -> {
                 if(e instanceof SandwichTableMinecartEntity) {
-                    PacketByteBuf nbuf = new PacketByteBuf(Unpooled.buffer());
-                    nbuf.writeInt(e.getEntityId());
-                    CompoundTag t = new CompoundTag();
-                    ((SandwichTableMinecartEntity)e).writeSandwichTableData(t);
-                    nbuf.writeCompoundTag(t);
-                    ServerSidePacketRegistry.INSTANCE.sendToPlayer(ctx.getPlayer(), Util.id("sync_sandwich_table_cart"), nbuf);
+                    ((SandwichTableMinecartEntity)e).sync();
                 }
             });
         });
@@ -261,21 +257,8 @@ public class Sandwichable implements ModInitializer {
         Sandwich.DisplayValues vals = ((SandwichBlockItem)BlocksRegistry.SANDWICH.asItem()).getDisplayValues(stack);
         int mh = 20 - player.getHungerManager().getFoodLevel();
         float ms = 20.0f - player.getHungerManager().getSaturationLevel();
-        return (int)(((vals.getHunger() + vals.getSaturation()) - (mh + ms)) * 1.25);
-        /*int mh = 20 - player.getHungerManager().getFoodLevel();
-        float ms = 20.0f - player.getHungerManager().getSaturationLevel();
-        int hl = 0;
-        ItemStack item;
-        List<ItemStack> l = ((SandwichBlockItem)BlocksRegistry.SANDWICH.asItem()).getFoodList(stack);
-        for(int i = 0; i < ((SandwichBlockItem)BlocksRegistry.SANDWICH.asItem()).getFoodListSize(stack); i++) {
-            item = l.get(i);
-            if(item.getItem().isFood()) {
-                int h = item.getItem().getFoodComponent().getHunger();
-                hl += (h + ((float)h * item.getItem().getFoodComponent().getSaturationModifier() * 2.0F));
-            }
-        }
-        hl -= (mh + ms);
-        hl *= 1.25;
-        return hl;*/
+        float h = vals.getHunger();
+        float s = h * vals.getSaturation() * 2;
+        return (int)(((h + s) - (mh + ms)) * 1.25);
     }
 }
