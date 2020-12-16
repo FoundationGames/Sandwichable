@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Supplier;
 
 public class Util {
 
@@ -129,6 +130,10 @@ public class Util {
                 tooltip.add(new TranslatableText("sandwichable.tooltip."+config.infoTooltipKeyBind.getName()).formatted(Formatting.GOLD));
             }
         }
+    }
+
+    public static <T> T create(Supplier<T> creator) {
+        return creator.get();
     }
 
     public static int getSaltyWaterColor() {

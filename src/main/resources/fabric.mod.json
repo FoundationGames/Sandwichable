@@ -24,6 +24,9 @@
 	"client": [
       "io.github.foundationgames.sandwichable.SandwichableClient"
     ],
+    "mealapi": [
+      "io.github.foundationgames.sandwichable.SandwichableMealAPI"
+    ],
     "cloth-early-init": [
       "io.github.foundationgames.sandwichable.SandwichableEarly"
     ],
@@ -40,8 +43,7 @@
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
-    "minecraft": "1.16.x",
-    "mealapi": ">=0.2+1.16.4"
+    "minecraft": "1.16.x"
   },
   "suggests": {
     "flamingo": "*"

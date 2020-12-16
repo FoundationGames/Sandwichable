@@ -95,7 +95,8 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
             CompoundTag tag = stack.getSubTag("BlockEntityTag");
             cache.setFromTag(tag);
             ItemStack finishStack;
-            ItemCooldownManager cooldownManager = ((PlayerEntity)user).getItemCooldownManager();
+            ItemCooldownManager cooldownManager = null;
+            if(user instanceof PlayerEntity) cooldownManager = ((PlayerEntity)user).getItemCooldownManager();
             for(int i = 0; i < cache.getSize(); i++) {
                 ItemStack food = cache.getFoodList().get(i);
                 if(food.isFood()) {
@@ -104,7 +105,7 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
                         if(!((PlayerEntity)user).isCreative() && !finishStack.getItem().equals(Items.AIR)) {
                             ((PlayerEntity)user).giveItemStack(finishStack);
                         }
-                        if(cooldownManager.isCoolingDown(food.getItem())) {
+                        if(cooldownManager != null && cooldownManager.isCoolingDown(food.getItem())) {
                             cooldownManager.set(this, 20);
                         }
                     }

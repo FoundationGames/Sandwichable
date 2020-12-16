@@ -7,6 +7,7 @@ import io.github.foundationgames.sandwichable.blocks.SandwichBlock;
 import io.github.foundationgames.sandwichable.blocks.entity.*;
 import io.github.foundationgames.sandwichable.blocks.entity.container.BottleCrateScreenHandler;
 import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
+import io.github.foundationgames.sandwichable.common.CommonTags;
 import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
 import io.github.foundationgames.sandwichable.items.CheeseCultureItem;
@@ -113,6 +114,7 @@ public class Sandwichable implements ModInitializer {
                     }
                 }
                 if(sandwich != null) {
+                    if(!sandwich.hasBreadBottom() && !isBread(stack.getItem())) return defaultBehavior.dispense(pointer, stack);
                     ItemStack r = sandwich.addTopFoodFrom(stack);
                     if(r != null) {
                         sync.run();
@@ -215,16 +217,7 @@ public class Sandwichable implements ModInitializer {
             });
         });
 
-        MealItemRegistry.register(BlocksRegistry.SANDWICH.asItem(), Sandwichable::calculateSandwichFullness);
-    }
-
-    private static int calculateSandwichFullness(PlayerEntity player, ItemStack stack) {
-        Sandwich.DisplayValues vals = ((SandwichBlockItem)BlocksRegistry.SANDWICH.asItem()).getDisplayValues(stack);
-        int mh = 20 - player.getHungerManager().getFoodLevel();
-        float ms = 20.0f - player.getHungerManager().getSaturationLevel();
-        float h = vals.getHunger();
-        float s = h * vals.getSaturation() * 2;
-        return (int)(((h + s) - (mh + ms)) * 1.25);
+        CommonTags.init();
     }
 
     public static boolean isBread(ItemConvertible item) {
