@@ -2,5 +2,13 @@
     "parent": "item/generated",
     "textures": {
         "layer0": "sandwichable:item/spread"
-    }
+    },
+	"overrides": [
+        {
+            "predicate": {
+                "sandwichable:loaf_shape": 1
+            },
+            "model": "sandwichable:item/spread_bread_loaf"
+        }
+    ]
 }

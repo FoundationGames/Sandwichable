@@ -5,6 +5,7 @@ import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
 import io.github.foundationgames.sandwichable.mixin.ComposterHelper;
 import io.github.foundationgames.sandwichable.util.Util;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.FoodComponent;
@@ -30,6 +31,13 @@ public class ItemsRegistry {
     public static final FoodComponent COOKEDCHOPPEDONION = (new FoodComponent.Builder()).hunger(3).saturationModifier(0.6F).snack().build();
     public static final FoodComponent BACON = (new FoodComponent.Builder()).hunger(4).saturationModifier(0.7F).meat().build();
     public static final FoodComponent PORKCUTS = (new FoodComponent.Builder()).hunger(2).saturationModifier(0.3F).meat().build();
+    public static final FoodComponent COOKEDPORKCUTS = (new FoodComponent.Builder()).hunger(4).saturationModifier(0.6F).meat().build();
+    public static final FoodComponent RAWCHICKFILET = (new FoodComponent.Builder()).hunger(1).saturationModifier(0.2F).statusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 300, 0), 0.3F).meat().build();
+    public static final FoodComponent COOKEDCHICKFILET = (new FoodComponent.Builder()).hunger(4).saturationModifier(0.5F).meat().build();
+    public static final FoodComponent RAWCODFILET = (new FoodComponent.Builder()).hunger(1).saturationModifier(0.2F).build();
+    public static final FoodComponent COOKEDCODFILET = (new FoodComponent.Builder()).hunger(3).saturationModifier(0.5F).build();
+    public static final FoodComponent RAWSALMONFILET = (new FoodComponent.Builder()).hunger(1).saturationModifier(0.35F).build();
+    public static final FoodComponent COOKEDSALMONFILET = (new FoodComponent.Builder()).hunger(3).saturationModifier(0.8F).build();
     public static final FoodComponent CRIMSONFUNGUS = (new FoodComponent.Builder()).hunger(4).saturationModifier(0.5F).build();
     public static final FoodComponent SLICEDCRIMSONFUNGUS = (new FoodComponent.Builder()).hunger(2).saturationModifier(0.6F).snack().build();
     public static final FoodComponent WARPEDFUNGUS = (new FoodComponent.Builder()).hunger(5).saturationModifier(0.4F).build();
@@ -44,6 +52,7 @@ public class ItemsRegistry {
     public static final FoodComponent GOLDAPPLESLICES = (new FoodComponent.Builder()).hunger(3).saturationModifier(0.7F).snack().statusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 50, 1), 1.0F).statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 0), 1.0F).alwaysEdible().build();
     public static final FoodComponent ENCHANTEDGOLDAPPLESLICES = (new FoodComponent.Builder()).hunger(4).saturationModifier(0.8F).snack().statusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 200, 1), 1.0F).statusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 3000, 0), 1.0F).statusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 3000, 0), 1.0F).statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 3), 1.0F).alwaysEdible().build();
     public static final FoodComponent BURNTFOOD = (new FoodComponent.Builder()).hunger(1).saturationModifier(0.1F).build();
+    public static final FoodComponent BURNTMORSEL = (new FoodComponent.Builder()).hunger(1).saturationModifier(0F).build();
 
     public static final Item BREAD_SLICE = new InfoTooltipItem(new Item.Settings().food(BREADSLICE).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item TOASTED_BREAD_SLICE = new InfoTooltipItem(new Item.Settings().food(TOASTEDBREADSLICE).group(Sandwichable.SANDWICHABLE_ITEMS));
@@ -92,8 +101,17 @@ public class ItemsRegistry {
     public static final Item SLICED_TOASTED_CRIMSON_FUNGUS = new InfoTooltipItem(new Item.Settings().food(SLICEDCRIMSONFUNGUS).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item SLICED_TOASTED_WARPED_FUNGUS = new InfoTooltipItem(new Item.Settings().food(SLICEDWARPEDFUNGUS).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item PORK_CUTS = new InfoTooltipItem(new Item.Settings().food(PORKCUTS).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item COOKED_PORK_CUTS = new InfoTooltipItem(new Item.Settings().food(COOKEDPORKCUTS).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item BACON_STRIPS = new InfoTooltipItem(new Item.Settings().food(BACON).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item CHICKEN_FILET = new InfoTooltipItem(new Item.Settings().food(RAWCHICKFILET).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item COOKED_CHICKEN_FILET = new InfoTooltipItem(new Item.Settings().food(COOKEDCHICKFILET).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item COD_FILET = new InfoTooltipItem(new Item.Settings().food(RAWCODFILET).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item COOKED_COD_FILET = new InfoTooltipItem(new Item.Settings().food(COOKEDCODFILET).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item SALMON_FILET = new InfoTooltipItem(new Item.Settings().food(RAWSALMONFILET).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item COOKED_SALMON_FILET = new InfoTooltipItem(new Item.Settings().food(COOKEDSALMONFILET).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item BURNT_FOOD = new InfoTooltipItem(new Item.Settings().food(BURNTFOOD).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item BURNT_MORSEL = new InfoTooltipItem(new Item.Settings().food(BURNTMORSEL).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item CHARRED_MORSEL = new InfoTooltipItem(new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
 
     public static final Item KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item SANDWICH_TABLE_MINECART = new CustomMinecartItem(EntitiesRegistry.SANDWICH_TABLE_MINECART, new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
@@ -172,7 +190,14 @@ public class ItemsRegistry {
         registerItem(CHEESE_WHEEL_WARPED_BLEU, "warped_bleu_cheese_wheel");
         registerItem(CHEESE_SLICE_WARPED_BLEU, "warped_bleu_cheese_slice");
         registerItem(PORK_CUTS, "pork_cuts");
+        registerItem(COOKED_PORK_CUTS, "cooked_pork_cuts");
         registerItem(BACON_STRIPS, "bacon_strips");
+        registerItem(CHICKEN_FILET, "chicken_filet");
+        registerItem(COOKED_CHICKEN_FILET, "cooked_chicken_filet");
+        registerItem(COD_FILET, "cod_filet");
+        registerItem(COOKED_COD_FILET, "cooked_cod_filet");
+        registerItem(SALMON_FILET, "salmon_filet");
+        registerItem(COOKED_SALMON_FILET, "cooked_salmon_filet");
         registerItem(TOASTED_CRIMSON_FUNGUS, "toasted_crimson_fungus");
         registerItem(TOASTED_WARPED_FUNGUS, "toasted_warped_fungus");
         registerItem(SLICED_TOASTED_CRIMSON_FUNGUS, "sliced_toasted_crimson_fungus");
@@ -186,6 +211,9 @@ public class ItemsRegistry {
         registerItem(ONION_SEEDS, "onion_seeds");
         ComposterHelper.registerCompostable(0.3f, ONION_SEEDS);
         registerItem(BURNT_FOOD, "burnt_food");
+        registerItem(BURNT_MORSEL, "burnt_morsel");
+        registerItem(CHARRED_MORSEL, "charred_morsel");
+        FuelRegistry.INSTANCE.add(CHARRED_MORSEL, 360);
         registerItem(SANDWICH_TABLE_MINECART, "sandwich_table_minecart");
         registerItem(FERMENTING_MILK_BUCKET, "fermenting_milk_bucket");
         registerItem(SPREAD, "spread");

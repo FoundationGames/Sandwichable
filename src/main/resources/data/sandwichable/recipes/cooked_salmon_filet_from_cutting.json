@@ -1,0 +1,8 @@
+{
+	"type": "sandwichable:cutting_recipe",
+	"input": {
+		"item": "minecraft:cooked_salmon"
+	},
+	"outputItem": "sandwichable:cooked_salmon_filet",
+	"outputCount": "2"
+}

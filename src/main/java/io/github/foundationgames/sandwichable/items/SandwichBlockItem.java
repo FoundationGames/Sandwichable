@@ -117,33 +117,31 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
 
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
-        if(stack.getTag() != null) {
-            cache.setFromTag(stack.getTag());
-            int size = cache.getSize();
-            List<ItemStack> foods = cache.getFoodList();
-            int i = 0; while(i < size && i < 5) {
-                if(i != 4) {
-                    tooltip.add(((MutableText)foods.get(i).getName()).formatted(Formatting.BLUE));
-                } else {
-                    tooltip.add(new TranslatableText("sandwich.tooltip.ellipsis").formatted(Formatting.BLUE));
-                }
-                i++;
+        cache.setFromTag(stack.getOrCreateSubTag("BlockEntityTag"));
+        int size = cache.getSize();
+        List<ItemStack> foods = cache.getFoodList();
+        int i = 0; while(i < size && i < 5) {
+            if(i < 4) {
+                tooltip.add(((MutableText)foods.get(i).getName()).formatted(Formatting.BLUE));
+            } else {
+                tooltip.add(new TranslatableText("sandwich.tooltip.ellipsis").formatted(Formatting.BLUE));
             }
-            boolean hacked = false;
-            for(int it = 0; it < foods.size() && !hacked; it++) {
-                if(!foods.get(it).isFood()) {
-                    hacked = true;
-                }
+            i++;
+        }
+        boolean hacked = false;
+        for(int it = 0; it < foods.size() && !hacked; it++) {
+            if(!foods.get(it).isFood()) {
+                hacked = true;
             }
-            if(size <= 2) {
-                tooltip.add(new TranslatableText("sandwich.tooltip.zandwich").formatted(Formatting.BLUE));
-            }
-            if(size >= 127) {
-                tooltip.add(new TranslatableText("sandwich.tooltip.bigsandwich").formatted(Formatting.BLUE));
-            }
-            if(hacked) {
-                tooltip.add(new TranslatableText("sandwich.tooltip.hacked").formatted(Formatting.DARK_PURPLE));
-            }
+        }
+        if(size <= 2) {
+            tooltip.add(new TranslatableText("sandwich.tooltip.zandwich").formatted(Formatting.BLUE));
+        }
+        if(size >= 127) {
+            tooltip.add(new TranslatableText("sandwich.tooltip.bigsandwich").formatted(Formatting.BLUE));
+        }
+        if(hacked) {
+            tooltip.add(new TranslatableText("sandwich.tooltip.hacked").formatted(Formatting.DARK_PURPLE));
         }
         super.appendTooltip(stack, world, tooltip, context);
     }

@@ -1,0 +1,8 @@
+{
+	"type": "sandwichable:cutting_recipe",
+	"input": {
+		"item": "minecraft:cod"
+	},
+	"outputItem": "sandwichable:cod_filet",
+	"outputCount": "2"
+}

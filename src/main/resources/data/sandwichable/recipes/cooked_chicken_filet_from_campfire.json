@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient": {
+    "item": "sandwichable:chicken_filet"
+  },
+  "result": "sandwichable:cooked_chicken_filet",
+  "experience": 0.25,
+  "cookingtime": 200
+}

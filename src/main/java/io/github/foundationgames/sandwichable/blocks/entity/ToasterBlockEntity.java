@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ParticleTypes;
@@ -76,8 +77,10 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
     }
 
     private void explode() {
-        world.removeBlock(pos, true);
-        world.createExplosion(world.getClosestPlayer(pos.getX(), pos.getZ(), 8, 10, false), pos.getX(), pos.getY(), pos.getZ(), 2.2F, true, Explosion.DestructionType.DESTROY);
+        if(!world.isClient) {
+            world.removeBlock(pos, true);
+            world.createExplosion(world.getClosestPlayer(pos.getX(), pos.getZ(), 8, 10, false), pos.getX(), pos.getY(), pos.getZ(), 2.2F, true, Explosion.DestructionType.DESTROY);
+        }
     }
 
     public Direction getToasterFacing() {
@@ -129,7 +132,8 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
                 items.set(i, match.get().getOutput().copy());
             } else {
                 if(items.get(i).isFood()) {
-                    items.set(i, new ItemStack(ItemsRegistry.BURNT_FOOD, 1));
+                    Item item = Sandwichable.SMALL_FOODS.contains(items.get(i).getItem()) ? ItemsRegistry.BURNT_MORSEL : ItemsRegistry.BURNT_FOOD;
+                    items.set(i, new ItemStack(item, 1));
                 }
             }
         }
@@ -221,7 +225,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-        return true;
+        return !world.getBlockState(pos).get(ToasterBlock.ON);
     }
 
     @Override

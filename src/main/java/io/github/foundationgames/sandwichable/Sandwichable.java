@@ -60,8 +60,10 @@ public class Sandwichable implements ModInitializer {
 
     public static final ItemGroup SANDWICHABLE_ITEMS = FabricItemGroupBuilder.build(Util.id("sandwichable"), SandwichableGroupIconBuilder::getIcon);
 
-    public static final Tag<Item> BREADS = TagRegistry.item(Util.id("breads"));
+    public static final Tag<Item> BREAD_SLICES = TagRegistry.item(Util.id("bread_slices"));
+    public static final Tag<Item> BREAD_LOAVES = TagRegistry.item(Util.id("bread_loaves"));
     public static final Tag<Item> METAL_ITEMS = TagRegistry.item(Util.id("metal_items"));
+    public static final Tag<Item> SMALL_FOODS = TagRegistry.item(Util.id("small_foods"));
     public static final Tag<Block> SALT_PRODUCING_BLOCKS = TagRegistry.block(Util.id("salt_producing_blocks"));
 
     public static final Logger LOG = LogManager.getLogger("Sandwichable");
@@ -107,7 +109,7 @@ public class Sandwichable implements ModInitializer {
                     List<SandwichTableMinecartEntity> list = pointer.getWorld().getEntitiesByClass(SandwichTableMinecartEntity.class, new Box(pos), EntityPredicates.EXCEPT_SPECTATOR);
                     if(list.size() > 0) {
                         sandwich = list.get(0).getSandwich();
-                        sync = () -> list.get(0).sync();
+                        sync = list.get(0)::sync;
                     }
                 }
                 if(sandwich != null) {
@@ -118,43 +120,6 @@ public class Sandwichable implements ModInitializer {
                     }
                 }
                 return defaultBehavior.dispense(pointer, stack);
-                /*if(pointer.getWorld().getBlockState(pos).getBlock() == BlocksRegistry.SANDWICH_TABLE) {
-                    BlockEntity be = pointer.getWorld().getBlockEntity(pos);
-                    if(be instanceof SandwichTableBlockEntity) {
-                        if(((SandwichTableBlockEntity)be).getFoodList().get(0).getItem().isIn(Sandwichable.BREADS) || stack.getItem().isIn(Sandwichable.BREADS)) {
-                            if(SpreadRegistry.INSTANCE.itemHasSpread(stack.getItem())) {
-                                ItemStack spread = new ItemStack(ItemsRegistry.SPREAD, 1);
-                                SpreadType type = SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem());
-                                type.onPour(stack, spread);
-                                spread.getOrCreateTag().putString("spreadType", SpreadRegistry.INSTANCE.asString(type));
-                                ((SandwichTableBlockEntity)be).addTopStackFrom(spread);
-                                Util.sync((SandwichTableBlockEntity)be, pointer.getWorld());
-                                return type.getResultItem();
-                            }
-                            else ((SandwichTableBlockEntity)be).addTopStackFrom(stack);
-                            Util.sync((SandwichTableBlockEntity)be, pointer.getWorld());
-                            return stack;
-                        }
-                    }
-                } else {
-                    List<SandwichTableMinecartEntity> list = pointer.getWorld().getEntitiesByClass(SandwichTableMinecartEntity.class, new Box(pos), EntityPredicates.EXCEPT_SPECTATOR);
-                    if(list.size() > 0) {
-                        SandwichTableMinecartEntity e = list.get(0);
-                        if(e.getFoodList().get(0).getItem().isIn(Sandwichable.BREADS) || stack.getItem().isIn(Sandwichable.BREADS)) {
-                            if(SpreadRegistry.INSTANCE.itemHasSpread(stack.getItem())) {
-                                ItemStack spread = new ItemStack(ItemsRegistry.SPREAD, 1);
-                                SpreadType type = SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem());
-                                type.onPour(stack, spread);
-                                spread.getOrCreateTag().putString("spreadType", SpreadRegistry.INSTANCE.asString(type));
-                                e.addTopStackFrom(spread);
-                                return type.getResultItem();
-                            }
-                            else e.addTopStackFrom(stack);
-                            return stack;
-                        }
-                    }
-                }
-                return defaultBehavior.dispense(pointer, stack);*/
             }
         };
         for(ItemConvertible item : Registry.ITEM) {
@@ -260,5 +225,9 @@ public class Sandwichable implements ModInitializer {
         float h = vals.getHunger();
         float s = h * vals.getSaturation() * 2;
         return (int)(((h + s) - (mh + ms)) * 1.25);
+    }
+
+    public static boolean isBread(ItemConvertible item) {
+        return BREAD_SLICES.contains(item.asItem()) || BREAD_LOAVES.contains(item.asItem());
     }
 }

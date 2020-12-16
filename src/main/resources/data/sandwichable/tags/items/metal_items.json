@@ -40,6 +40,7 @@
 		"minecraft:tnt_minecart",
 		"minecraft:hopper_minecart",
 		"minecraft:command_block_minecart",
+		"sandwichable:sandwich_table_minecart",
 		"minecraft:cauldron",
 		"minecraft:chainmail_helmet",
 		"minecraft:chainmail_chestplate",

@@ -1,0 +1,7 @@
+{
+	"type": "sandwichable:toasting_recipe",
+	"input": {
+		"item": "sandwichable:chicken_filet"
+	},
+	"output": "sandwichable:cooked_chicken_filet"
+}

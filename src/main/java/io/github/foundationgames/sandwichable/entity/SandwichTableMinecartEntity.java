@@ -69,6 +69,7 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
         super.onActivatorRail(x, y, z, powered);
         if(powered) {
             sandwich.ejectSandwich(world, getPos());
+            sync();
         }
     }
 
