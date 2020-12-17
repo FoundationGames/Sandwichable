@@ -13,8 +13,10 @@
   "client": [
     "BuiltinModelItemRendererMixin",
     "ClientPlayNetworkHandlerMixin",
+    "ItemModelsMixin",
     "ItemRendererMixin",
-    "MinecraftClientMixin"
+    "MinecraftClientMixin",
+    "SpriteAccess"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "sandwichable:tomato",
+    "sandwichable:tomato_slice",
+    "sandwichable:cooked_tomato_slice",
+    "sandwichable:apple_slices",
+    "sandwichable:golden_apple_slices",
+    "sandwichable:enchanted_golden_apple_slices",
+    "sandwichable:sweet_berry_jam_bottle"
+  ]
+}

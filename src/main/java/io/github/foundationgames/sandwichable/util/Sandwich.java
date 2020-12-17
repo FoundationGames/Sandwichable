@@ -209,6 +209,15 @@ public class Sandwich {
         }
     }
 
+    @Environment(EnvType.CLIENT)
+    public void renderLowLOD(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, double xPush, double yPush, double zPush) {
+        matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion((90)));
+        for (ItemStack food : foods) {
+            MinecraftClient.getInstance().getItemRenderer().renderItem(food, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
+            matrices.translate(0.0 + xPush, 0.0 + zPush, -0.034 - yPush);
+        }
+    }
+
     public static class DisplayValues {
         private final int hunger;
         private final float saturation;

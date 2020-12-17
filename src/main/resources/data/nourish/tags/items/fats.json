@@ -1,0 +1,27 @@
+{
+  "replace": false,
+  "values": [
+    "sandwichable:spread",
+    "sandwichable:fermenting_milk_bucket",
+    "sandwichable:mayonnaise_bottle",
+    "sandwichable:cheese_wheel",
+    "sandwichable:cheese_slice",
+    "sandwichable:creamy_cheese_wheel",
+    "sandwichable:creamy_cheese_slice",
+    "sandwichable:intoxicating_cheese_wheel",
+    "sandwichable:intoxicating_cheese_slice",
+    "sandwichable:sour_cheese_wheel",
+    "sandwichable:sour_cheese_slice",
+    "sandwichable:candescent_cheese_wheel",
+    "sandwichable:candescent_cheese_slice",
+    "sandwichable:warped_bleu_cheese_wheel",
+    "sandwichable:warped_bleu_cheese_slice",
+    "sandwichable:pork_cuts",
+    "sandwichable:cooked_pork_cuts",
+    "sandwichable:bacon_strips",
+    "sandwichable:toasted_crimson_fungus",
+    "sandwichable:toasted_warped_fungus",
+    "sandwichable:sliced_toasted_crimson_fungus",
+    "sandwichable:sliced_toasted_warped_fungus"
+  ]
+}

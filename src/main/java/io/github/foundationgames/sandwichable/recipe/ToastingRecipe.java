@@ -64,6 +64,6 @@ public class ToastingRecipe implements Recipe<SimpleInventory> {
         private Type() {}
         public static final ToastingRecipe.Type INSTANCE = new ToastingRecipe.Type();
 
-        public static final String ID = "toaster_recipe";
+        public static final String ID = "toasting_recipe";
     }
 }

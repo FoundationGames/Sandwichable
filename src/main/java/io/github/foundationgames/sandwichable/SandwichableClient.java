@@ -11,6 +11,7 @@ import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
 import io.github.foundationgames.sandwichable.entity.render.SandwichTableMinecartEntityRenderer;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
+import io.github.foundationgames.sandwichable.mixin.SpriteAccess;
 import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.api.ClientModInitializer;
@@ -29,11 +30,22 @@ import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.client.color.world.GrassColors;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.MinecartEntityRenderer;
+import net.minecraft.client.render.item.ItemModels;
+import net.minecraft.client.texture.NativeImage;
+import net.minecraft.client.texture.Sprite;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.registry.Registry;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SandwichableClient implements ClientModInitializer {
+    public static final Map<ItemConvertible, Integer> ITEM_COLOR_MAP = new HashMap<>();
+
     @Override
     public void onInitializeClient() {
         BlockEntityRendererRegistry.INSTANCE.register(BlocksRegistry.SANDWICHTABLE_BLOCKENTITY, SandwichTableBlockEntityRenderer::new);
@@ -56,6 +68,10 @@ public class SandwichableClient implements ClientModInitializer {
             return 0xFFFFFF;
         },
         ItemsRegistry.SPREAD);
+
+        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> ITEM_COLOR_MAP.getOrDefault(Items.CRIMSON_ROOTS, 0xFF00FF), Items.WHITE_DYE);
+        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> ITEM_COLOR_MAP.getOrDefault(Items.LAPIS_LAZULI, 0xFF00FF), Items.BONE_MEAL);
+        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> ITEM_COLOR_MAP.getOrDefault(Items.SPONGE, 0xFF00FF), Items.BONE);
 
         ScreenRegistry.<DesalinatorScreenHandler, DesalinatorScreen>register(Sandwichable.DESALINATOR_HANDLER, DesalinatorScreen::new);
         ScreenRegistry.<BottleCrateScreenHandler, BottleCrateScreen>register(Sandwichable.BOTTLE_CRATE_HANDLER, BottleCrateScreen::new);

@@ -109,7 +109,7 @@ public class Util {
         SandwichableConfig config = AutoConfig.getConfigHolder(SandwichableConfig.class).getConfig();
         if(config.showInfoTooltips) {
             if (config.infoTooltipKeyBind.isPressed()) {
-                tooltip.add(new TranslatableText("sandwichable.tooltip.infoheader").formatted(Formatting.GOLD));
+                tooltip.add(new TranslatableText("sandwichable.tooltip.infoheader").formatted(Formatting.GREEN));
                 char[] infoChars = I18n.translate(itemTranslationKey + ".info").toCharArray();
                 int lineLength = I18n.translate(itemTranslationKey).length();
                 if (lineLength < Math.sqrt(infoChars.length) * 1.5) {
@@ -127,7 +127,7 @@ public class Util {
                     tooltip.add(new LiteralText(ln.toString()).formatted(Formatting.GRAY));
                 }
             } else {
-                tooltip.add(new TranslatableText("sandwichable.tooltip."+config.infoTooltipKeyBind.getName()).formatted(Formatting.GOLD));
+                tooltip.add(new TranslatableText("sandwichable.tooltip."+config.infoTooltipKeyBind.getName()).formatted(Formatting.GREEN));
             }
         }
     }

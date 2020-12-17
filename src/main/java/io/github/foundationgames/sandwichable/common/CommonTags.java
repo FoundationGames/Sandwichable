@@ -43,8 +43,10 @@ public class CommonTags {
     public static final Map<Pair<CheeseType, Boolean>, Tag<Item>> CHEESE_TAGS = Util.create(() -> {
         Map<Pair<CheeseType, Boolean>, Tag<Item>> map = new HashMap<>();
         for(CheeseType type : CheeseType.values()) {
-            map.put(new Pair<>(type, false), t(type.name()+"_cheese_wheel"));
-            map.put(new Pair<>(type, true), t(type.name()+"_cheese_slice"));
+            if(type != CheeseType.NONE) {
+                map.put(new Pair<>(type, false), t(type.toString()+"_cheese_wheel"));
+                map.put(new Pair<>(type, true), t(type.toString()+"_cheese_slice"));
+            }
         }
         return map;
     });

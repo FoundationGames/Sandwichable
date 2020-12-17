@@ -69,6 +69,9 @@ public class BlocksRegistry {
 
     public static void init() {
         registerBlock(SANDWICH_TABLE, "sandwich_table", Sandwichable.SANDWICHABLE_ITEMS);
+
+        registerBlock(SANDWICH, "sandwich");
+
         registerBlock(TOASTER, "toaster", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(ANDESITE_BASIN, "andesite_basin", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(DIORITE_BASIN, "diorite_basin", Sandwichable.SANDWICHABLE_ITEMS);
@@ -99,8 +102,6 @@ public class BlocksRegistry {
         registerBlock(SALTY_STONE, "salty_stone", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(SALTY_ROCKS, "salty_rocks", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(DESALINATOR, "desalinator", Sandwichable.SANDWICHABLE_ITEMS);
-
-        registerSandwich(SANDWICH, "sandwich");
 
         registerBlock(LETTUCE, "lettuce");
         registerBlock(TOMATOES, "tomatoes");

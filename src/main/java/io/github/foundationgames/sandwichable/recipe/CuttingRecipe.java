@@ -65,6 +65,6 @@ public class CuttingRecipe implements Recipe<SimpleInventory> {
         private Type() {}
         public static final Type INSTANCE = new Type();
 
-        public static final String ID = "cutting_board_recipe";
+        public static final String ID = "cutting_recipe";
     }
 }

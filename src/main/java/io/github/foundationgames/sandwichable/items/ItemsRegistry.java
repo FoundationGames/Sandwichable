@@ -44,6 +44,7 @@ public class ItemsRegistry {
     public static final FoodComponent SLICEDWARPEDFUNGUS = (new FoodComponent.Builder()).hunger(3).saturationModifier(0.5F).snack().build();
     public static final FoodComponent CHOPPEDCARROT = (new FoodComponent.Builder()).hunger(2).saturationModifier(0.5F).snack().build();
     public static final FoodComponent COOKEDCHOPPEDCARROT = (new FoodComponent.Builder()).hunger(3).saturationModifier(0.6F).snack().build();
+    public static final FoodComponent CHOPPEDGOLDCARROT = (new FoodComponent.Builder()).hunger(3).saturationModifier(0.8F).snack().build();
     public static final FoodComponent CHOPPEDBEETROOT = (new FoodComponent.Builder()).hunger(3).saturationModifier(0.6F).snack().build();
     public static final FoodComponent COOKEDCHOPPEDBEETROOT = (new FoodComponent.Builder()).hunger(4).saturationModifier(0.7F).snack().build();
     public static final FoodComponent SWEETBERRYJAM = (new FoodComponent.Builder()).hunger(5).saturationModifier(0.5F).build();
@@ -53,6 +54,8 @@ public class ItemsRegistry {
     public static final FoodComponent ENCHANTEDGOLDAPPLESLICES = (new FoodComponent.Builder()).hunger(4).saturationModifier(0.8F).snack().statusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 200, 1), 1.0F).statusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 3000, 0), 1.0F).statusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 3000, 0), 1.0F).statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 3), 1.0F).alwaysEdible().build();
     public static final FoodComponent BURNTFOOD = (new FoodComponent.Builder()).hunger(1).saturationModifier(0.1F).build();
     public static final FoodComponent BURNTMORSEL = (new FoodComponent.Builder()).hunger(1).saturationModifier(0F).build();
+
+    public static final Item SANDWICH = new SandwichBlockItem(BlocksRegistry.SANDWICH);
 
     public static final Item BREAD_SLICE = new InfoTooltipItem(new Item.Settings().food(BREADSLICE).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item TOASTED_BREAD_SLICE = new InfoTooltipItem(new Item.Settings().food(TOASTEDBREADSLICE).group(Sandwichable.SANDWICHABLE_ITEMS));
@@ -89,6 +92,7 @@ public class ItemsRegistry {
     public static final Item COOKED_CHOPPED_ONION = new InfoTooltipItem(new Item.Settings().food(COOKEDCHOPPEDONION).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item CHOPPED_CARROT = new InfoTooltipItem(new Item.Settings().food(CHOPPEDCARROT).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item COOKED_CHOPPED_CARROT = new InfoTooltipItem(new Item.Settings().food(COOKEDCHOPPEDCARROT).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item CHOPPED_GOLDEN_CARROT = new InfoTooltipItem(new Item.Settings().food(CHOPPEDGOLDCARROT).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item CHOPPED_BEETROOT = new InfoTooltipItem(new Item.Settings().food(CHOPPEDBEETROOT).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item COOKED_CHOPPED_BEETROOT = new InfoTooltipItem(new Item.Settings().food(COOKEDCHOPPEDBEETROOT).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item SWEET_BERRY_JAM = new BottledFoodItem(true, new Item.Settings().food(SWEETBERRYJAM).maxCount(16).group(Sandwichable.SANDWICHABLE_ITEMS));
@@ -131,6 +135,7 @@ public class ItemsRegistry {
     public static final Item SPREAD = new SpreadItem();
 
     public static void init() {
+        registerItem(SANDWICH, "sandwich");
         registerItem(KITCHEN_KNIFE, "kitchen_knife");
         registerItem(BREAD_SLICE, "bread_slice");
         registerItem(TOASTED_BREAD_SLICE, "toasted_bread_slice");
@@ -162,6 +167,7 @@ public class ItemsRegistry {
         registerItem(CHOPPED_CARROT, "chopped_carrot");
         ComposterHelper.registerCompostable(0.3f, CHOPPED_CARROT);
         registerItem(COOKED_CHOPPED_CARROT, "cooked_chopped_carrot");
+        registerItem(CHOPPED_GOLDEN_CARROT, "chopped_golden_carrot");
         registerItem(CHOPPED_BEETROOT, "chopped_beetroot");
         ComposterHelper.registerCompostable(0.3f, CHOPPED_BEETROOT);
         registerItem(COOKED_CHOPPED_BEETROOT, "cooked_chopped_beetroot");
