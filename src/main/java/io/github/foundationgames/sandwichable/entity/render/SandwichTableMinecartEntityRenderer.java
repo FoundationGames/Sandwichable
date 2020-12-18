@@ -1,17 +1,14 @@
 package io.github.foundationgames.sandwichable.entity.render;
 
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
-import net.minecraft.client.MinecraftClient;
+import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.MinecartEntityRenderer;
-import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector3f;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -57,13 +54,9 @@ public class SandwichTableMinecartEntityRenderer extends MinecartEntityRenderer<
 
         int lightAbove = WorldRenderer.getLightmapCoordinates(entity.getEntityWorld(), entity.getBlockPos().up());
         matrices.translate(0, 1.048, -0.125);
-        /*matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(90));
-        matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(yaw));
-        for (ItemStack stack : foodList) {
-            MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.GROUND, lightAbove, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers);
-            matrices.translate(0.0, 0.0, -0.034);
-        }*/
-        entity.getSandwich().render(matrices, vertexConsumers, lightAbove, OverlayTexture.DEFAULT_UV);
+
+        if(Util.triggerLowLOD(50, entity.getPos())) entity.getSandwich().renderLowLOD(matrices, vertexConsumers, lightAbove, OverlayTexture.DEFAULT_UV);
+        else entity.getSandwich().render(matrices, vertexConsumers, lightAbove, OverlayTexture.DEFAULT_UV);
 
         matrices.pop();
     }

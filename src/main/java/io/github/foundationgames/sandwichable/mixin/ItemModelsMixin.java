@@ -1,22 +1,16 @@
 package io.github.foundationgames.sandwichable.mixin;
 
-import io.github.foundationgames.sandwichable.Sandwichable;
-import io.github.foundationgames.sandwichable.SandwichableClient;
-import net.minecraft.client.MinecraftClient;
+import io.github.foundationgames.sandwichable.util.LowDetailItemRenderer;
 import net.minecraft.client.render.item.ItemModels;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.registry.Registry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Arrays;
 
 @Mixin(ItemModels.class)
 public abstract class ItemModelsMixin {
@@ -32,7 +26,7 @@ public abstract class ItemModelsMixin {
             int fb = (c >> 16) & 0xFF;
             int fg = (c >> 8) & 0xFF;
             int fr = c & 0xFF;
-            SandwichableClient.ITEM_COLOR_MAP.put(i, ((fr & 0xFF) << 16) | ((fg & 0xFF) << 8) | ((fb & 0xFF)));
+            LowDetailItemRenderer.ITEM_COLOR_MAP.put(i, ((fr & 0xFF) << 16) | ((fg & 0xFF) << 8) | ((fb & 0xFF)));
         }
     }
 }

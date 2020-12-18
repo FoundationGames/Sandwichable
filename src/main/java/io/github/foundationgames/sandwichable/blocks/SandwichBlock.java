@@ -41,7 +41,7 @@ public class SandwichBlock extends Block implements BlockEntityProvider {
         if (view.getBlockEntity(pos) instanceof SandwichBlockEntity) {
             SandwichBlockEntity blockEntity = (SandwichBlockEntity)view.getBlockEntity(pos);
             double size = 10;
-            if(blockEntity != null) size = blockEntity.getSandwich().getSize() * 0.6D;
+            if(blockEntity != null) size = (blockEntity.getSandwich().getSize() * 0.5D);
             return Block.createCuboidShape(4.0D, 0.0D, 4.0D, 12.0D, size, 12.0D);
         }
         return Block.createCuboidShape(4.0D, 0.0D, 4.0D, 12.0D, 8.0D, 12.0D);

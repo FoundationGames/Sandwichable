@@ -15,6 +15,7 @@
     "ClientPlayNetworkHandlerMixin",
     "ItemModelsMixin",
     "ItemRendererMixin",
+    "MinecraftClientAccess",
     "MinecraftClientMixin",
     "SpriteAccess"
   ],

@@ -6,6 +6,8 @@ import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
@@ -17,6 +19,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -25,6 +28,9 @@ import java.util.List;
 
 public class Sandwich {
     private final ArrayList<ItemStack> foods = new ArrayList<>();
+
+    @Environment(EnvType.CLIENT)
+    private final boolean lowDetail = false;
 
     public Sandwich() {}
 
@@ -197,25 +203,29 @@ public class Sandwich {
 
     @Environment(EnvType.CLIENT)
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        render(matrices, vertexConsumers, light, overlay, 0, 0, 0);
-    }
-
-    @Environment(EnvType.CLIENT)
-    public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, double xPush, double yPush, double zPush) {
         matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion((90)));
         for (ItemStack food : foods) {
             MinecraftClient.getInstance().getItemRenderer().renderItem(food, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
-            matrices.translate(0.0 + xPush, 0.0 + zPush, -0.034 - yPush);
+            //matrices.translate(0.0, 0.0, -0.034);
+            matrices.translate(0.0, 0.0, -0.03124);
+        }
+    }
+
+    private static final Identifier WHITE_TEXTURE = Util.id("textures/entity/solid.png");
+
+    @Environment(EnvType.CLIENT)
+    public void renderLowLOD(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+        matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion((90)));
+        VertexConsumer buffer = vertexConsumers.getBuffer(RenderLayer.getEntitySolid(WHITE_TEXTURE));
+        for(int i = 0; i < foods.size(); i++) {
+            LowDetailItemRenderer.renderItem(foods.get(i).getItem(), light, overlay, matrices, buffer, i == foods.size() - 1, i == 0);
+            matrices.translate(0.0, 0.0, -0.03124);
         }
     }
 
     @Environment(EnvType.CLIENT)
-    public void renderLowLOD(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, double xPush, double yPush, double zPush) {
-        matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion((90)));
-        for (ItemStack food : foods) {
-            MinecraftClient.getInstance().getItemRenderer().renderItem(food, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
-            matrices.translate(0.0 + xPush, 0.0 + zPush, -0.034 - yPush);
-        }
+    public void tryLowerDetail() {
+
     }
 
     public static class DisplayValues {

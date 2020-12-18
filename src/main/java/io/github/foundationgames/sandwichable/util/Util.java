@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import io.github.foundationgames.sandwichable.config.SandwichableConfig;
 import io.github.foundationgames.sandwichable.events.StructurePoolAddCallback;
+import io.github.foundationgames.sandwichable.mixin.MinecraftClientAccess;
 import io.github.foundationgames.sandwichable.worldgen.ModifiableStructurePool;
 import io.github.foundationgames.sandwichable.worldgen.StructurePoolHelper;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -14,6 +15,7 @@ import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.render.VertexConsumer;
@@ -34,6 +36,7 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.world.World;
 
@@ -139,5 +142,14 @@ public class Util {
     public static int getSaltyWaterColor() {
         //return 0x56c7d1;
         return 0x6ce0eb;
+    }
+
+    public static boolean triggerLowLOD(int dist, Vec3d pos) {
+        MinecraftClient mc = MinecraftClient.getInstance();
+        int fps = ((MinecraftClientAccess)mc).getFps();
+        int maxFps = Math.min(mc.options.maxFps, 60);
+        if(mc.player == null) return false;
+        int threshold = (int)(dist * ((float)fps / maxFps));
+        return threshold >= dist || pos.distanceTo(mc.player.getPos()) >= threshold;
     }
 }
