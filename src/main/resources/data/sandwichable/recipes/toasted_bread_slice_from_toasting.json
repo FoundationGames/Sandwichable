@@ -1,7 +1,7 @@
 {
 	"type": "sandwichable:toasting_recipe",
 	"input": {
-		"item": "sandwichable:bread_slice"
+		"tag": "c:bread_slice"
 	},
 	"output": "sandwichable:toasted_bread_slice"
 }

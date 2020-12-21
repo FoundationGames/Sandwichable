@@ -55,8 +55,8 @@ public class SandwichTableMinecartEntityRenderer extends MinecartEntityRenderer<
         int lightAbove = WorldRenderer.getLightmapCoordinates(entity.getEntityWorld(), entity.getBlockPos().up());
         matrices.translate(0, 1.048, -0.125);
 
-        if(Util.triggerLowLOD(50, entity.getPos())) entity.getSandwich().renderLowLOD(matrices, vertexConsumers, lightAbove, OverlayTexture.DEFAULT_UV);
-        else entity.getSandwich().render(matrices, vertexConsumers, lightAbove, OverlayTexture.DEFAULT_UV);
+        //if(Util.triggerLowLOD(50, entity.getPos())) entity.getSandwich().renderLowLOD(matrices, vertexConsumers, lightAbove, OverlayTexture.DEFAULT_UV);
+        entity.getSandwich().render(matrices, vertexConsumers, lightAbove, OverlayTexture.DEFAULT_UV);
 
         matrices.pop();
     }

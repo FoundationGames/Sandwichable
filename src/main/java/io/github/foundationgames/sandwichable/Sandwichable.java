@@ -8,6 +8,7 @@ import io.github.foundationgames.sandwichable.blocks.entity.*;
 import io.github.foundationgames.sandwichable.blocks.entity.container.BottleCrateScreenHandler;
 import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
 import io.github.foundationgames.sandwichable.common.CommonTags;
+import io.github.foundationgames.sandwichable.compat.CroptopiaCompat;
 import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
 import io.github.foundationgames.sandwichable.items.CheeseCultureItem;
@@ -32,11 +33,13 @@ import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.fabricmc.fabric.api.tag.TagRegistry;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.DispenserBlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -118,7 +121,12 @@ public class Sandwichable implements ModInitializer {
                     ItemStack r = sandwich.addTopFoodFrom(stack);
                     if(r != null) {
                         sync.run();
-                        return r.isEmpty() ? stack : r;
+                        if(!r.isEmpty() && pointer.getWorld().getBlockEntity(pointer.getBlockPos()) instanceof DispenserBlockEntity) {
+                            DispenserBlockEntity be = (DispenserBlockEntity)pointer.getWorld().getBlockEntity(pointer.getBlockPos());
+                            int a = be.addToFirstFreeSlot(r);
+                            if(a < 0) defaultBehavior.dispense(pointer, r);
+                        }
+                        return stack;
                     }
                 }
                 return defaultBehavior.dispense(pointer, stack);
@@ -216,6 +224,10 @@ public class Sandwichable implements ModInitializer {
                 }
             });
         });
+
+        if(FabricLoader.getInstance().isModLoaded("croptopia")) {
+            CroptopiaCompat.init();
+        }
 
         CommonTags.init();
     }

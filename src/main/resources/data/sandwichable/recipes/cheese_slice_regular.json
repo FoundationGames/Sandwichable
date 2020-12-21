@@ -1,7 +1,7 @@
 {
 	"type": "sandwichable:cutting_recipe",
 	"input": {
-		"item": "sandwichable:cheese_wheel"
+		"tag": "c:default_cheese_wheel"
 	},
 	"outputItem": "sandwichable:cheese_slice",
 	"outputCount": "5"

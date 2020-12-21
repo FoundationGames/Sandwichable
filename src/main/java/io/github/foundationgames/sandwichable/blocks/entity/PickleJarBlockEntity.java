@@ -2,6 +2,7 @@ package io.github.foundationgames.sandwichable.blocks.entity;
 
 import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
+import io.github.foundationgames.sandwichable.common.CommonTags;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
@@ -63,7 +64,7 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
         ItemStack playerStack = player.getStackInHand(hand);
         Item playerItem = playerStack.getItem();
         //add cucumber
-        if(playerItem == ItemsRegistry.CUCUMBER && this.fluid == PickleJarFluid.WATER && numItems < maxItems) {
+        if(playerItem.isIn(CommonTags.CUCUMBER) && this.fluid == PickleJarFluid.WATER && numItems < maxItems) {
             if(!player.isCreative()) {
                 playerStack.decrement(1);
             }
@@ -72,7 +73,7 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
             return ActionResult.SUCCESS;
         }
         //add pickle
-        if(playerItem == ItemsRegistry.PICKLED_CUCUMBER && this.fluid == PickleJarFluid.PICKLED_BRINE && numItems < maxItems) {
+        if(playerItem.isIn(CommonTags.PICKLED_CUCUMBER) && this.fluid == PickleJarFluid.PICKLED_BRINE && numItems < maxItems) {
             if(!player.isCreative()) {
                 playerStack.decrement(1);
             }
@@ -98,7 +99,7 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
             return ActionResult.SUCCESS;
         }
         //add salt
-        if(playerItem == ItemsRegistry.SALT && fluid == PickleJarFluid.WATER && numItems > 0) {
+        if(playerItem.isIn(CommonTags.SALT) && fluid == PickleJarFluid.WATER && numItems > 0) {
             if(!player.isCreative()) {
                 playerStack.decrement(1);
             }

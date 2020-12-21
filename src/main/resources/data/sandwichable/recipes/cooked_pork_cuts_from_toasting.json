@@ -1,7 +1,7 @@
 {
 	"type": "sandwichable:toasting_recipe",
 	"input": {
-		"item": "sandwichable:pork_cuts"
+		"tag": "c:pork_filet"
 	},
 	"output": "sandwichable:cooked_pork_cuts"
 }

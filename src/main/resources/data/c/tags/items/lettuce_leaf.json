@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "sandwichable:lettuce_leaf",
+    {
+      "id": "croptopia:lettuce",
+      "required": false
+    }
+  ]
+}

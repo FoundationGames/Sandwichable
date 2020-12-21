@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "sandwichable:salt",
+    {
+      "id": "croptopia:salt",
+      "required": false
+    }
+  ]
+}

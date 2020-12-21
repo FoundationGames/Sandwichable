@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "sandwichable:salt_rock"
+      "tag": "c:salt_rock"
     }
   ],
   "result": {

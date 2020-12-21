@@ -1,7 +1,7 @@
 {
 	"type": "sandwichable:toasting_recipe",
 	"input": {
-		"item": "sandwichable:salmon_filet"
+		"tag": "c:salmon_filet"
 	},
 	"output": "sandwichable:cooked_salmon_filet"
 }

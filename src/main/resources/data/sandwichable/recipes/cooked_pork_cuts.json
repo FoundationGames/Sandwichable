@@ -1,7 +1,7 @@
 {
   "type": "minecraft:smelting",
   "ingredient": {
-    "item": "sandwichable:pork_cuts"
+    "tag": "c:pork_filet"
   },
   "result": "sandwichable:cooked_pork_cuts",
   "experience": 0.17,

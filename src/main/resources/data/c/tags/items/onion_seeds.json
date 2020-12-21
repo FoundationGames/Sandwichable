@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "sandwichable:onion_seeds",
+    {
+      "id": "croptopia:onion_seed",
+      "required": false
+    }
+  ]
+}

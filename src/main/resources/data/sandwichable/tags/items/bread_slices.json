@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "sandwichable:toasted_bread_slice",
-    "sandwichable:bread_slice"
+    "#c:toasted_bread_slice",
+    "#c:bread_slice"
   ]
 }

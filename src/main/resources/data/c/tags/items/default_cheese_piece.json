@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "sandwichable:cheese_slice",
+    {
+      "id": "croptopia:cheese",
+      "required": false
+    }
+  ]
+}

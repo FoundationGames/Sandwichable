@@ -1,7 +1,7 @@
 {
   "type": "minecraft:smoking",
   "ingredient": {
-    "item": "sandwichable:pork_cuts"
+    "tag": "c:pork_filet"
   },
   "result": "sandwichable:bacon_strips",
   "experience": 0.4,

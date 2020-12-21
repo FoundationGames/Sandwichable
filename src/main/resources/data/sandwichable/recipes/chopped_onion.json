@@ -1,7 +1,7 @@
 {
 	"type": "sandwichable:cutting_recipe",
 	"input": {
-		"item": "sandwichable:onion"
+		"tag": "c:onion"
 	},
 	"outputItem": "sandwichable:chopped_onion",
 	"outputCount": "3"

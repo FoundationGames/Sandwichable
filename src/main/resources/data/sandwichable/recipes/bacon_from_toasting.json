@@ -1,7 +1,0 @@
-{
-	"type": "sandwichable:toasting_recipe",
-	"input": {
-		"item": "sandwichable:pork_cuts"
-	},
-	"output": "sandwichable:bacon_strips"
-}

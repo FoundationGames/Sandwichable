@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "sandwichable:toasted_bread_slice",
+    {
+      "id": "croptopia:toast",
+      "required": false
+    }
+  ]
+}

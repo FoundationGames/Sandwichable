@@ -131,7 +131,7 @@ public class Sandwich {
     }
 
     public boolean isComplete() {
-        return hasBreadBottom() && hasBreadTop();
+        return hasBreadBottom() && hasBreadTop() && getSize() >= 2;
     }
 
     public boolean hasBreadBottom() {

@@ -40,7 +40,9 @@ public class CommonTags {
     public static final Tag<Item> COOKED_COD_FILET = t("cooked_cod_filet");
     public static final Tag<Item> SALMON_FILET = t("salmon_filet");
     public static final Tag<Item> COOKED_SALMON_FILET = t("cooked_salmon_filet");
-    public static final Map<Pair<CheeseType, Boolean>, Tag<Item>> CHEESE_TAGS = Util.create(() -> {
+    public static final Tag<Item> DEFAULT_CHEESE_WHEEL = t("default_cheese_wheel");
+    public static final Tag<Item> DEFAULT_CHEESE_PIECE = t("default_cheese_piece");
+    /*public static final Map<Pair<CheeseType, Boolean>, Tag<Item>> CHEESE_TAGS = Util.create(() -> {
         Map<Pair<CheeseType, Boolean>, Tag<Item>> map = new HashMap<>();
         for(CheeseType type : CheeseType.values()) {
             if(type != CheeseType.NONE) {
@@ -49,7 +51,7 @@ public class CommonTags {
             }
         }
         return map;
-    });
+    });*/
 
     public static void init() {}
 
@@ -57,7 +59,7 @@ public class CommonTags {
         return TagRegistry.item(new Identifier("c", name));
     }
 
-    public static Tag<Item> getCheeseTag(CheeseType type, boolean isSliceTag) {
+    /*public static Tag<Item> getCheeseTag(CheeseType type, boolean isSliceTag) {
         return CHEESE_TAGS.get(new Pair<>(type, isSliceTag));
-    }
+    }*/
 }

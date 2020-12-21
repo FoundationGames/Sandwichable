@@ -83,6 +83,18 @@
 		"minecraft:golden_apple",
 		"minecraft:golden_carrot",
 		"minecraft:golden_horse_armor",
-		"minecraft:totem_of_undying"
+		"minecraft:totem_of_undying",
+		{
+			"id": "croptopia:food_press",
+			"required": false
+		},
+		{
+			"id": "croptopia:frying_pan",
+			"required": false
+		},
+		{
+			"id": "croptopia:cooking_pot",
+			"required": false
+		}
 	]
 }

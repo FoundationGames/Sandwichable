@@ -3,6 +3,7 @@ package io.github.foundationgames.sandwichable.items.spread;
 import com.google.common.collect.ImmutableList;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.SpreadRegistry;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemConvertible;

@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "sandwichable:tomato_slice"
+      "tag": "c:tomato_slice"
     }
   ],
   "result": {

@@ -27,6 +27,9 @@ public class SandwichableConfig implements ConfigData {
     @ConfigEntry.Category(value = "gameplay")
     public TooltipKeyBind infoTooltipKeyBind = TooltipKeyBind.SHIFT;
 
+    @ConfigEntry.Category(value = "gameplay")
+    public boolean doLowDetailSandwiches = true;
+
     @ConfigEntry.Category(value = "server_gameplay")
     public boolean slowEatingLargeSandwiches = true;
     @ConfigEntry.Category(value = "server_gameplay")
