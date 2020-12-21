@@ -54,10 +54,6 @@ public class SandwichableClient implements ClientModInitializer {
         },
         ItemsRegistry.SPREAD);
 
-        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> LowDetailItemRenderer.ITEM_COLOR_MAP.getOrDefault(Items.CRIMSON_ROOTS, 0xFF00FF), Items.WHITE_DYE);
-        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> LowDetailItemRenderer.ITEM_COLOR_MAP.getOrDefault(Items.LAPIS_LAZULI, 0xFF00FF), Items.BONE_MEAL);
-        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> LowDetailItemRenderer.ITEM_COLOR_MAP.getOrDefault(Items.SPONGE, 0xFF00FF), Items.BONE);
-
         ScreenRegistry.<DesalinatorScreenHandler, DesalinatorScreen>register(Sandwichable.DESALINATOR_HANDLER, DesalinatorScreen::new);
         ScreenRegistry.<BottleCrateScreenHandler, BottleCrateScreen>register(Sandwichable.BOTTLE_CRATE_HANDLER, BottleCrateScreen::new);
 
