@@ -1,6 +1,7 @@
 package io.github.foundationgames.sandwichable.blocks;
 
 import io.github.foundationgames.sandwichable.blocks.entity.BasinBlockEntity;
+import io.github.foundationgames.sandwichable.blocks.entity.BottleCrateBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.CuttingBoardBlockEntity;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
@@ -9,6 +10,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
@@ -20,6 +22,7 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -64,17 +67,25 @@ public class CuttingBoardBlock extends HorizontalFacingBlock implements BlockEnt
     }
 
     @Override
-    public void onBroken(WorldAccess world, BlockPos pos, BlockState state) {
-        if (world.getBlockEntity(pos) instanceof CuttingBoardBlockEntity) {
-            CuttingBoardBlockEntity blockEntity = (CuttingBoardBlockEntity)world.getBlockEntity(pos);
-            ItemEntity item = new ItemEntity((World)world, pos.getX()+0.5, pos.getY()+0.3, pos.getZ()+0.5, blockEntity.getItem());
-            world.spawnEntity(item);
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+        if (state.getBlock() != newState.getBlock()) {
+            if (world.getBlockEntity(pos) instanceof CuttingBoardBlockEntity) {
+                ItemScatterer.spawn(world, pos, (CuttingBoardBlockEntity)world.getBlockEntity(pos));
+            }
         }
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        ItemStack stack = player.getStackInHand(hand);
+        if(world.getBlockEntity(pos) instanceof CuttingBoardBlockEntity) {
+            CuttingBoardBlockEntity blockEntity = (CuttingBoardBlockEntity) world.getBlockEntity(pos);
+            ActionResult r = blockEntity.onUse(state, world, pos, player, hand, hit);
+            blockEntity.update();
+            return r;
+        }
+        return ActionResult.PASS;
+        /*ItemStack stack = player.getStackInHand(hand);
         if(world.getBlockEntity(pos) instanceof CuttingBoardBlockEntity && !stack.getItem().equals(BlocksRegistry.SANDWICH.asItem())) {
             CuttingBoardBlockEntity blockEntity = (CuttingBoardBlockEntity) world.getBlockEntity(pos);
             if(stack.getItem() == ItemsRegistry.KITCHEN_KNIFE || player.getStackInHand(Hand.OFF_HAND).getItem() == ItemsRegistry.KITCHEN_KNIFE && blockEntity.getItem() != ItemStack.EMPTY) {
@@ -108,33 +119,7 @@ public class CuttingBoardBlock extends HorizontalFacingBlock implements BlockEnt
             blockEntity.markDirty();
             Util.sync(blockEntity, world);
         }
-        return ActionResult.SUCCESS;
-    }
-
-    @Override
-    public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
-        if(world.getBlockEntity(pos) instanceof CuttingBoardBlockEntity) {
-            CuttingBoardBlockEntity blockEntity = (CuttingBoardBlockEntity)world.getBlockEntity(pos);
-            if(blockEntity.getItem() != ItemStack.EMPTY) {
-                return blockEntity.getItem();
-            }
-        }
-        return super.getPickStack(world, pos, state);
-    }
-
-    @Override
-    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-        if (state.getBlock() != newState.getBlock()) {
-            BlockEntity be = world.getBlockEntity(pos);
-            if (be instanceof CuttingBoardBlockEntity) {
-                CuttingBoardBlockEntity blockEntity = (CuttingBoardBlockEntity)world.getBlockEntity(pos);
-                ItemEntity item = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, blockEntity.getItem());
-                world.spawnEntity(item);
-                world.updateNeighbors(pos, this);
-            }
-
-            super.onStateReplaced(state, world, pos, newState, moved);
-        }
+        return ActionResult.SUCCESS;*/
     }
 
     public BlockState getPlacementState(ItemPlacementContext ctx) {

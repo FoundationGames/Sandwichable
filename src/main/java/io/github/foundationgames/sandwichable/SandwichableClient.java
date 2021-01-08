@@ -11,7 +11,6 @@ import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
 import io.github.foundationgames.sandwichable.entity.render.SandwichTableMinecartEntityRenderer;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
-import io.github.foundationgames.sandwichable.util.LowDetailItemRenderer;
 import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.api.ClientModInitializer;
@@ -27,7 +26,6 @@ import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.client.color.world.GrassColors;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 
 public class SandwichableClient implements ClientModInitializer {

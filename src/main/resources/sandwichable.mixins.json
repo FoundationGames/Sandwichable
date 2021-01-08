@@ -13,7 +13,6 @@
   "client": [
     "BuiltinModelItemRendererMixin",
     "ClientPlayNetworkHandlerMixin",
-    "ItemModelsMixin",
     "ItemRendererMixin",
     "MinecraftClientAccess",
     "MinecraftClientMixin",

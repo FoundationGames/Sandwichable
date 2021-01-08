@@ -23,8 +23,7 @@ public class CuttingBoardBlockEntityRenderer extends BlockEntityRenderer<Cutting
 
     @Override
     public void render(CuttingBoardBlockEntity blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        matrices.push();
-        ItemStack item = blockEntity.getItem();
+        ItemStack stack = blockEntity.getItem();
         Direction dir = Direction.NORTH;
         if(blockEntity.getWorld().getBlockState(blockEntity.getPos()).getBlock() instanceof CuttingBoardBlock) {
             dir = Objects.requireNonNull(blockEntity.getWorld()).getBlockState(blockEntity.getPos()).get(Properties.HORIZONTAL_FACING);
@@ -40,18 +39,22 @@ public class CuttingBoardBlockEntityRenderer extends BlockEntityRenderer<Cutting
             case WEST:
                 rotation = 90; break;
         }
-        //if(CuttingBoardItemModelRegistry.INSTANCE.getModelForItem(item.getItem()) != null) {
-        //    matrices.translate(0.0, 0.313, 0.0);
-        //    matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion((rotation)+180));
-        //    matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(180));
-        //    CuttingBoardItemModelRegistry.INSTANCE.getModelForItem(item.getItem()).render(blockEntity, tickDelta, matrices, vertexConsumers, light, overlay);
-        //} else {
+        for (int i = 0; i < stack.getCount(); i++) {
+            matrices.push();
             matrices.translate(0.5, 0.08, 0.5);
             matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion((270)));
-            matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion((rotation)));
-            matrices.translate(0.0, -0.117, 0.0);
-            MinecraftClient.getInstance().getItemRenderer().renderItem(item, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
-        //}
+            matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion((float)(rotation + (i * 36))));
+            matrices.translate(0.0, -0.117, i * 0.03124);
+            MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
+            matrices.pop();
+        }
+        float knifePush = (float)Math.min(stack.getCount(), 8) / 8;
+        matrices.push();
+        matrices.translate(0.5, 0.4, 0.5);
+        matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(rotation));
+        matrices.translate(-0.05 - (knifePush * 0.23) - (knifePush > 0 ? 0.08 : 0), 0, 0);
+        matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(189 + (knifePush * 40)));
+        MinecraftClient.getInstance().getItemRenderer().renderItem(blockEntity.getKnife(), ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
         matrices.pop();
     }
 }

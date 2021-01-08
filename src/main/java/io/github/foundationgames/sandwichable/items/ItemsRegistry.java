@@ -11,7 +11,6 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.item.MinecartItem;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.registry.Registry;
 
@@ -117,7 +116,11 @@ public class ItemsRegistry {
     public static final Item BURNT_MORSEL = new InfoTooltipItem(new Item.Settings().food(BURNTMORSEL).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item CHARRED_MORSEL = new InfoTooltipItem(new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
 
-    public static final Item KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item STONE_KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item IRON_KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item GOLDEN_KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item DIAMOND_KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item NETHERITE_KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item SANDWICH_TABLE_MINECART = new CustomMinecartItem(EntitiesRegistry.SANDWICH_TABLE_MINECART, new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item FERMENTING_MILK_BUCKET = new FermentingMilkBucketItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
 
@@ -136,7 +139,11 @@ public class ItemsRegistry {
 
     public static void init() {
         registerItem(SANDWICH, "sandwich");
-        registerItem(KITCHEN_KNIFE, "kitchen_knife");
+        registerItem(STONE_KITCHEN_KNIFE, "stone_kitchen_knife");
+        registerItem(IRON_KITCHEN_KNIFE, "kitchen_knife");
+        registerItem(GOLDEN_KITCHEN_KNIFE, "golden_kitchen_knife");
+        registerItem(DIAMOND_KITCHEN_KNIFE, "diamond_kitchen_knife");
+        registerItem(NETHERITE_KITCHEN_KNIFE, "netherite_kitchen_knife");
         registerItem(BREAD_SLICE, "bread_slice");
         registerItem(TOASTED_BREAD_SLICE, "toasted_bread_slice");
         registerItem(LETTUCE_HEAD, "lettuce_head");

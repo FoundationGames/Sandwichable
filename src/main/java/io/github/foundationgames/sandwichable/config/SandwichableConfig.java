@@ -1,18 +1,12 @@
 package io.github.foundationgames.sandwichable.config;
 
-import io.github.foundationgames.sandwichable.Sandwichable;
+import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
 import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
 import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry;
-import me.sargunvohra.mcmods.autoconfig1u.serializer.PartitioningSerializer.GlobalData;
-import me.sargunvohra.mcmods.autoconfig1u.shadowed.blue.endless.jankson.Comment;
-import me.shedaniel.clothconfig2.api.ConfigCategory;
-import net.minecraft.block.enums.Instrument;
 import net.minecraft.client.gui.screen.Screen;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Stream;
+import net.minecraft.item.Item;
+import net.minecraft.util.registry.Registry;
 
 @Config(name = "sandwichable")
 @Config.Gui.Background("minecraft:textures/block/spruce_planks.png")
@@ -27,13 +21,13 @@ public class SandwichableConfig implements ConfigData {
     @ConfigEntry.Category(value = "gameplay")
     public TooltipKeyBind infoTooltipKeyBind = TooltipKeyBind.SHIFT;
 
-    @ConfigEntry.Category(value = "gameplay")
-    public boolean doLowDetailSandwiches = true;
-
     @ConfigEntry.Category(value = "server_gameplay")
     public boolean slowEatingLargeSandwiches = true;
     @ConfigEntry.Category(value = "server_gameplay")
     public int baseSandwichEatTime = 32;
+    @ConfigEntry.Category(value = "server_gameplay")
+    @ConfigEntry.Gui.Excluded
+    public ItemOptions itemOptions = new ItemOptions();
 
     @ConfigEntry.Category(value = "world_gen")
     @ConfigEntry.Gui.CollapsibleObject
@@ -62,6 +56,30 @@ public class SandwichableConfig implements ConfigData {
             "category=OCEANS",
             "category=BEACHES"
         };
+    }
+
+    public static class ItemOptions {
+        @ConfigEntry.Gui.Excluded
+        public ItemIntPair[] knives = {
+                new ItemIntPair(ItemsRegistry.STONE_KITCHEN_KNIFE, 1),
+                new ItemIntPair(ItemsRegistry.IRON_KITCHEN_KNIFE, 3),
+                new ItemIntPair(ItemsRegistry.GOLDEN_KITCHEN_KNIFE, 5),
+                new ItemIntPair(ItemsRegistry.DIAMOND_KITCHEN_KNIFE, 8),
+                new ItemIntPair(ItemsRegistry.NETHERITE_KITCHEN_KNIFE, 20),
+        };
+
+    }
+    public static class ItemIntPair {
+        @ConfigEntry.Gui.Excluded
+        public String itemId;
+
+        @ConfigEntry.Gui.Excluded
+        public int value;
+
+        public ItemIntPair(Item item, int value) {
+            this.itemId = Registry.ITEM.getId(item).toString();
+            this.value = value;
+        }
     }
 
     public enum TooltipKeyBind {

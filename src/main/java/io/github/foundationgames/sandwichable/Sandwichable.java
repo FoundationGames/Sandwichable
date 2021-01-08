@@ -69,6 +69,7 @@ public class Sandwichable implements ModInitializer {
     public static final Tag<Item> METAL_ITEMS = TagRegistry.item(Util.id("metal_items"));
     public static final Tag<Item> SMALL_FOODS = TagRegistry.item(Util.id("small_foods"));
     public static final Tag<Block> SALT_PRODUCING_BLOCKS = TagRegistry.block(Util.id("salt_producing_blocks"));
+    public static final Tag<Item> KNIVES = TagRegistry.item(Util.id("knives"));
 
     public static final Logger LOG = LogManager.getLogger("Sandwichable");
 

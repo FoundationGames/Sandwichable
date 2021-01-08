@@ -211,23 +211,6 @@ public class Sandwich {
         }
     }
 
-    private static final Identifier WHITE_TEXTURE = Util.id("textures/entity/solid.png");
-
-    @Environment(EnvType.CLIENT)
-    public void renderLowLOD(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion((90)));
-        VertexConsumer buffer = vertexConsumers.getBuffer(RenderLayer.getEntitySolid(WHITE_TEXTURE));
-        for(int i = 0; i < foods.size(); i++) {
-            LowDetailItemRenderer.renderItem(foods.get(i).getItem(), light, overlay, matrices, buffer, i == foods.size() - 1, i == 0);
-            matrices.translate(0.0, 0.0, -0.03124);
-        }
-    }
-
-    @Environment(EnvType.CLIENT)
-    public void tryLowerDetail() {
-
-    }
-
     public static class DisplayValues {
         private final int hunger;
         private final float saturation;
