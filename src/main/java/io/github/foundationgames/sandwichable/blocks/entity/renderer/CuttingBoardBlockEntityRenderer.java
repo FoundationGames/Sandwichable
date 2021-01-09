@@ -49,11 +49,12 @@ public class CuttingBoardBlockEntityRenderer extends BlockEntityRenderer<Cutting
             matrices.pop();
         }
         float knifePush = (float)Math.min(stack.getCount(), 8) / 8;
+        float knifeCut = blockEntity.getKnifeAnimationTicks() > 0 ? (5 - Math.abs(((blockEntity.getKnifeAnimationTicks() - tickDelta) - 5))) / 5 : 0;
         matrices.push();
-        matrices.translate(0.5, 0.4, 0.5);
+        matrices.translate(0.5, 0.4 - (knifeCut * 0.13), 0.5);
         matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(rotation));
-        matrices.translate(-0.05 - (knifePush * 0.23) - (knifePush > 0 ? 0.08 : 0), 0, 0);
-        matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(189 + (knifePush * 40)));
+        matrices.translate(-0.05 - (knifePush * 0.23) - (knifePush > 0 ? 0.08 : 0) + (knifeCut * 0.13), 0, 0);
+        matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(189 + (knifePush * 40) - (knifeCut * 35)));
         MinecraftClient.getInstance().getItemRenderer().renderItem(blockEntity.getKnife(), ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
         matrices.pop();
     }

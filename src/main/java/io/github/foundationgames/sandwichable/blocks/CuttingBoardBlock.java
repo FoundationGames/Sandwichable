@@ -19,6 +19,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -36,15 +37,16 @@ import java.util.Optional;
 
 public class CuttingBoardBlock extends HorizontalFacingBlock implements BlockEntityProvider {
     public static final VoxelShape[] SHAPES;
+    public static final BooleanProperty POWERED = Properties.POWERED;
 
     public CuttingBoardBlock(Settings settings) {
         super(settings);
-        setDefaultState(this.stateManager.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH));
+        setDefaultState(this.stateManager.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH).with(POWERED, false));
     }
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> stateManager) {
-        stateManager.add(Properties.HORIZONTAL_FACING);
+        stateManager.add(Properties.HORIZONTAL_FACING, POWERED);
     }
 
     @Override
@@ -70,7 +72,8 @@ public class CuttingBoardBlock extends HorizontalFacingBlock implements BlockEnt
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (state.getBlock() != newState.getBlock()) {
             if (world.getBlockEntity(pos) instanceof CuttingBoardBlockEntity) {
-                ItemScatterer.spawn(world, pos, (CuttingBoardBlockEntity)world.getBlockEntity(pos));
+                CuttingBoardBlockEntity be = (CuttingBoardBlockEntity)world.getBlockEntity(pos);
+                ItemScatterer.spawn(world, pos, new SimpleInventory(be.getItem(), be.getKnife()));
             }
         }
         super.onStateReplaced(state, world, pos, newState, moved);
@@ -120,6 +123,18 @@ public class CuttingBoardBlock extends HorizontalFacingBlock implements BlockEnt
             Util.sync(blockEntity, world);
         }
         return ActionResult.SUCCESS;*/
+    }
+
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
+        boolean pwr = world.isReceivingRedstonePower(pos);
+        if(pwr != state.get(POWERED)) {
+            if(world.getBlockEntity(pos) instanceof CuttingBoardBlockEntity && pwr) {
+                ((CuttingBoardBlockEntity) world.getBlockEntity(pos)).trySliceWithKnife();
+            }
+            if(!world.isClient()) world.setBlockState(pos, state.with(POWERED, pwr));
+        }
+        super.neighborUpdate(state, world, pos, block, fromPos, notify);
     }
 
     public BlockState getPlacementState(ItemPlacementContext ctx) {
