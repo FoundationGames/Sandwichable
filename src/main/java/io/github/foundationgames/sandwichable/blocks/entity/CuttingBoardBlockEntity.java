@@ -5,12 +5,15 @@ import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.config.SandwichableConfig;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
 import io.github.foundationgames.sandwichable.util.Util;
+import io.netty.buffer.Unpooled;
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
@@ -18,6 +21,7 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
@@ -31,6 +35,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
@@ -193,12 +198,12 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
                 result.setCount(Math.min(maxCount, (nc - (i * maxCount)) % (maxCount)));
                 ItemEntity entity = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.3, pos.getZ()+0.5, result);
                 BlockPos dir = BlockPos.ORIGIN.offset(world.getBlockState(pos).get(Properties.HORIZONTAL_FACING).getOpposite());
-                entity.setVelocity((dir.getX() * 0.27) + ((world.random.nextDouble() - 0.5) * 0.13), 0.17, (dir.getZ() * 0.27) + ((world.random.nextDouble() - 0.5) * 0.13));
+                entity.setVelocity((dir.getX() * 0.15) + ((world.random.nextDouble() - 0.5) * 0.08), 0.17, (dir.getZ() * 0.15) + ((world.random.nextDouble() - 0.5) * 0.08));
                 entity.setToDefaultPickupDelay();
                 world.spawnEntity(entity);
             }
+            particles(output, amount);
             getItem().decrement(amount);
-            //world.addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, blockEntity.getItem()), pos.getX()+0.5, pos.getY()+0.3, pos.getZ()+0.5, 0.0D, 0.0D, 0.0D);
             world.playSound(null, pos.getX()+0.5, pos.getY()+0.3, pos.getZ()+0.5, SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 0.7f, 0.8f);
         }
     }
@@ -272,5 +277,20 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
 
     public int getKnifeAnimationTicks() {
         return knifeAnimationTicks;
+    }
+
+    private void particles(ItemStack stack, int depth) {
+        if(!world.isClient()) {
+            PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+            buf.writeItemStack(stack);
+            buf.writeInt(this.getItem().getCount());
+            buf.writeInt(depth);
+            buf.writeBlockPos(pos);
+            for(PlayerEntity player : world.getPlayers()) {
+                if(player.getPos().distanceTo(new Vec3d(pos.getX(), pos.getY(), pos.getZ())) < 100) {
+                    ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, Util.id("cutting_board_particles"), buf);
+                }
+            }
+        }
     }
 }

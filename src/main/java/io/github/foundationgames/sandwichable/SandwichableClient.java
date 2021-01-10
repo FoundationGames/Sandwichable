@@ -21,12 +21,22 @@ import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.color.world.BiomeColors;
 import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.client.color.world.GrassColors;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.particle.ItemStackParticleEffect;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class SandwichableClient implements ClientModInitializer {
     @Override
@@ -71,6 +81,25 @@ public class SandwichableClient implements ClientModInitializer {
             ctx.getTaskQueue().execute(() -> {
                 if(e instanceof SandwichTableMinecartEntity) {
                     ((SandwichTableMinecartEntity)e).readSandwichTableData(tag);
+                }
+            });
+        });
+
+        ClientSidePacketRegistry.INSTANCE.register(Util.id("cutting_board_particles"), (ctx, buf) -> {
+            ItemStack stack = buf.readItemStack();
+            int top = buf.readInt();
+            int layers = buf.readInt();
+            BlockPos pos = buf.readBlockPos();
+            Random random = new Random();
+            World world = MinecraftClient.getInstance().world;
+            ctx.getTaskQueue().execute(() -> {
+                for (int i = 0; i < layers; i++) {
+                    for (int j = 0; j < 2 + random.nextInt(2); j++) {
+                        double x = pos.getX() + 0.5 + ((random.nextDouble() - 0.5) / 3);
+                        double y = pos.getY() + 0.094 + ((top - i) * 0.03124);
+                        double z = pos.getZ() + 0.5 + ((random.nextDouble() - 0.5) / 3);
+                        world.addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, stack), x, y, z, 0, (random.nextDouble() + 1.0) * 0.066, 0);
+                    }
                 }
             });
         });

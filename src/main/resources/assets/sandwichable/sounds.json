@@ -2,18 +2,18 @@
 	"desalinator_start": {
 		"subtitle": "subtitles.sandwichable.desalinator_start",
 		"sounds": [
-			"sandwichable:blocks/desalinator/desalinator_start"
+			"sandwichable:block/desalinator/desalinator_start"
 		]
 	},
 	"desalinator_run": {
 		"sounds": [
-			"sandwichable:blocks/desalinator/desalinator_run"
+			"sandwichable:block/desalinator/desalinator_run"
 		]
 	},
 	"desalinator_stop": {
-		"subtitle": "subtitles.sandwichable.desalinator_start",
+		"subtitle": "subtitles.sandwichable.desalinator_stop",
 		"sounds": [
-			"sandwichable:blocks/desalinator/desalinator_start"
+			"sandwichable:block/desalinator/desalinator_stop"
 		]
 	}
 }

@@ -14,7 +14,5 @@ public class EntitiesRegistry {
             FabricEntityTypeBuilder.<SandwichTableMinecartEntity>create(SpawnGroup.MISC, SandwichTableMinecartEntity::new).dimensions(EntityDimensions.fixed(0.98F, 0.7F)).build()
     );
 
-    public static void init() {
-
-    }
+    public static void init() {}
 }

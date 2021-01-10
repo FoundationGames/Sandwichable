@@ -35,7 +35,6 @@ import net.minecraft.world.World;
 
 public class SandwichTableMinecartEntity extends AbstractMinecartEntity implements SandwichHolder {
     private final Sandwich sandwich = new Sandwich();
-    private Vec3d lastVelocity;
 
     public SandwichTableMinecartEntity(World world) {
         super(EntitiesRegistry.SANDWICH_TABLE_MINECART, world);
@@ -47,16 +46,6 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
 
     public SandwichTableMinecartEntity(EntityType<SandwichTableMinecartEntity> type, World world) {
         super(type, world);
-    }
-
-    @Override
-    public void tick() {
-        lastVelocity = getVelocity();
-        super.tick();
-    }
-
-    public Vec3d getLastVelocity() {
-        return lastVelocity;
     }
 
     @Override

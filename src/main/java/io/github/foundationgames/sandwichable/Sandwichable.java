@@ -1,9 +1,6 @@
 package io.github.foundationgames.sandwichable;
 
-import com.google.gson.internal.$Gson$Preconditions;
-import io.github.foundationgames.mealapi.api.MealItemRegistry;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
-import io.github.foundationgames.sandwichable.blocks.SandwichBlock;
 import io.github.foundationgames.sandwichable.blocks.entity.*;
 import io.github.foundationgames.sandwichable.blocks.entity.container.BottleCrateScreenHandler;
 import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
@@ -13,23 +10,18 @@ import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
 import io.github.foundationgames.sandwichable.items.CheeseCultureItem;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
-import io.github.foundationgames.sandwichable.items.SandwichBlockItem;
 import io.github.foundationgames.sandwichable.items.SandwichableGroupIconBuilder;
-import io.github.foundationgames.sandwichable.util.Sandwich;
-import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.items.spread.SpreadType;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipeSerializer;
 import io.github.foundationgames.sandwichable.recipe.ToastingRecipe;
 import io.github.foundationgames.sandwichable.recipe.ToastingRecipeSerializer;
+import io.github.foundationgames.sandwichable.util.Sandwich;
+import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
 import io.github.foundationgames.sandwichable.villager.SandwichMakerProfession;
-import io.netty.buffer.Unpooled;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
-import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.fabricmc.fabric.api.tag.TagRegistry;
@@ -41,14 +33,11 @@ import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.DispenserBlockEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
@@ -69,7 +58,10 @@ public class Sandwichable implements ModInitializer {
     public static final Tag<Item> METAL_ITEMS = TagRegistry.item(Util.id("metal_items"));
     public static final Tag<Item> SMALL_FOODS = TagRegistry.item(Util.id("small_foods"));
     public static final Tag<Block> SALT_PRODUCING_BLOCKS = TagRegistry.block(Util.id("salt_producing_blocks"));
-    public static final Tag<Item> KNIVES = TagRegistry.item(Util.id("knives"));
+
+    public static final SoundEvent DESALINATOR_START = Registry.register(Registry.SOUND_EVENT, Util.id("desalinator_start"), new SoundEvent(Util.id("desalinator_start")));
+    public static final SoundEvent DESALINATOR_RUN = Registry.register(Registry.SOUND_EVENT, Util.id("desalinator_run"), new SoundEvent(Util.id("desalinator_run")));
+    public static final SoundEvent DESALINATOR_STOP = Registry.register(Registry.SOUND_EVENT, Util.id("desalinator_stop"), new SoundEvent(Util.id("desalinator_stop")));
 
     public static final Logger LOG = LogManager.getLogger("Sandwichable");
 

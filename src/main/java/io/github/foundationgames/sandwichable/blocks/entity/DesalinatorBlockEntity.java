@@ -21,6 +21,8 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -36,6 +38,7 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     private int fuelBurnProgress = 0;
     private boolean burning = false;
     private boolean evaporating = false;
+    private boolean wasEvaporating = evaporating;
     public static final int maxWaterAmount = 4;
     public static final int evaporateTime = 185;
     public static final int fuelBurnTime = 495;
@@ -147,6 +150,15 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
                 world.updateNeighbors(pos, world.getBlockState(pos).getBlock());
             }
         }
+        if(evaporateProgress % 6 == 0 || evaporating != wasEvaporating) {
+            SoundEvent sound= null;
+            if(evaporating && !wasEvaporating) sound = Sandwichable.DESALINATOR_START;
+            else if(!evaporating && wasEvaporating) sound = Sandwichable.DESALINATOR_STOP;
+            else if(evaporating) sound = Sandwichable.DESALINATOR_RUN;
+
+            if(sound != null) world.playSound(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, sound, SoundCategory.BLOCKS, 0.4f, 1.0f, false);
+        }
+        wasEvaporating = evaporating;
     }
 
     public int getEvaporateProgress() {

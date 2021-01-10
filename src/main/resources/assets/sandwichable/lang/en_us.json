@@ -177,7 +177,8 @@
 	"text.autoconfig.sandwichable.option.shrubGenOptions": "Shrub Generation",
 	"text.autoconfig.sandwichable.option.shrubGenOptions.spawnTries": "Spawn Tries",
 	
-	
+	"subtitles.sandwichable.desalinator_start": "Desalinator powers up",
+	"subtitles.sandwichable.desalinator_stop": "Desalinator powers down",
 	
 	"item.sandwichable.bread_slice.info": "A sliced bread food item. Much more hunger-efficient than a normal bread loaf and can be eaten faster.",
 	"item.sandwichable.toasted_bread_slice.info": "A sliced bread food item that has been toasted in a Redstone Toaster. Restores more hunger than a Bread Slice, and can also be eaten quickly.",

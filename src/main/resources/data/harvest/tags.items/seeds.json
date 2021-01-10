@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "sandwichable:tomato_seeds",
+    "sandwichable:lettuce_seeds",
+    "sandwichable:onion_seeds",
+    "sandwichable:cucumber_seeds"
+  ]
+}

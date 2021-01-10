@@ -88,41 +88,15 @@ public class CuttingBoardBlock extends HorizontalFacingBlock implements BlockEnt
             return r;
         }
         return ActionResult.PASS;
-        /*ItemStack stack = player.getStackInHand(hand);
-        if(world.getBlockEntity(pos) instanceof CuttingBoardBlockEntity && !stack.getItem().equals(BlocksRegistry.SANDWICH.asItem())) {
-            CuttingBoardBlockEntity blockEntity = (CuttingBoardBlockEntity) world.getBlockEntity(pos);
-            if(stack.getItem() == ItemsRegistry.KITCHEN_KNIFE || player.getStackInHand(Hand.OFF_HAND).getItem() == ItemsRegistry.KITCHEN_KNIFE && blockEntity.getItem() != ItemStack.EMPTY) {
-                SimpleInventory inv = new SimpleInventory(blockEntity.getItem());
-                Optional<CuttingRecipe> match = world.getRecipeManager().getFirstMatch(CuttingRecipe.Type.INSTANCE, inv, world);
+    }
 
-                if (match.isPresent()) {
-                    ItemStack result = match.get().getOutput().copy();
-                    ItemEntity item = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.3, pos.getZ()+0.5, result);
-                    world.addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, blockEntity.getItem()), pos.getX()+0.5, pos.getY()+0.3, pos.getZ()+0.5, 0.0D, 0.0D, 0.0D);
-                    blockEntity.setItem(ItemStack.EMPTY);
-                    world.playSound(player, pos.getX()+0.5, pos.getY()+0.3, pos.getZ()+0.5, SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 0.7f, 0.8f);
-                    world.spawnEntity(item);
-                }
-                if(player.getStackInHand(Hand.OFF_HAND).getItem() == ItemsRegistry.KITCHEN_KNIFE) { player.swingHand(Hand.OFF_HAND); return ActionResult.CONSUME; }
-            } else if(blockEntity.getItem() == ItemStack.EMPTY && !stack.isEmpty()) {
-                ItemStack stack1 = player.getStackInHand(hand).copy();
-                stack1.setCount(1);
-                blockEntity.setItem(stack1);
-                if (!player.isCreative()) {
-                    stack.decrement(1);
-                }
-            } else if (blockEntity.getItem() != ItemStack.EMPTY){
-                ItemEntity item = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.3, pos.getZ()+0.5, blockEntity.getItem());
-                blockEntity.setItem(ItemStack.EMPTY);
-                if(!player.isCreative()) {
-                    item.setToDefaultPickupDelay();
-                    world.spawnEntity(item);
-                }
-            }
-            blockEntity.markDirty();
-            Util.sync(blockEntity, world);
+    @Override
+    public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+        if(world.getBlockEntity(pos) instanceof CuttingBoardBlockEntity) {
+            CuttingBoardBlockEntity blockEntity = (CuttingBoardBlockEntity) world.getBlockEntity(pos);
+            return blockEntity.getItem().getCount() / blockEntity.getItem().getMaxCount();
         }
-        return ActionResult.SUCCESS;*/
+        return super.getComparatorOutput(state, world, pos);
     }
 
     @Override
