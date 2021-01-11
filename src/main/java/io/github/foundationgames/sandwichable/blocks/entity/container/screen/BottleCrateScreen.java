@@ -34,7 +34,7 @@ public class BottleCrateScreen extends HandledScreen<BottleCrateScreenHandler> {
     @Override
     protected void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
         this.textRenderer.draw(matrixStack, this.title, 24.0F, 6.0F, 4210752);
-        this.textRenderer.draw(matrixStack, this.playerInventory.getDisplayName(), 7.0F, (float)(this.backgroundHeight - 95 + 4), 4210752);
+        this.textRenderer.draw(matrixStack, this.playerInventory.getDisplayName(), 7.0F, (float)(this.backgroundHeight - 95 + 2), 4210752);
     }
 
     @Override
