@@ -1,11 +1,13 @@
-# ![Sandwichable](https://github.com/FoundationGames/MinecraftUtilsDownloads/raw/master/sandwichable/logo_large.png)
+# ![Sandwichable](https://github.com/FoundationGames/MinecraftUtilsDownloads/raw/master/sandwichable/logo_1.png)
 ### Customizable Sandwiches in Minecraft!
 <br/>
 
 This is a **Fabric Mod**. Installing Fabric is easy, just download and install the [Fabric Loader](https://fabricmc.net/use/) and put your mods in the `.minecraft/mods` folder. Launch from the vanilla launcher.
 <br/><br/>
 Available on ***[CurseForge](https://www.curseforge.com/minecraft/mc-mods/sandwichable)***
-Available on ***[Modrinth](https://modrinth.com/mod/5g7OOxWC)***<br/><br/>
+<br/>
+Available on ***[Modrinth](https://modrinth.com/mod/5g7OOxWC)***
+<br/><br/>
 
 <img src="https://github.com/FoundationGames/MinecraftUtilsDownloads/raw/master/sandwichable/sandwiches_banner.png" align="center"/>
 
@@ -25,12 +27,10 @@ Reasons? It would be a lot of work to rewrite the entire mod for another platfor
 
 <br/>
 
-## Gallery
-TODO
-
-
 ## Quick Start Guide
-You can see how to use the various blocks and items of Sandwichable by holding `Shift` while hovering over items to see the extended tooltips. Works great with *REI*.</br></br>
+<img src="https://github.com/FoundationGames/MinecraftUtilsDownloads/raw/master/sandwichable/sandwichable_blocks.png" align="center"/> <br/><br/>
+You can see how to use the various blocks and items of Sandwichable by holding `Shift` while hovering over items to see the extended tooltips. Works great with *REI*. <br/> <br/>
+
 #### Making a Sandwich
 1. Craft a **Sandwich Table**.
 2. Gather some **Bread**. You may slice it up on a **Cutting Board**.

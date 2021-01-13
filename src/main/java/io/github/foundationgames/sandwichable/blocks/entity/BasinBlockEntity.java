@@ -43,7 +43,7 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
         super(BlocksRegistry.BASIN_BLOCKENTITY);
     }
 
-    private static Map<CheeseType, Item> cheeseTypeToItem() {
+    public static Map<CheeseType, Item> cheeseTypeToItem() {
         Map<CheeseType, Item> map = Maps.newHashMap();
         map.put(CheeseType.REGULAR, ItemsRegistry.CHEESE_WHEEL_REGULAR);
         map.put(CheeseType.CREAMY, ItemsRegistry.CHEESE_WHEEL_CREAMY);

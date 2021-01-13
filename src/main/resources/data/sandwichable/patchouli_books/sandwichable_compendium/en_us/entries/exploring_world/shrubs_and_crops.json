@@ -1,0 +1,40 @@
+{
+  "name": "Shrubs and Crops",
+  "icon": "sandwichable:shrub",
+  "category": "exploring_world",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "sandwichable:shrub",
+      "title": "Shrubs",
+	  "link_recipe": false,
+      "text": "As you explore the world around you, you may find patches of shrubs. They make a great decorative block, but also serve the purpose of providing you with crop seeds. Break them to obtain the seeds, or break with shears to obtain the shrub. You can snip shrubs with shears, and pot them."
+    },
+	{
+      "type": "image",
+	  "images": [
+		"sandwichable:textures/gui/gallery/shrubs.png"
+	  ],
+	  "title": "Gallery",
+	  "border": true,
+	  "text": "Shrubs used as decoration, and crop seeds."
+    },
+    {
+      "type": "spotlight",
+      "item": "sandwichable:tomato",
+      "title": "Crops and Farming",
+	  "link_recipe": false,
+      "text": "After you have broken enough shrubs, you will find yourself with a selection of four crop seeds. Plant them to grow tomatoes, lettuce, onions, and cucumbers. Each crop can be chopped up and some can be cooked on a campfire. Tomato and cucumber crops only drop one seed when broken, but can be crafted into more seeds."
+    },
+	{
+      "type": "image",
+	  "images": [
+		"sandwichable:textures/gui/gallery/crops.png"
+	  ],
+	  "title": "Gallery",
+	  "border": true,
+	  "text": "A farm growing the four crops, along with some vanilla ones."
+    }
+  ]
+}

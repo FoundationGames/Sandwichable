@@ -23,7 +23,9 @@ public class CuttingBoardDisplay implements RecipeDisplay {
     }
 
     public CuttingBoardDisplay(Ingredient input, ItemStack result) {
-        this.inputs = ImmutableList.of(Collections.singletonList(EntryStack.create(input.getMatchingStacksClient()[0])));
+        ImmutableList.Builder<EntryStack> b = new ImmutableList.Builder<>();
+        for(ItemStack i : input.getMatchingStacksClient()) b.add(EntryStack.create(i));
+        this.inputs = ImmutableList.of(b.build());
         this.results = Collections.singletonList(EntryStack.create(result));
     }
 

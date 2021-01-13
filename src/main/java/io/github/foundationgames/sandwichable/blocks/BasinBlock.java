@@ -81,7 +81,7 @@ public class BasinBlock extends Block implements BlockEntityProvider {
             if(world.getBlockEntity(pos) instanceof BasinBlockEntity) {
                 BasinBlockEntity blockEntity = (BasinBlockEntity)world.getBlockEntity(pos);
                 if(blockEntity.getContent().getContentType() == BasinContentType.CHEESE) {
-                    ItemEntity item = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, CheeseRegistry.INSTANCE.cheeseItemFromCheeseType(blockEntity.getContent().getCheeseType()));
+                    ItemEntity item = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, new ItemStack(BasinBlockEntity.cheeseTypeToItem().get(blockEntity.getContent().getCheeseType())));
                     world.spawnEntity(item);
                 }
             }

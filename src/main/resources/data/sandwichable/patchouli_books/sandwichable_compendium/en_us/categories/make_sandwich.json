@@ -1,0 +1,5 @@
+{
+	"name": "Making Sandwiches",
+	"description": "It's time to make a sandwich, finally!",
+	"icon": "sandwichable:sandwich{BlockEntityTag:{Items:[{id:\"\"}]}}"
+}

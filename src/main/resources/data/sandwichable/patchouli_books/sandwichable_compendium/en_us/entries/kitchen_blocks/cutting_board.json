@@ -1,0 +1,24 @@
+{
+  "name": "Cutting Boards and Knives",
+  "icon": "sandwichable:oak_cutting_board",
+  "category": "kitchen_blocks",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "sandwichable:oak_cutting_board",
+      "title": "Cutting Boards",
+	  "link_recipe": false,
+      "text": "To chop up your fresh vegetables and meat, you will need two tools: a cutting board and a kitchen knife."
+    },
+	{
+      "type": "image",
+	  "images": [
+		"sandwichable:textures/gui/gallery/villager.png"
+	  ],
+	  "title": "Gallery",
+	  "border": true,
+	  "text": "The Sandwich Maker at his stand, waiting for customers."
+    }
+  ]
+}

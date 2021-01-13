@@ -1,7 +1,7 @@
 {
 	"name": "Guide To Sandwichable",
-	"subtitle": "Mod Version 1.1",
-	"use_blocky_font": true,
+	"subtitle": "Mod Version 1.2",
+	"use_blocky_font": false,
 	"book_texture": "patchouli:textures/gui/book_blue.png",
 	"model": "sandwichable:sandwich_book",
 	"creative_tab": "sandwichable.sandwichable",
