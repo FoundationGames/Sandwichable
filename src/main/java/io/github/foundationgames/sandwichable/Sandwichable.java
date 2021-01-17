@@ -202,6 +202,7 @@ public class Sandwichable implements ModInitializer {
                 if(be.getFluid() == PickleJarFluid.WATER && be.getItemCount() > 0) {
                     be.startPickling();
                     stack.decrement(1);
+                    be.update();
                     return stack;
                 }
             }

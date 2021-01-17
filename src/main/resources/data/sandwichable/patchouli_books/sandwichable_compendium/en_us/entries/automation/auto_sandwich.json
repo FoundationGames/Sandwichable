@@ -1,0 +1,27 @@
+{
+  "name": "Automatic Sandwich Making",
+  "icon": "sandwichable:sandwich_table_minecart",
+  "category": "automation",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "sandwichable:sandwich_table_minecart",
+      "title": "Automatic Sandwich Making",
+	  "link_recipe": false,
+      "text": "Making sandwiches manually is fun, and a great way to start your Minecraft day. But after a while, it may become quite tedious. This design for an automatic sandwich maker uses a sandwich table minecart to make sandwiches. The machine is fully automatic!"
+    },
+	{
+      "type": "image",
+	  "images": [
+		"sandwichable:textures/gui/gallery/auto_sandwich.png",
+        "sandwichable:textures/gui/gallery/auto_sandwich_1.png",
+        "sandwichable:textures/gui/gallery/auto_sandwich_2.png",
+        "sandwichable:textures/gui/gallery/auto_sandwich_3.png"
+	  ],
+	  "title": "Instructions",
+	  "border": true,
+	  "text": "Step-by-step instructions to build your machine. Place the framed items in the corresponding dispensers."
+    }
+  ]
+}

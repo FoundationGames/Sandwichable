@@ -100,6 +100,11 @@ public class CuttingBoardBlock extends HorizontalFacingBlock implements BlockEnt
     }
 
     @Override
+    public boolean hasComparatorOutput(BlockState state) {
+        return true;
+    }
+
+    @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
         boolean pwr = world.isReceivingRedstonePower(pos);
         if(pwr != state.get(POWERED)) {
