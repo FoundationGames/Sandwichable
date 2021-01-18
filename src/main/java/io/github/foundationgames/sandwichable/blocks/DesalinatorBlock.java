@@ -1,12 +1,14 @@
 package io.github.foundationgames.sandwichable.blocks;
 
 import io.github.foundationgames.sandwichable.blocks.entity.DesalinatorBlockEntity;
+import io.github.foundationgames.sandwichable.fluids.FluidsRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.Inventory;
@@ -14,26 +16,29 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 
 public class DesalinatorBlock extends BlockWithEntity implements Waterloggable {
 
     public static final VoxelShape SHAPE;
     public static final BooleanProperty ON;
-    public static final BooleanProperty WATERLOGGED;
+    public static final EnumProperty<FluidType> FLUID = EnumProperty.of("fluid", FluidType.class);
 
     public DesalinatorBlock(Settings settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(ON, false).with(WATERLOGGED, false));
+        this.setDefaultState(this.stateManager.getDefaultState().with(ON, false).with(FLUID, FluidType.NONE));
     }
 
     @Override
@@ -61,6 +66,34 @@ public class DesalinatorBlock extends BlockWithEntity implements Waterloggable {
     }
 
     @Override
+    public boolean canFillWithFluid(BlockView world, BlockPos pos, BlockState state, Fluid fluid) {
+        return state.get(FLUID) == FluidType.NONE;
+    }
+
+    @Override
+    public boolean tryFillWithFluid(WorldAccess world, BlockPos pos, BlockState state, FluidState fluidState) {
+        if (state.get(FLUID) == FluidType.NONE && fluidState.getFluid() == Fluids.WATER) {
+            if (!world.isClient()) {
+                world.setBlockState(pos, state.with(FLUID, FluidType.WATER), 3);
+                world.getFluidTickScheduler().schedule(pos, fluidState.getFluid(), fluidState.getFluid().getTickRate(world));
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public Fluid tryDrainFluid(WorldAccess world, BlockPos pos, BlockState state) {
+        if (state.get(FLUID) == FluidType.WATER) {
+            world.setBlockState(pos, state.with(FLUID, FluidType.NONE), 3);
+            return Fluids.WATER;
+        } else {
+            return Fluids.EMPTY;
+        }
+    }
+
+    @Override
     public VoxelShape getCollisionShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
         return SHAPE;
     }
@@ -72,7 +105,7 @@ public class DesalinatorBlock extends BlockWithEntity implements Waterloggable {
 
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+        return state.get(FLUID).state;
     }
 
     @Override
@@ -82,7 +115,7 @@ public class DesalinatorBlock extends BlockWithEntity implements Waterloggable {
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> stateManager) {
-        stateManager.add(ON, WATERLOGGED);
+        stateManager.add(ON, FLUID);
     }
 
     @Override
@@ -113,6 +146,21 @@ public class DesalinatorBlock extends BlockWithEntity implements Waterloggable {
     static {
         SHAPE = createCuboidShape(1, 0, 1, 15, 16, 15);
         ON = BooleanProperty.of("on");
-        WATERLOGGED = Properties.WATERLOGGED;
+    }
+
+    public enum FluidType implements StringIdentifiable {
+        NONE("none", Fluids.EMPTY.getDefaultState()), WATER("water", Fluids.WATER.getDefaultState()), PICKLE_BRINE("brine", FluidsRegistry.PICKLE_BRINE.getDefaultState());
+        private final String name;
+        public final FluidState state;
+
+        FluidType(String name, FluidState state) {
+            this.name = name;
+            this.state = state;
+        }
+
+        @Override
+        public String asString() {
+            return name;
+        }
     }
 }

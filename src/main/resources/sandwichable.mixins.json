@@ -11,12 +11,11 @@
     "StructurePoolsMixin"
   ],
   "client": [
+    "BackgroundRendererMixin",
     "BuiltinModelItemRendererMixin",
     "ClientPlayNetworkHandlerMixin",
     "ItemRendererMixin",
-    "MinecraftClientAccess",
-    "MinecraftClientMixin",
-    "SpriteAccess"
+    "MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -2,6 +2,7 @@ package io.github.foundationgames.sandwichable.blocks;
 
 import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.entity.*;
+import io.github.foundationgames.sandwichable.fluids.FluidsRegistry;
 import io.github.foundationgames.sandwichable.items.InfoTooltipBlockItem;
 import io.github.foundationgames.sandwichable.items.SandwichBlockItem;
 import io.github.foundationgames.sandwichable.util.Util;
@@ -9,12 +10,15 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.BlockView;
 
-public class BlocksRegistry {
+public final class BlocksRegistry {
 
     public static final Block SANDWICH_TABLE = new SandwichTableBlock(FabricBlockSettings.copy(Blocks.CRAFTING_TABLE));
     public static final Block LETTUCE = new LettuceCropBlock(FabricBlockSettings.copy(Blocks.WHEAT));
@@ -58,6 +62,12 @@ public class BlocksRegistry {
     public static class SaltyAirBlock extends AirBlock { public SaltyAirBlock(Settings settings) { super(settings); } }
     public static final Block SALTY_AIR = new SaltyAirBlock(FabricBlockSettings.copy(Blocks.CAVE_AIR));
 
+    public static class PickleBrineFluidBlock extends net.minecraft.block.FluidBlock {
+        protected PickleBrineFluidBlock(FlowableFluid fluid, Settings settings) { super(fluid, settings); }
+        @Override public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos) { return true; }
+    }
+    public static final Block PICKLE_BRINE = new PickleBrineFluidBlock(FluidsRegistry.PICKLE_BRINE, FabricBlockSettings.copy(Blocks.WATER));
+
     public static BlockEntityType<SandwichTableBlockEntity> SANDWICHTABLE_BLOCKENTITY;
     public static BlockEntityType<SandwichBlockEntity> SANDWICH_BLOCKENTITY;
     public static BlockEntityType<CuttingBoardBlockEntity> CUTTINGBOARD_BLOCKENTITY;
@@ -93,7 +103,6 @@ public class BlocksRegistry {
         registerBlock(CRIMSON_CUTTING_BOARD, "crimson_cutting_board", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(WARPED_CUTTING_BOARD, "warped_cutting_board", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(SHRUB, "shrub", Sandwichable.SANDWICHABLE_ITEMS);
-
         registerBlock(BOTTLE_CRATE, "bottle_crate", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(POTTED_SHRUB, "potted_shrub");
         registerBlock(PICKLE_JAR, "pickle_jar");
@@ -107,6 +116,8 @@ public class BlocksRegistry {
         registerBlock(TOMATOES, "tomatoes");
         registerBlock(CUCUMBERS, "cucumbers");
         registerBlock(ONIONS, "onions");
+
+        registerBlock(PICKLE_BRINE, "pickle_brine");
 
         SANDWICHTABLE_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("sandwich_table_ent"), BlockEntityType.Builder.create(SandwichTableBlockEntity::new, SANDWICH_TABLE).build(null));
         CUTTINGBOARD_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("cutting_board_ent"), BlockEntityType.Builder.create(CuttingBoardBlockEntity::new, OAK_CUTTING_BOARD, BIRCH_CUTTING_BOARD, SPRUCE_CUTTING_BOARD, JUNGLE_CUTTING_BOARD, ACACIA_CUTTING_BOARD, DARK_OAK_CUTTING_BOARD, CRIMSON_CUTTING_BOARD, WARPED_CUTTING_BOARD).build(null));

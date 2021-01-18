@@ -10,33 +10,48 @@ import io.github.foundationgames.sandwichable.blocks.entity.renderer.*;
 import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
 import io.github.foundationgames.sandwichable.entity.render.SandwichTableMinecartEntityRenderer;
+import io.github.foundationgames.sandwichable.fluids.FluidsRegistry;
+import io.github.foundationgames.sandwichable.particle.Particles;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
+import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
+import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.color.world.BiomeColors;
 import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.client.color.world.GrassColors;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceType;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 
 import java.util.Random;
+import java.util.function.Function;
 
 public class SandwichableClient implements ClientModInitializer {
     @Override
@@ -108,5 +123,56 @@ public class SandwichableClient implements ClientModInitializer {
             if(stack.getOrCreateTag().contains("onLoaf")) return stack.getOrCreateTag().getBoolean("onLoaf") ? 1 : 0;
             return 0;
         });
+
+        setupPickleBrine();
+
+        Particles.init();
+    }
+
+    private static void setupPickleBrine() {
+        Fluid still = FluidsRegistry.PICKLE_BRINE;
+        Fluid flowing = FluidsRegistry.PICKLE_BRINE_FLOWING;
+        Identifier fluidTexture = Util.id("pickle_brine");
+        Identifier stillId = new Identifier(fluidTexture.getNamespace(), "block/" + fluidTexture.getPath());
+        Identifier flowingId = new Identifier(fluidTexture.getNamespace(), "block/" + fluidTexture.getPath() + "_flow");
+        ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) -> {
+            registry.register(stillId);
+            registry.register(flowingId);
+        });
+        Identifier fluidId = Registry.FLUID.getId(still);
+        Identifier listenerId = new Identifier(fluidId.getNamespace(), fluidId.getPath() + "_reload_listener");
+
+        Sprite[] sprites = { null, null };
+
+        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
+            @Override
+            public Identifier getFabricId() {
+                return listenerId;
+            }
+
+            @Override
+            public void apply(ResourceManager resourceManager) {
+                final Function<Identifier, Sprite> atlas = MinecraftClient.getInstance().getSpriteAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
+                sprites[0] = atlas.apply(stillId);
+                sprites[1] = atlas.apply(flowingId);
+            }
+        });
+
+        FluidRenderHandler renderHandler = new FluidRenderHandler() {
+            @Override
+            public Sprite[] getFluidSprites(BlockRenderView view, BlockPos pos, FluidState state) {
+                return sprites;
+            }
+
+            @Override
+            public int getFluidColor(BlockRenderView view, BlockPos pos, FluidState state) {
+                return 0x65ff6e;
+            }
+        };
+
+        FluidRenderHandlerRegistry.INSTANCE.register(still, renderHandler);
+        FluidRenderHandlerRegistry.INSTANCE.register(flowing, renderHandler);
+
+        BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), FluidsRegistry.PICKLE_BRINE, FluidsRegistry.PICKLE_BRINE_FLOWING);
     }
 }

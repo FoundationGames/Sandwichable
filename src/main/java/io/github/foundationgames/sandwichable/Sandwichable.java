@@ -8,6 +8,7 @@ import io.github.foundationgames.sandwichable.common.CommonTags;
 import io.github.foundationgames.sandwichable.compat.CroptopiaCompat;
 import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
+import io.github.foundationgames.sandwichable.fluids.FluidsRegistry;
 import io.github.foundationgames.sandwichable.items.CheeseCultureItem;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.items.SandwichableGroupIconBuilder;
@@ -79,6 +80,7 @@ public class Sandwichable implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        FluidsRegistry.init();
         BlocksRegistry.init();
         ItemsRegistry.init();
         EntitiesRegistry.init();

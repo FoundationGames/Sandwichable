@@ -3,18 +3,20 @@ package io.github.foundationgames.sandwichable.items;
 import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
+import io.github.foundationgames.sandwichable.fluids.FluidsRegistry;
 import io.github.foundationgames.sandwichable.mixin.ComposterHelper;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.BucketItem;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.registry.Registry;
 
-public class ItemsRegistry {
+public final class ItemsRegistry {
     public static final FoodComponent BREADSLICE = (new FoodComponent.Builder()).hunger(2).saturationModifier(0.5F).build();
     public static final FoodComponent TOASTEDBREADSLICE = (new FoodComponent.Builder()).hunger(3).saturationModifier(0.6F).build();
     public static final FoodComponent LETTUCEHEAD = (new FoodComponent.Builder()).hunger(5).saturationModifier(0.8F).snack().build();
@@ -123,6 +125,7 @@ public class ItemsRegistry {
     public static final Item NETHERITE_KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item SANDWICH_TABLE_MINECART = new CustomMinecartItem(EntitiesRegistry.SANDWICH_TABLE_MINECART, new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item FERMENTING_MILK_BUCKET = new FermentingMilkBucketItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item PICKLE_BRINE_BUCKET = new BucketItem(FluidsRegistry.PICKLE_BRINE, new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
 
     public static final Item LETTUCE_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.LETTUCE, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item TOMATO_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.TOMATOES, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
@@ -229,6 +232,7 @@ public class ItemsRegistry {
         FuelRegistry.INSTANCE.add(CHARRED_MORSEL, 360);
         registerItem(SANDWICH_TABLE_MINECART, "sandwich_table_minecart");
         registerItem(FERMENTING_MILK_BUCKET, "fermenting_milk_bucket");
+        registerItem(PICKLE_BRINE_BUCKET, "pickle_brine_bucket");
         registerItem(SPREAD, "spread");
     }
 

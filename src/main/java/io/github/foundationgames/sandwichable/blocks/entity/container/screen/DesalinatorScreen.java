@@ -2,17 +2,12 @@ package io.github.foundationgames.sandwichable.blocks.entity.container.screen;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
-import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.blocks.entity.DesalinatorBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
 import io.github.foundationgames.sandwichable.util.Util;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.render.entity.BatEntityRenderer;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.BatEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
@@ -46,7 +41,7 @@ public class DesalinatorScreen extends HandledScreen<DesalinatorScreenHandler> {
             List<Text> tooltip = Lists.newArrayList(
                     //YES I KNOW THIS CODE IS HORRENDOUS
                     new LiteralText(Integer.toString(((DesalinatorBlockEntity)this.handler.inventory).getWaterAmount())+" B "+ I18n.translate("desalinator.tooltip.filled")),
-                    new LiteralText(I18n.translate("desalinator.tooltip.maxCapacity")+" "+Integer.toString(DesalinatorBlockEntity.maxWaterAmount)+" B")
+                    new LiteralText(I18n.translate("desalinator.tooltip.maxCapacity")+" "+Integer.toString(DesalinatorBlockEntity.maxFluidAmount)+" B")
             );
             if(this.getScreenHandler().inventory instanceof DesalinatorBlockEntity) {
                 if(((DesalinatorBlockEntity)this.handler.inventory).getWaterAmount() > 0) {
@@ -79,8 +74,8 @@ public class DesalinatorScreen extends HandledScreen<DesalinatorScreenHandler> {
         if(((DesalinatorBlockEntity)this.handler.inventory).isBurning()) {
             this.drawTexture(matrixStack, x + 58, y + 45-fireSize, 176, 40-fireSize, 14, fireSize+1);
         }
-        int waterSize =  Util.floatToIntWithBounds((float)((DesalinatorBlockEntity)this.handler.inventory).getWaterAmount()/DesalinatorBlockEntity.maxWaterAmount, 17);
-        this.drawTexture(matrixStack, x + 56, y + 32-waterSize, 176, 27-waterSize, 20, waterSize);
+        int fluidSize =  Util.floatToIntWithBounds((float)((DesalinatorBlockEntity)this.handler.inventory).getWaterAmount()/DesalinatorBlockEntity.maxFluidAmount, 17);
+        this.drawTexture(matrixStack, x + 56, y + 32-fluidSize, ((DesalinatorBlockEntity)this.handler.inventory).isPickleBrine() ? 196 : 176, 27-fluidSize, 20, fluidSize);
         if(!this.handler.inventory.getStack(0).isEmpty()) {
             this.drawTexture(matrixStack, x + 64, y + 47, 176, 41, 15, 12);
         }

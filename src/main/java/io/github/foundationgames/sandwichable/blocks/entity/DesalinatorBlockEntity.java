@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.LockableContainerBlockEntity;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
@@ -33,15 +32,16 @@ import net.minecraft.world.biome.Biome;
 
 public class DesalinatorBlockEntity extends LockableContainerBlockEntity implements ExtendedScreenHandlerFactory, SidedInventory, Tickable, BlockEntityClientSerializable {
     private DefaultedList<ItemStack> inventory;
-    private int waterAmount = 0;
+    private int fluidAmount = 0;
     private int evaporateProgress = 0;
     private int fuelBurnProgress = 0;
+    private boolean isPickleBrine = false;
     private boolean burning = false;
     private boolean evaporating = false;
     private boolean wasEvaporating = evaporating;
-    public static final int maxWaterAmount = 4;
+    public static final int maxFluidAmount = 4;
     public static final int evaporateTime = 185;
-    public static final int fuelBurnTime = 495;
+    public static final int fuelBurnTime = 990;
 
     public DesalinatorBlockEntity() {
         super(BlocksRegistry.DESALINATOR_BLOCKENTITY);
@@ -52,7 +52,7 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     public void fromTag(BlockState state, CompoundTag tag) {
         super.fromTag(state, tag);
         this.inventory = DefaultedList.ofSize(2, ItemStack.EMPTY);
-        waterAmount = tag.getInt("waterAmount");
+        fluidAmount = tag.getInt("waterAmount");
         evaporateProgress = tag.getInt("evaporateProgress");
         fuelBurnProgress = tag.getInt("fuelBurnProgress");
         Inventories.fromTag(tag, this.inventory);
@@ -62,14 +62,14 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     public CompoundTag toTag(CompoundTag tag) {
         super.toTag(tag);
         Inventories.toTag(tag, this.inventory);
-        tag.putInt("waterAmount", waterAmount);
+        tag.putInt("waterAmount", fluidAmount);
         tag.putInt("evaporateProgress", evaporateProgress);
         tag.putInt("fuelBurnProgress", fuelBurnProgress);
         return tag;
     }
 
     private void finishEvaporating() {
-        waterAmount--;
+        fluidAmount--;
         if(isWaterSaline()) {
             if(this.inventory.get(1).isEmpty()) {
                 this.inventory.set(1, new ItemStack(ItemsRegistry.SALT));
@@ -111,7 +111,7 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     @Override
     public void tick() {
         if(world.getBlockState(pos).getBlock() == BlocksRegistry.DESALINATOR) {
-            if(this.inventory.get(0).getCount() > 0 && this.waterAmount > 0) {
+            if(this.inventory.get(0).getCount() > 0 && this.fluidAmount > 0) {
                 if(!burning) {
                     this.inventory.get(0).decrement(1);
                     startBurning();
@@ -123,7 +123,7 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
                 if(fuelBurnProgress == fuelBurnTime) {
                     this.stopBurning();
                 }
-                if(waterAmount > 0) {
+                if(fluidAmount > 0) {
                     if(!evaporating && this.inventory.get(1).getCount() < 64) {
                         this.startEvaporating();
                     }
@@ -131,7 +131,7 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
                 this.markDirty();
             }
             if(evaporating && burning) {
-                evaporateProgress++;
+                evaporateProgress += isPickleBrine ? 1 : 2;
                 if(evaporateProgress == evaporateTime) {
                     finishEvaporating();
                 }
@@ -144,9 +144,11 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
             if(!evaporating && evaporateProgress > 0) {
                 evaporateProgress--;
             }
-            if(world.getBlockState(pos).get(Properties.WATERLOGGED) && waterAmount < maxWaterAmount) {
-                world.setBlockState(pos, world.getBlockState(pos).with(Properties.WATERLOGGED, false));
-                waterAmount++;
+            DesalinatorBlock.FluidType fluid = world.getBlockState(pos).get(DesalinatorBlock.FLUID);
+            if(fluid != DesalinatorBlock.FluidType.NONE && fluidAmount < maxFluidAmount && (((fluid == DesalinatorBlock.FluidType.PICKLE_BRINE) == isPickleBrine) || this.fluidAmount == 0)) {
+                this.isPickleBrine = fluid == DesalinatorBlock.FluidType.PICKLE_BRINE;
+                world.setBlockState(pos, world.getBlockState(pos).with(DesalinatorBlock.FLUID, DesalinatorBlock.FluidType.NONE));
+                fluidAmount++;
                 world.updateNeighbors(pos, world.getBlockState(pos).getBlock());
             }
         }
@@ -170,14 +172,18 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     public int getWaterAmount() {
-        return waterAmount;
+        return fluidAmount;
     }
 
     public boolean isBurning() {
         return burning;
     }
 
-    public boolean isWaterSaline() { return world.getBiome(pos).getCategory() == Biome.Category.OCEAN || world.getBiome(pos).getCategory() == Biome.Category.BEACH || world.getBlockState(pos.down()).getBlock().isIn(Sandwichable.SALT_PRODUCING_BLOCKS); }
+    public boolean isPickleBrine() {
+        return isPickleBrine;
+    }
+
+    public boolean isWaterSaline() { return isPickleBrine || world.getBiome(pos).getCategory() == Biome.Category.OCEAN || world.getBiome(pos).getCategory() == Biome.Category.BEACH || world.getBlockState(pos.down()).getBlock().isIn(Sandwichable.SALT_PRODUCING_BLOCKS); }
 
     @Override
     protected Text getContainerName() {

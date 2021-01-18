@@ -1,34 +1,18 @@
 package io.github.foundationgames.sandwichable.util;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
 import io.github.foundationgames.sandwichable.config.SandwichableConfig;
-import io.github.foundationgames.sandwichable.events.StructurePoolAddCallback;
-import io.github.foundationgames.sandwichable.mixin.MinecraftClientAccess;
 import io.github.foundationgames.sandwichable.worldgen.ModifiableStructurePool;
-import io.github.foundationgames.sandwichable.worldgen.StructurePoolHelper;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
 import net.minecraft.particle.BlockStateParticleEffect;
-import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.structure.Structure;
 import net.minecraft.structure.pool.*;
-import net.minecraft.structure.processor.StructureProcessorList;
 import net.minecraft.structure.processor.StructureProcessorLists;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
@@ -36,14 +20,11 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.function.Supplier;
 
 public class Util {
@@ -142,14 +123,5 @@ public class Util {
     public static int getSaltyWaterColor() {
         //return 0x56c7d1;
         return 0x6ce0eb;
-    }
-
-    public static boolean triggerLowLOD(int dist, Vec3d pos) {
-        MinecraftClient mc = MinecraftClient.getInstance();
-        int fps = ((MinecraftClientAccess)mc).getFps();
-        int maxFps = Math.min(mc.options.maxFps, 60);
-        if(mc.player == null) return false;
-        int threshold = (int)(dist * ((float)fps / maxFps));
-        return threshold >= dist || pos.distanceTo(mc.player.getPos()) >= threshold;
     }
 }

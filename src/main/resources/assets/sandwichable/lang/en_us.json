@@ -64,6 +64,7 @@
 
 	"item.sandwichable.sandwich_table_minecart": "Minecart with Sandwich Table",
 	"item.sandwichable.fermenting_milk_bucket": "Fermenting Milk Bucket",
+	"item.sandwichable.pickle_brine_bucket": "Pickle Brine Bucket",
 	"block.sandwichable.pickle_jar": "Pickle Jar",
 	"item.sandwichable.salt_rock": "Salt Rock",
 	"item.sandwichable.salt": "Salt",
@@ -232,6 +233,7 @@
 	"item.sandwichable.diamond_kitchen_knife.info": "Used to cut up to a stack of 8 items on a Cutting Board. Interact with a Cutting Board with an item on it to cut the item. Can be used in the off-hand. Can also be placed on the cutting board when empty.",
 	"item.sandwichable.netherite_kitchen_knife.info": "Used to cut up to a stack of 20 items on a Cutting Board. Interact with a Cutting Board with an item on it to cut the item. Can be used in the off-hand. Can also be placed on the cutting board when empty.",
 	"item.sandwichable.fermenting_milk_bucket.info": "A bucket used to store and transport milk that is in the process of turning into cheese. Obtained by interacting with a fermenting basin with an empty bucket, and can be poured back into the basin. Can be drank to gain nausea based on how much the cheese has fermented.",
+	"item.sandwichable.pickle_brine_bucket.info": "A bucket used to store pickle brine. Pickle brine can be poured into a Redstone Desalinator to get back some salt.",
 	"block.sandwichable.pickle_jar.info": "Used to pickle cucumbers. Can be done by filling with water, placing cucumbers inside, and placing salt in the water. Cucumbers will pickle after roughly one minute. Can be broken while pickling to save the state of the jar, and can be used to store pickled cucumbers in style.",
 	"item.sandwichable.salt_rock.info": "Found in salty sand, and can be crafted into Salt.",
 	"item.sandwichable.salt.info": "An item used to pickle cucumbers. Used by interacting with a cucumber-filled Pickle Jar, and waiting roughly one minute.",
