@@ -26,9 +26,9 @@ public class BackgroundRendererMixin {
     private static void fogColor(Camera camera, float tickDelta, ClientWorld world, int i, float f, CallbackInfo ci) {
         FluidState fluidState = camera.getSubmergedFluidState();
         if(fluidState.getFluid() == FluidsRegistry.PICKLE_BRINE || fluidState.getFluid() == FluidsRegistry.PICKLE_BRINE_FLOWING) {
-            red = 0.28f;
-            green = 1.0f;
-            blue = 0.4f;
+            red = 0.13f;
+            green = 0.486f;
+            blue = 0.17f;
         }
     }
 
@@ -36,9 +36,9 @@ public class BackgroundRendererMixin {
     private static void pickleBrineFog(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance, boolean thickFog, CallbackInfo ci) {
         FluidState fluidState = camera.getSubmergedFluidState();
         if(fluidState.getFluid() == FluidsRegistry.PICKLE_BRINE || fluidState.getFluid() == FluidsRegistry.PICKLE_BRINE_FLOWING) {
-            RenderSystem.fogDensity(0.5f);
+            RenderSystem.fogDensity(0.22f);
             RenderSystem.fogStart(0);
-            RenderSystem.fogEnd(viewDistance * 0.04f);
+            RenderSystem.fogEnd(viewDistance * 0.067f);
             RenderSystem.fogMode(GlStateManager.FogMode.LINEAR);
             RenderSystem.setupNvFogDistance();
             ci.cancel();

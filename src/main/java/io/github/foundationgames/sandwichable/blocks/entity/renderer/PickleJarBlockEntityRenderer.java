@@ -69,7 +69,7 @@ public class PickleJarBlockEntityRenderer extends BlockEntityRenderer<PickleJarB
             r = 0.4F; g = 1.0F; b = 0.5F;
         }
         if(blockEntity.getFluid() != PickleJarFluid.AIR) {
-            fluidModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(fluidTex, true)), light, overlay, r, g, b, 0.69F);
+            fluidModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentCull(fluidTex)), light, overlay, r, g, b, 0.69F);
         }
         matrices.pop();
     }

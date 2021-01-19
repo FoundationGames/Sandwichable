@@ -7,6 +7,7 @@ import io.github.foundationgames.sandwichable.util.Sandwich;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -14,6 +15,7 @@ import squeek.appleskin.helpers.FoodHelper;
 
 import java.util.List;
 
+@Pseudo
 @Mixin(value = FoodHelper.class, remap = false)
 public class ASFoodHelperMixin {
     @Inject(method = "getDefaultFoodValues", at = @At("HEAD"), cancellable = true)

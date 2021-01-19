@@ -28,6 +28,7 @@ import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.color.world.BiomeColors;
 import net.minecraft.client.color.world.FoliageColors;
@@ -44,6 +45,7 @@ import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
+import net.minecraft.util.CuboidBlockIterator;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
@@ -166,6 +168,36 @@ public class SandwichableClient implements ClientModInitializer {
 
             @Override
             public int getFluidColor(BlockRenderView view, BlockPos pos, FluidState state) {
+                // possible TODO
+                // THIS CODE DOESNT WORK???
+                /* ERROR:
+                 * java.lang.ArrayIndexOutOfBoundsException: -833
+                 *      at net.minecraft.client.render.chunk.ChunkRendererRegion.getBlockState(ChunkRendererRegion.java:103)
+                 *      at io.github.foundationgames.sandwichable.SandwichableClient$2.getFluidColor(SandwichableClient.java:181)
+                 */
+                // Meant to be to blend with water color
+                /*int rad = (int)(MinecraftClient.getInstance().options.biomeBlendRadius * 0.64);
+                if(rad == 0) return 0x65ff6e;
+                CuboidBlockIterator iter = new CuboidBlockIterator(pos.getX() - rad, pos.getY() - rad, pos.getZ() - rad, pos.getX() + rad, pos.getY() + rad, pos.getZ() + rad);
+                int r = 101;
+                int g = 255;
+                int b = 110;
+                int i = 0;
+                int c;
+                for(BlockPos.Mutable mpos = new BlockPos.Mutable(); iter.step(); i++) {
+                    mpos.set(iter.getX(), Math.min(Math.max(iter.getY(), view.getHeight() - 1), 0), iter.getZ());
+                    if(view.getBlockState(mpos).isOf(Blocks.WATER)) {
+                        c = BiomeColors.getWaterColor(view, mpos);
+                        r += (c >> 16) & 0xFF;
+                        g += (c >> 8) & 0xFF;
+                        b += c & 0xFF;
+                    } else {
+                        r += 101;
+                        g += 255;
+                        b += 110;
+                    }
+                }
+                return ((r / i & 0xFF) << 16 | (g / i & 0xFF) << 8 | b / i & 0xFF);*/
                 return 0x65ff6e;
             }
         };

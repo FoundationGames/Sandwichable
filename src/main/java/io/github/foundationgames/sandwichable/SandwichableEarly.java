@@ -47,8 +47,8 @@ public class SandwichableEarly implements EarlyInitializer {
                 new ExtraOreFeatureConfig(Blocks.SAND.getDefaultState(), BlocksRegistry.SALTY_SAND.getDefaultState(), config.saltySandGenOptions.veinSize)
         ).rangeOf(config.saltySandGenOptions.maxGenHeight).spreadHorizontally().repeat(config.saltySandGenOptions.rarity));
 
-        SALT_POOL_WATER = SALT_POOL_FEATURE.configure(new SaltPoolFeatureConfig(true)).decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(426)));
-        SALT_POOL_DRY = SALT_POOL_FEATURE.configure(new SaltPoolFeatureConfig(false)).decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(442)));
+        SALT_POOL_WATER = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salt_pool_water"), SALT_POOL_FEATURE.configure(new SaltPoolFeatureConfig(true)).decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(426))));
+        SALT_POOL_DRY = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salty_pool_dry"), SALT_POOL_FEATURE.configure(new SaltPoolFeatureConfig(false)).decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(442))));
 
         DynamicRegistryCallback.callback(Registry.BIOME_KEY).register((manager, key, biome) -> {
             if(biome.getCategory() == Biome.Category.OCEAN || biome.getCategory() == Biome.Category.BEACH) {

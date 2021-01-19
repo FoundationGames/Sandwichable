@@ -1,10 +1,8 @@
 package io.github.foundationgames.sandwichable.blocks;
 
-import io.github.foundationgames.sandwichable.blocks.entity.BasinBlockEntity;
-import io.github.foundationgames.sandwichable.blocks.entity.BasinContentType;
-import io.github.foundationgames.sandwichable.blocks.entity.PickleJarBlockEntity;
-import io.github.foundationgames.sandwichable.blocks.entity.SandwichBlockEntity;
+import io.github.foundationgames.sandwichable.blocks.entity.*;
 import io.github.foundationgames.sandwichable.items.PickleJarBlockItem;
+import io.github.foundationgames.sandwichable.particle.Particles;
 import io.github.foundationgames.sandwichable.util.CheeseRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -23,6 +21,8 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class PickleJarBlock extends Block implements BlockEntityProvider {
     public static final VoxelShape SHAPE;
@@ -83,6 +83,16 @@ public class PickleJarBlock extends Block implements BlockEntityProvider {
     @Override
     public BlockEntity createBlockEntity(BlockView view) {
         return new PickleJarBlockEntity();
+    }
+
+    @Override
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+        super.randomDisplayTick(state, world, pos, random);
+        if(world.getBlockEntity(pos) instanceof PickleJarBlockEntity) {
+            if(((PickleJarBlockEntity)world.getBlockEntity(pos)).getFluid() == PickleJarFluid.PICKLED_BRINE) {
+                world.addParticle(Particles.PICKLE_JAR_BUBBLE, pos.getX() + (3d/16d) + (random.nextDouble() * 10d/16d), pos.getY() + (1d/16d) + (random.nextDouble() * 0.25d), pos.getZ() + (3d/16d) + (random.nextDouble() * 10d/16d), 0, 0, 0);
+            }
+        }
     }
 
     static {

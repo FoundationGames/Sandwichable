@@ -125,7 +125,7 @@ public final class ItemsRegistry {
     public static final Item NETHERITE_KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item SANDWICH_TABLE_MINECART = new CustomMinecartItem(EntitiesRegistry.SANDWICH_TABLE_MINECART, new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item FERMENTING_MILK_BUCKET = new FermentingMilkBucketItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item PICKLE_BRINE_BUCKET = new BucketItem(FluidsRegistry.PICKLE_BRINE, new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item PICKLE_BRINE_BUCKET = new CustomBucketItem(FluidsRegistry.PICKLE_BRINE, new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
 
     public static final Item LETTUCE_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.LETTUCE, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item TOMATO_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.TOMATOES, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));

@@ -3,7 +3,6 @@
   "package": "io.github.foundationgames.sandwichable.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "ASFoodHelperMixin",
     "ClientWorldMixin",
     "ComposterHelper",
     "PistonBlockMixin",
@@ -11,9 +10,12 @@
     "StructurePoolsMixin"
   ],
   "client": [
+    "ASFoodHelperMixin",
     "BackgroundRendererMixin",
     "BuiltinModelItemRendererMixin",
     "ClientPlayNetworkHandlerMixin",
+    "ContinuousFallingParticleMixin",
+    "DrippingParticleMixin",
     "ItemRendererMixin",
     "MinecraftClientMixin"
   ],

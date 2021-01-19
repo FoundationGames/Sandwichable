@@ -4,6 +4,8 @@ import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.particle.Particles;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.options.ParticlesMode;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
@@ -47,12 +49,13 @@ public abstract class PickleBrineFluid extends FlowableFluid {
 
     @Override
     public void randomDisplayTick(World world, BlockPos pos, FluidState state, Random random) {
+        ParticlesMode p = MinecraftClient.getInstance().options.particles;
         if (!state.isStill() && !state.get(FALLING)) {
             if (random.nextInt(64) == 0) {
                 world.playSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, SoundEvents.BLOCK_WATER_AMBIENT, SoundCategory.BLOCKS, random.nextFloat() * 0.25F + 0.75F, (random.nextFloat() * 0.5f) + 0.5F, false);
             }
-        } else if (random.nextInt(6) == 0) {
-            world.addParticle(getParticle(), (double)pos.getX() + random.nextDouble(), (double)pos.getY() + random.nextDouble(), (double)pos.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
+        } else if (p != ParticlesMode.MINIMAL && random.nextInt(p == ParticlesMode.ALL ? 5 : 16) == 0) {
+            world.addParticle(Particles.SMALL_BRINE_BUBBLE, (double)pos.getX() + random.nextDouble(), (double)pos.getY() + random.nextDouble(), (double)pos.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
         }
     }
 
@@ -78,7 +81,7 @@ public abstract class PickleBrineFluid extends FlowableFluid {
 
     @Override
     protected @Nullable ParticleEffect getParticle() {
-        return Particles.SMALL_BRINE_BUBBLE;
+        return Particles.DRIPPING_BRINE;
     }
 
     @Override
