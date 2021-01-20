@@ -2,6 +2,7 @@ package io.github.foundationgames.sandwichable.blocks;
 
 import io.github.foundationgames.sandwichable.blocks.entity.DesalinatorBlockEntity;
 import io.github.foundationgames.sandwichable.fluids.FluidsRegistry;
+import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.*;
@@ -30,7 +31,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
-public class DesalinatorBlock extends BlockWithEntity implements Waterloggable {
+public class DesalinatorBlock extends BlockWithEntity implements Waterloggable, BucketFluidloggable {
 
     public static final VoxelShape SHAPE;
     public static final BooleanProperty ON;
@@ -146,6 +147,11 @@ public class DesalinatorBlock extends BlockWithEntity implements Waterloggable {
     static {
         SHAPE = createCuboidShape(1, 0, 1, 15, 16, 15);
         ON = BooleanProperty.of("on");
+    }
+
+    @Override
+    public boolean isValidBucket(ItemStack stack) {
+        return stack.getItem() == ItemsRegistry.PICKLE_BRINE_BUCKET;
     }
 
     public enum FluidType implements StringIdentifiable {

@@ -1,9 +1,7 @@
 {
   "textures": [
-    "sandwichable:small_brine_bubble_0",
-	"sandwichable:small_brine_bubble_1",
-	"sandwichable:small_brine_bubble_2",
-	"sandwichable:small_brine_bubble_3",
-	"sandwichable:small_brine_bubble_4"
+    "sandwichable:pickle_jar_bubble_0",
+	"sandwichable:pickle_jar_bubble_1",
+	"sandwichable:pickle_jar_bubble_2"
   ]
 }

@@ -21,13 +21,13 @@ public final class Particles {
     public static final DefaultParticleType BRINE_SPLASH = Registry.register(Registry.PARTICLE_TYPE, Util.id("brine_splash"), FabricParticleTypes.simple());
     public static final DefaultParticleType BRINE_BUBBLE = Registry.register(Registry.PARTICLE_TYPE, Util.id("brine_bubble"), FabricParticleTypes.simple());
     public static final DefaultParticleType SMALL_BRINE_BUBBLE = Registry.register(Registry.PARTICLE_TYPE, Util.id("small_brine_bubble"), FabricParticleTypes.simple());
-    public static final DefaultParticleType PICKLE_JAR_BUBBLE = Registry.register(Registry.PARTICLE_TYPE, Util.id("pickle_jar_bubble"), FabricParticleTypes.simple());
+    //public static final DefaultParticleType PICKLE_JAR_BUBBLE = Registry.register(Registry.PARTICLE_TYPE, Util.id("pickle_jar_bubble"), FabricParticleTypes.simple());
 
     public static final ParticleTextureSheet BLENDED = new ParticleTextureSheet() {
         @Override
         public void begin(BufferBuilder bufferBuilder, TextureManager textureManager) {
             RenderSystem.disableBlend();
-            RenderSystem.depthMask(false);
+            RenderSystem.depthMask(true);
             textureManager.bindTexture(SpriteAtlasTexture.PARTICLE_ATLAS_TEXTURE);
             bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR_LIGHT);
         }
@@ -63,6 +63,6 @@ public final class Particles {
         ParticleFactoryRegistry.getInstance().register(BRINE_SPLASH, WaterSplashParticle.SplashFactory::new);
         ParticleFactoryRegistry.getInstance().register(BRINE_BUBBLE, WaterBubbleParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(SMALL_BRINE_BUBBLE, BubbleColumnUpParticle.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(PICKLE_JAR_BUBBLE, PickleJarBubbleParticle.Factory::new);
+        //ParticleFactoryRegistry.getInstance().register(PICKLE_JAR_BUBBLE, PickleJarBubbleParticle.Factory::new);
     }
 }

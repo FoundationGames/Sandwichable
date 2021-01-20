@@ -1,6 +1,7 @@
 plugins {
 	id 'fabric-loom' version '0.5-SNAPSHOT'
 	id 'maven-publish'
+	id "com.wynprice.cursemaven" version "2.1.5"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -34,13 +35,10 @@ dependencies {
 	include "me.sargunvohra.mcmods:autoconfig1u:3.2.0-unstable"
 
 	modImplementation "com.github.FoundationGames:MealAPI:dc0ef8b8ba"
-	//include "com.github.FoundationGames:MealAPI:aea3ebc43d"
 
-	//YOU WILL NEED TO CREATE A "localjars" FOLDER IN THIS PROJECT, AND BUILD AN APPLESKIN DEV JAR TO PUT IN IT
 	modApi "local-repo:appleskin-1.0.11-dev"
 
-	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
-	// You may need to force-disable transitiveness on them.
+	//modApi "curse.maven:appleskin:2987255"
 }
 
 processResources {

@@ -178,7 +178,7 @@ public class Sandwichable implements ModInitializer {
             if(world.getBlockEntity(pos) instanceof PickleJarBlockEntity) {
                 PickleJarBlockEntity be = (PickleJarBlockEntity)world.getBlockEntity(pos);
                 if(be.getFluid() == PickleJarFluid.WATER) {
-                    be.emptyWater(true);
+                    be.emptyFluid(true);
                     return new ItemStack(Items.WATER_BUCKET);
                 }
             }
