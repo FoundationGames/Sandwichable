@@ -1,7 +1,7 @@
 package io.github.foundationgames.sandwichable.blocks;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.fluid.Fluid;
 
 public interface BucketFluidloggable {
-    boolean isValidBucket(ItemStack stack);
+    boolean isFillableWith(Fluid fluid);
 }

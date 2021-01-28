@@ -11,6 +11,7 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.texture.TextureManager;
+import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.util.registry.Registry;
@@ -21,25 +22,6 @@ public final class Particles {
     public static final DefaultParticleType BRINE_SPLASH = Registry.register(Registry.PARTICLE_TYPE, Util.id("brine_splash"), FabricParticleTypes.simple());
     public static final DefaultParticleType BRINE_BUBBLE = Registry.register(Registry.PARTICLE_TYPE, Util.id("brine_bubble"), FabricParticleTypes.simple());
     public static final DefaultParticleType SMALL_BRINE_BUBBLE = Registry.register(Registry.PARTICLE_TYPE, Util.id("small_brine_bubble"), FabricParticleTypes.simple());
-    //public static final DefaultParticleType PICKLE_JAR_BUBBLE = Registry.register(Registry.PARTICLE_TYPE, Util.id("pickle_jar_bubble"), FabricParticleTypes.simple());
-
-    public static final ParticleTextureSheet BLENDED = new ParticleTextureSheet() {
-        @Override
-        public void begin(BufferBuilder bufferBuilder, TextureManager textureManager) {
-            RenderSystem.disableBlend();
-            RenderSystem.depthMask(true);
-            textureManager.bindTexture(SpriteAtlasTexture.PARTICLE_ATLAS_TEXTURE);
-            bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR_LIGHT);
-        }
-
-        @Override
-        public void draw(Tessellator tessellator) { tessellator.draw(); }
-
-        @Override
-        public String toString() {
-            return "BLENDED";
-        }
-    };
 
     public static void init() {
         ParticleFactoryRegistry.getInstance().register(FALLING_BRINE, s -> new BlockLeakParticle.FallingWaterFactory(s) {
@@ -63,6 +45,5 @@ public final class Particles {
         ParticleFactoryRegistry.getInstance().register(BRINE_SPLASH, WaterSplashParticle.SplashFactory::new);
         ParticleFactoryRegistry.getInstance().register(BRINE_BUBBLE, WaterBubbleParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(SMALL_BRINE_BUBBLE, BubbleColumnUpParticle.Factory::new);
-        //ParticleFactoryRegistry.getInstance().register(PICKLE_JAR_BUBBLE, PickleJarBubbleParticle.Factory::new);
     }
 }

@@ -15,7 +15,7 @@ public abstract class DrippingParticleMixin extends Particle implements BlockLea
     @Unique
     private ParticleEffect customNextParticle;
 
-    @Inject(method = "updateAge", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "updateAge()V", at = @At("HEAD"), cancellable = true)
     public void spawnCustomNextParticle(CallbackInfo ci) {
         if(customNextParticle != null && this.maxAge - 1 <= 0) {
             this.markDead();

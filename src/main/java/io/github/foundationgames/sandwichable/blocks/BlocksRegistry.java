@@ -13,9 +13,13 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.state.StateManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 
 public final class BlocksRegistry {
@@ -68,6 +72,22 @@ public final class BlocksRegistry {
     }
     public static final Block PICKLE_BRINE = new PickleBrineFluidBlock(FluidsRegistry.PICKLE_BRINE, FabricBlockSettings.copy(Blocks.WATER));
 
+    // TODO: being able to place the patchouli book
+    /*public static final Block SANDWICH_BOOK = new HorizontalFacingBlock(FabricBlockSettings.copy(Blocks.TRIPWIRE).sounds(BlockSoundGroup.WOOD)) {
+        VoxelShape SHAPE = createCuboidShape(1.5, 0, 1.5, 14.5, 3, 14.5);
+
+        @Override
+        public BlockState getPlacementState(ItemPlacementContext ctx) { return getDefaultState().with(FACING, ctx.getPlayerLookDirection()); }
+
+        @Override
+        protected void appendProperties(StateManager.Builder<Block, BlockState> builder) { builder.add(FACING); }
+
+        @Override
+        public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+            return SHAPE;
+        }
+    };*/
+
     public static BlockEntityType<SandwichTableBlockEntity> SANDWICHTABLE_BLOCKENTITY;
     public static BlockEntityType<SandwichBlockEntity> SANDWICH_BLOCKENTITY;
     public static BlockEntityType<CuttingBoardBlockEntity> CUTTINGBOARD_BLOCKENTITY;
@@ -106,6 +126,8 @@ public final class BlocksRegistry {
         registerBlock(BOTTLE_CRATE, "bottle_crate", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(POTTED_SHRUB, "potted_shrub");
         registerBlock(PICKLE_JAR, "pickle_jar");
+
+        registerBlock(SALTY_AIR, "salty_air");
 
         registerBlock(SALTY_SAND, "salty_sand", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(SALTY_STONE, "salty_stone", Sandwichable.SANDWICHABLE_ITEMS);

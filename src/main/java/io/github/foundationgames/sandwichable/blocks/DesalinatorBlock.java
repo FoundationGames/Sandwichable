@@ -73,9 +73,9 @@ public class DesalinatorBlock extends BlockWithEntity implements Waterloggable, 
 
     @Override
     public boolean tryFillWithFluid(WorldAccess world, BlockPos pos, BlockState state, FluidState fluidState) {
-        if (state.get(FLUID) == FluidType.NONE && fluidState.getFluid() == Fluids.WATER) {
+        if (state.get(FLUID) == FluidType.NONE && (fluidState.getFluid() == Fluids.WATER || fluidState.getFluid() == FluidsRegistry.PICKLE_BRINE)) {
             if (!world.isClient()) {
-                world.setBlockState(pos, state.with(FLUID, FluidType.WATER), 3);
+                world.setBlockState(pos, state.with(FLUID, fluidState.getFluid() == Fluids.WATER ? FluidType.WATER : FluidType.PICKLE_BRINE), 3);
                 world.getFluidTickScheduler().schedule(pos, fluidState.getFluid(), fluidState.getFluid().getTickRate(world));
             }
             return true;
@@ -150,8 +150,8 @@ public class DesalinatorBlock extends BlockWithEntity implements Waterloggable, 
     }
 
     @Override
-    public boolean isValidBucket(ItemStack stack) {
-        return stack.getItem() == ItemsRegistry.PICKLE_BRINE_BUCKET;
+    public boolean isFillableWith(Fluid fluid) {
+        return FluidsRegistry.PICKLE_BRINE.matchesType(fluid);
     }
 
     public enum FluidType implements StringIdentifiable {

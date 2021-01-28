@@ -25,6 +25,7 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.collection.DefaultedList;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -60,4 +61,10 @@ public class BuiltinModelItemRendererMixin {
             matrices.pop();
         }
     }
+
+    // OPTIFABRIC COMPAT (No longer needed, has been fixed on optifabric's side)
+    /*
+    public void sandwich_render(ItemStack stack, ModelTransformation.Mode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci) {
+        this.renderSandwichGui(stack, mode, matrices, vertexConsumers, light, overlay, ci);
+    }*/
 }

@@ -85,18 +85,6 @@ public class PickleJarBlock extends Block implements BlockEntityProvider {
         return new PickleJarBlockEntity();
     }
 
-    /*@Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        super.randomDisplayTick(state, world, pos, random);
-        if(world.getBlockEntity(pos) instanceof PickleJarBlockEntity) {
-            if(((PickleJarBlockEntity)world.getBlockEntity(pos)).getFluid() == PickleJarFluid.PICKLED_BRINE) {
-                for (int i = 0; i < random.nextInt(2) + 1; i++) {
-                    world.addParticle(Particles.PICKLE_JAR_BUBBLE, pos.getX() + (3.6d/16d) + (random.nextDouble() * 9.3d/16d), pos.getY() + (1.6d/16d) + (random.nextDouble() * 0.25d), pos.getZ() + (3.6d/16d) + (random.nextDouble() * 9.3d/16d), 0, 0, 0);
-                }
-            }
-        }
-    }*/
-
     static {
         SHAPE = VoxelShapes.union(
             Block.createCuboidShape(2, 0, 2, 14, 13, 14),

@@ -18,7 +18,7 @@ public abstract class ContinuousFallingParticleMixin extends Particle implements
     @Unique
     private ParticleEffect customNextParticle;
 
-    @Inject(method = "updateVelocity", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "updateVelocity()V", at = @At("HEAD"), cancellable = true)
     public void spawnCustomNextParticle(CallbackInfo ci) {
         if(customNextParticle != null && this.onGround) {
             this.markDead();

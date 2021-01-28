@@ -68,7 +68,7 @@ public class ExtraOreFeature extends Feature<ExtraOreFeatureConfig> {
             q = MathHelper.lerp(f, startZ, endZ);
             r = random.nextDouble() * (double)config.size / 16.0D;
             double l = ((double)(MathHelper.sin(3.1415927F * f) + 1.0F) * r + 1.0D) / 2.0D;
-            ds[m * 4 + 0] = o;
+            ds[m * 4] = o;
             ds[m * 4 + 1] = p;
             ds[m * 4 + 2] = q;
             ds[m * 4 + 3] = l;
@@ -78,7 +78,7 @@ public class ExtraOreFeature extends Feature<ExtraOreFeatureConfig> {
             if (ds[m * 4 + 3] > 0.0D) {
                 for(int n = m + 1; n < config.size; ++n) {
                     if (ds[n * 4 + 3] > 0.0D) {
-                        o = ds[m * 4 + 0] - ds[n * 4 + 0];
+                        o = ds[m * 4] - ds[n * 4];
                         p = ds[m * 4 + 1] - ds[n * 4 + 1];
                         q = ds[m * 4 + 2] - ds[n * 4 + 2];
                         r = ds[m * 4 + 3] - ds[n * 4 + 3];

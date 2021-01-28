@@ -132,7 +132,7 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
             }
             if(evaporating && burning) {
                 evaporateProgress += isPickleBrine ? 1 : 2;
-                if(evaporateProgress == evaporateTime) {
+                if(evaporateProgress >= evaporateTime) {
                     finishEvaporating();
                 }
                 world.addParticle(ParticleTypes.CLOUD, pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5, 0, 0.07, 0);
