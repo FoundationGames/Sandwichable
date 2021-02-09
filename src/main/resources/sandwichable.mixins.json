@@ -5,6 +5,8 @@
   "mixins": [
     "ClientWorldMixin",
     "ComposterHelper",
+    "DispenserBlockAccess",
+    "DispenserBlockMixin",
     "FishingBobberEntityMixin",
     "PistonBlockMixin",
     "StructurePoolAccess",

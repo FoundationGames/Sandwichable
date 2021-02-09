@@ -13,10 +13,12 @@ import io.github.foundationgames.sandwichable.items.CheeseCultureItem;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.items.SandwichableGroupIconBuilder;
 import io.github.foundationgames.sandwichable.items.spread.SpreadType;
+import io.github.foundationgames.sandwichable.mixin.DispenserBlockAccess;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipeSerializer;
 import io.github.foundationgames.sandwichable.recipe.ToastingRecipe;
 import io.github.foundationgames.sandwichable.recipe.ToastingRecipeSerializer;
+import io.github.foundationgames.sandwichable.util.ExtraDispenserBehaviorRegistry;
 import io.github.foundationgames.sandwichable.util.Sandwich;
 import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
@@ -93,123 +95,7 @@ public class Sandwichable implements ModInitializer {
         Registry.register(Registry.RECIPE_SERIALIZER, ToastingRecipeSerializer.ID, ToastingRecipeSerializer.INSTANCE);
         Registry.register(Registry.RECIPE_TYPE, Util.id(ToastingRecipe.Type.ID), ToastingRecipe.Type.INSTANCE);
 
-        ItemDispenserBehavior defaultBehavior = new ItemDispenserBehavior();
-        DispenserBehavior foodBehavior = new ItemDispenserBehavior() {
-            @Override
-            protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
-                BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
-                World world = pointer.getWorld();
-                Sandwich sandwich = null;
-                Runnable sync = () -> {};
-                if(world.getBlockEntity(pos) instanceof SandwichTableBlockEntity) {
-                    sandwich = ((SandwichTableBlockEntity)world.getBlockEntity(pos)).getSandwich();
-                    sync = () -> Util.sync(((SandwichTableBlockEntity)world.getBlockEntity(pos)), pointer.getWorld());
-                } else {
-                    List<SandwichTableMinecartEntity> list = pointer.getWorld().getEntitiesByClass(SandwichTableMinecartEntity.class, new Box(pos), EntityPredicates.EXCEPT_SPECTATOR);
-                    if(list.size() > 0) {
-                        sandwich = list.get(0).getSandwich();
-                        sync = list.get(0)::sync;
-                    }
-                }
-                if(sandwich != null) {
-                    if(!sandwich.hasBreadBottom() && !isBread(stack.getItem())) return defaultBehavior.dispense(pointer, stack);
-                    ItemStack r = sandwich.addTopFoodFrom(stack);
-                    if(r != null) {
-                        sync.run();
-                        if(!r.isEmpty() && pointer.getWorld().getBlockEntity(pointer.getBlockPos()) instanceof DispenserBlockEntity) {
-                            DispenserBlockEntity be = (DispenserBlockEntity)pointer.getWorld().getBlockEntity(pointer.getBlockPos());
-                            int a = be.addToFirstFreeSlot(r);
-                            if(a < 0) defaultBehavior.dispense(pointer, r);
-                        }
-                        return stack;
-                    }
-                }
-                return defaultBehavior.dispense(pointer, stack);
-            }
-        };
-        for(ItemConvertible item : Registry.ITEM) {
-            if((item.asItem().isFood() || SpreadRegistry.INSTANCE.itemHasSpread(item)) && item.asItem() != BlocksRegistry.SANDWICH.asItem()) {
-                DispenserBlock.registerBehavior(item, foodBehavior);
-            }
-            if(item instanceof CheeseCultureItem) {
-                DispenserBlock.registerBehavior(item, (pointer, stack) -> {
-                    BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
-                    ServerWorld world = pointer.getWorld();
-                    if(world.getBlockEntity(pos) instanceof BasinBlockEntity) {
-                        BasinBlockEntity be = (BasinBlockEntity)world.getBlockEntity(pos);
-                        if(be.getContent().getContentType() == BasinContentType.MILK) {
-                            return be.addCheeseCulture(stack);
-                        }
-                    }
-                    return defaultBehavior.dispense(pointer, stack);
-                });
-            }
-        }
-        ItemDispenserBehavior milkBehavior = new ItemDispenserBehavior() {
-            @Override
-            protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
-                BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
-                ServerWorld world = pointer.getWorld();
-                if(world.getBlockEntity(pos) instanceof BasinBlockEntity) {
-                    BasinBlockEntity be = (BasinBlockEntity)world.getBlockEntity(pos);
-                    if(be.getContent() == BasinContent.AIR) {
-                        return be.insertMilk(stack);
-                    }
-                }
-                return defaultBehavior.dispense(pointer, stack);
-            }
-        };
-        DispenserBlock.registerBehavior(Items.MILK_BUCKET, milkBehavior);
-        DispenserBlock.registerBehavior(ItemsRegistry.FERMENTING_MILK_BUCKET, milkBehavior);
-        DispenserBlock.registerBehavior(Items.BUCKET, (pointer, stack) -> {
-            BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
-            ServerWorld world = pointer.getWorld();
-            if(world.getBlockEntity(pos) instanceof BasinBlockEntity) {
-                BasinBlockEntity be = (BasinBlockEntity)world.getBlockEntity(pos);
-                if(be.getContent().getContentType().isLiquid) {
-                    return be.extractMilk();
-                }
-            }
-            return defaultBehavior.dispense(pointer, stack);
-        });
-        DispenserBlock.registerBehavior(Items.BUCKET, (pointer, stack) -> {
-            BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
-            ServerWorld world = pointer.getWorld();
-            if(world.getBlockEntity(pos) instanceof PickleJarBlockEntity) {
-                PickleJarBlockEntity be = (PickleJarBlockEntity)world.getBlockEntity(pos);
-                if(be.getFluid() == PickleJarFluid.WATER) {
-                    be.emptyFluid(true);
-                    return new ItemStack(Items.WATER_BUCKET);
-                }
-            }
-            return defaultBehavior.dispense(pointer, stack);
-        });
-        DispenserBlock.registerBehavior(Items.WATER_BUCKET, (pointer, stack) -> {
-            BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
-            ServerWorld world = pointer.getWorld();
-            if(world.getBlockEntity(pos) instanceof PickleJarBlockEntity) {
-                PickleJarBlockEntity be = (PickleJarBlockEntity)world.getBlockEntity(pos);
-                if(be.getFluid() == PickleJarFluid.AIR) {
-                    be.fillWater(true);
-                    return new ItemStack(Items.BUCKET);
-                }
-            }
-            return defaultBehavior.dispense(pointer, stack);
-        });
-        DispenserBlock.registerBehavior(ItemsRegistry.SALT, (pointer, stack) -> {
-            BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
-            ServerWorld world = pointer.getWorld();
-            if(world.getBlockEntity(pos) instanceof PickleJarBlockEntity) {
-                PickleJarBlockEntity be = (PickleJarBlockEntity)world.getBlockEntity(pos);
-                if(be.getFluid() == PickleJarFluid.WATER && be.getItemCount() > 0) {
-                    be.startPickling();
-                    stack.decrement(1);
-                    be.update();
-                    return stack;
-                }
-            }
-            return defaultBehavior.dispense(pointer, stack);
-        });
+        ExtraDispenserBehaviorRegistry.initDefaults();
 
         ServerSidePacketRegistry.INSTANCE.register(Util.id("request_sandwich_table_cart_sync"), (ctx, buf) -> {
             int id = buf.readInt();

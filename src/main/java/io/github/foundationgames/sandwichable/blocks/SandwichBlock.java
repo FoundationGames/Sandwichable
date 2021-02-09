@@ -33,6 +33,7 @@ public class SandwichBlock extends Block implements BlockEntityProvider {
         super.neighborUpdate(state, world, pos, block, fromPos, notify);
         if(!canPlaceAt(state, world, pos)) {
             world.breakBlock(pos, true);
+            dropItem(world, pos);
         }
     }
 
@@ -64,11 +65,15 @@ public class SandwichBlock extends Block implements BlockEntityProvider {
 
     @Override
     public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        if (world.getBlockEntity(pos) instanceof SandwichBlockEntity && !player.isCreative()) {
+        if(!player.isCreative()) dropItem(world, pos);
+        super.onBreak(world, pos, state, player);
+    }
+
+    public void dropItem(World world, BlockPos pos) {
+        if (world.getBlockEntity(pos) instanceof SandwichBlockEntity) {
             SandwichBlockEntity blockEntity = (SandwichBlockEntity)world.getBlockEntity(pos);
             blockEntity.getSandwich().ejectSandwich(world, new Vec3d(pos.getX()+0.5, pos.getY() - 0.7, pos.getZ() + 0.5));
         }
-        super.onBreak(world, pos, state, player);
     }
 
     @Override

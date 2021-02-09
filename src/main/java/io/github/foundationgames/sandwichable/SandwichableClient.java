@@ -126,6 +126,11 @@ public class SandwichableClient implements ClientModInitializer {
             return 0;
         });
 
+        FabricModelPredicateProviderRegistry.register(Util.id("sandwich_state"), (stack, world, entity) -> {
+            if(entity == null && stack.getOrCreateTag().contains("s")) return stack.getOrCreateTag().getInt("s");
+            return 0;
+        });
+
         setupPickleBrine();
 
         Particles.init();

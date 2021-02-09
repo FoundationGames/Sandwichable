@@ -2,5 +2,25 @@
     "parent": "item/generated",
     "textures": {
         "layer0": "sandwichable:item/cooked_tomato_slice"
-    }
+    },
+	"overrides": [
+        {
+            "predicate": {
+                "sandwichable:sandwich_state": 1
+            },
+            "model": "sandwichable:item/cooked_tomato_slice_0"
+        },
+        {
+            "predicate": {
+                "sandwichable:sandwich_state": 2
+            },
+            "model": "sandwichable:item/cooked_tomato_slice_1"
+        },
+        {
+            "predicate": {
+                "sandwichable:sandwich_state": 3
+            },
+            "model": "sandwichable:item/cooked_tomato_slice_2"
+        }
+    ]
 }

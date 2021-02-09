@@ -36,7 +36,7 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
             sBlockEntity.getSandwich().interact(world, new Vec3d(pos.getX()+0.5, pos.getY(), pos.getZ()+0.5), player, hand);
             Util.sync(sBlockEntity, world);
         }
-        return ActionResult.SUCCESS;
+        return ActionResult.success(world.isClient());
     }
 
     @Override

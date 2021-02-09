@@ -109,6 +109,7 @@
 	"block.sandwichable.salty_rocks": "Salty Rocks",
 	"block.sandwichable.salty_stone": "Salty Stone",
 	"block.sandwichable.desalinator": "Redstone Desalinator",
+	"block.sandwichable.pickle_brine": "Pickle Brine",
 	
 	"entity.minecraft.villager.sandwich_maker": "Sandwich Maker",
 	"entity.sandwichable.sandwich_table_minecart": "Minecart with Sandwich Table",

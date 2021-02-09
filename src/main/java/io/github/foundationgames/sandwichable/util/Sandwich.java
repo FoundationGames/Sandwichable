@@ -29,9 +29,6 @@ import java.util.List;
 public class Sandwich {
     private final ArrayList<ItemStack> foods = new ArrayList<>();
 
-    @Environment(EnvType.CLIENT)
-    private final boolean lowDetail = false;
-
     public Sandwich() {}
 
     public boolean addFood(PlayerEntity player, ItemStack stack) {
@@ -52,14 +49,14 @@ public class Sandwich {
             stack.decrement(1);
             return r;
         } else if(stack.isFood()) {
-            foods.add(stack.split(1));
+            foods.add(prepareAdd(stack.split(1)));
             return ItemStack.EMPTY;
         }
         return null;
     }
 
     public ItemStack removeTopFood() {
-        if(foods.size() > 0) return foods.remove(foods.size() - 1);
+        if(foods.size() > 0) return prepareRemove(foods.remove(foods.size() - 1));
         return ItemStack.EMPTY;
     }
 
@@ -73,7 +70,9 @@ public class Sandwich {
 
     public void setFoodList(List<ItemStack> list) {
         foods.clear();
-        foods.addAll(list);
+        for(ItemStack i : list) {
+            foods.add(prepareAdd(i));
+        }
     }
 
     public void clearFoodList() {
@@ -119,11 +118,25 @@ public class Sandwich {
 
     public void setFromTag(CompoundTag tag) {
         foods.clear();
+        addFromTag(tag);
+    }
+
+    public void addFromTag(CompoundTag tag) {
         ListTag list = tag.getList("Items", 10);
         for(int i = 0; i < list.size(); ++i) {
             CompoundTag stackTag = list.getCompound(i);
-            foods.add(ItemStack.fromTag(stackTag));
+            foods.add(prepareAdd(ItemStack.fromTag(stackTag)));
         }
+    }
+
+    private ItemStack prepareAdd(ItemStack stack) {
+        stack.getOrCreateTag().putInt("s", (this.foods.size() % 3) + 1);
+        return stack;
+    }
+
+    private ItemStack prepareRemove(ItemStack stack) {
+        stack.getOrCreateTag().remove("s");
+        return stack;
     }
 
     public boolean isEmpty() {
@@ -157,7 +170,7 @@ public class Sandwich {
 
     public void ejectSandwich(World world, Vec3d pos) {
         if(getSize() > 0) {
-            if(isComplete()){
+            if(isComplete()) {
                 ItemStack item = createSandwich();
                 ItemEntity itemEntity = new ItemEntity(world, pos.getX(), pos.getY()+1.2, pos.getZ(), item);
                 itemEntity.setToDefaultPickupDelay();
@@ -166,7 +179,7 @@ public class Sandwich {
             } else {
                 for(ItemStack stack : foods) {
                     if(!stack.isEmpty() && stack.getItem() != ItemsRegistry.SPREAD) {
-                        ItemEntity item = new ItemEntity(world, pos.getX(), pos.getY() + 1.2, pos.getZ(), stack);
+                        ItemEntity item = new ItemEntity(world, pos.getX(), pos.getY() + 1.2, pos.getZ(), prepareRemove(stack));
                         item.setToDefaultPickupDelay();
                         world.spawnEntity(item);
                     }
@@ -184,10 +197,12 @@ public class Sandwich {
 
     public void interact(World world, Vec3d pos, PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
-        if(stack.getItem().equals(BlocksRegistry.SANDWICH.asItem()) && stack.getTag() != null && this.isEmpty()) {
-            CompoundTag tag = stack.getOrCreateSubTag("BlockEntityTag");
-            this.setFromTag(tag);
-            stack.decrement(1);
+        if(stack.getItem().equals(BlocksRegistry.SANDWICH.asItem())) {
+            if(stack.getTag() != null) {
+                CompoundTag tag = stack.getOrCreateSubTag("BlockEntityTag");
+                this.addFromTag(tag);
+                stack.decrement(1);
+            }
         } else if(!this.hasBreadBottom() && !Sandwichable.isBread(stack.getItem())) {
             if(stack.isFood()) player.sendMessage(new TranslatableText("message.sandwichtable.bottombread"), true);
         } else if(!this.addFood(player, stack) && stack.isEmpty()) {
@@ -206,7 +221,6 @@ public class Sandwich {
         matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion((90)));
         for (ItemStack food : foods) {
             MinecraftClient.getInstance().getItemRenderer().renderItem(food, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
-            //matrices.translate(0.0, 0.0, -0.034);
             matrices.translate(0.0, 0.0, -0.03124);
         }
     }
