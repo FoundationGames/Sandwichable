@@ -163,7 +163,7 @@ public class ToasterBlock extends HorizontalFacingBlock implements BlockEntityPr
                 Block.createCuboidShape(2, 1, 4, 14, 10, 12)
         );
 
-        ON = BooleanProperty.of("on");
+        ON = BlockProperties.ON;
         WATERLOGGED = Properties.WATERLOGGED;
     }
 }
