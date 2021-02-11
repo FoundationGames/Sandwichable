@@ -1,5 +1,6 @@
 package io.github.foundationgames.sandwichable.blocks;
 
+import io.github.foundationgames.sandwichable.blocks.DesalinatorBlock.FluidType;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.IntProperty;
