@@ -31,7 +31,7 @@ import java.util.Random;
 public class BottleCrateBlock extends BlockWithEntity {
     public static final DirectionProperty FACING = Properties.FACING;
     public static final BooleanProperty OPEN = Properties.OPEN;
-    public static final IntProperty STAGE = IntProperty.of("stage", 0, 4);
+    public static final IntProperty STAGE = BlockProperties.STAGE;
 
     protected BottleCrateBlock(Settings settings) {
         super(settings);

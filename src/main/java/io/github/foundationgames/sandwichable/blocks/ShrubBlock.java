@@ -82,6 +82,6 @@ public class ShrubBlock extends PlantBlock {
     }
 
     static {
-        SNIPPED = BooleanProperty.of("snipped");
+        SNIPPED = BlockProperties.SNIPPED;
     }
 }
