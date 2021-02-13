@@ -32,6 +32,7 @@ public class Sandwich {
     public Sandwich() {}
 
     public boolean addFood(PlayerEntity player, ItemStack stack) {
+        if(stack.getItem() == BlocksRegistry.SANDWICH.asItem()) return false;
         ItemStack g = addTopFoodFrom(player.isCreative() ? stack.copy() : stack);
         if(g == null) return false;
         if(!g.isEmpty() && !player.isCreative()) player.giveItemStack(g);
@@ -39,6 +40,7 @@ public class Sandwich {
     }
     
     public ItemStack addTopFoodFrom(ItemStack stack) {
+        if(stack.getItem() == BlocksRegistry.SANDWICH.asItem()) return stack;
         if(SpreadRegistry.INSTANCE.itemHasSpread(stack.getItem())) {
             ItemStack spread = new ItemStack(ItemsRegistry.SPREAD, 1);
             SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem()).onPour(stack, spread);
@@ -123,9 +125,11 @@ public class Sandwich {
 
     public void addFromTag(CompoundTag tag) {
         ListTag list = tag.getList("Items", 10);
+        ItemStack stack;
         for(int i = 0; i < list.size(); ++i) {
             CompoundTag stackTag = list.getCompound(i);
-            foods.add(prepareAdd(ItemStack.fromTag(stackTag)));
+            stack = ItemStack.fromTag(stackTag);
+            if(stack.getItem() != BlocksRegistry.SANDWICH.asItem()) foods.add(prepareAdd(stack));
         }
     }
 
