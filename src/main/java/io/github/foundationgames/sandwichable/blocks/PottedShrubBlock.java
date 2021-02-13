@@ -57,6 +57,6 @@ public class PottedShrubBlock extends FlowerPotBlock {
     }
 
     static {
-        SNIPPED = BooleanProperty.of("snipped");
+        SNIPPED = BlockProperties.SNIPPED;
     }
 }

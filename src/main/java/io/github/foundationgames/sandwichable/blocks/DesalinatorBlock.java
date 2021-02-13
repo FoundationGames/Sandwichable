@@ -35,7 +35,7 @@ public class DesalinatorBlock extends BlockWithEntity implements Waterloggable, 
 
     public static final VoxelShape SHAPE;
     public static final BooleanProperty ON;
-    public static final EnumProperty<FluidType> FLUID = EnumProperty.of("fluid", FluidType.class);
+    public static final EnumProperty<FluidType> FLUID = BlockProperties.FLUID;
 
     public DesalinatorBlock(Settings settings) {
         super(settings);
@@ -146,7 +146,7 @@ public class DesalinatorBlock extends BlockWithEntity implements Waterloggable, 
 
     static {
         SHAPE = createCuboidShape(1, 0, 1, 15, 16, 15);
-        ON = BooleanProperty.of("on");
+        ON = BlockProperties.ON;
     }
 
     @Override
