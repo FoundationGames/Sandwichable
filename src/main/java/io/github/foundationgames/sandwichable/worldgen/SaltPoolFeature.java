@@ -25,8 +25,9 @@ public class SaltPoolFeature extends Feature<SaltPoolFeatureConfig> {
     @Override
     public boolean generate(StructureWorldAccess world, ChunkGenerator chunkGenerator, Random random, BlockPos spos, SaltPoolFeatureConfig config) {
         int yfs = 0;
-        if(random.nextInt(2) == 2) yfs = random.nextInt(3);
-        spos = new BlockPos(spos.getX(), world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, spos.getX(), spos.getZ()) - (1 + yfs), spos.getZ());
+        int topY = Math.max(world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, spos.getX(), spos.getZ()), 64);
+        if(random.nextInt(2) == 2 && topY > 65) yfs = random.nextInt(3);
+        spos = new BlockPos(spos.getX(), topY - (1 + yfs), spos.getZ());
         BlockState liquidState = config.hasWater ? Blocks.WATER.getDefaultState() : BlocksRegistry.SALTY_AIR.getDefaultState();
         for(int i = 0; i < 2 + random.nextInt(2); i++) {
             BlockPos pos = spos.add(random.nextInt(10) - 5, 0, random.nextInt(10) - 5);

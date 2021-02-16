@@ -20,7 +20,9 @@ import java.util.List;
 public class DispenserBlockMixin {
     @Inject(method = "dispense", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/block/entity/DispenserBlockEntity;getStack(I)Lnet/minecraft/item/ItemStack;", shift = At.Shift.AFTER), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
     public void interrupt(ServerWorld serverWorld, BlockPos pos, CallbackInfo ci, BlockPointerImpl pointer, DispenserBlockEntity blockEntity, int slot, ItemStack stack) {
-        for(DispenserBehavior behavior : ExtraDispenserBehaviorRegistry.ENTRIES.get(stack.getItem())) {
+        List<DispenserBehavior> behaviors = ExtraDispenserBehaviorRegistry.ENTRIES.get(stack.getItem());
+        if(behaviors == null) return;
+        for(DispenserBehavior behavior : behaviors) {
             ItemStack d = behavior.dispense(pointer, stack);
             if(d != null) {
                 blockEntity.setStack(slot, d);
