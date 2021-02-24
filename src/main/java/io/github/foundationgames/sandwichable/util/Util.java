@@ -6,6 +6,7 @@ import io.github.foundationgames.sandwichable.worldgen.ModifiableStructurePool;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
+import me.sargunvohra.mcmods.autoconfig1u.serializer.GsonConfigSerializer;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.Block;
 import net.minecraft.client.resource.language.I18n;
@@ -90,7 +91,7 @@ public class Util {
     }
 
     public static void appendInfoTooltip(List<Text> tooltip, String itemTranslationKey) {
-        SandwichableConfig config = AutoConfig.getConfigHolder(SandwichableConfig.class).getConfig();
+        SandwichableConfig config = getConfig();
         if(config.showInfoTooltips) {
             if (config.infoTooltipKeyBind.isPressed()) {
                 tooltip.add(new TranslatableText("sandwichable.tooltip.infoheader").formatted(Formatting.GREEN));
@@ -123,5 +124,13 @@ public class Util {
     public static int getSaltyWaterColor() {
         //return 0x56c7d1;
         return 0x6ce0eb;
+    }
+    public static SandwichableConfig getConfig() {
+        try {
+            return AutoConfig.getConfigHolder(SandwichableConfig.class).getConfig();
+        } catch (Throwable t) {
+            AutoConfig.register(SandwichableConfig.class, GsonConfigSerializer::new);
+        }
+        return AutoConfig.getConfigHolder(SandwichableConfig.class).getConfig();
     }
 }

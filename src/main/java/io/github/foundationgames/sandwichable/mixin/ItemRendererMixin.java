@@ -1,16 +1,14 @@
 package io.github.foundationgames.sandwichable.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import io.github.foundationgames.sandwichable.items.CustomDurabilityBar;
+import io.github.foundationgames.sandwichable.item.CustomDurabilityBar;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;

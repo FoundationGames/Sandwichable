@@ -1,28 +1,26 @@
 package io.github.foundationgames.sandwichable;
 
-import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
-import io.github.foundationgames.sandwichable.blocks.entity.*;
-import io.github.foundationgames.sandwichable.blocks.entity.container.BottleCrateScreenHandler;
-import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
+import io.github.foundationgames.sandwichable.block.BlocksRegistry;
+import io.github.foundationgames.sandwichable.block.entity.*;
+import io.github.foundationgames.sandwichable.block.entity.container.BottleCrateScreenHandler;
+import io.github.foundationgames.sandwichable.block.entity.container.DesalinatorScreenHandler;
 import io.github.foundationgames.sandwichable.common.CommonTags;
-import io.github.foundationgames.sandwichable.compat.CroptopiaCompat;
+import io.github.foundationgames.sandwichable.compat.CompatModuleManager;
+import io.github.foundationgames.sandwichable.compat.mod.CroptopiaCompat;
 import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
-import io.github.foundationgames.sandwichable.fluids.FluidsRegistry;
-import io.github.foundationgames.sandwichable.items.CheeseCultureItem;
-import io.github.foundationgames.sandwichable.items.ItemsRegistry;
-import io.github.foundationgames.sandwichable.items.SandwichableGroupIconBuilder;
-import io.github.foundationgames.sandwichable.items.spread.SpreadType;
-import io.github.foundationgames.sandwichable.mixin.DispenserBlockAccess;
+import io.github.foundationgames.sandwichable.fluid.FluidsRegistry;
+import io.github.foundationgames.sandwichable.item.ItemsRegistry;
+import io.github.foundationgames.sandwichable.util.SandwichableGroupIconBuilder;
+import io.github.foundationgames.sandwichable.item.spread.SpreadType;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipeSerializer;
 import io.github.foundationgames.sandwichable.recipe.ToastingRecipe;
 import io.github.foundationgames.sandwichable.recipe.ToastingRecipeSerializer;
 import io.github.foundationgames.sandwichable.util.ExtraDispenserBehaviorRegistry;
-import io.github.foundationgames.sandwichable.util.Sandwich;
-import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
 import io.github.foundationgames.sandwichable.villager.SandwichMakerProfession;
+import net.devtech.arrp.api.RRPCallback;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
@@ -30,27 +28,17 @@ import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.block.dispenser.DispenserBehavior;
-import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.DispenserBlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.*;
-import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.tag.Tag;
-import net.minecraft.util.math.BlockPointer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
+import java.io.IOException;
 
 public class Sandwichable implements ModInitializer {
 
@@ -88,6 +76,17 @@ public class Sandwichable implements ModInitializer {
         EntitiesRegistry.init();
         SandwichMakerProfession.init();
         SpreadType.init();
+
+        RRPCallback.EVENT.register(a -> a.add(CompatModuleManager.DATA));
+
+        try {
+            CompatModuleManager.init();
+        } catch (IOException e) {
+            LOG.error("ERROR parsing compatibility modules!");
+            e.printStackTrace();
+        }
+
+        BlocksRegistry.initBlockEntities();
 
         Registry.register(Registry.RECIPE_SERIALIZER, CuttingRecipeSerializer.ID, CuttingRecipeSerializer.INSTANCE);
         Registry.register(Registry.RECIPE_TYPE, Util.id(CuttingRecipe.Type.ID), CuttingRecipe.Type.INSTANCE);

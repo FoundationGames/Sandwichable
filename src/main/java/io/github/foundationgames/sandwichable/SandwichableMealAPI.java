@@ -2,9 +2,9 @@ package io.github.foundationgames.sandwichable;
 
 import io.github.foundationgames.mealapi.api.MealAPIInitializer;
 import io.github.foundationgames.mealapi.api.MealItemRegistry;
-import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
-import io.github.foundationgames.sandwichable.items.ItemsRegistry;
-import io.github.foundationgames.sandwichable.items.SandwichBlockItem;
+import io.github.foundationgames.sandwichable.block.BlocksRegistry;
+import io.github.foundationgames.sandwichable.item.ItemsRegistry;
+import io.github.foundationgames.sandwichable.item.SandwichBlockItem;
 import io.github.foundationgames.sandwichable.util.Sandwich;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

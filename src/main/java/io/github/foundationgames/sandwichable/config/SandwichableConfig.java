@@ -1,6 +1,6 @@
 package io.github.foundationgames.sandwichable.config;
 
-import io.github.foundationgames.sandwichable.items.ItemsRegistry;
+import io.github.foundationgames.sandwichable.item.ItemsRegistry;
 import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
 import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
 import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry;

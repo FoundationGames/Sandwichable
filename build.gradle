@@ -14,6 +14,7 @@ group = project.maven_group
 repositories {
 	jcenter()
 	maven { url "https://jitpack.io" }
+	maven { url "https://raw.githubusercontent.com/Devan-Kerman/Devan-Repo/master/" }
 	flatDir name: "local-repo", dirs: "./localjars"
 }
 
@@ -32,11 +33,14 @@ dependencies {
 	modImplementation "me.shedaniel.cloth.api:cloth-dynamic-registry-api-v1:1.2.1"
 	include "me.shedaniel.cloth.api:cloth-dynamic-registry-api-v1:1.2.1"
 
-	include "me.sargunvohra.mcmods:autoconfig1u:3.2.0-unstable"
+	include "me.sargunvohra.mcmods:autoconfig1u:3.3.1"
 
 	modImplementation "com.github.FoundationGames:MealAPI:dc0ef8b8ba"
 
 	modApi "local-repo:appleskin-1.0.11-dev"
+
+	modImplementation "net.devtech:arrp:0.3.7"
+	include "net.devtech:arrp:0.3.7"
 
 	//modApi "curse.maven:appleskin:2987255"
 }

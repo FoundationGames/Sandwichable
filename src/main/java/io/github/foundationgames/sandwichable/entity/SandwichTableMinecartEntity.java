@@ -1,35 +1,23 @@
 package io.github.foundationgames.sandwichable.entity;
 
-import io.github.foundationgames.sandwichable.Sandwichable;
-import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
-import io.github.foundationgames.sandwichable.items.ItemsRegistry;
-import io.github.foundationgames.sandwichable.items.SpreadItem;
+import io.github.foundationgames.sandwichable.block.BlocksRegistry;
 import io.github.foundationgames.sandwichable.util.Sandwich;
 import io.github.foundationgames.sandwichable.util.SandwichHolder;
-import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 

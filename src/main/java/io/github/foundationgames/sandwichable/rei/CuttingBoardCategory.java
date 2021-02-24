@@ -1,9 +1,9 @@
 package io.github.foundationgames.sandwichable.rei;
 
 import com.google.common.collect.Lists;
-import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
+import io.github.foundationgames.sandwichable.block.BlocksRegistry;
 import io.github.foundationgames.sandwichable.config.SandwichableConfig;
-import io.github.foundationgames.sandwichable.items.ItemsRegistry;
+import io.github.foundationgames.sandwichable.util.Util;
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -18,10 +18,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class CuttingBoardCategory implements RecipeCategory<CuttingBoardDisplay> {
 
@@ -46,7 +44,7 @@ public class CuttingBoardCategory implements RecipeCategory<CuttingBoardDisplay>
         Point startPoint = new Point(bounds.getMinX()+6, bounds.getMinY()+4);
         List<Widget> widgets = Lists.newArrayList();
         List<EntryStack> knives = new ArrayList<>();
-        SandwichableConfig cfg = AutoConfig.getConfigHolder(SandwichableConfig.class).getConfig();
+        SandwichableConfig cfg = Util.getConfig();
         for(SandwichableConfig.ItemIntPair p : cfg.itemOptions.knives) {
             Identifier itemId = Identifier.tryParse(p.itemId);
             if(itemId != null) {

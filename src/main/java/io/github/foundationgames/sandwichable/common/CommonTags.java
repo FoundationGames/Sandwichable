@@ -1,15 +1,9 @@
 package io.github.foundationgames.sandwichable.common;
 
-import io.github.foundationgames.sandwichable.items.CheeseType;
-import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class CommonTags {
     public static final Tag<Item> BREAD_SLICE = t("bread_slice");

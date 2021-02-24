@@ -2,10 +2,10 @@ package io.github.foundationgames.sandwichable.util;
 
 import com.google.common.collect.Maps;
 import io.github.foundationgames.sandwichable.Sandwichable;
-import io.github.foundationgames.sandwichable.blocks.entity.BasinContent;
-import io.github.foundationgames.sandwichable.blocks.entity.BasinContentType;
-import io.github.foundationgames.sandwichable.items.CheeseType;
-import io.github.foundationgames.sandwichable.items.ItemsRegistry;
+import io.github.foundationgames.sandwichable.block.entity.BasinContent;
+import io.github.foundationgames.sandwichable.block.entity.BasinContentType;
+import io.github.foundationgames.sandwichable.item.CheeseType;
+import io.github.foundationgames.sandwichable.item.ItemsRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 

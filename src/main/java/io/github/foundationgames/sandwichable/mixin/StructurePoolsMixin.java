@@ -1,24 +1,14 @@
 package io.github.foundationgames.sandwichable.mixin;
 
-import com.google.common.collect.Lists;
-import io.github.foundationgames.sandwichable.events.StructurePoolAddCallback;
 import io.github.foundationgames.sandwichable.util.Util;
-import io.github.foundationgames.sandwichable.worldgen.ModifiableStructurePool;
-import io.github.foundationgames.sandwichable.worldgen.StructurePoolHelper;
 import net.minecraft.structure.pool.StructurePool;
-import net.minecraft.structure.pool.StructurePoolElement;
 import net.minecraft.structure.pool.StructurePools;
-import net.minecraft.structure.processor.StructureProcessorLists;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
 import net.minecraft.util.registry.BuiltinRegistries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.List;
 
 @Mixin(StructurePools.class)
 public class StructurePoolsMixin {

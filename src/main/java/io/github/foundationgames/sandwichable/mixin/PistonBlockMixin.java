@@ -1,6 +1,6 @@
 package io.github.foundationgames.sandwichable.mixin;
 
-import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
+import io.github.foundationgames.sandwichable.block.BlocksRegistry;
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.PistonBlock;

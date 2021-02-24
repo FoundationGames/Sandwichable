@@ -1,14 +1,10 @@
 package io.github.foundationgames.sandwichable.util;
 
 import com.google.common.collect.Maps;
-import io.github.foundationgames.sandwichable.items.spread.SpreadType;
+import io.github.foundationgames.sandwichable.item.spread.SpreadType;
 import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Pair;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SpreadRegistry {

@@ -1,18 +1,15 @@
 package io.github.foundationgames.sandwichable.util;
 
 import io.github.foundationgames.sandwichable.Sandwichable;
-import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
-import io.github.foundationgames.sandwichable.blocks.entity.*;
+import io.github.foundationgames.sandwichable.block.BlocksRegistry;
+import io.github.foundationgames.sandwichable.block.entity.*;
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
-import io.github.foundationgames.sandwichable.items.CheeseCultureItem;
-import io.github.foundationgames.sandwichable.items.ItemsRegistry;
-import io.github.foundationgames.sandwichable.mixin.DispenserBlockAccess;
-import javafx.util.Pair;
+import io.github.foundationgames.sandwichable.item.CheeseCultureItem;
+import io.github.foundationgames.sandwichable.item.ItemsRegistry;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.block.entity.DispenserBlockEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;

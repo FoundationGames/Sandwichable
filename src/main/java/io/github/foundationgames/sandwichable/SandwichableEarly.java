@@ -1,7 +1,7 @@
 package io.github.foundationgames.sandwichable;
 
 import com.google.common.collect.Lists;
-import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
+import io.github.foundationgames.sandwichable.block.BlocksRegistry;
 import io.github.foundationgames.sandwichable.config.SandwichableConfig;
 import io.github.foundationgames.sandwichable.util.Util;
 import io.github.foundationgames.sandwichable.worldgen.*;
@@ -11,7 +11,6 @@ import me.shedaniel.cloth.api.dynamic.registry.v1.BiomesRegistry;
 import me.shedaniel.cloth.api.dynamic.registry.v1.DynamicRegistryCallback;
 import me.shedaniel.cloth.api.dynamic.registry.v1.EarlyInitializer;
 import net.minecraft.block.Blocks;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
@@ -19,7 +18,6 @@ import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.decorator.ChanceDecoratorConfig;
 import net.minecraft.world.gen.decorator.Decorator;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.DecoratedFeature;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
 
@@ -40,9 +38,9 @@ public class SandwichableEarly implements EarlyInitializer {
 
     @Override
     public void onEarlyInitialization() {
-        AutoConfig.register(SandwichableConfig.class, GsonConfigSerializer::new);
 
-        SandwichableConfig config = AutoConfig.getConfigHolder(SandwichableConfig.class).getConfig();
+
+        SandwichableConfig config = Util.getConfig();
         SALTY_SAND_CONFIGURED = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salty_sand"), SALTY_SAND_FEATURE.configure(
                 new ExtraOreFeatureConfig(Blocks.SAND.getDefaultState(), BlocksRegistry.SALTY_SAND.getDefaultState(), config.saltySandGenOptions.veinSize)
         ).rangeOf(config.saltySandGenOptions.maxGenHeight).spreadHorizontally().repeat(config.saltySandGenOptions.rarity));

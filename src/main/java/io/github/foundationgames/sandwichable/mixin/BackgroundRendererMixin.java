@@ -2,11 +2,10 @@ package io.github.foundationgames.sandwichable.mixin;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import io.github.foundationgames.sandwichable.fluids.FluidsRegistry;
+import io.github.foundationgames.sandwichable.fluid.FluidsRegistry;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
 import net.minecraft.fluid.FluidState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

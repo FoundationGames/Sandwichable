@@ -1,20 +1,22 @@
 package io.github.foundationgames.sandwichable;
 
-import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
-import io.github.foundationgames.sandwichable.blocks.ShrubBlock;
-import io.github.foundationgames.sandwichable.blocks.entity.container.BottleCrateScreenHandler;
-import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
-import io.github.foundationgames.sandwichable.blocks.entity.container.screen.BottleCrateScreen;
-import io.github.foundationgames.sandwichable.blocks.entity.container.screen.DesalinatorScreen;
-import io.github.foundationgames.sandwichable.blocks.entity.renderer.*;
+import io.github.foundationgames.sandwichable.block.BlocksRegistry;
+import io.github.foundationgames.sandwichable.block.ShrubBlock;
+import io.github.foundationgames.sandwichable.block.entity.container.BottleCrateScreenHandler;
+import io.github.foundationgames.sandwichable.block.entity.container.DesalinatorScreenHandler;
+import io.github.foundationgames.sandwichable.block.entity.container.screen.BottleCrateScreen;
+import io.github.foundationgames.sandwichable.block.entity.container.screen.DesalinatorScreen;
+import io.github.foundationgames.sandwichable.block.entity.renderer.*;
+import io.github.foundationgames.sandwichable.compat.CompatModuleManager;
 import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
 import io.github.foundationgames.sandwichable.entity.render.SandwichTableMinecartEntityRenderer;
-import io.github.foundationgames.sandwichable.fluids.FluidsRegistry;
+import io.github.foundationgames.sandwichable.fluid.FluidsRegistry;
 import io.github.foundationgames.sandwichable.particle.Particles;
-import io.github.foundationgames.sandwichable.items.ItemsRegistry;
+import io.github.foundationgames.sandwichable.item.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
+import net.devtech.arrp.api.RRPCallback;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
@@ -28,7 +30,6 @@ import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.color.world.BiomeColors;
 import net.minecraft.client.color.world.FoliageColors;
@@ -45,7 +46,6 @@ import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
-import net.minecraft.util.CuboidBlockIterator;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
@@ -64,6 +64,8 @@ public class SandwichableClient implements ClientModInitializer {
         BlockEntityRendererRegistry.INSTANCE.register(BlocksRegistry.TOASTER_BLOCKENTITY, ToasterBlockEntityRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(BlocksRegistry.BASIN_BLOCKENTITY, BasinBlockEntityRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(BlocksRegistry.PICKLEJAR_BLOCKENTITY, PickleJarBlockEntityRenderer::new);
+
+        RRPCallback.EVENT.register(a -> a.add(CompatModuleManager.ASSETS));
 
         ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> !state.get(ShrubBlock.SNIPPED) ? BiomeColors.getGrassColor(view, pos) : FoliageColors.getDefaultColor(), BlocksRegistry.SHRUB, BlocksRegistry.POTTED_SHRUB);
 

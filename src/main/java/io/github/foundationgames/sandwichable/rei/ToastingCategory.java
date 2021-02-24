@@ -1,31 +1,19 @@
 package io.github.foundationgames.sandwichable.rei;
 
 import com.google.common.collect.Lists;
-import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
-import io.github.foundationgames.sandwichable.items.ItemsRegistry;
+import io.github.foundationgames.sandwichable.block.BlocksRegistry;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.EntryStack;
 import me.shedaniel.rei.api.RecipeCategory;
 import me.shedaniel.rei.api.widgets.Widgets;
-import me.shedaniel.rei.gui.widget.CategoryBaseWidget;
-import me.shedaniel.rei.gui.widget.EntryWidget;
-import me.shedaniel.rei.gui.widget.RecipeArrowWidget;
 import me.shedaniel.rei.gui.widget.Widget;
-import me.shedaniel.rei.impl.ItemEntryStack;
-import me.shedaniel.rei.impl.ScreenHelper;
-import me.shedaniel.rei.plugin.campfire.DefaultCampfireDisplay;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
-import net.minecraft.item.ItemStack;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.NotNull;
 
-import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class ToastingCategory implements RecipeCategory<ToastingDisplay> {
 

@@ -1,8 +1,8 @@
 package io.github.foundationgames.sandwichable.villager;
 
 import com.google.common.collect.ImmutableMap;
-import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
-import io.github.foundationgames.sandwichable.items.ItemsRegistry;
+import io.github.foundationgames.sandwichable.block.BlocksRegistry;
+import io.github.foundationgames.sandwichable.item.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.object.builder.v1.villager.VillagerProfessionBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
@@ -15,8 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.structure.pool.*;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffer;
@@ -25,7 +23,6 @@ import net.minecraft.village.VillagerProfession;
 import net.minecraft.world.poi.PointOfInterestType;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class SandwichMakerProfession {
