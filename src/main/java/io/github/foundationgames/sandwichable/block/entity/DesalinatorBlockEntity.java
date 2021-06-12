@@ -24,12 +24,13 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-public class DesalinatorBlockEntity extends LockableContainerBlockEntity implements ExtendedScreenHandlerFactory, SidedInventory, Tickable, BlockEntityClientSerializable {
+public class DesalinatorBlockEntity extends LockableContainerBlockEntity implements ExtendedScreenHandlerFactory, SidedInventory, BlockEntityClientSerializable {
     private DefaultedList<ItemStack> inventory;
     private int fluidAmount = 0;
     private int evaporateProgress = 0;
@@ -42,14 +43,14 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     public static final int evaporateTime = 185;
     public static final int fuelBurnTime = 990;
 
-    public DesalinatorBlockEntity() {
-        super(BlocksRegistry.DESALINATOR_BLOCKENTITY);
+    public DesalinatorBlockEntity(BlockPos pos, BlockState state) {
+        super(BlocksRegistry.DESALINATOR_BLOCKENTITY, pos, state);
         this.inventory = DefaultedList.ofSize(2, ItemStack.EMPTY);
     }
 
     @Override
-    public void readNbt(BlockState state, NbtCompound tag) {
-        super.readNbt(state, tag);
+    public void readNbt(NbtCompound tag) {
+        super.readNbt(tag);
         this.inventory = DefaultedList.ofSize(2, ItemStack.EMPTY);
         fluidAmount = tag.getInt("waterAmount");
         evaporateProgress = tag.getInt("evaporateProgress");
@@ -107,9 +108,12 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
         }
     }
 
-    @Override
-    public void tick() {
-        if(world.getBlockState(pos).getBlock() == BlocksRegistry.DESALINATOR) {
+    public static void tick(World world, BlockPos pos, BlockState state, DesalinatorBlockEntity be) {
+        be.tick(state);
+    }
+
+    public void tick(BlockState state) {
+        if(state.getBlock() == BlocksRegistry.DESALINATOR) {
             if(this.inventory.get(0).getCount() > 0 && this.fluidAmount > 0) {
                 if(!burning) {
                     this.inventory.get(0).decrement(1);
@@ -182,7 +186,7 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
         return isPickleBrine;
     }
 
-    public boolean isWaterSaline() { return isPickleBrine || world.getBiome(pos).getCategory() == Biome.Category.OCEAN || world.getBiome(pos).getCategory() == Biome.Category.BEACH || world.getBlockState(pos.down()).getBlock().isIn(Sandwichable.SALT_PRODUCING_BLOCKS); }
+    public boolean isWaterSaline() { return isPickleBrine || world.getBiome(pos).getCategory() == Biome.Category.OCEAN || world.getBiome(pos).getCategory() == Biome.Category.BEACH || world.getBlockState(pos.down()).isIn(Sandwichable.SALT_PRODUCING_BLOCKS); }
 
     @Override
     protected Text getContainerName() {
@@ -260,7 +264,7 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
 
     @Override
     public void fromClientTag(NbtCompound compoundTag) {
-        this.readNbt(world.getBlockState(pos), compoundTag);
+        this.readNbt(compoundTag);
     }
 
     @Override

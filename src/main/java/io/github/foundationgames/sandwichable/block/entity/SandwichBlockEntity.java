@@ -7,17 +7,18 @@ import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.BlockPos;
 
 public class SandwichBlockEntity extends BlockEntity implements SandwichHolder, BlockEntityClientSerializable {
     private final Sandwich sandwich = new Sandwich();
 
-    public SandwichBlockEntity() {
-        super(BlocksRegistry.SANDWICH_BLOCKENTITY);
+    public SandwichBlockEntity(BlockPos pos, BlockState state) {
+        super(BlocksRegistry.SANDWICH_BLOCKENTITY, pos, state);
     }
 
     @Override
-    public void readNbt(BlockState state, NbtCompound tag) {
-        super.readNbt(state, tag);
+    public void readNbt(NbtCompound tag) {
+        super.readNbt(tag);
         sandwich.setFromTag(tag);
     }
 
@@ -30,7 +31,7 @@ public class SandwichBlockEntity extends BlockEntity implements SandwichHolder, 
 
     @Override
     public void fromClientTag(NbtCompound compoundTag) {
-        this.readNbt(world.getBlockState(pos), compoundTag);
+        this.readNbt(compoundTag);
     }
 
     @Override

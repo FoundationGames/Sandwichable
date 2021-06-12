@@ -54,8 +54,8 @@ public class SandwichBlock extends Block implements BlockEntityProvider {
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockView view) {
-        return new SandwichBlockEntity();
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new SandwichBlockEntity(pos, state);
     }
 
     @Override

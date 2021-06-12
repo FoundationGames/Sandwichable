@@ -10,6 +10,7 @@ import io.github.foundationgames.sandwichable.util.CheeseRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BeehiveBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,15 +24,15 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 
 import java.util.Map;
 import java.util.Random;
 
-public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tickable, BlockEntityClientSerializable {
+public class BasinBlockEntity extends BlockEntity implements SidedInventory, BlockEntityClientSerializable {
 
     private int fermentProgress = 0;
     public static final int fermentTime = 3600;
@@ -39,8 +40,8 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
 
     private Random rng = new Random();
 
-    public BasinBlockEntity() {
-        super(BlocksRegistry.BASIN_BLOCKENTITY);
+    public BasinBlockEntity(BlockPos pos, BlockState state) {
+        super(BlocksRegistry.BASIN_BLOCKENTITY, pos, state);
     }
 
     public static Map<CheeseType, Item> cheeseTypeToItem() {
@@ -55,8 +56,8 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
     }
 
     @Override
-    public void readNbt(BlockState state, NbtCompound tag) {
-        super.readNbt(state, tag);
+    public void readNbt(NbtCompound tag) {
+        super.readNbt(tag);
         fermentProgress = tag.getInt("fermentProgress");
         content = CheeseRegistry.INSTANCE.basinContentFromString(tag.getString("basinContent") == null ? "air" : tag.getString("basinContent"));
 //      Handle update from v1.0.1 to v1.0.2 {
@@ -76,7 +77,7 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
 
     @Override
     public void fromClientTag(NbtCompound compoundTag) {
-        this.readNbt(world.getBlockState(pos), compoundTag);
+        this.readNbt(compoundTag);
     }
 
     @Override
@@ -221,15 +222,14 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
         update();
     }
 
-    @Override
-    public void tick() {
-        if(content != null) {
-            if (content.getContentType() == BasinContentType.FERMENTING_MILK) {
-                fermentProgress++;
+    public static void tick(World world, BlockPos pos, BlockState state, BasinBlockEntity be) {
+        if(be.content != null) {
+            if (be.content.getContentType() == BasinContentType.FERMENTING_MILK) {
+                be.fermentProgress++;
             }
         }
-        if(fermentProgress >= fermentTime) {
-            finishFermenting();
+        if(be.fermentProgress >= fermentTime) {
+            be.finishFermenting();
         }
     }
 
@@ -243,7 +243,7 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
         for (int i = 0; i < count; i++) {
             double ox = ((double) random.nextInt(10) / 16);
             double oz = ((double) random.nextInt(10) / 16);
-            world.addParticle(new DustParticleEffect(color[0], color[1], color[2], 1.0F), pos.getX() + ox + 0.2, pos.getY() + 0.4, pos.getZ() + oz + 0.2, 0.0D, 0.09D, 0.0D);
+            world.addParticle(new DustParticleEffect(new Vec3f(color[0], color[1], color[2]), 1.0F), pos.getX() + ox + 0.2, pos.getY() + 0.4, pos.getZ() + oz + 0.2, 0.0D, 0.09D, 0.0D);
         }
     }
 

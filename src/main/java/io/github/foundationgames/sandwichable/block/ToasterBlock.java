@@ -4,6 +4,8 @@ import io.github.foundationgames.sandwichable.block.entity.ToasterBlockEntity;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,6 +25,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class ToasterBlock extends HorizontalFacingBlock implements BlockEntityProvider, Waterloggable {
 
@@ -38,8 +41,8 @@ public class ToasterBlock extends HorizontalFacingBlock implements BlockEntityPr
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockView view) {
-        return new ToasterBlockEntity();
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new ToasterBlockEntity(pos, state);
     }
 
     @Override
@@ -146,6 +149,12 @@ public class ToasterBlock extends HorizontalFacingBlock implements BlockEntityPr
 
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         return this.getDefaultState().with(FACING, ctx.getPlayerFacing().getOpposite());
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return Util.checkType(type, BlocksRegistry.TOASTER_BLOCKENTITY, ToasterBlockEntity::tick);
     }
 
     static {

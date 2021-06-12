@@ -62,14 +62,15 @@ public class CustomBucketItem extends BucketItem {
                 BlockState state;
                 if (this.fluid == Fluids.EMPTY) {
                     state = world.getBlockState(pos);
-                    if (state.getBlock() instanceof FluidDrainable) {
-                        Fluid fluid = ((FluidDrainable) state.getBlock()).tryDrainFluid(world, pos, state);
-                        if (fluid != Fluids.EMPTY) {
+                    if (state.getBlock() instanceof FluidDrainable drainable) {
+                        ItemStack bucket = drainable.tryDrainFluid(world, pos, state);
+                        drainable.getBucketFillSound().ifPresent((sound) -> user.playSound(sound, 1, 1));
+
+                        if (!bucket.isEmpty()) {
                             user.incrementStat(Stats.USED.getOrCreateStat(this));
-                            user.playSound(fluid.isIn(FluidTags.LAVA) ? SoundEvents.ITEM_BUCKET_FILL_LAVA : SoundEvents.ITEM_BUCKET_FILL, 1.0F, 1.0F);
-                            ItemStack used = ItemUsage.exchangeStack(stack, user, new ItemStack(fluid.getBucketItem()));
+                            ItemStack used = ItemUsage.exchangeStack(stack, user, bucket);
                             if (!world.isClient)
-                                Criteria.FILLED_BUCKET.trigger((ServerPlayerEntity) user, new ItemStack(fluid.getBucketItem()));
+                                Criteria.FILLED_BUCKET.trigger((ServerPlayerEntity) user, bucket);
                             return TypedActionResult.success(used, world.isClient());
                         }
                     }
@@ -78,10 +79,10 @@ public class CustomBucketItem extends BucketItem {
                     state = world.getBlockState(pos);
                     BlockPos npos = state.getBlock() instanceof BucketFluidloggable && ((BucketFluidloggable)state.getBlock()).isFillableWith(this.fluid) ? pos : placePos;
                     if (this.placeFluid(user, world, npos, hit)) {
-                        this.onEmptied(world, stack, npos);
+                        this.onEmptied(user, world, stack, npos);
                         if (user instanceof ServerPlayerEntity) Criteria.PLACED_BLOCK.trigger((ServerPlayerEntity)user, npos, stack);
                         user.incrementStat(Stats.USED.getOrCreateStat(this));
-                        return TypedActionResult.success(this.getEmptiedStack(stack, user), world.isClient());
+                        return TypedActionResult.success(CustomBucketItem.getEmptiedStack(stack, user), world.isClient());
                     } else return TypedActionResult.fail(stack);
                 }
             } else {

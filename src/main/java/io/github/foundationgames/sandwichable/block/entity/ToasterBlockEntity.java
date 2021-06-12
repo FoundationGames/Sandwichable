@@ -21,13 +21,14 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import java.util.Optional;
 
-public class ToasterBlockEntity extends BlockEntity implements SidedInventory, Tickable, BlockEntityClientSerializable {
+public class ToasterBlockEntity extends BlockEntity implements SidedInventory, BlockEntityClientSerializable {
 
     private DefaultedList<ItemStack> items = DefaultedList.ofSize(2, ItemStack.EMPTY);
     private static int toastTime = 240;
@@ -40,13 +41,13 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
     private boolean previouslyPowered = false;
     private boolean updateNeighbors = false;
 
-    public ToasterBlockEntity() {
-        super(BlocksRegistry.TOASTER_BLOCKENTITY);
+    public ToasterBlockEntity(BlockPos pos, BlockState state) {
+        super(BlocksRegistry.TOASTER_BLOCKENTITY, pos, state);
     }
 
     @Override
-    public void readNbt(BlockState state, NbtCompound tag) {
-        super.readNbt(state, tag);
+    public void readNbt(NbtCompound tag) {
+        super.readNbt(tag);
         items = DefaultedList.ofSize(2, ItemStack.EMPTY);
         toastProgress = tag.getInt("toastProgress");
         toasting = tag.getBoolean("toasting");
@@ -68,7 +69,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
 
     @Override
     public void fromClientTag(NbtCompound compoundTag) {
-        this.readNbt(world.getBlockState(pos), compoundTag);
+        this.readNbt(compoundTag);
     }
 
     @Override
@@ -178,11 +179,14 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
 
     private boolean tickPitch = false;
 
-    @Override
-    public void tick() {
+    public static void tick(World world, BlockPos pos, BlockState state, ToasterBlockEntity be) {
+        be.tick(world, pos, state);
+    }
+
+    public void tick(World world, BlockPos pos, BlockState state) {
         int smokeTime = 80;
         if(updateNeighbors) {
-            world.updateNeighbors(pos, world.getBlockState(pos).getBlock());
+            world.updateNeighbors(pos, state.getBlock());
             updateNeighbors = false;
         }
         previouslyPowered = currentlyPowered;

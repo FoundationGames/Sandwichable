@@ -2,11 +2,14 @@ package io.github.foundationgames.sandwichable.block;
 
 import io.github.foundationgames.sandwichable.block.entity.*;
 import io.github.foundationgames.sandwichable.item.PickleJarBlockItem;
+import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -18,6 +21,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class PickleJarBlock extends Block implements BlockEntityProvider {
     public static final VoxelShape SHAPE;
@@ -76,8 +80,14 @@ public class PickleJarBlock extends Block implements BlockEntityProvider {
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockView view) {
-        return new PickleJarBlockEntity();
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new PickleJarBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return Util.checkType(type, BlocksRegistry.PICKLEJAR_BLOCKENTITY, PickleJarBlockEntity::tick);
     }
 
     static {

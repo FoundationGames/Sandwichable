@@ -25,7 +25,6 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -36,7 +35,7 @@ import net.minecraft.world.World;
 
 import java.util.Optional;
 
-public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityClientSerializable, SidedInventory, Tickable {
+public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityClientSerializable, SidedInventory {
 
     private ItemStack item = ItemStack.EMPTY;
     private ItemStack knife = ItemStack.EMPTY;
@@ -45,8 +44,8 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
 
     private int lastItemCount = 0;
 
-    public CuttingBoardBlockEntity() {
-        super(BlocksRegistry.CUTTINGBOARD_BLOCKENTITY);
+    public CuttingBoardBlockEntity(BlockPos pos, BlockState state) {
+        super(BlocksRegistry.CUTTINGBOARD_BLOCKENTITY, pos, state);
     }
 
     public ItemStack getItem() {
@@ -110,7 +109,7 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
             return ActionResult.success(world.isClient());
         }
         if(!knife.isEmpty()) {
-            player.inventory.offerOrDrop(world, getKnife());
+            player.getInventory().offerOrDrop(getKnife());
             knife = ItemStack.EMPTY;
             return ActionResult.success(world.isClient());
         }
@@ -127,8 +126,8 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
     }
 
     @Override
-    public void readNbt(BlockState state, NbtCompound tag) {
-        super.readNbt(state, tag);
+    public void readNbt(NbtCompound tag) {
+        super.readNbt(tag);
         if(tag.contains("Items")) {
             DefaultedList<ItemStack> list = DefaultedList.ofSize(1, ItemStack.EMPTY);
             Inventories.readNbt(tag, list);
@@ -151,7 +150,7 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
 
     @Override
     public void fromClientTag(NbtCompound compoundTag) {
-        this.readNbt(world.getBlockState(pos), compoundTag);
+        this.readNbt(compoundTag);
     }
 
     @Override
@@ -259,13 +258,12 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
         this.item = ItemStack.EMPTY;
     }
 
-    @Override
-    public void tick() {
-        if(item.getCount() != lastItemCount) {
-            update();
+    public static void tick(World world, BlockPos pos, BlockState state, CuttingBoardBlockEntity be) {
+        if(be.item.getCount() != be.lastItemCount) {
+            be.update();
         }
-        lastItemCount = item.getCount();
-        if(knifeAnimationTicks > 0) knifeAnimationTicks--;
+        be.lastItemCount = be.item.getCount();
+        if(be.knifeAnimationTicks > 0) be.knifeAnimationTicks--;
     }
 
     public int getKnifeAnimationTicks() {

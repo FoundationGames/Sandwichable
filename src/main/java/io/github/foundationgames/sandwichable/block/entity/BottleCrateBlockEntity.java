@@ -21,21 +21,22 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class BottleCrateBlockEntity extends LockableContainerBlockEntity implements Tickable, ExtendedScreenHandlerFactory, SidedInventory, BlockEntityClientSerializable {
+public class BottleCrateBlockEntity extends LockableContainerBlockEntity implements ExtendedScreenHandlerFactory, SidedInventory, BlockEntityClientSerializable {
     private DefaultedList<ItemStack> inventory;
     private final Random random = new Random();
     private int growthTicks = randomTime();
 
-    public BottleCrateBlockEntity() {
-        super(BlocksRegistry.BOTTLECRATE_BLOCKENTITY);
+    public BottleCrateBlockEntity(BlockPos pos, BlockState state) {
+        super(BlocksRegistry.BOTTLECRATE_BLOCKENTITY, pos, state);
         this.inventory = DefaultedList.ofSize(21, ItemStack.EMPTY);
     }
 
@@ -57,12 +58,11 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
         }
     }
 
-    @Override
-    public void tick() {
-        growthTicks--;
-        if(growthTicks <= 0) {
-            tickItems(this.random);
-            growthTicks = randomTime();
+    public static void tick(World world, BlockPos pos, BlockState state, BottleCrateBlockEntity be) {
+        be.growthTicks--;
+        if(be.growthTicks <= 0) {
+            be.tickItems(be.random);
+            be.growthTicks = be.randomTime();
         }
     }
 
@@ -71,8 +71,8 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     @Override
-    public void readNbt(BlockState state, NbtCompound tag) {
-        super.readNbt(state, tag);
+    public void readNbt(NbtCompound tag) {
+        super.readNbt(tag);
         this.inventory = DefaultedList.ofSize(21, ItemStack.EMPTY);
         this.growthTicks = tag.getInt("growthTicks");
         Inventories.readNbt(tag, this.inventory);
@@ -183,7 +183,7 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
 
     @Override
     public void fromClientTag(NbtCompound compoundTag) {
-        readNbt(this.getCachedState(), compoundTag);
+        readNbt(compoundTag);
     }
 
     @Override
