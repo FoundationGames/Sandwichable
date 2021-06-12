@@ -15,11 +15,14 @@ import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStep;
+import net.minecraft.world.gen.YOffset;
 import net.minecraft.world.gen.decorator.ChanceDecoratorConfig;
 import net.minecraft.world.gen.decorator.Decorator;
+import net.minecraft.world.gen.decorator.RangeDecoratorConfig;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.heightprovider.UniformHeightProvider;
 
 import java.util.List;
 
@@ -41,9 +44,10 @@ public class SandwichableEarly implements EarlyInitializer {
 
 
         SandwichableConfig config = Util.getConfig();
+        var saltySandHeightRange = new RangeDecoratorConfig(UniformHeightProvider.create(YOffset.getBottom(), YOffset.fixed(config.saltySandGenOptions.maxGenHeight)));
         SALTY_SAND_CONFIGURED = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salty_sand"), SALTY_SAND_FEATURE.configure(
                 new ExtraOreFeatureConfig(Blocks.SAND.getDefaultState(), BlocksRegistry.SALTY_SAND.getDefaultState(), config.saltySandGenOptions.veinSize)
-        ).rangeOf(config.saltySandGenOptions.maxGenHeight).spreadHorizontally().repeat(config.saltySandGenOptions.rarity));
+        ).range(saltySandHeightRange).spreadHorizontally().repeat(config.saltySandGenOptions.rarity));
 
         SALT_POOL_WATER = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salt_pool_water"), SALT_POOL_FEATURE.configure(new SaltPoolFeatureConfig(true)).decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(426))));
         SALT_POOL_DRY = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salty_pool_dry"), SALT_POOL_FEATURE.configure(new SaltPoolFeatureConfig(false)).decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(442))));

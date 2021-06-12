@@ -11,6 +11,7 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.util.FeatureContext;
 
 import java.util.BitSet;
 import java.util.Random;
@@ -23,7 +24,12 @@ public class ExtraOreFeature extends Feature<ExtraOreFeatureConfig> {
     }
 
     @Override
-    public boolean generate(StructureWorldAccess iWorld, ChunkGenerator chunkGenerator, Random random, BlockPos blockPos, ExtraOreFeatureConfig config) {
+    public boolean generate(FeatureContext<ExtraOreFeatureConfig> context) {
+        var blockPos = context.getOrigin();
+        var random = context.getRandom();
+        var config = context.getConfig();
+        var world = context.getWorld();
+
         float f = random.nextFloat() * 3.1415927F;
         float g = (float)config.size / 8.0F;
         int i = MathHelper.ceil(((float)config.size / 16.0F * 2.0F + 1.0F) / 2.0F);
@@ -41,8 +47,8 @@ public class ExtraOreFeature extends Feature<ExtraOreFeatureConfig> {
 
         for(int s = n; s <= n + q; ++s) {
             for(int t = p; t <= p + q; ++t) {
-                if (o <= iWorld.getTopY(Heightmap.Type.OCEAN_FLOOR_WG, s, t)) {
-                    return this.generateVeinPart(iWorld, random, config, d, e, h, j, l, m, n, o, p, q, r);
+                if (o <= world.getTopY(Heightmap.Type.OCEAN_FLOOR_WG, s, t)) {
+                    return this.generateVeinPart(world, random, config, d, e, h, j, l, m, n, o, p, q, r);
                 }
             }
         }
