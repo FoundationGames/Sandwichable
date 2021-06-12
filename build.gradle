@@ -14,6 +14,8 @@ repositories {
 	jcenter()
 	maven { url "https://jitpack.io" }
 	maven { url "https://raw.githubusercontent.com/Devan-Kerman/Devan-Repo/master/" }
+	maven { url "https://maven.terraformersmc.com" }
+	maven { url "https://maven.shedaniel.me/" }
 	flatDir name: "local-repo", dirs: "./localjars"
 }
 
@@ -25,16 +27,20 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	
-	modImplementation "me.shedaniel:RoughlyEnoughItems:5.2.3"
-	modImplementation "io.github.prospector:modmenu:1.14.6+build.31"
+
+	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:6.0.250-alpha"
+	modImplementation "me.shedaniel:RoughlyEnoughItems-fabric:6.0.250-alpha"
+	modImplementation "com.terraformersmc:modmenu:2.0.2"
 
 	modImplementation "me.shedaniel.cloth.api:cloth-dynamic-registry-api-v1:1.2.1"
 	include "me.shedaniel.cloth.api:cloth-dynamic-registry-api-v1:1.2.1"
 
 	include "me.sargunvohra.mcmods:autoconfig1u:3.3.1"
 
-	modImplementation "com.github.FoundationGames:MealAPI:dc0ef8b8ba"
+	modImplementation("com.github.FoundationGames:MealAPI:dc0ef8b8ba") {
+		exclude group: "io.github.prospector", module: "modmenu"
+		exclude group: "me.shedaniel", module: "RoughlyEnoughItems"
+	}
 
 	modApi "local-repo:appleskin-1.0.11-dev"
 
