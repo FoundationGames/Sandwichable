@@ -136,6 +136,8 @@ public class SandwichableClient implements ClientModInitializer {
         setupPickleBrine();
 
         Particles.init();
+
+        LayerModelRegistry.init();
     }
 
     private static void setupPickleBrine() {
