@@ -41,7 +41,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.resource.ResourceManager;
@@ -96,7 +96,7 @@ public class SandwichableClient implements ClientModInitializer {
 
         ClientSidePacketRegistry.INSTANCE.register(Util.id("sync_sandwich_table_cart"), (ctx, buf) -> {
             Entity e = ctx.getPlayer().getEntityWorld().getEntityById(buf.readInt());
-            CompoundTag tag = buf.readCompoundTag();
+            NbtCompound tag = buf.readNbt();
             ctx.getTaskQueue().execute(() -> {
                 if(e instanceof SandwichTableMinecartEntity) {
                     ((SandwichTableMinecartEntity)e).readSandwichTableData(tag);
@@ -160,7 +160,7 @@ public class SandwichableClient implements ClientModInitializer {
             }
 
             @Override
-            public void apply(ResourceManager resourceManager) {
+            public void reload(ResourceManager resourceManager) {
                 final Function<Identifier, Sprite> atlas = MinecraftClient.getInstance().getSpriteAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
                 sprites[0] = atlas.apply(stillId);
                 sprites[1] = atlas.apply(flowingId);

@@ -8,10 +8,10 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,7 +27,7 @@ public class BuiltinModelItemRendererMixin {
             matrices.push();
             if(stack.getTag() != null) {
                 if(stack.getTag().contains("BlockEntityTag")) {
-                    CompoundTag tag = stack.getSubTag("BlockEntityTag");
+                    NbtCompound tag = stack.getSubTag("BlockEntityTag");
                     /*DefaultedList<ItemStack> foodList = DefaultedList.ofSize(128, ItemStack.EMPTY);
                     Inventories.fromTag(tag, foodList);
                     matrices.translate(0.5, 0.017, 0.4);
@@ -42,7 +42,7 @@ public class BuiltinModelItemRendererMixin {
                 }
             } else {
                 matrices.translate(0.5, 0.017, 0.4);
-                matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion((90)));
+                matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion((90)));
                 MinecraftClient.getInstance().getItemRenderer().renderItem(new ItemStack(Items.BARRIER), ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
             }
             matrices.pop();

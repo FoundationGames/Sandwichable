@@ -17,7 +17,7 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -127,36 +127,36 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
     }
 
     @Override
-    public void fromTag(BlockState state, CompoundTag tag) {
-        super.fromTag(state, tag);
+    public void readNbt(BlockState state, NbtCompound tag) {
+        super.readNbt(state, tag);
         if(tag.contains("Items")) {
             DefaultedList<ItemStack> list = DefaultedList.ofSize(1, ItemStack.EMPTY);
-            Inventories.fromTag(tag, list);
+            Inventories.readNbt(tag, list);
             item = list.get(0);
         } else {
-            item = ItemStack.fromTag(tag.getCompound("Item"));
+            item = ItemStack.fromNbt(tag.getCompound("Item"));
         }
-        knife = ItemStack.fromTag(tag.getCompound("Knife"));
+        knife = ItemStack.fromNbt(tag.getCompound("Knife"));
         knifeAnimationTicks = tag.getInt("knifeAnim");
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag tag) {
-        super.toTag(tag);
-        tag.put("Item", item.toTag(new CompoundTag()));
-        tag.put("Knife", knife.toTag(new CompoundTag()));
+    public NbtCompound writeNbt(NbtCompound tag) {
+        super.writeNbt(tag);
+        tag.put("Item", item.writeNbt(new NbtCompound()));
+        tag.put("Knife", knife.writeNbt(new NbtCompound()));
         tag.putInt("knifeAnim", knifeAnimationTicks);
         return tag;
     }
 
     @Override
-    public void fromClientTag(CompoundTag compoundTag) {
-        this.fromTag(world.getBlockState(pos), compoundTag);
+    public void fromClientTag(NbtCompound compoundTag) {
+        this.readNbt(world.getBlockState(pos), compoundTag);
     }
 
     @Override
-    public CompoundTag toClientTag(CompoundTag compoundTag) {
-        return this.toTag(compoundTag);
+    public NbtCompound toClientTag(NbtCompound compoundTag) {
+        return this.writeNbt(compoundTag);
     }
 
     public void trySliceWithKnife() {

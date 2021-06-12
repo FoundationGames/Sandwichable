@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import io.github.foundationgames.sandwichable.block.BlocksRegistry;
 import io.github.foundationgames.sandwichable.item.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
+import io.github.foundationgames.sandwichable.villager.SandwichMakerProfession.SellableSandwiches;
 import net.fabricmc.fabric.api.object.builder.v1.villager.VillagerProfessionBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.block.Block;
@@ -13,7 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
@@ -179,7 +180,7 @@ public class SandwichMakerProfession {
         @Nullable
         public TradeOffer create(Entity entity, Random random) {
             ItemStack itemStack = new ItemStack(BlocksRegistry.SANDWICH, 1);
-            itemStack.putSubTag("BlockEntityTag", Inventories.toTag(new CompoundTag(), this.items));
+            itemStack.putSubTag("BlockEntityTag", Inventories.writeNbt(new NbtCompound(), this.items));
             return new TradeOffer(new ItemStack(Items.EMERALD, this.price), itemStack, maxUses, this.experience, 0.2F);
         }
     }

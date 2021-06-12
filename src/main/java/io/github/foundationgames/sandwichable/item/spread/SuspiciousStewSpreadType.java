@@ -5,8 +5,8 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.world.World;
 
 public class SuspiciousStewSpreadType extends SpreadType {
@@ -16,12 +16,12 @@ public class SuspiciousStewSpreadType extends SpreadType {
 
     @Override
     public void finishUsing(ItemStack stack, World world, LivingEntity user) {
-        CompoundTag tag = stack.getOrCreateTag().getCompound("stewData");
+        NbtCompound tag = stack.getOrCreateTag().getCompound("stewData");
         if (tag != null && tag.contains("Effects", 9)) {
-            ListTag effects = tag.getList("Effects", 10);
+            NbtList effects = tag.getList("Effects", 10);
             for(int i = 0; i < effects.size(); ++i) {
                 int duration = 160;
-                CompoundTag effectData = effects.getCompound(i);
+                NbtCompound effectData = effects.getCompound(i);
                 if (effectData.contains("EffectDuration", 3)) {
                     duration = effectData.getInt("EffectDuration");
                 }

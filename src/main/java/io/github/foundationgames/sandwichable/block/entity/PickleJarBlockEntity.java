@@ -13,7 +13,7 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
@@ -38,8 +38,8 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
     }
 
     @Override
-    public void fromTag(BlockState state, CompoundTag tag) {
-        super.fromTag(state, tag);
+    public void readNbt(BlockState state, NbtCompound tag) {
+        super.readNbt(state, tag);
         this.fluid = PickleJarFluid.fromString(tag.getString("pickleJarFluid"));
         this.numItems = tag.getInt("numItems");
         this.areItemsPickled = tag.getBoolean("areItemsPickled");
@@ -47,8 +47,8 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag tag) {
-        super.toTag(tag);
+    public NbtCompound writeNbt(NbtCompound tag) {
+        super.writeNbt(tag);
         tag.putString("pickleJarFluid", fluid.toString());
         tag.putInt("numItems", numItems);
         tag.putBoolean("areItemsPickled", areItemsPickled);
@@ -213,13 +213,13 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
     }
 
     @Override
-    public void fromClientTag(CompoundTag compoundTag) {
-        this.fromTag(world.getBlockState(pos), compoundTag);
+    public void fromClientTag(NbtCompound compoundTag) {
+        this.readNbt(world.getBlockState(pos), compoundTag);
     }
 
     @Override
-    public CompoundTag toClientTag(CompoundTag compoundTag) {
-        return this.toTag(compoundTag);
+    public NbtCompound toClientTag(NbtCompound compoundTag) {
+        return this.writeNbt(compoundTag);
     }
 
     public void update() {

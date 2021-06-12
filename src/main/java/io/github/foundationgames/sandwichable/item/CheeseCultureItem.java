@@ -6,7 +6,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
@@ -36,7 +36,7 @@ public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateSto
 
     public ItemStack fill(ItemStack stack, int amount) {
         if(stack.getItem() == this) {
-            CompoundTag tag = stack.getOrCreateSubTag("UsageData");
+            NbtCompound tag = stack.getOrCreateSubTag("UsageData");
             int old = tag.getInt("uses");
             tag.putInt("uses", Math.min(Math.max(0, old + amount), 10));
         } else if (stack.getItem() == Items.GLASS_BOTTLE) {
@@ -48,7 +48,7 @@ public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateSto
 
     public ItemStack deplete(ItemStack stack, int amount) {
         if(stack.getItem() == this) {
-            CompoundTag tag = stack.getOrCreateSubTag("UsageData");
+            NbtCompound tag = stack.getOrCreateSubTag("UsageData");
             int old = tag.getInt("uses");
             int newA = Math.min(Math.max(0, old - amount), 10);
             if(newA == 0) stack = new ItemStack(Items.GLASS_BOTTLE);

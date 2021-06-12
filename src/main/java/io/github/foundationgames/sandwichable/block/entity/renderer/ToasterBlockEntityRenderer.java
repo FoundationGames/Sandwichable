@@ -8,11 +8,10 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
-
+import net.minecraft.util.math.Vec3f;
 import java.util.Objects;
 
 public class ToasterBlockEntityRenderer extends BlockEntityRenderer<ToasterBlockEntity> {
@@ -41,7 +40,7 @@ public class ToasterBlockEntityRenderer extends BlockEntityRenderer<ToasterBlock
             case WEST: rot = 0; break;
             case EAST: rot = 180; break;
         }
-        matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(rot));
+        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(rot));
         matrices.translate(0, 0, -0.5);
         matrices.translate(0, 0, 0.41);
         MinecraftClient.getInstance().getItemRenderer().renderItem(items.get(0), ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);

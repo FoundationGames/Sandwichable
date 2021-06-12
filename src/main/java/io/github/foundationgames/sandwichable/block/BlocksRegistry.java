@@ -51,8 +51,8 @@ public final class BlocksRegistry {
     public static final Block DESALINATOR = new DesalinatorBlock(FabricBlockSettings.copy(Blocks.STONECUTTER).luminance(state -> state.get(DesalinatorBlock.ON) ? 13 : 4));
     public static final Block SALTY_SAND = new SandBlock(14406560, FabricBlockSettings.copy(Blocks.SAND));
 
-    public static final Block SALTY_STONE = new Block(AbstractBlock.Settings.of(Material.ORGANIC_PRODUCT, MaterialColor.GRASS).strength(1.7f, 6.5f).sounds(BlockSoundGroup.STONE));
-    public static final Block SALTY_ROCKS = new Block(AbstractBlock.Settings.of(Material.ORGANIC_PRODUCT, MaterialColor.GRASS).strength(1.7f, 6.5f).sounds(BlockSoundGroup.STONE));
+    public static final Block SALTY_STONE = new Block(AbstractBlock.Settings.of(Material.ORGANIC_PRODUCT, MapColor.PALE_GREEN).strength(1.7f, 6.5f).sounds(BlockSoundGroup.STONE));
+    public static final Block SALTY_ROCKS = new Block(AbstractBlock.Settings.of(Material.ORGANIC_PRODUCT, MapColor.PALE_GREEN).strength(1.7f, 6.5f).sounds(BlockSoundGroup.STONE));
 
     public static final Block PICKLE_JAR = new PickleJarBlock(FabricBlockSettings.copy(Blocks.GLASS_PANE));
 

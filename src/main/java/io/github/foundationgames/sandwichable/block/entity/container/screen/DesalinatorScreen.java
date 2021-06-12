@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.foundationgames.sandwichable.block.entity.DesalinatorBlockEntity;
 import io.github.foundationgames.sandwichable.block.entity.container.DesalinatorScreenHandler;
+import io.github.foundationgames.sandwichable.block.entity.container.screen.DesalinatorScreen.MouseOverBox;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.resource.language.I18n;

@@ -15,7 +15,7 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -45,35 +45,35 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
     }
 
     @Override
-    public void fromTag(BlockState state, CompoundTag tag) {
-        super.fromTag(state, tag);
+    public void readNbt(BlockState state, NbtCompound tag) {
+        super.readNbt(state, tag);
         items = DefaultedList.ofSize(2, ItemStack.EMPTY);
         toastProgress = tag.getInt("toastProgress");
         toasting = tag.getBoolean("toasting");
         smokeProgress = tag.getInt("smokeProgress");
         smoking = tag.getBoolean("smoking");
-        Inventories.fromTag(tag, items);
+        Inventories.readNbt(tag, items);
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag tag) {
-        super.toTag(tag);
+    public NbtCompound writeNbt(NbtCompound tag) {
+        super.writeNbt(tag);
         tag.putInt("toastProgress", toastProgress);
         tag.putBoolean("toasting", toasting);
         tag.putInt("smokeProgress", smokeProgress);
         tag.putBoolean("smoking", smoking);
-        Inventories.toTag(tag, items);
+        Inventories.writeNbt(tag, items);
         return tag;
     }
 
     @Override
-    public void fromClientTag(CompoundTag compoundTag) {
-        this.fromTag(world.getBlockState(pos), compoundTag);
+    public void fromClientTag(NbtCompound compoundTag) {
+        this.readNbt(world.getBlockState(pos), compoundTag);
     }
 
     @Override
-    public CompoundTag toClientTag(CompoundTag compoundTag) {
-        return this.toTag(compoundTag);
+    public NbtCompound toClientTag(NbtCompound compoundTag) {
+        return this.writeNbt(compoundTag);
     }
 
     private void explode() {

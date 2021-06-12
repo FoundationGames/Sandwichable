@@ -9,7 +9,7 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 
@@ -25,7 +25,7 @@ public class SandwichableGroupIconBuilder {
         sandwich.addTopFoodFrom(new ItemStack(ItemsRegistry.TOMATO_SLICE));
         sandwich.addTopFoodFrom(new ItemStack(ItemsRegistry.LETTUCE_LEAF));
         sandwich.addTopFoodFrom(new ItemStack(ItemsRegistry.TOASTED_BREAD_SLICE));
-        groupIcon.putSubTag("BlockEntityTag", sandwich.addToTag(new CompoundTag()));
+        groupIcon.putSubTag("BlockEntityTag", sandwich.addToTag(new NbtCompound()));
         return groupIcon;
     }
 

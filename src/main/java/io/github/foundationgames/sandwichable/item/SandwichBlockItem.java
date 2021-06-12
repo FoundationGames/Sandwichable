@@ -11,7 +11,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -36,13 +36,13 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
     }
 
     public List<ItemStack> getFoodList(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateSubTag("BlockEntityTag");
+        NbtCompound tag = stack.getOrCreateSubTag("BlockEntityTag");
         cache.setFromTag(tag);
         return cache.getFoodList();
     }
 
     public Sandwich.DisplayValues getDisplayValues(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateSubTag("BlockEntityTag");
+        NbtCompound tag = stack.getOrCreateSubTag("BlockEntityTag");
         cache.setFromTag(tag);
         if(!tag.contains("DisplayValues")) {
             cache.putDisplayValues(tag);
@@ -53,7 +53,7 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
     @Override
     public Text getName(ItemStack stack) {
         if(stack.getTag() != null) {
-            CompoundTag tag = stack.getSubTag("BlockEntityTag");
+            NbtCompound tag = stack.getSubTag("BlockEntityTag");
             cache.setFromTag(tag);
             int size = cache.getSize();
             boolean hacked = false;
@@ -90,7 +90,7 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
     public ItemStack finishUsing(ItemStack istack, World world, LivingEntity user) {
         ItemStack stack = istack.copy();
         if(stack.getTag() != null) {
-            CompoundTag tag = stack.getSubTag("BlockEntityTag");
+            NbtCompound tag = stack.getSubTag("BlockEntityTag");
             cache.setFromTag(tag);
             ItemStack finishStack;
             ItemCooldownManager cooldownManager = null;

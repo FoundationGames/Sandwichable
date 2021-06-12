@@ -11,8 +11,8 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3f;
 
 public class PickleJarBlockEntityRenderer extends BlockEntityRenderer<PickleJarBlockEntity> {
 
@@ -30,10 +30,10 @@ public class PickleJarBlockEntityRenderer extends BlockEntityRenderer<PickleJarB
             matrices.translate(0.0F, 0.0F, 0.17F);
             cucumber.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(cucumberTex)), light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
             matrices.translate(0.0F, 0.0F, -0.17F);
-            matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(90));
+            matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
         }
         for (int i = 0; i < blockEntity.getItemCount(); i++) {
-            matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(90));
+            matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(90));
         }
         matrices.pop();
         matrices.push();

@@ -12,7 +12,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
@@ -53,10 +53,10 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
     public void sync() {
         if(!world.isClient) {
             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-            buf.writeInt(getEntityId());
-            CompoundTag t = new CompoundTag();
+            buf.writeInt(getId());
+            NbtCompound t = new NbtCompound();
             writeSandwichTableData(t);
-            buf.writeCompoundTag(t);
+            buf.writeNbt(t);
             for(PlayerEntity player : world.getPlayers()) {
                 ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, Util.id("sync_sandwich_table_cart"), buf);
             }
@@ -66,16 +66,16 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
     public void clientSync() {
         if(world.isClient) {
             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-            buf.writeInt(getEntityId());
+            buf.writeInt(getId());
             ClientSidePacketRegistry.INSTANCE.sendToServer(Util.id("request_sandwich_table_cart_sync"), buf);
         }
     }
 
-    public void readSandwichTableData(CompoundTag tag) {
+    public void readSandwichTableData(NbtCompound tag) {
         sandwich.setFromTag(tag);
     }
 
-    public void writeSandwichTableData(CompoundTag tag) {
+    public void writeSandwichTableData(NbtCompound tag) {
         sandwich.addToTag(tag);
     }
 
@@ -87,14 +87,14 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
     }
 
     @Override
-    public void setEntityId(int id) {
-        super.setEntityId(id);
+    public void setId(int id) {
+        super.setId(id);
         clientSync();
     }
 
     @Override
-    public void fromTag(CompoundTag tag) {
-        super.fromTag(tag);
+    public void readNbt(NbtCompound tag) {
+        super.readNbt(tag);
     }
 
     @Override
@@ -107,14 +107,14 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
     }
 
     @Override
-    protected void readCustomDataFromTag(CompoundTag tag) {
-        super.readCustomDataFromTag(tag);
+    protected void readCustomDataFromNbt(NbtCompound tag) {
+        super.readCustomDataFromNbt(tag);
         readSandwichTableData(tag);
     }
 
     @Override
-    protected void writeCustomDataToTag(CompoundTag tag) {
-        super.writeCustomDataToTag(tag);
+    protected void writeCustomDataToNbt(NbtCompound tag) {
+        super.writeCustomDataToNbt(tag);
         writeSandwichTableData(tag);
     }
 

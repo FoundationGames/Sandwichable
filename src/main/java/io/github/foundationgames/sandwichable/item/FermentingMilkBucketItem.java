@@ -9,7 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -30,7 +30,7 @@ public class FermentingMilkBucketItem extends InfoTooltipItem {
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
         if(stack.getTag() != null) {
             if(stack.getTag().contains("bucketData")) {
-                CompoundTag tag = stack.getTag().getCompound("bucketData");
+                NbtCompound tag = stack.getTag().getCompound("bucketData");
                 user.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, tag.getInt("percentFermented") * 4, 5));
             }
         }
@@ -53,7 +53,7 @@ public class FermentingMilkBucketItem extends InfoTooltipItem {
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
         if(stack.getTag() != null) {
             if(stack.getTag().getCompound("bucketData") != null) {
-                CompoundTag tag = stack.getTag().getCompound("bucketData").copy();
+                NbtCompound tag = stack.getTag().getCompound("bucketData").copy();
                 int pct;
                 CheeseType type;
                 pct = tag.getInt("percentFermented");

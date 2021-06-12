@@ -9,15 +9,15 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -82,8 +82,8 @@ public class Sandwich {
         return foods.size();
     }
 
-    public void putDisplayValues(CompoundTag tag) {
-        CompoundTag displayValues = new CompoundTag();
+    public void putDisplayValues(NbtCompound tag) {
+        NbtCompound displayValues = new NbtCompound();
         int h = 0;
         float s = 0;
         for(ItemStack item : foods) {
@@ -98,16 +98,16 @@ public class Sandwich {
         tag.put("DisplayValues", displayValues);
     }
 
-    public static DisplayValues getDisplayValues(CompoundTag displayValuesTag) {
+    public static DisplayValues getDisplayValues(NbtCompound displayValuesTag) {
         return new DisplayValues(displayValuesTag.getInt("hunger"), displayValuesTag.getFloat("saturation"));
     }
 
-    public CompoundTag addToTag(CompoundTag tag) {
-        ListTag list = new ListTag();
+    public NbtCompound addToTag(NbtCompound tag) {
+        NbtList list = new NbtList();
         for (ItemStack stack : foods) {
             if (!stack.isEmpty()) {
-                CompoundTag compoundTag = new CompoundTag();
-                stack.toTag(compoundTag);
+                NbtCompound compoundTag = new NbtCompound();
+                stack.writeNbt(compoundTag);
                 list.add(compoundTag);
             }
         }
@@ -115,17 +115,17 @@ public class Sandwich {
         return tag;
     }
 
-    public void setFromTag(CompoundTag tag) {
+    public void setFromTag(NbtCompound tag) {
         foods.clear();
         addFromTag(tag);
     }
 
-    public void addFromTag(CompoundTag tag) {
-        ListTag list = tag.getList("Items", 10);
+    public void addFromTag(NbtCompound tag) {
+        NbtList list = tag.getList("Items", 10);
         ItemStack stack;
         for(int i = 0; i < list.size(); ++i) {
-            CompoundTag stackTag = list.getCompound(i);
-            stack = ItemStack.fromTag(stackTag);
+            NbtCompound stackTag = list.getCompound(i);
+            stack = ItemStack.fromNbt(stackTag);
             if(stack.getItem() != BlocksRegistry.SANDWICH.asItem()) foods.add(prepareAdd(stack));
         }
     }
@@ -159,7 +159,7 @@ public class Sandwich {
     public ItemStack createSandwich() {
         if(isComplete()) {
             ItemStack item = new ItemStack(BlocksRegistry.SANDWICH);
-            CompoundTag tag = addToTag(new CompoundTag());
+            NbtCompound tag = addToTag(new NbtCompound());
             putDisplayValues(tag);
             if(!tag.isEmpty()) {
                 item.putSubTag("BlockEntityTag", tag);
@@ -200,7 +200,7 @@ public class Sandwich {
         ItemStack stack = player.getStackInHand(hand);
         if(stack.getItem().equals(BlocksRegistry.SANDWICH.asItem())) {
             if(stack.getTag() != null) {
-                CompoundTag tag = stack.getOrCreateSubTag("BlockEntityTag");
+                NbtCompound tag = stack.getOrCreateSubTag("BlockEntityTag");
                 this.addFromTag(tag);
                 stack.decrement(1);
             }
@@ -219,7 +219,7 @@ public class Sandwich {
 
     @Environment(EnvType.CLIENT)
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion((90)));
+        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion((90)));
         for (ItemStack food : foods) {
             MinecraftClient.getInstance().getItemRenderer().renderItem(food, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
             matrices.translate(0.0, 0.0, -0.03124);

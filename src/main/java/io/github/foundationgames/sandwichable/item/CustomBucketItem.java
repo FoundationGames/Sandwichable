@@ -67,7 +67,7 @@ public class CustomBucketItem extends BucketItem {
                         if (fluid != Fluids.EMPTY) {
                             user.incrementStat(Stats.USED.getOrCreateStat(this));
                             user.playSound(fluid.isIn(FluidTags.LAVA) ? SoundEvents.ITEM_BUCKET_FILL_LAVA : SoundEvents.ITEM_BUCKET_FILL, 1.0F, 1.0F);
-                            ItemStack used = ItemUsage.method_30012(stack, user, new ItemStack(fluid.getBucketItem()));
+                            ItemStack used = ItemUsage.exchangeStack(stack, user, new ItemStack(fluid.getBucketItem()));
                             if (!world.isClient)
                                 Criteria.FILLED_BUCKET.trigger((ServerPlayerEntity) user, new ItemStack(fluid.getBucketItem()));
                             return TypedActionResult.success(used, world.isClient());

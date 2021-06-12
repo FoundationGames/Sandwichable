@@ -17,7 +17,7 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -55,8 +55,8 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
     }
 
     @Override
-    public void fromTag(BlockState state, CompoundTag tag) {
-        super.fromTag(state, tag);
+    public void readNbt(BlockState state, NbtCompound tag) {
+        super.readNbt(state, tag);
         fermentProgress = tag.getInt("fermentProgress");
         content = CheeseRegistry.INSTANCE.basinContentFromString(tag.getString("basinContent") == null ? "air" : tag.getString("basinContent"));
 //      Handle update from v1.0.1 to v1.0.2 {
@@ -67,21 +67,21 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag tag) {
-        super.toTag(tag);
+    public NbtCompound writeNbt(NbtCompound tag) {
+        super.writeNbt(tag);
         tag.putInt("fermentProgress", fermentProgress);
         tag.putString("basinContent", content == null ? "air" : content.toString());
         return tag;
     }
 
     @Override
-    public void fromClientTag(CompoundTag compoundTag) {
-        this.fromTag(world.getBlockState(pos), compoundTag);
+    public void fromClientTag(NbtCompound compoundTag) {
+        this.readNbt(world.getBlockState(pos), compoundTag);
     }
 
     @Override
-    public CompoundTag toClientTag(CompoundTag compoundTag) {
-        return this.toTag(compoundTag);
+    public NbtCompound toClientTag(NbtCompound compoundTag) {
+        return this.writeNbt(compoundTag);
     }
 
     public ActionResult onBlockUse(PlayerEntity player, Hand hand) {
@@ -159,7 +159,7 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
         }
         else if(milk.getItem() == ItemsRegistry.FERMENTING_MILK_BUCKET) {
             if(milk.getTag() != null && milk.getTag().getCompound("bucketData") != null) {
-                CompoundTag tag = milk.getTag().getCompound("bucketData");
+                NbtCompound tag = milk.getTag().getCompound("bucketData");
                 content = CheeseRegistry.INSTANCE.basinContentFromString(tag.getString("basinContent"));
                 fermentProgress = tag.getInt("fermentProgressActual");
             }
@@ -179,7 +179,7 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Tic
         } else if(content.getContentType() == BasinContentType.FERMENTING_MILK) {
             world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 0.8F, 1.0F);
             ItemStack stack = new ItemStack(ItemsRegistry.FERMENTING_MILK_BUCKET);
-            CompoundTag tag = new CompoundTag();
+            NbtCompound tag = new NbtCompound();
             tag.putInt("fermentProgressActual", fermentProgress);
             float a = (float)fermentProgress/fermentTime; a *= 100;
             int x = Math.round(a);
