@@ -30,13 +30,13 @@ public class MinecraftClientMixin {
             if(type == HitResult.Type.ENTITY) {
                 if(((EntityHitResult)this.crosshairTarget).getEntity() instanceof SandwichTableMinecartEntity) {
                     ItemStack stack = new ItemStack(ItemsRegistry.SANDWICH_TABLE_MINECART);
-                    int i = this.player.inventory.getSlotWithStack(stack);
+                    int i = this.player.getInventory().getSlotWithStack(stack);
                     if (this.player.isCreative()) {
-                        this.player.inventory.addPickBlock(stack);
-                        this.interactionManager.clickCreativeStack(this.player.getStackInHand(Hand.MAIN_HAND), 36 + this.player.inventory.selectedSlot);
+                        this.player.getInventory().addPickBlock(stack);
+                        this.interactionManager.clickCreativeStack(this.player.getStackInHand(Hand.MAIN_HAND), 36 + this.player.getInventory().selectedSlot);
                     } else if (i != -1) {
                         if (PlayerInventory.isValidHotbarIndex(i)) {
-                            this.player.inventory.selectedSlot = i;
+                            this.player.getInventory().selectedSlot = i;
                         } else {
                             this.interactionManager.pickFromInventory(i);
                         }

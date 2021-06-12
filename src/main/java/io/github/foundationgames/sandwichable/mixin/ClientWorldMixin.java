@@ -21,7 +21,7 @@ public class ClientWorldMixin {
     @Inject(method = "calculateColor", at = @At(value = "RETURN", ordinal = 0), cancellable = true)
     public void setWaterColorUnblended(BlockPos pos, ColorResolver colorResolver, CallbackInfoReturnable<Integer> cir) {
         ClientWorld self = (ClientWorld)(Object)this;
-        if(self.getBlockState(pos.down()).getBlock().isIn(Sandwichable.SALT_PRODUCING_BLOCKS) && colorResolver == BiomeColors.WATER_COLOR) cir.setReturnValue(Util.getSaltyWaterColor());
+        if(self.getBlockState(pos.down()).isIn(Sandwichable.SALT_PRODUCING_BLOCKS) && colorResolver == BiomeColors.WATER_COLOR) cir.setReturnValue(Util.getSaltyWaterColor());
     }
 
     @Inject(method = "calculateColor", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/level/ColorResolver;getColor(Lnet/minecraft/world/biome/Biome;DD)I", ordinal = 1, shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILSOFT)
@@ -32,7 +32,7 @@ public class ClientWorldMixin {
     @ModifyVariable(method = "calculateColor", ordinal = 5, at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/level/ColorResolver;getColor(Lnet/minecraft/world/biome/Biome;DD)I", ordinal = 1, shift = At.Shift.AFTER))
     public int setWaterColorBlended(int old, BlockPos pos, ColorResolver colorResolver) {
         ClientWorld self = (ClientWorld)(Object)this;
-        if(self.getBlockState(cachedMutable.down()).getBlock().isIn(Sandwichable.SALT_PRODUCING_BLOCKS) && colorResolver == BiomeColors.WATER_COLOR) return Util.getSaltyWaterColor();
+        if(self.getBlockState(cachedMutable.down()).isIn(Sandwichable.SALT_PRODUCING_BLOCKS) && colorResolver == BiomeColors.WATER_COLOR) return Util.getSaltyWaterColor();
         return old;
     }
 }

@@ -24,7 +24,8 @@ public abstract class ItemRendererMixin {
             if(item.showBar(stack)) {
                 RenderSystem.disableDepthTest();
                 RenderSystem.disableTexture();
-                RenderSystem.disableAlphaTest();
+                //TODO get correct way to do this in 1.17
+                //RenderSystem.disableAlphaTest();
                 RenderSystem.disableBlend();
                 Tessellator tessellator = Tessellator.getInstance();
                 BufferBuilder bufferBuilder = tessellator.getBuffer();
@@ -33,7 +34,7 @@ public abstract class ItemRendererMixin {
                 this.renderGuiQuad(bufferBuilder, x + 2, y + 13, 13, 2, 0, 0, 0, 255);
                 this.renderGuiQuad(bufferBuilder, x + 2, y + 13, i, 1, color >> 16 & 255, color >> 8 & 255, color & 255, 255);
                 RenderSystem.enableBlend();
-                RenderSystem.enableAlphaTest();
+                //RenderSystem.enableAlphaTest();
                 RenderSystem.enableTexture();
                 RenderSystem.enableDepthTest();
             }

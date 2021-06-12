@@ -221,7 +221,7 @@ public class Sandwich {
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion((90)));
         for (ItemStack food : foods) {
-            MinecraftClient.getInstance().getItemRenderer().renderItem(food, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
+            MinecraftClient.getInstance().getItemRenderer().renderItem(food, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers, 0);
             matrices.translate(0.0, 0.0, -0.03124);
         }
     }

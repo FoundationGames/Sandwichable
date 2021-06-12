@@ -43,7 +43,7 @@ public class BuiltinModelItemRendererMixin {
             } else {
                 matrices.translate(0.5, 0.017, 0.4);
                 matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion((90)));
-                MinecraftClient.getInstance().getItemRenderer().renderItem(new ItemStack(Items.BARRIER), ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
+                MinecraftClient.getInstance().getItemRenderer().renderItem(new ItemStack(Items.BARRIER), ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers, 0);
             }
             matrices.pop();
         }

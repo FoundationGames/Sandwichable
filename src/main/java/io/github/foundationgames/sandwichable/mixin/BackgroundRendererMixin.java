@@ -23,8 +23,7 @@ public class BackgroundRendererMixin {
 
     @Inject(method = "render", at = @At("TAIL"))
     private static void fogColor(Camera camera, float tickDelta, ClientWorld world, int i, float f, CallbackInfo ci) {
-        FluidState fluidState = camera.getSubmersionType();
-        if(fluidState.getFluid() == FluidsRegistry.PICKLE_BRINE || fluidState.getFluid() == FluidsRegistry.PICKLE_BRINE_FLOWING) {
+        if(isInPickleBrine(camera)) {
             red = 0.13f;
             green = 0.486f;
             blue = 0.17f;
@@ -33,14 +32,20 @@ public class BackgroundRendererMixin {
 
     @Inject(method = "applyFog", at = @At("HEAD"), cancellable = true)
     private static void pickleBrineFog(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance, boolean thickFog, CallbackInfo ci) {
-        FluidState fluidState = camera.getSubmersionType();
-        if(fluidState.getFluid() == FluidsRegistry.PICKLE_BRINE || fluidState.getFluid() == FluidsRegistry.PICKLE_BRINE_FLOWING) {
-            RenderSystem.fogDensity(0.22f);
-            RenderSystem.fogStart(0);
-            RenderSystem.fogEnd(viewDistance * 0.067f);
-            RenderSystem.fogMode(GlStateManager.FogMode.LINEAR);
-            RenderSystem.setupNvFogDistance();
+        if(isInPickleBrine(camera)) {
+            //TODO some of these don't seem to have an alternative in 1.17
+            //RenderSystem.fogDensity(0.22f);
+            RenderSystem.setShaderFogStart(0);
+            RenderSystem.setShaderFogEnd(viewDistance * 0.067f);
+            //RenderSystem.fogMode(GlStateManager.FogMode.LINEAR);
+            //RenderSystem.setupNvFogDistance();
             ci.cancel();
         }
+    }
+
+    private static boolean isInPickleBrine(Camera camera) {
+        var fluidState = ((CameraAccessor)camera).getArea().getFluidState(camera.getBlockPos());
+        return (fluidState.getFluid() == FluidsRegistry.PICKLE_BRINE || fluidState.getFluid() == FluidsRegistry.PICKLE_BRINE_FLOWING) &&
+                camera.getPos().y < camera.getBlockPos().getY() + fluidState.getHeight(((CameraAccessor)camera).getArea(), camera.getBlockPos());
     }
 }

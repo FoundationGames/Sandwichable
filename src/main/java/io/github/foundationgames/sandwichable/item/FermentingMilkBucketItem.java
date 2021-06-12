@@ -34,7 +34,7 @@ public class FermentingMilkBucketItem extends InfoTooltipItem {
                 user.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, tag.getInt("percentFermented") * 4, 5));
             }
         }
-        return user instanceof PlayerEntity && ((PlayerEntity)user).abilities.creativeMode ? super.finishUsing(stack, world, user) : new ItemStack(Items.BUCKET);
+        return user instanceof PlayerEntity && ((PlayerEntity)user).getAbilities().creativeMode ? super.finishUsing(stack, world, user) : new ItemStack(Items.BUCKET);
     }
 
     public UseAction getUseAction(ItemStack stack) {
