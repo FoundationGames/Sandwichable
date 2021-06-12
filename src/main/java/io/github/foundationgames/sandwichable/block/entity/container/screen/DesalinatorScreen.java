@@ -7,6 +7,7 @@ import io.github.foundationgames.sandwichable.block.entity.container.Desalinator
 import io.github.foundationgames.sandwichable.block.entity.container.screen.DesalinatorScreen.MouseOverBox;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
@@ -31,6 +32,8 @@ public class DesalinatorScreen extends HandledScreen<DesalinatorScreenHandler> {
     protected void init() {
         super.init();
         this.waterTankBox = new MouseOverBox(this.x+56, this.y+15, 20, 17);
+        this.titleX += 12;
+        this.playerInventoryTitleY += 2;
     }
 
     @Override
@@ -56,15 +59,10 @@ public class DesalinatorScreen extends HandledScreen<DesalinatorScreenHandler> {
     }
 
     @Override
-    protected void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
-        this.textRenderer.draw(matrixStack, this.title, 20.0F, 6.0F, 4210752);
-        this.textRenderer.draw(matrixStack, this.playerInventory.getDisplayName(), 8.0F, (float)(this.backgroundHeight - 96 + 4), 4210752);
-    }
-
-    @Override
     protected void drawBackground(MatrixStack matrixStack, float delta, int mouseX, int mouseY) {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.client.getTextureManager().bindTexture(TEXTURE);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
         int x = this.x;
