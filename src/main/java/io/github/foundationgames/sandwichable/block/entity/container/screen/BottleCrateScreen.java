@@ -17,7 +17,7 @@ public class BottleCrateScreen extends HandledScreen<BottleCrateScreenHandler> {
         this.backgroundHeight = 173;
         this.titleX += 16;
         this.playerInventoryTitleX -= 1;
-        this.playerInventoryTitleY += 2;
+        this.playerInventoryTitleY = this.backgroundHeight - 95 + 2;
     }
 
     @Override

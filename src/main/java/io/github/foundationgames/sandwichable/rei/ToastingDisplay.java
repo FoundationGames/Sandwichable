@@ -35,7 +35,7 @@ public class ToastingDisplay implements Display {
 
     @Override
     public List<EntryIngredient> getInputEntries() {
-        return null;
+        return this.inputs;
     }
 
     @Override

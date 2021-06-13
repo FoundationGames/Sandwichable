@@ -17,7 +17,6 @@
     "BackgroundRendererMixin",
     "BuiltinModelItemRendererMixin",
     "CameraAccessor",
-    "ClientPlayNetworkHandlerMixin",
     "ContinuousFallingParticleMixin",
     "DrippingParticleMixin",
     "ItemRendererMixin",

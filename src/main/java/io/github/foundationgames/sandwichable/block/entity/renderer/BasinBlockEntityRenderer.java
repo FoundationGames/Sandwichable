@@ -61,7 +61,7 @@ public class BasinBlockEntityRenderer implements BlockEntityRenderer<BasinBlockE
             ModelPartData modelPartData = modelData.getRoot();
             modelPartData.addChild("cheese", ModelPartBuilder.create().uv(0,0)
                     .cuboid(3.0F, 2.0F, 3.0F, 10, 4.0F, 10),
-                    ModelTransform.pivot(0.0f, 0.0f, -1.0f));
+                    ModelTransform.pivot(0.0f, 0.0f, 0.0f));
             return TexturedModelData.of(modelData, 64, 32);
         }
     }
@@ -84,7 +84,7 @@ public class BasinBlockEntityRenderer implements BlockEntityRenderer<BasinBlockE
             ModelPartData modelPartData = modelData.getRoot();
             modelPartData.addChild("milk", ModelPartBuilder.create().uv(0,0)
                     .cuboid(3.0F, 2.0F, 3.0F, 10, 4.0F, 10),
-                    ModelTransform.pivot(0.0f, 0.0f, -1.0f));
+                    ModelTransform.pivot(0.0f, 0.0f, 0.0f));
             return TexturedModelData.of(modelData, 64, 32);
         }
     }

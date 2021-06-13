@@ -81,7 +81,7 @@ public class PickleJarBlockEntityRenderer implements BlockEntityRenderer<PickleJ
             ModelPartData modelPartData = modelData.getRoot();
             modelPartData.addChild("fluid", ModelPartBuilder.create().uv(0,0)
                     .cuboid(3.001F, 1.0F, 3.001F, 9.998F, 9.0F, 9.998F),
-                    ModelTransform.pivot(0.0f, 0.0f, -1.0f));
+                    ModelTransform.pivot(0.0f, 0.0f, 0.0f));
             return TexturedModelData.of(modelData, 64, 32);
         }
     }

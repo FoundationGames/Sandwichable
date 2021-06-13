@@ -52,11 +52,11 @@ public class SandwichableEarly {
 
         BiomeModifications.addFeature(
                 BiomeSelectors.categories(Biome.Category.OCEAN, Biome.Category.BEACH),
-                GenerationStep.Feature.VEGETAL_DECORATION,
+                GenerationStep.Feature.UNDERGROUND_ORES,
                 BuiltinRegistries.CONFIGURED_FEATURE.getKey(SALTY_SAND_CONFIGURED).orElseThrow()
         );
         BiomeModifications.addFeature(
-                BiomeSelectors.categories(Biome.Category.NETHER, Biome.Category.THEEND),
+                BiomeSelectors.categories(Biome.Category.NETHER, Biome.Category.THEEND).negate(),
                 GenerationStep.Feature.VEGETAL_DECORATION,
                 BuiltinRegistries.CONFIGURED_FEATURE.getKey(SHRUBS_CONFIGURED).orElseThrow()
         );
