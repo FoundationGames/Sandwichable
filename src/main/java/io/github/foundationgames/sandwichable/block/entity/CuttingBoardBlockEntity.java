@@ -17,7 +17,7 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -25,7 +25,6 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -36,7 +35,7 @@ import net.minecraft.world.World;
 
 import java.util.Optional;
 
-public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityClientSerializable, SidedInventory, Tickable {
+public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityClientSerializable, SidedInventory {
 
     private ItemStack item = ItemStack.EMPTY;
     private ItemStack knife = ItemStack.EMPTY;
@@ -45,8 +44,8 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
 
     private int lastItemCount = 0;
 
-    public CuttingBoardBlockEntity() {
-        super(BlocksRegistry.CUTTINGBOARD_BLOCKENTITY);
+    public CuttingBoardBlockEntity(BlockPos pos, BlockState state) {
+        super(BlocksRegistry.CUTTINGBOARD_BLOCKENTITY, pos, state);
     }
 
     public ItemStack getItem() {
@@ -110,7 +109,7 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
             return ActionResult.success(world.isClient());
         }
         if(!knife.isEmpty()) {
-            player.inventory.offerOrDrop(world, getKnife());
+            player.getInventory().offerOrDrop(getKnife());
             knife = ItemStack.EMPTY;
             return ActionResult.success(world.isClient());
         }
@@ -127,36 +126,36 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
     }
 
     @Override
-    public void fromTag(BlockState state, CompoundTag tag) {
-        super.fromTag(state, tag);
+    public void readNbt(NbtCompound tag) {
+        super.readNbt(tag);
         if(tag.contains("Items")) {
             DefaultedList<ItemStack> list = DefaultedList.ofSize(1, ItemStack.EMPTY);
-            Inventories.fromTag(tag, list);
+            Inventories.readNbt(tag, list);
             item = list.get(0);
         } else {
-            item = ItemStack.fromTag(tag.getCompound("Item"));
+            item = ItemStack.fromNbt(tag.getCompound("Item"));
         }
-        knife = ItemStack.fromTag(tag.getCompound("Knife"));
+        knife = ItemStack.fromNbt(tag.getCompound("Knife"));
         knifeAnimationTicks = tag.getInt("knifeAnim");
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag tag) {
-        super.toTag(tag);
-        tag.put("Item", item.toTag(new CompoundTag()));
-        tag.put("Knife", knife.toTag(new CompoundTag()));
+    public NbtCompound writeNbt(NbtCompound tag) {
+        super.writeNbt(tag);
+        tag.put("Item", item.writeNbt(new NbtCompound()));
+        tag.put("Knife", knife.writeNbt(new NbtCompound()));
         tag.putInt("knifeAnim", knifeAnimationTicks);
         return tag;
     }
 
     @Override
-    public void fromClientTag(CompoundTag compoundTag) {
-        this.fromTag(world.getBlockState(pos), compoundTag);
+    public void fromClientTag(NbtCompound compoundTag) {
+        this.readNbt(compoundTag);
     }
 
     @Override
-    public CompoundTag toClientTag(CompoundTag compoundTag) {
-        return this.toTag(compoundTag);
+    public NbtCompound toClientTag(NbtCompound compoundTag) {
+        return this.writeNbt(compoundTag);
     }
 
     public void trySliceWithKnife() {
@@ -259,13 +258,12 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
         this.item = ItemStack.EMPTY;
     }
 
-    @Override
-    public void tick() {
-        if(item.getCount() != lastItemCount) {
-            update();
+    public static void tick(World world, BlockPos pos, BlockState state, CuttingBoardBlockEntity be) {
+        if(be.item.getCount() != be.lastItemCount) {
+            be.update();
         }
-        lastItemCount = item.getCount();
-        if(knifeAnimationTicks > 0) knifeAnimationTicks--;
+        be.lastItemCount = be.item.getCount();
+        if(be.knifeAnimationTicks > 0) be.knifeAnimationTicks--;
     }
 
     public int getKnifeAnimationTicks() {

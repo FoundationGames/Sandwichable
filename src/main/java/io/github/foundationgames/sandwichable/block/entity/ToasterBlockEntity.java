@@ -15,19 +15,20 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import java.util.Optional;
 
-public class ToasterBlockEntity extends BlockEntity implements SidedInventory, Tickable, BlockEntityClientSerializable {
+public class ToasterBlockEntity extends BlockEntity implements SidedInventory, BlockEntityClientSerializable {
 
     private DefaultedList<ItemStack> items = DefaultedList.ofSize(2, ItemStack.EMPTY);
     private static int toastTime = 240;
@@ -40,40 +41,40 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
     private boolean previouslyPowered = false;
     private boolean updateNeighbors = false;
 
-    public ToasterBlockEntity() {
-        super(BlocksRegistry.TOASTER_BLOCKENTITY);
+    public ToasterBlockEntity(BlockPos pos, BlockState state) {
+        super(BlocksRegistry.TOASTER_BLOCKENTITY, pos, state);
     }
 
     @Override
-    public void fromTag(BlockState state, CompoundTag tag) {
-        super.fromTag(state, tag);
+    public void readNbt(NbtCompound tag) {
+        super.readNbt(tag);
         items = DefaultedList.ofSize(2, ItemStack.EMPTY);
         toastProgress = tag.getInt("toastProgress");
         toasting = tag.getBoolean("toasting");
         smokeProgress = tag.getInt("smokeProgress");
         smoking = tag.getBoolean("smoking");
-        Inventories.fromTag(tag, items);
+        Inventories.readNbt(tag, items);
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag tag) {
-        super.toTag(tag);
+    public NbtCompound writeNbt(NbtCompound tag) {
+        super.writeNbt(tag);
         tag.putInt("toastProgress", toastProgress);
         tag.putBoolean("toasting", toasting);
         tag.putInt("smokeProgress", smokeProgress);
         tag.putBoolean("smoking", smoking);
-        Inventories.toTag(tag, items);
+        Inventories.writeNbt(tag, items);
         return tag;
     }
 
     @Override
-    public void fromClientTag(CompoundTag compoundTag) {
-        this.fromTag(world.getBlockState(pos), compoundTag);
+    public void fromClientTag(NbtCompound compoundTag) {
+        this.readNbt(compoundTag);
     }
 
     @Override
-    public CompoundTag toClientTag(CompoundTag compoundTag) {
-        return this.toTag(compoundTag);
+    public NbtCompound toClientTag(NbtCompound compoundTag) {
+        return this.writeNbt(compoundTag);
     }
 
     private void explode() {
@@ -178,11 +179,14 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
 
     private boolean tickPitch = false;
 
-    @Override
-    public void tick() {
+    public static void tick(World world, BlockPos pos, BlockState state, ToasterBlockEntity be) {
+        be.tick(world, pos, state);
+    }
+
+    public void tick(World world, BlockPos pos, BlockState state) {
         int smokeTime = 80;
         if(updateNeighbors) {
-            world.updateNeighbors(pos, world.getBlockState(pos).getBlock());
+            world.updateNeighbors(pos, state.getBlock());
             updateNeighbors = false;
         }
         previouslyPowered = currentlyPowered;

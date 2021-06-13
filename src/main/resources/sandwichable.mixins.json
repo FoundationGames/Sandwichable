@@ -16,10 +16,9 @@
     "ASFoodHelperMixin",
     "BackgroundRendererMixin",
     "BuiltinModelItemRendererMixin",
-    "ClientPlayNetworkHandlerMixin",
+    "CameraAccessor",
     "ContinuousFallingParticleMixin",
     "DrippingParticleMixin",
-    "ItemRendererMixin",
     "MinecraftClientMixin"
   ],
   "injectors": {

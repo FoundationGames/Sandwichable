@@ -8,6 +8,8 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,6 +22,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
@@ -28,11 +31,6 @@ public class BasinBlock extends Block implements BlockEntityProvider {
 
     public BasinBlock(Settings settings) {
         super(settings);
-    }
-
-    @Override
-    public BlockEntity createBlockEntity(BlockView view) {
-        return new BasinBlockEntity();
     }
 
     @Override
@@ -58,9 +56,8 @@ public class BasinBlock extends Block implements BlockEntityProvider {
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         super.randomDisplayTick(state, world, pos, random);
-        if(world.getBlockEntity(pos) instanceof BasinBlockEntity) {
-            BasinBlockEntity be = (BasinBlockEntity)world.getBlockEntity(pos);
-            if(be.getContent().getContentType() == BasinContentType.CHEESE) be.createCheeseParticle(world, pos, random, random.nextInt(2) + 1, be.getContent().getCheeseType().getParticleColorRGB());
+        if(world.getBlockEntity(pos) instanceof BasinBlockEntity be) {
+            if(be.getContent().getContentType() == BasinContentType.CHEESE) BasinBlockEntity.createCheeseParticle(world, pos, random, random.nextInt(2) + 1, be.getContent().getCheeseType().getParticleColorRGB());
         }
     }
 
@@ -93,6 +90,17 @@ public class BasinBlock extends Block implements BlockEntityProvider {
             return ((BasinBlockEntity)world.getBlockEntity(pos)).onBlockUse(player, hand);
         }
         return ActionResult.FAIL;
+    }
+
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new BasinBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return Util.checkType(type, BlocksRegistry.BASIN_BLOCKENTITY, BasinBlockEntity::tick);
     }
 
     static {

@@ -1,8 +1,11 @@
 package io.github.foundationgames.sandwichable.block;
 
 import io.github.foundationgames.sandwichable.block.entity.BottleCrateBlockEntity;
+import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
@@ -23,6 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class BottleCrateBlock extends BlockWithEntity {
     public static final DirectionProperty FACING = Properties.FACING;
@@ -99,7 +103,13 @@ public class BottleCrateBlock extends BlockWithEntity {
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockView world) {
-        return new BottleCrateBlockEntity();
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new BottleCrateBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return Util.checkType(type, BlocksRegistry.BOTTLECRATE_BLOCKENTITY, BottleCrateBlockEntity::tick);
     }
 }

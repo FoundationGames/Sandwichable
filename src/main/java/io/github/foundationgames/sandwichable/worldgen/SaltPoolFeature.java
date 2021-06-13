@@ -9,6 +9,7 @@ import net.minecraft.world.Heightmap;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.util.FeatureContext;
 
 import java.util.Random;
 
@@ -18,7 +19,12 @@ public class SaltPoolFeature extends Feature<SaltPoolFeatureConfig> {
     }
 
     @Override
-    public boolean generate(StructureWorldAccess world, ChunkGenerator chunkGenerator, Random random, BlockPos spos, SaltPoolFeatureConfig config) {
+    public boolean generate(FeatureContext<SaltPoolFeatureConfig> context) {
+        var spos = context.getOrigin();
+        var random = context.getRandom();
+        var config = context.getConfig();
+        var world = context.getWorld();
+
         int yfs = 0;
         int topY = Math.max(world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, spos.getX(), spos.getZ()), 64);
         if(random.nextInt(2) == 2 && topY > 65) yfs = random.nextInt(3);

@@ -1,8 +1,11 @@
 package io.github.foundationgames.sandwichable.block;
 
 import io.github.foundationgames.sandwichable.block.entity.CuttingBoardBlockEntity;
+import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemPlacementContext;
@@ -19,6 +22,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class CuttingBoardBlock extends HorizontalFacingBlock implements BlockEntityProvider {
     public static final VoxelShape[] SHAPES;
@@ -110,7 +114,13 @@ public class CuttingBoardBlock extends HorizontalFacingBlock implements BlockEnt
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockView view) {
-        return new CuttingBoardBlockEntity();
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new CuttingBoardBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return Util.checkType(type, BlocksRegistry.CUTTINGBOARD_BLOCKENTITY, CuttingBoardBlockEntity::tick);
     }
 }

@@ -24,8 +24,8 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockView view) {
-        return new SandwichTableBlockEntity();
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new SandwichTableBlockEntity(pos, state);
     }
 
     @Override

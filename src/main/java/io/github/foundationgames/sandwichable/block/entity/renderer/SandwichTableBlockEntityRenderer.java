@@ -5,12 +5,12 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class SandwichTableBlockEntityRenderer extends BlockEntityRenderer<SandwichTableBlockEntity> {
+public class SandwichTableBlockEntityRenderer implements BlockEntityRenderer<SandwichTableBlockEntity> {
 
-    public SandwichTableBlockEntityRenderer(BlockEntityRenderDispatcher dispatcher) {
-        super(dispatcher);
+    public SandwichTableBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
     }
 
     @Override

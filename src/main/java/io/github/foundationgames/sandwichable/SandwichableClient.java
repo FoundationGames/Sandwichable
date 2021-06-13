@@ -41,7 +41,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.resource.ResourceManager;
@@ -92,11 +92,11 @@ public class SandwichableClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.ONIONS, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.PICKLE_JAR, RenderLayer.getCutout());
 
-        EntityRendererRegistry.INSTANCE.register(EntitiesRegistry.SANDWICH_TABLE_MINECART, (dispatcher, context) -> new SandwichTableMinecartEntityRenderer(dispatcher));
+        EntityRendererRegistry.INSTANCE.register(EntitiesRegistry.SANDWICH_TABLE_MINECART, SandwichTableMinecartEntityRenderer::new);
 
         ClientSidePacketRegistry.INSTANCE.register(Util.id("sync_sandwich_table_cart"), (ctx, buf) -> {
             Entity e = ctx.getPlayer().getEntityWorld().getEntityById(buf.readInt());
-            CompoundTag tag = buf.readCompoundTag();
+            NbtCompound tag = buf.readNbt();
             ctx.getTaskQueue().execute(() -> {
                 if(e instanceof SandwichTableMinecartEntity) {
                     ((SandwichTableMinecartEntity)e).readSandwichTableData(tag);
@@ -123,12 +123,12 @@ public class SandwichableClient implements ClientModInitializer {
             });
         });
 
-        FabricModelPredicateProviderRegistry.register(ItemsRegistry.SPREAD, Util.id("loaf_shape"), (stack, world, entity) -> {
+        FabricModelPredicateProviderRegistry.register(ItemsRegistry.SPREAD, Util.id("loaf_shape"), (stack, world, entity, seed) -> {
             if(stack.getOrCreateTag().contains("onLoaf")) return stack.getOrCreateTag().getBoolean("onLoaf") ? 1 : 0;
             return 0;
         });
 
-        FabricModelPredicateProviderRegistry.register(Util.id("sandwich_state"), (stack, world, entity) -> {
+        FabricModelPredicateProviderRegistry.register(Util.id("sandwich_state"), (stack, world, entity, seed) -> {
             if(entity == null && stack.getOrCreateTag().contains("s")) return stack.getOrCreateTag().getInt("s");
             return 0;
         });
@@ -136,6 +136,8 @@ public class SandwichableClient implements ClientModInitializer {
         setupPickleBrine();
 
         Particles.init();
+
+        LayerModelRegistry.init();
     }
 
     private static void setupPickleBrine() {
@@ -160,7 +162,7 @@ public class SandwichableClient implements ClientModInitializer {
             }
 
             @Override
-            public void apply(ResourceManager resourceManager) {
+            public void reload(ResourceManager resourceManager) {
                 final Function<Identifier, Sprite> atlas = MinecraftClient.getInstance().getSpriteAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
                 sprites[0] = atlas.apply(stillId);
                 sprites[1] = atlas.apply(flowingId);

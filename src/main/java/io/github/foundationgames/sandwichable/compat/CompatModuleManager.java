@@ -28,7 +28,7 @@ public class CompatModuleManager {
     public static final RuntimeResourcePack ASSETS = RuntimeResourcePack.create("sandwichable:compat_assets");
     public static final RuntimeResourcePack DATA = RuntimeResourcePack.create("sandwichable:compat_data");
     public static ItemGroup SANDWICHABLE_COMPAT;
-    public static CompatModule[] MODULES;
+    public static CompatModule[] MODULES = new CompatModule[0];
 
     public static void init() throws IOException {
         registerDefaults();

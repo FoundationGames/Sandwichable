@@ -6,15 +6,18 @@ import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MinecartEntityRenderer;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
 
 public class SandwichTableMinecartEntityRenderer extends MinecartEntityRenderer<SandwichTableMinecartEntity> {
-    public SandwichTableMinecartEntityRenderer(EntityRenderDispatcher entityRenderDispatcher) {
-        super(entityRenderDispatcher);
+    public SandwichTableMinecartEntityRenderer(EntityRendererFactory.Context ctx) {
+        super(ctx, EntityModelLayers.MINECART);
     }
 
     @Override
@@ -28,7 +31,7 @@ public class SandwichTableMinecartEntityRenderer extends MinecartEntityRenderer<
         double e = MathHelper.lerp(tickDelta, entity.lastRenderY, entity.getY());
         double m = MathHelper.lerp(tickDelta, entity.lastRenderZ, entity.getZ());
         Vec3d vec3d = entity.snapPositionToRail(d, e, m);
-        float o = MathHelper.lerp(tickDelta, entity.prevPitch, entity.pitch);
+        float o = MathHelper.lerp(tickDelta, entity.prevPitch, entity.getPitch());
         if (vec3d != null) {
             Vec3d vec3d2 = entity.snapPositionToRailWithOffset(d, e, m, 0.30000001192092896D);
             Vec3d vec3d3 = entity.snapPositionToRailWithOffset(d, e, m, -0.30000001192092896D);
@@ -47,10 +50,10 @@ public class SandwichTableMinecartEntityRenderer extends MinecartEntityRenderer<
             }
         }
 
-        matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-yaw));
+        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-yaw));
         matrices.translate(o * 0.0061, Math.abs(o) * 0.00269, 0);
 
-        matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(o));
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(o));
 
         int lightAbove = WorldRenderer.getLightmapCoordinates(entity.getEntityWorld(), entity.getBlockPos().up());
         matrices.translate(0, 1.048, -0.125);

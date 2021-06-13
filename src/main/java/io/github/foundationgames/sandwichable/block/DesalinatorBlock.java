@@ -2,14 +2,18 @@ package io.github.foundationgames.sandwichable.block;
 
 import io.github.foundationgames.sandwichable.block.entity.DesalinatorBlockEntity;
 import io.github.foundationgames.sandwichable.fluid.FluidsRegistry;
+import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
@@ -24,6 +28,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import org.jetbrains.annotations.Nullable;
 
 public class DesalinatorBlock extends BlockWithEntity implements Waterloggable, BucketFluidloggable {
 
@@ -79,12 +84,12 @@ public class DesalinatorBlock extends BlockWithEntity implements Waterloggable, 
     }
 
     @Override
-    public Fluid tryDrainFluid(WorldAccess world, BlockPos pos, BlockState state) {
+    public ItemStack tryDrainFluid(WorldAccess world, BlockPos pos, BlockState state) {
         if (state.get(FLUID) == FluidType.WATER) {
             world.setBlockState(pos, state.with(FLUID, FluidType.NONE), 3);
-            return Fluids.WATER;
+            return new ItemStack(Items.WATER_BUCKET);
         } else {
-            return Fluids.EMPTY;
+            return ItemStack.EMPTY;
         }
     }
 
@@ -104,8 +109,14 @@ public class DesalinatorBlock extends BlockWithEntity implements Waterloggable, 
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockView view) {
-        return new DesalinatorBlockEntity();
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new DesalinatorBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return Util.checkType(type, BlocksRegistry.DESALINATOR_BLOCKENTITY, DesalinatorBlockEntity::tick);
     }
 
     @Override

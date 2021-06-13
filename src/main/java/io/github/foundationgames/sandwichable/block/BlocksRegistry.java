@@ -8,7 +8,9 @@ import io.github.foundationgames.sandwichable.item.InfoTooltipBlockItem;
 import io.github.foundationgames.sandwichable.item.SandwichBlockItem;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
+import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.fluid.FlowableFluid;
@@ -51,8 +53,8 @@ public final class BlocksRegistry {
     public static final Block DESALINATOR = new DesalinatorBlock(FabricBlockSettings.copy(Blocks.STONECUTTER).luminance(state -> state.get(DesalinatorBlock.ON) ? 13 : 4));
     public static final Block SALTY_SAND = new SandBlock(14406560, FabricBlockSettings.copy(Blocks.SAND));
 
-    public static final Block SALTY_STONE = new Block(AbstractBlock.Settings.of(Material.ORGANIC_PRODUCT, MaterialColor.GRASS).strength(1.7f, 6.5f).sounds(BlockSoundGroup.STONE));
-    public static final Block SALTY_ROCKS = new Block(AbstractBlock.Settings.of(Material.ORGANIC_PRODUCT, MaterialColor.GRASS).strength(1.7f, 6.5f).sounds(BlockSoundGroup.STONE));
+    public static final Block SALTY_STONE = new Block(AbstractBlock.Settings.of(Material.ORGANIC_PRODUCT, MapColor.PALE_GREEN).strength(1.7f, 6.5f).sounds(BlockSoundGroup.STONE));
+    public static final Block SALTY_ROCKS = new Block(AbstractBlock.Settings.of(Material.ORGANIC_PRODUCT, MapColor.PALE_GREEN).strength(1.7f, 6.5f).sounds(BlockSoundGroup.STONE));
 
     public static final Block PICKLE_JAR = new PickleJarBlock(FabricBlockSettings.copy(Blocks.GLASS_PANE));
 
@@ -146,14 +148,14 @@ public final class BlocksRegistry {
     }
 
     public static void initBlockEntities() {
-        SANDWICHTABLE_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("sandwich_table_ent"), BlockEntityType.Builder.create(SandwichTableBlockEntity::new, SANDWICH_TABLE).build(null));
-        CUTTINGBOARD_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("cutting_board_ent"), BlockEntityType.Builder.create(CuttingBoardBlockEntity::new, CUTTING_BOARDS.toArray(new Block[] {})).build(null));
-        SANDWICH_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("sandwich_ent"), BlockEntityType.Builder.create(SandwichBlockEntity::new, SANDWICH).build(null));
-        TOASTER_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("toaster_ent"), BlockEntityType.Builder.create(ToasterBlockEntity::new, TOASTER).build(null));
-        BASIN_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("basin_ent"), BlockEntityType.Builder.create(BasinBlockEntity::new, BASINS.toArray(new Block[] {})).build(null));
-        PICKLEJAR_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("pickle_jar_ent"), BlockEntityType.Builder.create(PickleJarBlockEntity::new, PICKLE_JAR).build(null));
-        DESALINATOR_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("desalinator_ent"), BlockEntityType.Builder.create(DesalinatorBlockEntity::new, DESALINATOR).build(null));
-        BOTTLECRATE_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("bottle_crate_ent"), BlockEntityType.Builder.create(BottleCrateBlockEntity::new, BOTTLE_CRATE).build(null));
+        SANDWICHTABLE_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("sandwich_table_ent"), FabricBlockEntityTypeBuilder.create(SandwichTableBlockEntity::new, SANDWICH_TABLE).build(null));
+        CUTTINGBOARD_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("cutting_board_ent"), FabricBlockEntityTypeBuilder.create(CuttingBoardBlockEntity::new, CUTTING_BOARDS.toArray(new Block[] {})).build(null));
+        SANDWICH_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("sandwich_ent"), FabricBlockEntityTypeBuilder.create(SandwichBlockEntity::new, SANDWICH).build(null));
+        TOASTER_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("toaster_ent"), FabricBlockEntityTypeBuilder.create(ToasterBlockEntity::new, TOASTER).build(null));
+        BASIN_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("basin_ent"), FabricBlockEntityTypeBuilder.create(BasinBlockEntity::new, BASINS.toArray(new Block[] {})).build(null));
+        PICKLEJAR_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("pickle_jar_ent"), FabricBlockEntityTypeBuilder.create(PickleJarBlockEntity::new, PICKLE_JAR).build(null));
+        DESALINATOR_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("desalinator_ent"), FabricBlockEntityTypeBuilder.create(DesalinatorBlockEntity::new, DESALINATOR).build(null));
+        BOTTLECRATE_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("bottle_crate_ent"), FabricBlockEntityTypeBuilder.create(BottleCrateBlockEntity::new, BOTTLE_CRATE).build(null));
 
     }
 

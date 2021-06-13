@@ -30,7 +30,7 @@
     "cloth-early-init": [
       "io.github.foundationgames.sandwichable.SandwichableEarly"
     ],
-	"rei_plugins_v0": [
+	"rei_plugins": [
       "io.github.foundationgames.sandwichable.rei.SandwichableREI"
     ],
     "modmenu": [
@@ -43,7 +43,8 @@
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
-    "minecraft": "1.16.x"
+    "minecraft": "1.17.x",
+    "java": ">=16"
   },
   "suggests": {
     "flamingo": "*"

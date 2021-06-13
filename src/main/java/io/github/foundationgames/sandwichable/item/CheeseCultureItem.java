@@ -6,7 +6,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Random;
 
-public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateStorable, CustomDurabilityBar {
+public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateStorable {
     private final CheeseType type;
     private final int craftAmount;
     private final float growthChance;
@@ -36,7 +36,7 @@ public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateSto
 
     public ItemStack fill(ItemStack stack, int amount) {
         if(stack.getItem() == this) {
-            CompoundTag tag = stack.getOrCreateSubTag("UsageData");
+            NbtCompound tag = stack.getOrCreateSubTag("UsageData");
             int old = tag.getInt("uses");
             tag.putInt("uses", Math.min(Math.max(0, old + amount), 10));
         } else if (stack.getItem() == Items.GLASS_BOTTLE) {
@@ -48,7 +48,7 @@ public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateSto
 
     public ItemStack deplete(ItemStack stack, int amount) {
         if(stack.getItem() == this) {
-            CompoundTag tag = stack.getOrCreateSubTag("UsageData");
+            NbtCompound tag = stack.getOrCreateSubTag("UsageData");
             int old = tag.getInt("uses");
             int newA = Math.min(Math.max(0, old - amount), 10);
             if(newA == 0) stack = new ItemStack(Items.GLASS_BOTTLE);
@@ -89,19 +89,19 @@ public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateSto
     }
 
     @Override
-    public float getBarLength(ItemStack stack) {
+    public int getItemBarStep(ItemStack stack) {
         int uses = stack.getOrCreateSubTag("UsageData").getInt("uses");
-        return (float)uses / 10;
+        return (int)((uses / 10f) * 13);
     }
 
     @Override
-    public int getBarColor(ItemStack stack) {
+    public int getItemBarColor(ItemStack stack) {
         int uses = stack.getOrCreateSubTag("UsageData").getInt("uses");
         return uses == 1 ? 0xff0000 : uses <= 3 ? 0x5465ff : 0x0099ff;
     }
 
     @Override
-    public boolean showBar(ItemStack stack) {
+    public boolean isItemBarVisible(ItemStack stack) {
         int uses = stack.getOrCreateSubTag("UsageData").getInt("uses");
         return uses < 10 && uses != 0;
     }
