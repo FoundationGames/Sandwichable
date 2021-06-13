@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "sandwichable:sandwich_table",
+    "#sandwichable:cutting_boards"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "sandwichable:toaster",
+    "sandwichable:desalinator",
+    "sandwichable:salty_stone",
+    "sandwichable:salty_rocks",
+    "#sandwichable:basins"
+  ]
+}
