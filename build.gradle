@@ -32,9 +32,6 @@ dependencies {
 	modImplementation "me.shedaniel:RoughlyEnoughItems-fabric:6.0.250-alpha"
 	modImplementation "com.terraformersmc:modmenu:2.0.2"
 
-	modImplementation "me.shedaniel.cloth.api:cloth-dynamic-registry-api-v1:1.2.1"
-	include "me.shedaniel.cloth.api:cloth-dynamic-registry-api-v1:1.2.1"
-
 	modImplementation "me.sargunvohra.mcmods:autoconfig1u:3.3.1"
 
 	modImplementation("com.github.FoundationGames:MealAPI:dc0ef8b8ba") {

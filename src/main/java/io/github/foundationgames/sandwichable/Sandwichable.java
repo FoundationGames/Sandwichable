@@ -111,6 +111,8 @@ public class Sandwichable implements ModInitializer {
         }
 
         CommonTags.init();
+
+        SandwichableEarly.onEarlyInitialization();
     }
 
     public static boolean isBread(ItemConvertible item) {
