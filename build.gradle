@@ -35,7 +35,7 @@ dependencies {
 	modImplementation "me.shedaniel.cloth.api:cloth-dynamic-registry-api-v1:1.2.1"
 	include "me.shedaniel.cloth.api:cloth-dynamic-registry-api-v1:1.2.1"
 
-	include "me.sargunvohra.mcmods:autoconfig1u:3.3.1"
+	modImplementation "me.sargunvohra.mcmods:autoconfig1u:3.3.1"
 
 	modImplementation("com.github.FoundationGames:MealAPI:dc0ef8b8ba") {
 		exclude group: "io.github.prospector", module: "modmenu"
