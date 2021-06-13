@@ -19,7 +19,6 @@
     "CameraAccessor",
     "ContinuousFallingParticleMixin",
     "DrippingParticleMixin",
-    "ItemRendererMixin",
     "MinecraftClientMixin"
   ],
   "injectors": {

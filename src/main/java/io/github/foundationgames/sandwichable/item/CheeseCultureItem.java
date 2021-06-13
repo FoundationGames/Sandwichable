@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Random;
 
-public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateStorable, CustomDurabilityBar {
+public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateStorable {
     private final CheeseType type;
     private final int craftAmount;
     private final float growthChance;
@@ -89,19 +89,19 @@ public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateSto
     }
 
     @Override
-    public float getBarLength(ItemStack stack) {
+    public int getItemBarStep(ItemStack stack) {
         int uses = stack.getOrCreateSubTag("UsageData").getInt("uses");
-        return (float)uses / 10;
+        return (int)((uses / 10f) * 13);
     }
 
     @Override
-    public int getBarColor(ItemStack stack) {
+    public int getItemBarColor(ItemStack stack) {
         int uses = stack.getOrCreateSubTag("UsageData").getInt("uses");
         return uses == 1 ? 0xff0000 : uses <= 3 ? 0x5465ff : 0x0099ff;
     }
 
     @Override
-    public boolean showBar(ItemStack stack) {
+    public boolean isItemBarVisible(ItemStack stack) {
         int uses = stack.getOrCreateSubTag("UsageData").getInt("uses");
         return uses < 10 && uses != 0;
     }
