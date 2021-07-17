@@ -267,17 +267,3 @@
 	"block.sandwichable.salty_stone.info": "Bloc ne pouvant pas être récupéré, se trouvant dans les fonds d'étendues d'eau salée générées naturellement. L'eau au dessus de celui-ci sera salée, ce qui signifie qu'un dessalinisateur fonctionnera en étant posé sur ce bloc.",
 	"block.sandwichable.desalinator.info": "Machine pour extraire le sel des plages et de l'eau de mer. Contrairement au toasteur à redstone, il est alimenté uniquement par de la poudre de redstone, non une impulsion. Son réservoir se remplit avec de l'eau qui donnera du sel si elle se trouve dans un biome salé."
 }
-
-    © 2021 GitHub, Inc.
-    Terms
-    Privacy
-    Security
-    Status
-    Docs
-
-    Contact GitHub
-    Pricing
-    API
-    Training
-    Blog
-    About
