@@ -13,19 +13,19 @@ Available on ***[Modrinth](https://modrinth.com/mod/5g7OOxWC)***
 
 #### Requires:
 - [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api) - The core library for almost all Fabric mods. (You must put this in your mods folder like any other mod)
+- [Cloth Config](https://www.curseforge.com/minecraft/mc-mods/cloth-config) - A mod needed for Sandwichable to create its configuration menus.
 
 #### Supports:
-- [Meal API](https://www.curseforge.com/minecraft/mc-mods/meal-api) - Make sandwiches fill past the vanilla food bar's limits!
+- [**Meal API [RECOMMENDED]**](https://www.curseforge.com/minecraft/mc-mods/meal-api) - Make sandwiches fill past the vanilla food bar's limits!
+- [Roughly Enough Items / REI](https://www.curseforge.com/minecraft/mc-mods/roughly-enough-items) - **View all of Sandwichable's recipes and item descriptions**, including recipes for the toaster and cutting board!
 - [Nourish](https://www.curseforge.com/minecraft/mc-mods/nourish) - Sandwichable foods are part of a nutritionally balanced diet!
 - [Croptopia](https://www.curseforge.com/minecraft/mc-mods/croptopia-fabric) - Make use of more crops and foods, which work with Sandwichable's recipes!
 - [SimpleHarvest](https://www.curseforge.com/minecraft/mc-mods/simpleharvest) - Right-click harvest Sandwichable crops! (Must be configured manually in SimpleHarvest config)
-- [Roughly Enough Items / REI](https://www.curseforge.com/minecraft/mc-mods/roughly-enough-items) - View all of Sandwichable's recipes, including those for the toaster and cutting board!
 
 ## Forge? 1.12 - 1.15?
 No.<br/>
-Reasons? It would be a lot of work to rewrite the entire mod for another platform/version, and I don't personally enjoy Forge as a development platform. See also: [a gist by JellySquid](https://gist.github.com/jellysquid3/8b68b81a5e48462f8690284a0a3c89a1)
+Reasons? It would be a lot of work to rewrite the entire mod for another platform/version, and the mod is already very well situated in the tools available for Fabric.
 
-<br/>
 
 ## Quick Start Guide
 <img src="https://github.com/FoundationGames/MinecraftUtilsDownloads/raw/master/sandwichable/sandwichable_blocks.png" align="center"/> <br/><br/>
