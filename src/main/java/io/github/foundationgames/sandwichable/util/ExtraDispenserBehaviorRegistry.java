@@ -6,13 +6,10 @@ import io.github.foundationgames.sandwichable.blocks.entity.*;
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
 import io.github.foundationgames.sandwichable.items.CheeseCultureItem;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
-import io.github.foundationgames.sandwichable.mixin.DispenserBlockAccess;
-import javafx.util.Pair;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.block.entity.DispenserBlockEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -57,7 +54,7 @@ public class ExtraDispenserBehaviorRegistry {
                 }
                 if(sandwich != null) {
                     if(!sandwich.hasBreadBottom() && !Sandwichable.isBread(stack.getItem())) return null;
-                    ItemStack r = sandwich.addTopFoodFrom(stack);
+                    ItemStack r = sandwich.tryAddTopFoodFrom(world, stack);
                     if(r != null) {
                         sync.run();
                         if(!r.isEmpty() && pointer.getWorld().getBlockEntity(pointer.getBlockPos()) instanceof DispenserBlockEntity) {

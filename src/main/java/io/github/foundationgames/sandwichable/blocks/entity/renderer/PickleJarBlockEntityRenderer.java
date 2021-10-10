@@ -1,14 +1,7 @@
 package io.github.foundationgames.sandwichable.blocks.entity.renderer;
 
-import io.github.foundationgames.sandwichable.blocks.entity.BasinBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.PickleJarBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.PickleJarFluid;
-import io.github.foundationgames.sandwichable.items.ItemsRegistry;
-
-import io.github.foundationgames.sandwichable.util.Util;
-import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
-import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.RenderLayer;
@@ -16,19 +9,9 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.model.json.ModelTransformation;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.util.math.Vec3f;
 
 public class PickleJarBlockEntityRenderer extends BlockEntityRenderer<PickleJarBlockEntity> {
 
@@ -46,10 +29,10 @@ public class PickleJarBlockEntityRenderer extends BlockEntityRenderer<PickleJarB
             matrices.translate(0.0F, 0.0F, 0.17F);
             cucumber.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(cucumberTex)), light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
             matrices.translate(0.0F, 0.0F, -0.17F);
-            matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(90));
+            matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
         }
         for (int i = 0; i < blockEntity.getItemCount(); i++) {
-            matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(90));
+            matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(90));
         }
         matrices.pop();
         matrices.push();
@@ -90,6 +73,7 @@ public class PickleJarBlockEntityRenderer extends BlockEntityRenderer<PickleJarB
             fluid.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
         }
     }
+
     private static class CucumberModel extends Model {
         ModelPart cucumberBottom;
         ModelPart cucumberTop;

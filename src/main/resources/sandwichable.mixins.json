@@ -3,19 +3,21 @@
   "package": "io.github.foundationgames.sandwichable.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "ChickenEntityMixin",
     "ClientWorldMixin",
-    "ComposterHelper",
-    "DispenserBlockAccess",
     "DispenserBlockMixin",
     "FishingBobberEntityMixin",
     "PistonBlockMixin",
+    "ServerPlayerInteractionManagerMixin",
     "StructurePoolAccess",
-    "StructurePoolsMixin"
+    "StructurePoolsMixin",
+    "VillagerEntityMixin",
+    "VillagerProfessionMixin"
   ],
   "client": [
-    "ASFoodHelperMixin",
     "BackgroundRendererMixin",
     "BuiltinModelItemRendererMixin",
+    "ClientPlayerInteractionManagerMixin",
     "ClientPlayNetworkHandlerMixin",
     "ContinuousFallingParticleMixin",
     "DrippingParticleMixin",

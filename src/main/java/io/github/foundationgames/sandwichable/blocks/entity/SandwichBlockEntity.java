@@ -6,11 +6,7 @@ import io.github.foundationgames.sandwichable.util.SandwichHolder;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.nbt.NbtCompound;
 
 public class SandwichBlockEntity extends BlockEntity implements SandwichHolder, BlockEntityClientSerializable {
     private final Sandwich sandwich = new Sandwich();
@@ -20,26 +16,26 @@ public class SandwichBlockEntity extends BlockEntity implements SandwichHolder, 
     }
 
     @Override
-    public void fromTag(BlockState state, CompoundTag tag) {
+    public void fromTag(BlockState state, NbtCompound tag) {
         super.fromTag(state, tag);
-        sandwich.setFromTag(tag);
+        sandwich.setFromNbt(tag);
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag tag) {
-        super.toTag(tag);
-        sandwich.addToTag(tag);
+    public NbtCompound writeNbt(NbtCompound tag) {
+        super.writeNbt(tag);
+        sandwich.writeToNbt(tag);
         return tag;
     }
 
     @Override
-    public void fromClientTag(CompoundTag compoundTag) {
-        this.fromTag(world.getBlockState(pos), compoundTag);
+    public void fromClientTag(NbtCompound NbtCompound) {
+        this.fromTag(world.getBlockState(pos), NbtCompound);
     }
 
     @Override
-    public CompoundTag toClientTag(CompoundTag compoundTag) {
-        return this.toTag(compoundTag);
+    public NbtCompound toClientTag(NbtCompound NbtCompound) {
+        return this.writeNbt(NbtCompound);
     }
 
     @Override

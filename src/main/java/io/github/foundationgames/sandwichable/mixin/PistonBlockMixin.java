@@ -20,7 +20,7 @@ import java.util.List;
 @Mixin(PistonBlock.class)
 public class PistonBlockMixin {
     @Inject(method = "tryMove", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;addSyncedBlockEvent(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/Block;II)V", ordinal = 0, shift = At.Shift.BEFORE))
-    public void tryEjectSandwich(World world, BlockPos pos, BlockState state, CallbackInfo ci) {
+    public void sandwichable$tryEjectSandwich(World world, BlockPos pos, BlockState state, CallbackInfo ci) {
         Direction dir = state.get(PistonBlock.FACING);
         BlockPos tablePos = pos.offset(dir).down();
         if(world.getBlockState(tablePos).getBlock() == BlocksRegistry.SANDWICH_TABLE) {

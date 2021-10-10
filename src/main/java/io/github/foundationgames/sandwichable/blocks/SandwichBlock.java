@@ -6,7 +6,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
@@ -81,7 +81,7 @@ public class SandwichBlock extends Block implements BlockEntityProvider {
         if (world.getBlockEntity(pos) instanceof SandwichBlockEntity) {
             SandwichBlockEntity blockEntity = (SandwichBlockEntity)world.getBlockEntity(pos);
             ItemStack item = new ItemStack(BlocksRegistry.SANDWICH);
-            CompoundTag tag = blockEntity.getSandwich().addToTag(new CompoundTag());
+            NbtCompound tag = blockEntity.getSandwich().writeToNbt(new NbtCompound());
             if(!tag.isEmpty()) {
                 item.putSubTag("BlockEntityTag", tag);
             }

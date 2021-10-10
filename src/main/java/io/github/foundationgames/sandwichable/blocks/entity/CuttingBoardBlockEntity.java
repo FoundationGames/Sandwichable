@@ -1,29 +1,25 @@
 package io.github.foundationgames.sandwichable.blocks.entity;
 
-import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.config.SandwichableConfig;
+import io.github.foundationgames.sandwichable.items.ItemsRegistry;
+import io.github.foundationgames.sandwichable.items.KitchenKnifeItem;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
 import io.github.foundationgames.sandwichable.util.Util;
 import io.netty.buffer.Unpooled;
-import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.particle.ItemStackParticleEffect;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
@@ -39,8 +35,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityClientSerializable, SidedInventory, Tickable {
@@ -68,15 +62,15 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
         int cut = 0;
         Hand knifeHand = null;
         Hand itemHand = hand;
-        SandwichableConfig cfg = AutoConfig.getConfigHolder(SandwichableConfig.class).getConfig();
-        for(SandwichableConfig.ItemIntPair p : cfg.itemOptions.knives) {
-            Identifier id = Identifier.tryParse(p.itemId);
+        SandwichableConfig cfg = Util.getConfig();
+        for(SandwichableConfig.KitchenKnifeOption opt : cfg.itemOptions.knives) {
+            Identifier id = Identifier.tryParse(opt.itemId);
             if(id != null) {
                 Item item = Registry.ITEM.get(id);
                 if(player.getStackInHand(Hand.MAIN_HAND).getItem() == item || player.getStackInHand(Hand.OFF_HAND).getItem() == item) {
-                    cut = p.value;
                     knifeHand = player.getStackInHand(Hand.MAIN_HAND).getItem() == item ? Hand.MAIN_HAND : Hand.OFF_HAND;
                     itemHand = knifeHand == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND;
+                    cut = KitchenKnifeItem.getItemCutAmount(player.getStackInHand(knifeHand));
                 }
             }
         }
@@ -99,6 +93,7 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
         }
         if(hasKnife && !item.isEmpty() && knife.isEmpty()) {
             slice(cut);
+            if (!player.isCreative()) KitchenKnifeItem.processCut(player.getStackInHand(knifeHand), cut);
             if(knifeHand == Hand.OFF_HAND) player.swingHand(knifeHand);
             return ActionResult.success(knifeHand != Hand.OFF_HAND && world.isClient());
         }
@@ -134,51 +129,47 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
     }
 
     @Override
-    public void fromTag(BlockState state, CompoundTag tag) {
+    public void fromTag(BlockState state, NbtCompound tag) {
         super.fromTag(state, tag);
         if(tag.contains("Items")) {
             DefaultedList<ItemStack> list = DefaultedList.ofSize(1, ItemStack.EMPTY);
-            Inventories.fromTag(tag, list);
+            Inventories.readNbt(tag, list);
             item = list.get(0);
         } else {
-            item = ItemStack.fromTag(tag.getCompound("Item"));
+            item = ItemStack.fromNbt(tag.getCompound("Item"));
         }
-        knife = ItemStack.fromTag(tag.getCompound("Knife"));
+        knife = ItemStack.fromNbt(tag.getCompound("Knife"));
         knifeAnimationTicks = tag.getInt("knifeAnim");
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag tag) {
-        super.toTag(tag);
-        tag.put("Item", item.toTag(new CompoundTag()));
-        tag.put("Knife", knife.toTag(new CompoundTag()));
+    public NbtCompound writeNbt(NbtCompound tag) {
+        super.writeNbt(tag);
+        tag.put("Item", item.writeNbt(new NbtCompound()));
+        tag.put("Knife", knife.writeNbt(new NbtCompound()));
         tag.putInt("knifeAnim", knifeAnimationTicks);
         return tag;
     }
 
     @Override
-    public void fromClientTag(CompoundTag compoundTag) {
-        this.fromTag(world.getBlockState(pos), compoundTag);
+    public void fromClientTag(NbtCompound NbtCompound) {
+        this.fromTag(world.getBlockState(pos), NbtCompound);
     }
 
     @Override
-    public CompoundTag toClientTag(CompoundTag compoundTag) {
-        return this.toTag(compoundTag);
+    public NbtCompound toClientTag(NbtCompound NbtCompound) {
+        return this.writeNbt(NbtCompound);
     }
 
     public void trySliceWithKnife() {
         if(!this.knife.isEmpty()) {
             this.knifeAnimationTicks = 10;
             int cut = 0;
-            SandwichableConfig cfg = AutoConfig.getConfigHolder(SandwichableConfig.class).getConfig();
-            for(SandwichableConfig.ItemIntPair p : cfg.itemOptions.knives) {
-                Identifier id = Identifier.tryParse(p.itemId);
-                if(id != null) {
-                    Item item = Registry.ITEM.get(id);
-                    if(this.knife.getItem() == item) {
-                        cut = p.value;
-                    }
-                }
+            SandwichableConfig cfg = Util.getConfig();
+            SandwichableConfig.KitchenKnifeOption opt = cfg.getKnifeOption(this.knife.getItem());
+            if (opt != null) {
+                cut = KitchenKnifeItem.getItemCutAmount(this.knife);
+                KitchenKnifeItem.processCut(this.knife, cut);
             }
             this.slice(cut);
             update();
@@ -204,7 +195,7 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
             }
             particles(output, amount);
             getItem().decrement(amount);
-            world.playSound(null, pos.getX()+0.5, pos.getY()+0.3, pos.getZ()+0.5, SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 0.7f, 0.8f);
+            if (amount > 0) world.playSound(null, pos.getX()+0.5, pos.getY()+0.3, pos.getZ()+0.5, SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 0.7f, 0.8f);
         }
     }
 
@@ -215,7 +206,7 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, Direction dir) {
-        return true;
+        return stack.getItem() != ItemsRegistry.SANDWICH && Util.getConfig().getKnifeOption(stack.getItem()) == null;
     }
 
     @Override

@@ -2,8 +2,10 @@
 	"replace": false,
 	"values": [
 		"sandwichable:kitchen_knife",
+		"sandwichable:golden_kitchen_knife",
 		"sandwichable:toaster",
 		"sandwichable:fermenting_milk_bucket",
+		"sandwichable:pickle_brine_bucket",
 		"minecraft:iron_nugget",
 		"minecraft:iron_ingot",
 		"minecraft:iron_block",

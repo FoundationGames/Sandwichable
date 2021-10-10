@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "sandwichable:item/glass_kitchen_knife"
+  }
+}

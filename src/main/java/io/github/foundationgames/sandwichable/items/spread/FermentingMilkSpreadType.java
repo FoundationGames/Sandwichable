@@ -7,7 +7,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class FermentingMilkSpreadType extends SpreadType {
     @Override
     public void finishUsing(ItemStack stack, World world, LivingEntity user) {
         if(stack.getTag() != null) {
-            CompoundTag tag = stack.getTag();
+            NbtCompound tag = stack.getTag();
             user.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, tag.getInt("effectDuration"), 5));
         }
     }

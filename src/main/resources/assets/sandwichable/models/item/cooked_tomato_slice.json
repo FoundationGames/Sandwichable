@@ -6,19 +6,19 @@
 	"overrides": [
         {
             "predicate": {
-                "sandwichable:sandwich_state": 1
+                "sandwichable:sandwich_state": 0.25
             },
             "model": "sandwichable:item/cooked_tomato_slice_0"
         },
         {
             "predicate": {
-                "sandwichable:sandwich_state": 2
+                "sandwichable:sandwich_state": 0.5
             },
             "model": "sandwichable:item/cooked_tomato_slice_1"
         },
         {
             "predicate": {
-                "sandwichable:sandwich_state": 3
+                "sandwichable:sandwich_state": 0.75
             },
             "model": "sandwichable:item/cooked_tomato_slice_2"
         }

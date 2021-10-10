@@ -61,6 +61,7 @@
 	"item.sandwichable.golden_kitchen_knife": "Golden Kitchen Knife",
 	"item.sandwichable.diamond_kitchen_knife": "Diamond Kitchen Knife",
 	"item.sandwichable.netherite_kitchen_knife": "Netherite Kitchen Knife",
+	"item.sandwichable.glass_kitchen_knife": "Glass Kitchen Knife",
 
 	"item.sandwichable.sandwich_table_minecart": "Minecart with Sandwich Table",
 	"item.sandwichable.fermenting_milk_bucket": "Fermenting Milk Bucket",
@@ -138,8 +139,10 @@
 	
 	"fermenting_milk_bucket.tooltip.pct_fermented": "%d%% Fermented",
 	"fermenting_milk_bucket.tooltip.no_properties": "No Properties",
-
 	"cheese_culture_bottle.tooltip.uses": "Uses: %d/10",
+	"kitchen_knife.tooltip.sharpness": "Sharpness: %s%%",
+	"kitchen_knife.tooltip.items_cut": "Cuts %s items",
+	"kitchen_knife.tooltip.items_cut_singular": "Cuts %s item",
 	
 	"desalinator.tooltip.filled": "Filled",
 	"desalinator.tooltip.maxCapacity": "Max Capacity:",
@@ -157,7 +160,7 @@
 	
 	"message.sandwichtable.bottombread": "Bottom item must be bread",
 	"message.sandwichtable.topbread": "Top item must be bread",
-	"message.sandwichtable.fullsandwich": "Max Size Reached!",
+	"message.sandwichtable.maxSize": "Maximum sandwich size is currently set to %s!",
 	
 	"sandwichable.tooltip.infoheader": "Info:",
 	"sandwichable.tooltip.shift": "Hold SHIFT for info",
@@ -228,11 +231,12 @@
 	"item.sandwichable.burnt_food.info": "A food item which is obtained by toasting a cooked food or a food item with no toasted variant. Although useless as a food, it can be toasted once more to obtain charcoal.",
 	"item.sandwichable.burnt_morsel.info": "A smaller version of burnt food, obtained by toasting a \"small\" food item, like Dried Kelp. Like Burnt Food, it is useless to eat but can be toasted again into a charred morsel.",
 	"item.sandwichable.charred_morsel.info": "Somewhat like a tiny piece of charcoal. Obtained by toasting a Burnt Morsel, and can be used as a compact furnace fuel.",
-	"item.sandwichable.stone_kitchen_knife.info": "Used to cut an item on a Cutting Board. Interact with a Cutting Board with an item on it to cut the item. Can be used in the off-hand. Can also be placed on the cutting board when empty.",
-	"item.sandwichable.kitchen_knife.info": "Used to cut up to a stack of 3 items on a Cutting Board. Interact with a Cutting Board with an item on it to cut the item. Can be used in the off-hand. Can also be placed on the cutting board when empty.",
-	"item.sandwichable.golden_kitchen_knife.info": "Used to cut up to a stack of 5 items on a Cutting Board. Interact with a Cutting Board with an item on it to cut the item. Can be used in the off-hand. Can also be placed on the cutting board when empty.",
-	"item.sandwichable.diamond_kitchen_knife.info": "Used to cut up to a stack of 8 items on a Cutting Board. Interact with a Cutting Board with an item on it to cut the item. Can be used in the off-hand. Can also be placed on the cutting board when empty.",
-	"item.sandwichable.netherite_kitchen_knife.info": "Used to cut up to a stack of 20 items on a Cutting Board. Interact with a Cutting Board with an item on it to cut the item. Can be used in the off-hand. Can also be placed on the cutting board when empty.",
+	"item.sandwichable.stone_kitchen_knife.info": "Used to cut items on a Cutting Board. Interact with a Cutting Board with items on it to cut the items. Can be used in the off-hand. Can also be placed on the cutting board when empty. Can be sharpened by interacting on a grindstone.",
+	"item.sandwichable.kitchen_knife.info": "Used to cut items on a Cutting Board. Interact with a Cutting Board with items on it to cut the items. Can be used in the off-hand. Can also be placed on the cutting board when empty. Can be sharpened by interacting on a grindstone.",
+	"item.sandwichable.golden_kitchen_knife.info": "Used to cut items on a Cutting Board. Interact with a Cutting Board with items on it to cut the items. Can be used in the off-hand. Can also be placed on the cutting board when empty. Can be sharpened by interacting on a grindstone.",
+	"item.sandwichable.diamond_kitchen_knife.info": "Used to cut items on a Cutting Board. Interact with a Cutting Board with items on it to cut the items. Can be used in the off-hand. Can also be placed on the cutting board when empty. Can be sharpened by interacting on a grindstone.",
+	"item.sandwichable.netherite_kitchen_knife.info": "Used to cut items on a Cutting Board. Interact with a Cutting Board with items on it to cut the items. Can be used in the off-hand. Can also be placed on the cutting board when empty. Can be sharpened by interacting on a grindstone.",
+	"item.sandwichable.glass_kitchen_knife.info": "Used to cut a single item on a Cutting Board. Interact with a Cutting Board with items on it to cut the items. Can be used in the off-hand. Can also be placed on the cutting board when empty. Does not decrease in sharpness.",
 	"item.sandwichable.fermenting_milk_bucket.info": "A bucket used to store and transport milk that is in the process of turning into cheese. Obtained by interacting with a fermenting basin with an empty bucket, and can be poured back into the basin. Can be drank to gain nausea based on how much the cheese has fermented.",
 	"item.sandwichable.pickle_brine_bucket.info": "A bucket used to store pickle brine. Pickle brine can be poured into a Redstone Desalinator to get back some salt.",
 	"block.sandwichable.pickle_jar.info": "Used to pickle cucumbers. Can be done by filling with water, placing cucumbers inside, and placing salt in the water. Cucumbers will pickle after roughly one minute. Can be broken while pickling to save the state of the jar, and can be used to store pickled cucumbers in style.",

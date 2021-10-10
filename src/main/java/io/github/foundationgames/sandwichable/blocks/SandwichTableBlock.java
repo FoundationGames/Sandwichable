@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class SandwichTableBlock extends Block implements BlockEntityProvider {
+public class SandwichTableBlock extends Block implements BlockEntityProvider, SneakInteractable {
     public SandwichTableBlock(Settings settings) {
         super(settings);
     }
@@ -31,9 +31,9 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if(blockEntity instanceof SandwichTableBlockEntity) {
+        if (!world.isClient() && blockEntity instanceof SandwichTableBlockEntity) {
             SandwichTableBlockEntity sBlockEntity = (SandwichTableBlockEntity)world.getBlockEntity(pos);
-            sBlockEntity.getSandwich().interact(world, new Vec3d(pos.getX()+0.5, pos.getY(), pos.getZ()+0.5), player, hand);
+            sBlockEntity.getSandwich().interact(world, new Vec3d(pos.getX()+0.5, pos.getY(), pos.getZ()+0.5), player, hand, player.isSneaking());
             Util.sync(sBlockEntity, world);
         }
         return ActionResult.success(world.isClient());

@@ -20,7 +20,7 @@ public abstract class ItemRendererMixin {
     @Shadow protected abstract void renderGuiQuad(BufferBuilder buffer, int x, int y, int width, int height, int red, int green, int blue, int alpha);
 
     @Inject(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", at = @At(value = "HEAD"))
-    public void renderCustomDurabilityBars(TextRenderer renderer, ItemStack stack, int x, int y, String countLabel, CallbackInfo ci) {
+    public void sandwichable$renderCustomDurabilityBars(TextRenderer renderer, ItemStack stack, int x, int y, String countLabel, CallbackInfo ci) {
         if(!stack.isEmpty() && stack.getItem() instanceof CustomDurabilityBar) {
             CustomDurabilityBar item = (CustomDurabilityBar)stack.getItem();
             if(item.showBar(stack)) {

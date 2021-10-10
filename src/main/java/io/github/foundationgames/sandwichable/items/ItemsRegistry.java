@@ -4,12 +4,11 @@ import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
 import io.github.foundationgames.sandwichable.fluids.FluidsRegistry;
-import io.github.foundationgames.sandwichable.mixin.ComposterHelper;
 import io.github.foundationgames.sandwichable.util.Util;
+import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.BucketItem;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -118,14 +117,15 @@ public final class ItemsRegistry {
     public static final Item BURNT_MORSEL = new InfoTooltipItem(new Item.Settings().food(BURNTMORSEL).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item CHARRED_MORSEL = new InfoTooltipItem(new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
 
-    public static final Item STONE_KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item IRON_KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item GOLDEN_KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item DIAMOND_KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item NETHERITE_KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item STONE_KITCHEN_KNIFE = new KitchenKnifeItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item IRON_KITCHEN_KNIFE = new KitchenKnifeItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item GOLDEN_KITCHEN_KNIFE = new KitchenKnifeItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item DIAMOND_KITCHEN_KNIFE = new KitchenKnifeItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item NETHERITE_KITCHEN_KNIFE = new KitchenKnifeItem(new Item.Settings().maxCount(1).fireproof().group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item GLASS_KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item SANDWICH_TABLE_MINECART = new CustomMinecartItem(EntitiesRegistry.SANDWICH_TABLE_MINECART, new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item FERMENTING_MILK_BUCKET = new FermentingMilkBucketItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item PICKLE_BRINE_BUCKET = new CustomBucketItem(FluidsRegistry.PICKLE_BRINE, new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item PICKLE_BRINE_BUCKET = new CustomBucketItem(FluidsRegistry.PICKLE_BRINE, new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS), world -> false);
 
     public static final Item LETTUCE_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.LETTUCE, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item TOMATO_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.TOMATOES, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
@@ -140,6 +140,10 @@ public final class ItemsRegistry {
 
     public static final Item SPREAD = new SpreadItem();
 
+    private static void addCompostable(float chance, Item item) {
+        CompostingChanceRegistry.INSTANCE.add(item, chance);
+    }
+
     public static void init() {
         registerItem(SANDWICH, "sandwich");
         registerItem(STONE_KITCHEN_KNIFE, "stone_kitchen_knife");
@@ -147,19 +151,20 @@ public final class ItemsRegistry {
         registerItem(GOLDEN_KITCHEN_KNIFE, "golden_kitchen_knife");
         registerItem(DIAMOND_KITCHEN_KNIFE, "diamond_kitchen_knife");
         registerItem(NETHERITE_KITCHEN_KNIFE, "netherite_kitchen_knife");
+        registerItem(GLASS_KITCHEN_KNIFE, "glass_kitchen_knife");
         registerItem(BREAD_SLICE, "bread_slice");
         registerItem(TOASTED_BREAD_SLICE, "toasted_bread_slice");
         registerItem(LETTUCE_HEAD, "lettuce_head");
-        ComposterHelper.registerCompostable(0.65f, LETTUCE_HEAD);
+        addCompostable(0.65f, LETTUCE_HEAD);
         registerItem(LETTUCE_LEAF, "lettuce_leaf");
-        ComposterHelper.registerCompostable(0.3f, LETTUCE_LEAF);
+        addCompostable(0.3f, LETTUCE_LEAF);
         registerItem(TOMATO, "tomato");
-        ComposterHelper.registerCompostable(0.65f, TOMATO);
+        addCompostable(0.65f, TOMATO);
         registerItem(TOMATO_SLICE, "tomato_slice");
-        ComposterHelper.registerCompostable(0.3f, TOMATO_SLICE);
+        addCompostable(0.3f, TOMATO_SLICE);
         registerItem(COOKED_TOMATO_SLICE, "cooked_tomato_slice");
         registerItem(CUCUMBER, "cucumber");
-        ComposterHelper.registerCompostable(0.65f, CUCUMBER);
+        addCompostable(0.65f, CUCUMBER);
         registerItem(PICKLED_CUCUMBER, "pickled_cucumber");
         registerItem(PICKLE_CHIPS, "pickle_chips");
         registerItem(SALT_ROCK, "salt_rock");
@@ -170,21 +175,21 @@ public final class ItemsRegistry {
         registerItem(PICKLE_FILLED_PICKLE_JAR, "pickle_filled_pickle_jar");
         registerItem(EMPTY_PICKLE_JAR, "empty_pickle_jar");
         registerItem(ONION, "onion");
-        ComposterHelper.registerCompostable(0.5f, ONION);
+        addCompostable(0.5f, ONION);
         registerItem(CHOPPED_ONION, "chopped_onion");
-        ComposterHelper.registerCompostable(0.3f, CHOPPED_ONION);
+        addCompostable(0.3f, CHOPPED_ONION);
         registerItem(COOKED_CHOPPED_ONION, "cooked_chopped_onion");
         registerItem(CHOPPED_CARROT, "chopped_carrot");
-        ComposterHelper.registerCompostable(0.3f, CHOPPED_CARROT);
+        addCompostable(0.3f, CHOPPED_CARROT);
         registerItem(COOKED_CHOPPED_CARROT, "cooked_chopped_carrot");
         registerItem(CHOPPED_GOLDEN_CARROT, "chopped_golden_carrot");
         registerItem(CHOPPED_BEETROOT, "chopped_beetroot");
-        ComposterHelper.registerCompostable(0.3f, CHOPPED_BEETROOT);
+        addCompostable(0.3f, CHOPPED_BEETROOT);
         registerItem(COOKED_CHOPPED_BEETROOT, "cooked_chopped_beetroot");
         registerItem(SWEET_BERRY_JAM, "sweet_berry_jam_bottle");
         registerItem(MAYONNAISE, "mayonnaise_bottle");
         registerItem(APPLE_SLICES, "apple_slices");
-        ComposterHelper.registerCompostable(0.3f, APPLE_SLICES);
+        addCompostable(0.3f, APPLE_SLICES);
         registerItem(GOLDEN_APPLE_SLICES, "golden_apple_slices");
         registerItem(ENCHANTED_GOLDEN_APPLE_SLICES, "enchanted_golden_apple_slices");
         registerItem(CHEESE_CULTURE_REGULAR, "regular_cheese_culture_bottle");
@@ -219,13 +224,13 @@ public final class ItemsRegistry {
         registerItem(SLICED_TOASTED_CRIMSON_FUNGUS, "sliced_toasted_crimson_fungus");
         registerItem(SLICED_TOASTED_WARPED_FUNGUS, "sliced_toasted_warped_fungus");
         registerItem(LETTUCE_SEEDS, "lettuce_seeds");
-        ComposterHelper.registerCompostable(0.3f, LETTUCE_SEEDS);
+        addCompostable(0.3f, LETTUCE_SEEDS);
         registerItem(TOMATO_SEEDS, "tomato_seeds");
-        ComposterHelper.registerCompostable(0.3f, TOMATO_SEEDS);
+        addCompostable(0.3f, TOMATO_SEEDS);
         registerItem(CUCUMBER_SEEDS, "cucumber_seeds");
-        ComposterHelper.registerCompostable(0.3f, CUCUMBER_SEEDS);
+        addCompostable(0.3f, CUCUMBER_SEEDS);
         registerItem(ONION_SEEDS, "onion_seeds");
-        ComposterHelper.registerCompostable(0.3f, ONION_SEEDS);
+        addCompostable(0.3f, ONION_SEEDS);
         registerItem(BURNT_FOOD, "burnt_food");
         registerItem(BURNT_MORSEL, "burnt_morsel");
         registerItem(CHARRED_MORSEL, "charred_morsel");

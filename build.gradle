@@ -1,7 +1,6 @@
 plugins {
-	id 'fabric-loom' version '0.5-SNAPSHOT'
+	id 'fabric-loom' version '0.10-SNAPSHOT'
 	id 'maven-publish'
-	id "com.wynprice.cursemaven" version "2.1.5"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -11,58 +10,65 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
-repositories {
-	jcenter()
-	maven { url "https://jitpack.io" }
-	flatDir name: "local-repo", dirs: "./localjars"
+static String terraformers() {
+	def url = "https://maven.terraformersmc.com/"
+	def conn = new URL(url).openConnection()
+	conn.connect()
+	url = conn.getResponseCode() == 521 ? "https://raw.githubusercontent.com/TerraformersMC/Archive/main/releases" : url
+	return url
 }
 
+repositories {
+	maven { url = terraformers() }
+	maven { url = "https://maven.ryanliptak.com/" }
+	maven { url = "https://maven.shedaniel.me/" }
+	maven { url "https://api.modrinth.com/maven" }
+}
+
+// please stop making mod menu transitive
 dependencies {
-	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
+	// Fabric API
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	
-	modImplementation "me.shedaniel:RoughlyEnoughItems:5.2.3"
-	modImplementation "io.github.prospector:modmenu:1.14.6+build.31"
 
-	modImplementation "me.shedaniel.cloth.api:cloth-dynamic-registry-api-v1:1.2.1"
-	include "me.shedaniel.cloth.api:cloth-dynamic-registry-api-v1:1.2.1"
+	modImplementation("me.shedaniel:RoughlyEnoughItems:${project.rei_version}") {
+		exclude(group: "com.terraformersmc")
+		exclude(group: "io.github.prospector")
+	}
+	modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
 
-	include "me.sargunvohra.mcmods:autoconfig1u:3.2.0-unstable"
+	modApi("squeek.appleskin:appleskin-fabric:${project.appleskin_version}:api") {
+		exclude(group: "com.terraformersmc")
+		exclude(group: "io.github.prospector")
+	}
+	modApi "maven.modrinth:mealapi:${project.mealapi_version}"
+	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_cfg_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+		exclude(group: "com.terraformersmc")
+		exclude(group: "io.github.prospector")
+	}
 
-	modImplementation "com.github.FoundationGames:MealAPI:dc0ef8b8ba"
-
-	modApi "local-repo:appleskin-1.0.11-dev"
-
-	//modApi "curse.maven:appleskin:2987255"
+	modRuntime("squeek.appleskin:appleskin-fabric:${project.appleskin_version}") {
+		exclude(group: "com.terraformersmc")
+		exclude(group: "io.github.prospector")
+	}
 }
 
 processResources {
 	inputs.property "version", project.version
 
-	from(sourceSets.main.resources.srcDirs) {
-		include "fabric.mod.json"
+	filesMatching("fabric.mod.json") {
 		expand "version": project.version
 	}
-
-	from(sourceSets.main.resources.srcDirs) {
-		exclude "fabric.mod.json"
-	}
 }
-// ensure that the encoding is set to UTF-8, no matter what the system default is
-// this fixes some edge cases with special characters not displaying correctly
-// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+
 tasks.withType(JavaCompile) {
 	options.encoding = "UTF-8"
 }
 
-// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-// if it is present.
-// If you remove this task, sources will not be generated.
 task sourcesJar(type: Jar, dependsOn: classes) {
 	classifier = "sources"
 	from sourceSets.main.allSource
@@ -72,11 +78,9 @@ jar {
 	from "LICENSE"
 }
 
-// configure the maven publication
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
-			// add all the jars that should be included when publishing to maven
 			artifact(remapJar) {
 				builtBy remapJar
 			}
@@ -86,9 +90,7 @@ publishing {
 		}
 	}
 
-	// select the repositories you want to publish to
 	repositories {
-		// uncomment to publish to the local maven
-		// mavenLocal()
+		mavenLocal()
 	}
 }

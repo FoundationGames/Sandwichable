@@ -39,9 +39,8 @@ public class DesalinatorScreen extends HandledScreen<DesalinatorScreenHandler> {
         this.drawMouseoverTooltip(matrixStack, mouseX, mouseY);
         if(waterTankBox.isMouseOver(mouseX, mouseY)) {
             List<Text> tooltip = Lists.newArrayList(
-                    //YES I KNOW THIS CODE IS HORRENDOUS
-                    new LiteralText(Integer.toString(((DesalinatorBlockEntity)this.handler.inventory).getWaterAmount())+" B "+ I18n.translate("desalinator.tooltip.filled")),
-                    new LiteralText(I18n.translate("desalinator.tooltip.maxCapacity")+" "+Integer.toString(DesalinatorBlockEntity.maxFluidAmount)+" B")
+                    new LiteralText(((DesalinatorBlockEntity) this.handler.inventory).getWaterAmount() +" B "+ I18n.translate("desalinator.tooltip.filled")),
+                    new LiteralText(I18n.translate("desalinator.tooltip.maxCapacity")+" "+DesalinatorBlockEntity.maxFluidAmount +" B")
             );
             if(this.getScreenHandler().inventory instanceof DesalinatorBlockEntity) {
                 if(((DesalinatorBlockEntity)this.handler.inventory).getWaterAmount() > 0) {

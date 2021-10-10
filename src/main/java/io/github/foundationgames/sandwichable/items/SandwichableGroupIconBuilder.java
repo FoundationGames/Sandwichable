@@ -3,7 +3,7 @@ package io.github.foundationgames.sandwichable.items;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.collection.DefaultedList;
 
 public class SandwichableGroupIconBuilder {
@@ -15,7 +15,7 @@ public class SandwichableGroupIconBuilder {
         sandwichlist.set(2, new ItemStack(ItemsRegistry.LETTUCE_LEAF));
         sandwichlist.set(3, new ItemStack(ItemsRegistry.TOMATO_SLICE));
         sandwichlist.set(4, new ItemStack(ItemsRegistry.TOASTED_BREAD_SLICE));
-        groupIcon.putSubTag("BlockEntityTag", Inventories.toTag(new CompoundTag(), sandwichlist));
+        groupIcon.putSubTag("BlockEntityTag", Inventories.writeNbt(new NbtCompound(), sandwichlist));
         return groupIcon;
     }
 }

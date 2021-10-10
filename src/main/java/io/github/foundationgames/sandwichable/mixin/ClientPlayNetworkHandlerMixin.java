@@ -19,7 +19,7 @@ public class ClientPlayNetworkHandlerMixin {
     private ClientWorld world;
 
     @ModifyVariable(method = "onEntitySpawn", at = @At(value = "JUMP", opcode = Opcodes.IFNULL, ordinal = 3, shift = At.Shift.BEFORE), index = 8)
-    public Entity changeEntityToSpawn(Entity old, EntitySpawnS2CPacket packet) {
+    public Entity sandwichable$handleSandwichTableMinecartSpawn(Entity old, EntitySpawnS2CPacket packet) {
         EntityType<?> entityType = packet.getEntityTypeId();
         if(entityType == EntitiesRegistry.SANDWICH_TABLE_MINECART) {
             SandwichTableMinecartEntity e = new SandwichTableMinecartEntity(world, packet.getX(), packet.getY(), packet.getZ());

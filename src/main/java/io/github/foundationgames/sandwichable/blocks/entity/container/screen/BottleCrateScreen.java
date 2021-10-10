@@ -1,20 +1,12 @@
 package io.github.foundationgames.sandwichable.blocks.entity.container.screen;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
-import io.github.foundationgames.sandwichable.blocks.entity.DesalinatorBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.container.BottleCrateScreenHandler;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 public class BottleCrateScreen extends HandledScreen<BottleCrateScreenHandler> {
     private static final Identifier TEXTURE = new Identifier("sandwichable", "textures/gui/container/bottle_crate.png");

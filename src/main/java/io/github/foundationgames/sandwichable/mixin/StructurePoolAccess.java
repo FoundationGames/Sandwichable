@@ -11,8 +11,8 @@ import java.util.List;
 @Mixin(StructurePool.class)
 public interface StructurePoolAccess {
     @Accessor(value = "elements")
-    List<StructurePoolElement> getElements();
+    List<StructurePoolElement> sandwichable$getElements();
 
     @Accessor(value = "elementCounts")
-    List<Pair<StructurePoolElement, Integer>> getElementCounts();
+    List<Pair<StructurePoolElement, Integer>> sandwichable$getElementCounts();
 }

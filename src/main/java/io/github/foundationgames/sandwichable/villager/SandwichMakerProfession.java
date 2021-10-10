@@ -13,10 +13,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.structure.pool.*;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffer;
@@ -25,7 +23,6 @@ import net.minecraft.village.VillagerProfession;
 import net.minecraft.world.poi.PointOfInterestType;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class SandwichMakerProfession {
@@ -182,7 +179,7 @@ public class SandwichMakerProfession {
         @Nullable
         public TradeOffer create(Entity entity, Random random) {
             ItemStack itemStack = new ItemStack(BlocksRegistry.SANDWICH, 1);
-            itemStack.putSubTag("BlockEntityTag", Inventories.toTag(new CompoundTag(), this.items));
+            itemStack.putSubTag("BlockEntityTag", Inventories.writeNbt(new NbtCompound(), this.items));
             return new TradeOffer(new ItemStack(Items.EMERALD, this.price), itemStack, maxUses, this.experience, 0.2F);
         }
     }

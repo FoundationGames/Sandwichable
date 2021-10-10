@@ -15,7 +15,7 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.ScreenHandler;
@@ -49,19 +49,19 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     @Override
-    public void fromTag(BlockState state, CompoundTag tag) {
+    public void fromTag(BlockState state, NbtCompound tag) {
         super.fromTag(state, tag);
         this.inventory = DefaultedList.ofSize(2, ItemStack.EMPTY);
         fluidAmount = tag.getInt("waterAmount");
         evaporateProgress = tag.getInt("evaporateProgress");
         fuelBurnProgress = tag.getInt("fuelBurnProgress");
-        Inventories.fromTag(tag, this.inventory);
+        Inventories.readNbt(tag, this.inventory);
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag tag) {
-        super.toTag(tag);
-        Inventories.toTag(tag, this.inventory);
+    public NbtCompound writeNbt(NbtCompound tag) {
+        super.writeNbt(tag);
+        Inventories.writeNbt(tag, this.inventory);
         tag.putInt("waterAmount", fluidAmount);
         tag.putInt("evaporateProgress", evaporateProgress);
         tag.putInt("fuelBurnProgress", fuelBurnProgress);
@@ -260,13 +260,13 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     @Override
-    public void fromClientTag(CompoundTag compoundTag) {
-        this.fromTag(world.getBlockState(pos), compoundTag);
+    public void fromClientTag(NbtCompound NbtCompound) {
+        this.fromTag(world.getBlockState(pos), NbtCompound);
     }
 
     @Override
-    public CompoundTag toClientTag(CompoundTag compoundTag) {
-        return this.toTag(compoundTag);
+    public NbtCompound toClientTag(NbtCompound NbtCompound) {
+        return this.writeNbt(NbtCompound);
     }
 
     @Override

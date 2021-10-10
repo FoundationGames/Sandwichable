@@ -6,22 +6,21 @@ import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +31,28 @@ public class Sandwich {
     public Sandwich() {}
 
     public boolean addFood(PlayerEntity player, ItemStack stack) {
+        int maxSize = player.world.getGameRules().getInt(Sandwichable.SANDWICH_SIZE_RULE);
         if(stack.getItem() == BlocksRegistry.SANDWICH.asItem()) return false;
+        if (maxSize >= 0 && this.getSize() >= maxSize && canAdd(stack)) {
+            player.sendMessage(new TranslatableText("message.sandwichtable.maxSize", maxSize).formatted(Formatting.RED), true);
+            return false;
+        }
         ItemStack g = addTopFoodFrom(player.isCreative() ? stack.copy() : stack);
         if(g == null) return false;
         if(!g.isEmpty() && !player.isCreative()) player.giveItemStack(g);
         return true;
+    }
+
+    public static boolean canAdd(ItemStack stack) {
+        return stack.isFood() || SpreadRegistry.INSTANCE.itemHasSpread(stack.getItem());
+    }
+
+    public ItemStack tryAddTopFoodFrom(World world, ItemStack stack) {
+        int maxSize = world.getGameRules().getInt(Sandwichable.SANDWICH_SIZE_RULE);
+        if (maxSize >= 0 && this.getSize() >= maxSize && canAdd(stack)) {
+            return null;
+        }
+        return addTopFoodFrom(stack);
     }
     
     public ItemStack addTopFoodFrom(ItemStack stack) {
@@ -51,14 +67,14 @@ public class Sandwich {
             stack.decrement(1);
             return r;
         } else if(stack.isFood()) {
-            foods.add(prepareAdd(stack.split(1)));
+            foods.add(stack.split(1));
             return ItemStack.EMPTY;
         }
         return null;
     }
 
     public ItemStack removeTopFood() {
-        if(foods.size() > 0) return prepareRemove(foods.remove(foods.size() - 1));
+        if(foods.size() > 0) return fixForEject(foods.remove(foods.size() - 1));
         return ItemStack.EMPTY;
     }
 
@@ -72,9 +88,7 @@ public class Sandwich {
 
     public void setFoodList(List<ItemStack> list) {
         foods.clear();
-        for(ItemStack i : list) {
-            foods.add(prepareAdd(i));
-        }
+        foods.addAll(list);
     }
 
     public void clearFoodList() {
@@ -85,8 +99,8 @@ public class Sandwich {
         return foods.size();
     }
 
-    public void putDisplayValues(CompoundTag tag) {
-        CompoundTag displayValues = new CompoundTag();
+    public void putDisplayValues(NbtCompound tag) {
+        NbtCompound displayValues = new NbtCompound();
         int h = 0;
         float s = 0;
         for(ItemStack item : foods) {
@@ -101,45 +115,44 @@ public class Sandwich {
         tag.put("DisplayValues", displayValues);
     }
 
-    public static DisplayValues getDisplayValues(CompoundTag displayValuesTag) {
+    public static DisplayValues getDisplayValues(NbtCompound displayValuesTag) {
         return new DisplayValues(displayValuesTag.getInt("hunger"), displayValuesTag.getFloat("saturation"));
     }
 
-    public CompoundTag addToTag(CompoundTag tag) {
-        ListTag list = new ListTag();
+    public NbtCompound writeToNbt(NbtCompound nbt) {
+        NbtList list = new NbtList();
         for (ItemStack stack : foods) {
             if (!stack.isEmpty()) {
-                CompoundTag compoundTag = new CompoundTag();
-                stack.toTag(compoundTag);
-                list.add(compoundTag);
+                NbtCompound NbtCompound = new NbtCompound();
+                stack.writeNbt(NbtCompound);
+                list.add(NbtCompound);
             }
         }
-        if (!list.isEmpty()) tag.put("Items", list);
-        return tag;
+        if (!list.isEmpty()) nbt.put("Items", list);
+        return nbt;
     }
 
-    public void setFromTag(CompoundTag tag) {
+    public void setFromNbt(NbtCompound nbt) {
         foods.clear();
-        addFromTag(tag);
+        addFromNbt(nbt);
     }
 
-    public void addFromTag(CompoundTag tag) {
-        ListTag list = tag.getList("Items", 10);
+    public void addFromNbt(NbtCompound nbt) {
+        NbtList list = nbt.getList("Items", 10);
         ItemStack stack;
         for(int i = 0; i < list.size(); ++i) {
-            CompoundTag stackTag = list.getCompound(i);
-            stack = ItemStack.fromTag(stackTag);
-            if(stack.getItem() != BlocksRegistry.SANDWICH.asItem()) foods.add(prepareAdd(stack));
+            NbtCompound stackTag = list.getCompound(i);
+            stack = ItemStack.fromNbt(stackTag);
+            if(stack.getItem() != BlocksRegistry.SANDWICH.asItem()) foods.add(stack);
         }
     }
 
-    private ItemStack prepareAdd(ItemStack stack) {
-        stack.getOrCreateTag().putInt("s", (this.foods.size() % 3) + 1);
-        return stack;
-    }
-
-    private ItemStack prepareRemove(ItemStack stack) {
-        stack.getOrCreateTag().remove("s");
+    /**
+     * For handling sandwiches from previous versions,
+     * to be removed in 1.17
+     */
+    private ItemStack fixForEject(ItemStack stack) {
+        if (stack.hasTag() && stack.getTag().contains("s")) stack.getTag().remove("s");
         return stack;
     }
 
@@ -162,7 +175,7 @@ public class Sandwich {
     public ItemStack createSandwich() {
         if(isComplete()) {
             ItemStack item = new ItemStack(BlocksRegistry.SANDWICH);
-            CompoundTag tag = addToTag(new CompoundTag());
+            NbtCompound tag = writeToNbt(new NbtCompound());
             putDisplayValues(tag);
             if(!tag.isEmpty()) {
                 item.putSubTag("BlockEntityTag", tag);
@@ -183,7 +196,7 @@ public class Sandwich {
             } else {
                 for(ItemStack stack : foods) {
                     if(!stack.isEmpty() && stack.getItem() != ItemsRegistry.SPREAD) {
-                        ItemEntity item = new ItemEntity(world, pos.getX(), pos.getY() + 1.2, pos.getZ(), prepareRemove(stack));
+                        ItemEntity item = new ItemEntity(world, pos.getX(), pos.getY() + 1.2, pos.getZ(), fixForEject(stack));
                         item.setToDefaultPickupDelay();
                         world.spawnEntity(item);
                     }
@@ -199,18 +212,27 @@ public class Sandwich {
         world.spawnEntity(item);
     }
 
-    public void interact(World world, Vec3d pos, PlayerEntity player, Hand hand) {
+    public void interact(World world, Vec3d pos, PlayerEntity player, Hand hand, boolean intendsRemoval) {
         ItemStack stack = player.getStackInHand(hand);
+        int maxSize = world.getGameRules().getInt(Sandwichable.SANDWICH_SIZE_RULE);
         if(stack.getItem().equals(BlocksRegistry.SANDWICH.asItem())) {
             if(stack.getTag() != null) {
-                CompoundTag tag = stack.getOrCreateSubTag("BlockEntityTag");
-                this.addFromTag(tag);
+                NbtCompound tag = stack.getOrCreateSubTag("BlockEntityTag");
+                if (maxSize >= 0) {
+                    Sandwich toAdd = new Sandwich();
+                    toAdd.addFromNbt(tag);
+                    if (toAdd.getSize() + this.getSize() > maxSize) {
+                        player.sendMessage(new TranslatableText("message.sandwichtable.maxSize", maxSize).formatted(Formatting.RED), true);
+                        return;
+                    }
+                }
+                this.addFromNbt(tag);
                 stack.decrement(1);
             }
         } else if(!this.hasBreadBottom() && !Sandwichable.isBread(stack.getItem())) {
             if(stack.isFood()) player.sendMessage(new TranslatableText("message.sandwichtable.bottombread"), true);
         } else if(!this.addFood(player, stack) && stack.isEmpty()) {
-            if(player.isSneaking()) {
+            if(intendsRemoval) {
                 if(this.isComplete()) this.ejectSandwich(world, pos);
                 else player.sendMessage(new TranslatableText("message.sandwichtable.topbread"), true);
             } else if(!this.isEmpty()) {
@@ -222,11 +244,15 @@ public class Sandwich {
 
     @Environment(EnvType.CLIENT)
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion((90)));
+        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion((90)));
+        int i = 0;
         for (ItemStack food : foods) {
+            RenderFlags.RENDERING_SANDWICH_ITEM = (i % 3) + 1;
             MinecraftClient.getInstance().getItemRenderer().renderItem(food, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
             matrices.translate(0.0, 0.0, -0.03124);
+            i++;
         }
+        RenderFlags.RENDERING_SANDWICH_ITEM = 0;
     }
 
     public static class DisplayValues {

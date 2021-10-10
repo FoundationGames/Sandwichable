@@ -25,16 +25,19 @@
       "io.github.foundationgames.sandwichable.SandwichableClient"
     ],
     "mealapi": [
-      "io.github.foundationgames.sandwichable.SandwichableMealAPI"
+      "io.github.foundationgames.sandwichable.plugin.SandwichableMealAPI"
     ],
     "cloth-early-init": [
-      "io.github.foundationgames.sandwichable.SandwichableEarly"
+      "io.github.foundationgames.sandwichable.worldgen.SandwichableWorldgen"
     ],
 	"rei_plugins_v0": [
-      "io.github.foundationgames.sandwichable.rei.SandwichableREI"
+      "io.github.foundationgames.sandwichable.plugin.rei.SandwichableREI"
     ],
     "modmenu": [
-      "io.github.foundationgames.sandwichable.modmenu.SandwichableModMenu"
+      "io.github.foundationgames.sandwichable.plugin.SandwichableModMenu"
+    ],
+    "appleskin": [
+      "io.github.foundationgames.sandwichable.plugin.SandwichableAppleSkin"
     ]
   },
   "mixins": [

@@ -1,19 +1,14 @@
 package io.github.foundationgames.sandwichable.blocks;
 
-import io.github.foundationgames.sandwichable.blocks.entity.CuttingBoardBlockEntity;
-import io.github.foundationgames.sandwichable.blocks.entity.SandwichTableBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.ToasterBlockEntity;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
@@ -29,7 +24,7 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-public class ToasterBlock extends HorizontalFacingBlock implements BlockEntityProvider, Waterloggable {
+public class ToasterBlock extends HorizontalFacingBlock implements BlockEntityProvider, Waterloggable, SneakInteractable {
 
     public static final BooleanProperty ON;
     public static final BooleanProperty WATERLOGGED;
@@ -107,10 +102,10 @@ public class ToasterBlock extends HorizontalFacingBlock implements BlockEntityPr
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if(world.getBlockEntity(pos) instanceof ToasterBlockEntity) {
-            ToasterBlockEntity blockEntity = (ToasterBlockEntity)world.getBlockEntity(pos);
-            if(!player.isSneaking()) {
-                if(!blockEntity.isToasting()) {
+        if (world.getBlockEntity(pos) instanceof ToasterBlockEntity) {
+            ToasterBlockEntity blockEntity = (ToasterBlockEntity) world.getBlockEntity(pos);
+            if (!player.isSneaking()) {
+                if (!blockEntity.isToasting()) {
                     if (!player.getStackInHand(hand).isEmpty() && !player.getStackInHand(hand).getItem().equals(BlocksRegistry.SANDWICH.asItem())) {
                         if (!blockEntity.addItem(hand, player)) {
                             ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, blockEntity.takeItem());
@@ -121,12 +116,12 @@ public class ToasterBlock extends HorizontalFacingBlock implements BlockEntityPr
                         world.spawnEntity(itemEntity);
                     }
                 }
+                Util.sync(blockEntity, world);
             } else {
-                if(!blockEntity.isToasting()) { blockEntity.startToasting(); } else { blockEntity.stopToasting(); }
+                if (!blockEntity.isToasting()) { blockEntity.startToasting(); } else { blockEntity.stopToasting(); }
             }
-            Util.sync(blockEntity, world);
         }
-        return ActionResult.SUCCESS;
+        return ActionResult.success(world.isClient());
     }
 
     @Override

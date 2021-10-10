@@ -8,7 +8,7 @@ import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.MinecartEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -47,10 +47,10 @@ public class SandwichTableMinecartEntityRenderer extends MinecartEntityRenderer<
             }
         }
 
-        matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-yaw));
+        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-yaw));
         matrices.translate(o * 0.0061, Math.abs(o) * 0.00269, 0);
 
-        matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(o));
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(o));
 
         int lightAbove = WorldRenderer.getLightmapCoordinates(entity.getEntityWorld(), entity.getBlockPos().up());
         matrices.translate(0, 1.048, -0.125);

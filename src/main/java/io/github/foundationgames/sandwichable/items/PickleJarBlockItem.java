@@ -14,7 +14,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
@@ -39,7 +39,7 @@ public class PickleJarBlockItem extends InfoTooltipBlockItem {
     }
 
     public static ItemStack createFromBlockEntity(PickleJarBlockEntity entity) {
-        CompoundTag tag = entity.toTag(new CompoundTag());
+        NbtCompound tag = entity.writeNbt(new NbtCompound());
         ItemStack stack = new ItemStack(ItemsRegistry.EMPTY_PICKLE_JAR, 1);
         PickleJarFluid fluid = PickleJarFluid.fromString(tag.getString("pickleJarFluid"));
         int numItems = tag.getInt("numItems");
@@ -68,7 +68,7 @@ public class PickleJarBlockItem extends InfoTooltipBlockItem {
         tooltip.add(new TranslatableText("pickle_jar.tooltip.contents").formatted(Formatting.AQUA));
         if(stack.getSubTag("BlockEntityTag") != null) {
             tooltip.add(new TranslatableText(this.tooltipKey).formatted(Formatting.BLUE));
-            CompoundTag tag = stack.getSubTag("BlockEntityTag");
+            NbtCompound tag = stack.getSubTag("BlockEntityTag");
             PickleJarFluid fluid = PickleJarFluid.fromString(tag.getString("pickleJarFluid"));
             int numItems = tag.getInt("numItems");
             int pickleProgress = tag.getInt("pickleProgress");

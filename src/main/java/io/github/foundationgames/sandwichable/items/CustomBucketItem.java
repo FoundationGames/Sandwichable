@@ -25,20 +25,26 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class CustomBucketItem extends BucketItem {
-    // THIS IS A HOT MESS, THANKS MOJANG HARDCODING WATER
+    private final Fluid fluid;
+    private final Predicate<World> evaporates;
 
-    private Fluid fluid;
+    public static final Predicate<World> HOT_DIMENSION = world -> world.getDimension().isUltrawarm();
 
-    public CustomBucketItem(Fluid fluid, Settings settings) {
+    public CustomBucketItem(Fluid fluid, Settings settings, Predicate<World> evaporates) {
         super(fluid, settings);
         this.fluid = fluid;
+        this.evaporates = evaporates;
     }
 
     @Override
@@ -100,7 +106,7 @@ public class CustomBucketItem extends BucketItem {
             boolean canPlace = state.isAir() || canPour || block instanceof FluidFillable && ((FluidFillable)block).canFillWithFluid(world, pos, state, this.fluid);
             if (!canPlace) {
                 return blockHitResult != null && this.placeFluid(player, world, blockHitResult.getBlockPos().offset(blockHitResult.getSide()), null);
-            } else if (world.getDimension().isUltrawarm() && this.fluid.isIn(FluidTags.WATER)) {
+            } else if (evaporates.test(world)) {
                 int x = pos.getX();
                 int y = pos.getY();
                 int z = pos.getZ();
@@ -117,7 +123,6 @@ public class CustomBucketItem extends BucketItem {
                 if (!world.isClient && canPour && !material.isLiquid()) {
                     world.breakBlock(pos, true);
                 }
-
                 if (!world.setBlockState(pos, this.fluid.getDefaultState().getBlockState(), 11) && !state.getFluidState().isStill()) {
                     return false;
                 } else {

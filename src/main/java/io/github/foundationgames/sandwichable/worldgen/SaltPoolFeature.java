@@ -1,21 +1,16 @@
 package io.github.foundationgames.sandwichable.worldgen;
 
-import com.mojang.serialization.Codec;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.CuboidBlockIterator;
-import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import java.util.function.Consumer;
 
 public class SaltPoolFeature extends Feature<SaltPoolFeatureConfig> {
     public SaltPoolFeature() {

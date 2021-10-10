@@ -1,17 +1,16 @@
 package io.github.foundationgames.sandwichable.fluids;
 
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
-import io.github.foundationgames.sandwichable.particle.Particles;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
+import io.github.foundationgames.sandwichable.particle.Particles;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.options.ParticlesMode;
+import net.minecraft.client.option.ParticlesMode;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -96,7 +95,7 @@ public abstract class PickleBrineFluid extends FlowableFluid {
 
     @Override
     protected BlockState toBlockState(FluidState state) {
-        return BlocksRegistry.PICKLE_BRINE.getDefaultState().with(Properties.LEVEL_15, method_15741(state));
+        return BlocksRegistry.PICKLE_BRINE.getDefaultState().with(Properties.LEVEL_15, getBlockStateLevel(state));
     }
 
     @Override

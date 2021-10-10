@@ -19,7 +19,7 @@ import java.util.List;
 @Mixin(DispenserBlock.class)
 public class DispenserBlockMixin {
     @Inject(method = "dispense", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/block/entity/DispenserBlockEntity;getStack(I)Lnet/minecraft/item/ItemStack;", shift = At.Shift.AFTER), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
-    public void interrupt(ServerWorld serverWorld, BlockPos pos, CallbackInfo ci, BlockPointerImpl pointer, DispenserBlockEntity blockEntity, int slot, ItemStack stack) {
+    public void sandwichable$interrupt(ServerWorld serverWorld, BlockPos pos, CallbackInfo ci, BlockPointerImpl pointer, DispenserBlockEntity blockEntity, int slot, ItemStack stack) {
         List<DispenserBehavior> behaviors = ExtraDispenserBehaviorRegistry.ENTRIES.get(stack.getItem());
         if(behaviors == null) return;
         for(DispenserBehavior behavior : behaviors) {

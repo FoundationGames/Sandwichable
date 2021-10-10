@@ -30,9 +30,8 @@ public class MinecraftClientMixin {
     @Shadow public ClientPlayerEntity player;
     @Shadow public ClientPlayerInteractionManager interactionManager;
 
-    /*@ModifyVariable(method = "doItemPick", at = @At(value = "NEW", target = "Lnet/minecraft/item/ItemStack", shift = At.Shift.BEFORE, ordinal = 3), print = true)*/
     @Inject(method = "doItemPick", at = @At(value = "HEAD"), cancellable = true)
-    private void pickEntitySandwichTableCart(CallbackInfo ci) {
+    private void sandwichable$pickEntitySandwichTableCart(CallbackInfo ci) {
         if(this.crosshairTarget != null) {
             HitResult.Type type = this.crosshairTarget.getType();
             if(type == HitResult.Type.ENTITY) {

@@ -23,7 +23,7 @@ public class BackgroundRendererMixin {
     @Shadow private static float blue;
 
     @Inject(method = "render", at = @At("TAIL"))
-    private static void fogColor(Camera camera, float tickDelta, ClientWorld world, int i, float f, CallbackInfo ci) {
+    private static void sandwichable$pickleBrineFogColor(Camera camera, float tickDelta, ClientWorld world, int i, float f, CallbackInfo ci) {
         FluidState fluidState = camera.getSubmergedFluidState();
         if(fluidState.getFluid() == FluidsRegistry.PICKLE_BRINE || fluidState.getFluid() == FluidsRegistry.PICKLE_BRINE_FLOWING) {
             red = 0.13f;
@@ -33,7 +33,7 @@ public class BackgroundRendererMixin {
     }
 
     @Inject(method = "applyFog", at = @At("HEAD"), cancellable = true)
-    private static void pickleBrineFog(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance, boolean thickFog, CallbackInfo ci) {
+    private static void sandwichable$pickleBrineFogRender(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance, boolean thickFog, CallbackInfo ci) {
         FluidState fluidState = camera.getSubmergedFluidState();
         if(fluidState.getFluid() == FluidsRegistry.PICKLE_BRINE || fluidState.getFluid() == FluidsRegistry.PICKLE_BRINE_FLOWING) {
             RenderSystem.fogDensity(0.22f);

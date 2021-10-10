@@ -2,25 +2,22 @@ package io.github.foundationgames.sandwichable.items;
 
 import io.github.foundationgames.sandwichable.config.SandwichableConfig;
 import io.github.foundationgames.sandwichable.util.Sandwich;
-import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
+import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventories;
 import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Objects;
 
 public class SandwichBlockItem extends InfoTooltipBlockItem {
     private final Sandwich cache = new Sandwich();
@@ -38,14 +35,14 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
     }
 
     public List<ItemStack> getFoodList(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateSubTag("BlockEntityTag");
-        cache.setFromTag(tag);
+        NbtCompound tag = stack.getOrCreateSubTag("BlockEntityTag");
+        cache.setFromNbt(tag);
         return cache.getFoodList();
     }
 
     public Sandwich.DisplayValues getDisplayValues(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateSubTag("BlockEntityTag");
-        cache.setFromTag(tag);
+        NbtCompound tag = stack.getOrCreateSubTag("BlockEntityTag");
+        cache.setFromNbt(tag);
         if(!tag.contains("DisplayValues")) {
             cache.putDisplayValues(tag);
         }
@@ -55,8 +52,8 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
     @Override
     public Text getName(ItemStack stack) {
         if(stack.getTag() != null) {
-            CompoundTag tag = stack.getSubTag("BlockEntityTag");
-            cache.setFromTag(tag);
+            NbtCompound tag = stack.getSubTag("BlockEntityTag");
+            cache.setFromNbt(tag);
             int size = cache.getSize();
             boolean hacked = false;
             for(ItemStack food : cache.getFoodList()) {
@@ -79,12 +76,12 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
 
     @Override
     public int getMaxUseTime(ItemStack stack) {
-        SandwichableConfig config = AutoConfig.getConfigHolder(SandwichableConfig.class).getConfig();
+        SandwichableConfig config = Util.getConfig();
         return config.baseSandwichEatTime + (config.slowEatingLargeSandwiches ? getFoodListSize(stack) : 0);
     }
 
     public int getFoodListSize(ItemStack stack) {
-        cache.setFromTag(stack.getOrCreateSubTag("BlockEntityTag"));
+        cache.setFromNbt(stack.getOrCreateSubTag("BlockEntityTag"));
         return cache.getSize();
     }
 
@@ -92,8 +89,8 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
     public ItemStack finishUsing(ItemStack istack, World world, LivingEntity user) {
         ItemStack stack = istack.copy();
         if(stack.getTag() != null) {
-            CompoundTag tag = stack.getSubTag("BlockEntityTag");
-            cache.setFromTag(tag);
+            NbtCompound tag = stack.getSubTag("BlockEntityTag");
+            cache.setFromNbt(tag);
             ItemStack finishStack;
             ItemCooldownManager cooldownManager = null;
             if(user instanceof PlayerEntity) cooldownManager = ((PlayerEntity)user).getItemCooldownManager();
@@ -118,7 +115,7 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
 
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
-        cache.setFromTag(stack.getOrCreateSubTag("BlockEntityTag"));
+        cache.setFromNbt(stack.getOrCreateSubTag("BlockEntityTag"));
         int size = cache.getSize();
         List<ItemStack> foods = cache.getFoodList();
         int i = 0; while(i < size && i < 5) {

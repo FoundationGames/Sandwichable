@@ -1,11 +1,13 @@
 package io.github.foundationgames.sandwichable.util;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.datafixers.util.Pair;
 import io.github.foundationgames.sandwichable.config.SandwichableConfig;
-import io.github.foundationgames.sandwichable.worldgen.ModifiableStructurePool;
+import io.github.foundationgames.sandwichable.mixin.StructurePoolAccess;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.Block;
 import net.minecraft.client.resource.language.I18n;
@@ -48,6 +50,7 @@ public class Util {
             world.addParticle(new BlockStateParticleEffect(ParticleTypes.BLOCK, block.getDefaultState()), pos.getX()+0.5+ox, pos.getY()+0.5+oy, pos.getZ()+0.5+oz, 0.0D+vx, 0.0D+vy, 0.0D+vz);
         }
     }
+
     public static void scatterDroppedBlockDust(World world, BlockPos pos, Block block, int intensity, int density) {
         Random random = new Random();
         for (int i = 0; i < density; i++) {
@@ -58,20 +61,25 @@ public class Util {
             world.addParticle(new BlockStateParticleEffect(ParticleTypes.BLOCK, block.getDefaultState()), pos.getX()+0.5+ox, pos.getY()+0.5+oy, pos.getZ()+0.5+oz, 0.0D, -0.3D, 0.0D);
         }
     }
+
     public static Int2ObjectMap<TradeOffers.Factory[]> copyToFastUtilMap(ImmutableMap<Integer, TradeOffers.Factory[]> immutableMap) {
         return new Int2ObjectOpenHashMap(immutableMap);
     }
-    public static StructurePool tryAddElementToPool(Identifier targetPool, StructurePool pool, String elementId, StructurePool.Projection projection, int weight) {
+
+    public static void tryAddElementToPool(Identifier targetPool, StructurePool pool, String elementId, StructurePool.Projection projection, int weight) {
         if(targetPool.equals(pool.getId())) {
-            ModifiableStructurePool modPool = new ModifiableStructurePool(pool);
-            modPool.addStructurePoolElement(StructurePoolElement.method_30426(elementId, StructureProcessorLists.EMPTY).apply(projection), weight);
-            return modPool.getStructurePool();
+            StructurePoolElement element = StructurePoolElement.method_30426(elementId, StructureProcessorLists.EMPTY).apply(projection);
+            for (int i = 0; i < weight; i++) {
+                ((StructurePoolAccess)pool).sandwichable$getElements().add(element);
+            }
+            ((StructurePoolAccess)pool).sandwichable$getElementCounts().add(Pair.of(element, weight));
         }
-        return pool;
     }
+
     public static void sync(BlockEntityClientSerializable be, World world) {
         if(!world.isClient) be.sync();
     }
+
     public static float pxToFlt(double d) {
         return (float) 1 / (float) 16 * (float) d;
     }
@@ -90,7 +98,7 @@ public class Util {
     }
 
     public static void appendInfoTooltip(List<Text> tooltip, String itemTranslationKey) {
-        SandwichableConfig config = AutoConfig.getConfigHolder(SandwichableConfig.class).getConfig();
+        SandwichableConfig config = Util.getConfig();
         if(config.showInfoTooltips) {
             if (config.infoTooltipKeyBind.isPressed()) {
                 tooltip.add(new TranslatableText("sandwichable.tooltip.infoheader").formatted(Formatting.GREEN));
@@ -121,7 +129,16 @@ public class Util {
     }
 
     public static int getSaltyWaterColor() {
-        //return 0x56c7d1;
         return 0x6ce0eb;
+    }
+
+    private static boolean configRegistered = false;
+
+    public static SandwichableConfig getConfig() {
+        if (!configRegistered) {
+            AutoConfig.register(SandwichableConfig.class, GsonConfigSerializer::new);
+            configRegistered = true;
+        }
+        return AutoConfig.getConfigHolder(SandwichableConfig.class).getConfig();
     }
 }

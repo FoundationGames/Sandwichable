@@ -15,7 +15,7 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -71,18 +71,18 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     @Override
-    public void fromTag(BlockState state, CompoundTag tag) {
+    public void fromTag(BlockState state, NbtCompound tag) {
         super.fromTag(state, tag);
         this.inventory = DefaultedList.ofSize(21, ItemStack.EMPTY);
         this.growthTicks = tag.getInt("growthTicks");
-        Inventories.fromTag(tag, this.inventory);
+        Inventories.readNbt(tag, this.inventory);
         updateBlockState();
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag tag) {
-        super.toTag(tag);
-        Inventories.toTag(tag, this.inventory);
+    public NbtCompound writeNbt(NbtCompound tag) {
+        super.writeNbt(tag);
+        Inventories.writeNbt(tag, this.inventory);
         tag.putInt("growthTicks", growthTicks);
         return tag;
     }
@@ -182,13 +182,13 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     @Override
-    public void fromClientTag(CompoundTag compoundTag) {
-        fromTag(this.getCachedState(), compoundTag);
+    public void fromClientTag(NbtCompound NbtCompound) {
+        fromTag(this.getCachedState(), NbtCompound);
     }
 
     @Override
-    public CompoundTag toClientTag(CompoundTag compoundTag) {
-        return toTag(compoundTag);
+    public NbtCompound toClientTag(NbtCompound NbtCompound) {
+        return writeNbt(NbtCompound);
     }
 
     @Override

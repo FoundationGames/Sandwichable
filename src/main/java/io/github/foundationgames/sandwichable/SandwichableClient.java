@@ -13,10 +13,12 @@ import io.github.foundationgames.sandwichable.entity.render.SandwichTableMinecar
 import io.github.foundationgames.sandwichable.fluids.FluidsRegistry;
 import io.github.foundationgames.sandwichable.particle.Particles;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
+import io.github.foundationgames.sandwichable.util.RenderFlags;
 import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
@@ -40,7 +42,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.resource.ResourceManager;
@@ -92,10 +94,10 @@ public class SandwichableClient implements ClientModInitializer {
 
         EntityRendererRegistry.INSTANCE.register(EntitiesRegistry.SANDWICH_TABLE_MINECART, (dispatcher, context) -> new SandwichTableMinecartEntityRenderer(dispatcher));
 
-        ClientSidePacketRegistry.INSTANCE.register(Util.id("sync_sandwich_table_cart"), (ctx, buf) -> {
-            Entity e = ctx.getPlayer().getEntityWorld().getEntityById(buf.readInt());
-            CompoundTag tag = buf.readCompoundTag();
-            ctx.getTaskQueue().execute(() -> {
+        ClientPlayNetworking.registerGlobalReceiver(Util.id("sync_sandwich_table_cart"), (client, handler, buf, responseSender) -> {
+            Entity e = client.player.getEntityWorld().getEntityById(buf.readInt());
+            NbtCompound tag = buf.readNbt();
+            client.execute(() -> {
                 if(e instanceof SandwichTableMinecartEntity) {
                     ((SandwichTableMinecartEntity)e).readSandwichTableData(tag);
                 }
@@ -127,7 +129,7 @@ public class SandwichableClient implements ClientModInitializer {
         });
 
         FabricModelPredicateProviderRegistry.register(Util.id("sandwich_state"), (stack, world, entity) -> {
-            if(entity == null && stack.getOrCreateTag().contains("s")) return stack.getOrCreateTag().getInt("s");
+            if(entity == null) return RenderFlags.RENDERING_SANDWICH_ITEM * 0.25f;
             return 0;
         });
 
@@ -153,15 +155,15 @@ public class SandwichableClient implements ClientModInitializer {
 
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
-            public Identifier getFabricId() {
-                return listenerId;
-            }
-
-            @Override
-            public void apply(ResourceManager resourceManager) {
+            public void reload(ResourceManager manager) {
                 final Function<Identifier, Sprite> atlas = MinecraftClient.getInstance().getSpriteAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
                 sprites[0] = atlas.apply(stillId);
                 sprites[1] = atlas.apply(flowingId);
+            }
+
+            @Override
+            public Identifier getFabricId() {
+                return listenerId;
             }
         });
 
@@ -173,36 +175,6 @@ public class SandwichableClient implements ClientModInitializer {
 
             @Override
             public int getFluidColor(BlockRenderView view, BlockPos pos, FluidState state) {
-                // possible TODO
-                // THIS CODE DOESNT WORK???
-                /* ERROR:
-                 * java.lang.ArrayIndexOutOfBoundsException: -833
-                 *      at net.minecraft.client.render.chunk.ChunkRendererRegion.getBlockState(ChunkRendererRegion.java:103)
-                 *      at io.github.foundationgames.sandwichable.SandwichableClient$2.getFluidColor(SandwichableClient.java:181)
-                 */
-                // Meant to be to blend with water color
-                /*int rad = (int)(MinecraftClient.getInstance().options.biomeBlendRadius * 0.64);
-                if(rad == 0) return 0x65ff6e;
-                CuboidBlockIterator iter = new CuboidBlockIterator(pos.getX() - rad, pos.getY() - rad, pos.getZ() - rad, pos.getX() + rad, pos.getY() + rad, pos.getZ() + rad);
-                int r = 101;
-                int g = 255;
-                int b = 110;
-                int i = 0;
-                int c;
-                for(BlockPos.Mutable mpos = new BlockPos.Mutable(); iter.step(); i++) {
-                    mpos.set(iter.getX(), Math.min(Math.max(iter.getY(), view.getHeight() - 1), 0), iter.getZ());
-                    if(view.getBlockState(mpos).isOf(Blocks.WATER)) {
-                        c = BiomeColors.getWaterColor(view, mpos);
-                        r += (c >> 16) & 0xFF;
-                        g += (c >> 8) & 0xFF;
-                        b += c & 0xFF;
-                    } else {
-                        r += 101;
-                        g += 255;
-                        b += 110;
-                    }
-                }
-                return ((r / i & 0xFF) << 16 | (g / i & 0xFF) << 8 | b / i & 0xFF);*/
                 return 0x65ff6e;
             }
         };
