@@ -11,6 +11,7 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.util.FeatureContext;
 
 import java.util.BitSet;
 import java.util.Random;
@@ -23,26 +24,30 @@ public class ExtraOreFeature extends Feature<ExtraOreFeatureConfig> {
     }
 
     @Override
-    public boolean generate(StructureWorldAccess iWorld, ChunkGenerator chunkGenerator, Random random, BlockPos blockPos, ExtraOreFeatureConfig config) {
+    public boolean generate(FeatureContext<ExtraOreFeatureConfig> ctx) {
+        var random = ctx.getRandom();
+        var config = ctx.getConfig();
+        var origin = ctx.getOrigin();
+        var world = ctx.getWorld();
         float f = random.nextFloat() * 3.1415927F;
         float g = (float)config.size / 8.0F;
         int i = MathHelper.ceil(((float)config.size / 16.0F * 2.0F + 1.0F) / 2.0F);
-        double d = (float)blockPos.getX() + MathHelper.sin(f) * g;
-        double e = (float)blockPos.getX() - MathHelper.sin(f) * g;
-        double h = (float)blockPos.getZ() + MathHelper.cos(f) * g;
-        double j = (float)blockPos.getZ() - MathHelper.cos(f) * g;
-        double l = blockPos.getY() + random.nextInt(3) - 2;
-        double m = blockPos.getY() + random.nextInt(3) - 2;
-        int n = blockPos.getX() - MathHelper.ceil(g) - i;
-        int o = blockPos.getY() - 2 - i;
-        int p = blockPos.getZ() - MathHelper.ceil(g) - i;
+        double d = (float)origin.getX() + MathHelper.sin(f) * g;
+        double e = (float)origin.getX() - MathHelper.sin(f) * g;
+        double h = (float)origin.getZ() + MathHelper.cos(f) * g;
+        double j = (float)origin.getZ() - MathHelper.cos(f) * g;
+        double l = origin.getY() + random.nextInt(3) - 2;
+        double m = origin.getY() + random.nextInt(3) - 2;
+        int n = origin.getX() - MathHelper.ceil(g) - i;
+        int o = origin.getY() - 2 - i;
+        int p = origin.getZ() - MathHelper.ceil(g) - i;
         int q = 2 * (MathHelper.ceil(g) + i);
         int r = 2 * (2 + i);
 
         for(int s = n; s <= n + q; ++s) {
             for(int t = p; t <= p + q; ++t) {
-                if (o <= iWorld.getTopY(Heightmap.Type.OCEAN_FLOOR_WG, s, t)) {
-                    return this.generateVeinPart(iWorld, random, config, d, e, h, j, l, m, n, o, p, q, r);
+                if (o <= world.getTopY(Heightmap.Type.OCEAN_FLOOR_WG, s, t)) {
+                    return this.generateVeinPart(world, random, config, d, e, h, j, l, m, n, o, p, q, r);
                 }
             }
         }

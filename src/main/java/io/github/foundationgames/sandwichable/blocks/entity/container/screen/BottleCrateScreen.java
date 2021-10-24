@@ -26,13 +26,13 @@ public class BottleCrateScreen extends HandledScreen<BottleCrateScreenHandler> {
     @Override
     protected void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
         this.textRenderer.draw(matrixStack, this.title, 24.0F, 6.0F, 4210752);
-        this.textRenderer.draw(matrixStack, this.playerInventory.getDisplayName(), 7.0F, (float)(this.backgroundHeight - 95 + 2), 4210752);
+        this.textRenderer.draw(matrixStack, this.playerInventoryTitle, 7.0F, (float)(this.backgroundHeight - 95 + 2), 4210752);
     }
 
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.client.getTextureManager().bindTexture(TEXTURE);
+        RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
         this.drawTexture(matrices, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);

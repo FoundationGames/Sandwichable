@@ -2,45 +2,45 @@ package io.github.foundationgames.sandwichable.plugin.rei;
 
 import com.google.common.collect.ImmutableList;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
-import me.shedaniel.rei.api.EntryStack;
-import me.shedaniel.rei.api.RecipeDisplay;
+import me.shedaniel.rei.api.common.category.CategoryIdentifier;
+import me.shedaniel.rei.api.common.display.Display;
+import me.shedaniel.rei.api.common.entry.EntryIngredient;
+import me.shedaniel.rei.api.common.entry.EntryStack;
+import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.util.Identifier;
 
 import java.util.Collections;
 import java.util.List;
 
-public class CuttingBoardDisplay implements RecipeDisplay {
+public class CuttingBoardDisplay implements Display {
 
-    private List<List<EntryStack>> inputs;
-    private List<EntryStack> results;
-    private CuttingRecipe display;
+    private final List<EntryIngredient> inputs;
+    private final List<EntryIngredient> results;
 
     public CuttingBoardDisplay(CuttingRecipe recipe) {
         this(recipe.getInput(), recipe.getOutput());
-        this.display = recipe;
     }
 
     public CuttingBoardDisplay(Ingredient input, ItemStack result) {
-        ImmutableList.Builder<EntryStack> b = new ImmutableList.Builder<>();
-        for(ItemStack i : input.getMatchingStacksClient()) b.add(EntryStack.create(i));
-        this.inputs = ImmutableList.of(b.build());
-        this.results = Collections.singletonList(EntryStack.create(result));
+        ImmutableList.Builder<EntryIngredient> b = new ImmutableList.Builder<>();
+        for(ItemStack i : input.getMatchingStacks()) b.add(EntryIngredient.of(EntryStack.of(VanillaEntryTypes.ITEM, i)));
+        this.inputs = b.build();
+        this.results = Collections.singletonList(EntryIngredient.of(EntryStack.of(VanillaEntryTypes.ITEM, result)));
     }
 
     @Override
-    public List<List<EntryStack>> getInputEntries() {
+    public List<EntryIngredient> getInputEntries() {
         return this.inputs;
     }
 
     @Override
-    public List<EntryStack> getOutputEntries() {
+    public List<EntryIngredient> getOutputEntries() {
         return this.results;
     }
 
     @Override
-    public Identifier getRecipeCategory() {
-        return SandwichableREI.CUTTING_BOARD_CATEGORY;
+    public CategoryIdentifier<?> getCategoryIdentifier() {
+        return CuttingBoardCategory.ID;
     }
 }

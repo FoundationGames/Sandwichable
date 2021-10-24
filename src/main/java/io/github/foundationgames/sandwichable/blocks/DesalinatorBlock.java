@@ -2,36 +2,37 @@ package io.github.foundationgames.sandwichable.blocks;
 
 import io.github.foundationgames.sandwichable.blocks.entity.DesalinatorBlockEntity;
 import io.github.foundationgames.sandwichable.fluids.FluidsRegistry;
-import io.github.foundationgames.sandwichable.items.ItemsRegistry;
-import io.github.foundationgames.sandwichable.util.Util;
-import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.block.Waterloggable;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import org.jetbrains.annotations.Nullable;
 
-public class DesalinatorBlock extends BlockWithEntity implements Waterloggable, BucketFluidloggable {
+public class DesalinatorBlock extends ModelBlockWithEntity implements Waterloggable, BucketFluidloggable {
 
     public static final VoxelShape SHAPE;
     public static final BooleanProperty ON;
@@ -85,12 +86,12 @@ public class DesalinatorBlock extends BlockWithEntity implements Waterloggable, 
     }
 
     @Override
-    public Fluid tryDrainFluid(WorldAccess world, BlockPos pos, BlockState state) {
+    public ItemStack tryDrainFluid(WorldAccess world, BlockPos pos, BlockState state) {
         if (state.get(FLUID) == FluidType.WATER) {
             world.setBlockState(pos, state.with(FLUID, FluidType.NONE), 3);
-            return Fluids.WATER;
+            return new ItemStack(Items.WATER_BUCKET);
         } else {
-            return Fluids.EMPTY;
+            return ItemStack.EMPTY;
         }
     }
 
@@ -110,11 +111,6 @@ public class DesalinatorBlock extends BlockWithEntity implements Waterloggable, 
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockView view) {
-        return new DesalinatorBlockEntity();
-    }
-
-    @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> stateManager) {
         stateManager.add(ON, FLUID);
     }
@@ -130,11 +126,6 @@ public class DesalinatorBlock extends BlockWithEntity implements Waterloggable, 
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
-    }
-
-    @Override
     public boolean hasComparatorOutput(BlockState state) {
         return true;
     }
@@ -142,6 +133,18 @@ public class DesalinatorBlock extends BlockWithEntity implements Waterloggable, 
     @Override
     public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
         return ScreenHandler.calculateComparatorOutput(world.getBlockEntity(pos));
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new DesalinatorBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return checkType(type, BlocksRegistry.DESALINATOR_BLOCKENTITY, DesalinatorBlockEntity::tick);
     }
 
     static {

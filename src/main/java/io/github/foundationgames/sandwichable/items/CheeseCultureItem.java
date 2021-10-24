@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Random;
 
-public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateStorable, CustomDurabilityBar {
+public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateStorable {
     private final CheeseType type;
     private final int craftAmount;
     private final float growthChance;
@@ -36,19 +36,19 @@ public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateSto
 
     public ItemStack fill(ItemStack stack, int amount) {
         if(stack.getItem() == this) {
-            NbtCompound tag = stack.getOrCreateSubTag("UsageData");
+            NbtCompound tag = stack.getOrCreateSubNbt("UsageData");
             int old = tag.getInt("uses");
             tag.putInt("uses", Math.min(Math.max(0, old + amount), 10));
         } else if (stack.getItem() == Items.GLASS_BOTTLE) {
             stack = new ItemStack(this, 1);
-            stack.getOrCreateSubTag("UsageData").putInt("uses", Math.min(Math.max(0, amount), 10));
+            stack.getOrCreateSubNbt("UsageData").putInt("uses", Math.min(Math.max(0, amount), 10));
         }
         return stack;
     }
 
     public ItemStack deplete(ItemStack stack, int amount) {
         if(stack.getItem() == this) {
-            NbtCompound tag = stack.getOrCreateSubTag("UsageData");
+            NbtCompound tag = stack.getOrCreateSubNbt("UsageData");
             int old = tag.getInt("uses");
             int newA = Math.min(Math.max(0, old - amount), 10);
             if(newA == 0) stack = new ItemStack(Items.GLASS_BOTTLE);
@@ -61,7 +61,7 @@ public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateSto
     public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
         if(this.isIn(group)) {
             ItemStack stack = new ItemStack(this);
-            stack.getOrCreateSubTag("UsageData").putInt("uses", 10);
+            stack.getOrCreateSubNbt("UsageData").putInt("uses", 10);
             stacks.add(stack);
         }
     }
@@ -69,7 +69,7 @@ public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateSto
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
         tooltip.add(new TranslatableText("cheese.type."+type.toString()).formatted(Formatting.BLUE));
-        int uses = stack.getOrCreateSubTag("UsageData").getInt("uses");
+        int uses = stack.getOrCreateSubNbt("UsageData").getInt("uses");
         tooltip.add(new TranslatableText("cheese_culture_bottle.tooltip.uses", uses).formatted(Formatting.DARK_GRAY));
         super.appendTooltip(stack, world, tooltip, context);
     }
@@ -89,20 +89,20 @@ public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateSto
     }
 
     @Override
-    public float getBarLength(ItemStack stack) {
-        int uses = stack.getOrCreateSubTag("UsageData").getInt("uses");
-        return (float)uses / 10;
+    public int getItemBarStep(ItemStack stack) {
+        int uses = stack.getOrCreateSubNbt("UsageData").getInt("uses");
+        return (int)(13 * ((float)uses / 10));
     }
 
     @Override
-    public int getBarColor(ItemStack stack) {
-        int uses = stack.getOrCreateSubTag("UsageData").getInt("uses");
+    public int getItemBarColor(ItemStack stack) {
+        int uses = stack.getOrCreateSubNbt("UsageData").getInt("uses");
         return uses == 1 ? 0xff0000 : uses <= 3 ? 0x5465ff : 0x0099ff;
     }
 
     @Override
-    public boolean showBar(ItemStack stack) {
-        int uses = stack.getOrCreateSubTag("UsageData").getInt("uses");
+    public boolean isItemBarVisible(ItemStack stack) {
+        int uses = stack.getOrCreateSubNbt("UsageData").getInt("uses");
         return uses < 10 && uses != 0;
     }
 }

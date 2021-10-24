@@ -6,6 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -15,10 +16,9 @@ import net.minecraft.util.math.Vec3f;
 
 import java.util.Objects;
 
-public class ToasterBlockEntityRenderer extends BlockEntityRenderer<ToasterBlockEntity> {
+public class ToasterBlockEntityRenderer implements BlockEntityRenderer<ToasterBlockEntity> {
 
-    public ToasterBlockEntityRenderer(BlockEntityRenderDispatcher dispatcher) {
-        super(dispatcher);
+    public ToasterBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
     }
 
     @Override
@@ -44,9 +44,9 @@ public class ToasterBlockEntityRenderer extends BlockEntityRenderer<ToasterBlock
         matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(rot));
         matrices.translate(0, 0, -0.5);
         matrices.translate(0, 0, 0.41);
-        MinecraftClient.getInstance().getItemRenderer().renderItem(items.get(0), ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
+        MinecraftClient.getInstance().getItemRenderer().renderItem(items.get(0), ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers, 346746554);
         matrices.translate(0, 0, 0.18);
-        MinecraftClient.getInstance().getItemRenderer().renderItem(items.get(1), ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
+        MinecraftClient.getInstance().getItemRenderer().renderItem(items.get(1), ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers, 834871346);
 
         matrices.pop();
     }

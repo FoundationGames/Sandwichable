@@ -27,7 +27,7 @@ public class CustomMinecartItem extends InfoTooltipItem {
             double x = pointer.getX() + (double)dir.getOffsetX() * 1.125D;
             double y = Math.floor(pointer.getY()) + (double)dir.getOffsetY();
             double z = pointer.getZ() + (double)dir.getOffsetZ() * 1.125D;
-            BlockPos pos = pointer.getBlockPos().offset(dir);
+            BlockPos pos = pointer.getPos().offset(dir);
             BlockState state = world.getBlockState(pos);
             RailShape shape = state.getBlock() instanceof AbstractRailBlock ? state.get(((AbstractRailBlock)state.getBlock()).getShapeProperty()) : RailShape.NORTH_SOUTH;
             double offset;
@@ -60,7 +60,7 @@ public class CustomMinecartItem extends InfoTooltipItem {
             return stack;
         }
         protected void playSound(BlockPointer pointer) {
-            pointer.getWorld().syncWorldEvent(1000, pointer.getBlockPos(), 0);
+            pointer.getWorld().syncWorldEvent(1000, pointer.getPos(), 0);
         }
     };
 

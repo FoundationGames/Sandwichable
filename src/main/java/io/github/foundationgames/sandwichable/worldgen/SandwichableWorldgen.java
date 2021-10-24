@@ -11,6 +11,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStep;
+import net.minecraft.world.gen.YOffset;
 import net.minecraft.world.gen.decorator.ChanceDecoratorConfig;
 import net.minecraft.world.gen.decorator.Decorator;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
@@ -37,22 +38,22 @@ public class SandwichableWorldgen {
         BiomeModifications.addFeature(ctx -> {
             Biome biome = ctx.getBiome();
             return biome.getCategory() == Biome.Category.OCEAN || biome.getCategory() == Biome.Category.BEACH;
-        }, GenerationStep.Feature.UNDERGROUND_ORES, RegistryKey.of(Registry.CONFIGURED_FEATURE_WORLDGEN, Util.id("salty_sand")));
+        }, GenerationStep.Feature.UNDERGROUND_ORES, RegistryKey.of(Registry.CONFIGURED_FEATURE_KEY, Util.id("salty_sand")));
         BiomeModifications.addFeature(ctx -> {
             Biome biome = ctx.getBiome();
             return biome.getCategory() != Biome.Category.NETHER && biome.getCategory() != Biome.Category.THEEND;
-        }, GenerationStep.Feature.VEGETAL_DECORATION, RegistryKey.of(Registry.CONFIGURED_FEATURE_WORLDGEN, Util.id("shrubs")));
+        }, GenerationStep.Feature.VEGETAL_DECORATION, RegistryKey.of(Registry.CONFIGURED_FEATURE_KEY, Util.id("shrubs")));
         if (cfg.saltPoolGenOptions.saltPools) {
             BiomeModifications.addFeature(ctx -> {
                 Biome biome = ctx.getBiome();
                 return biome.getPrecipitation() == Biome.Precipitation.RAIN && !biome.hasHighHumidity() && biome.getScale() < 0.25 && !SALT_POOL_BLACKLIST.contains(biome.getCategory());
-            }, GenerationStep.Feature.LAKES, RegistryKey.of(Registry.CONFIGURED_FEATURE_WORLDGEN, Util.id("salt_pool_water")));
+            }, GenerationStep.Feature.LAKES, RegistryKey.of(Registry.CONFIGURED_FEATURE_KEY, Util.id("salt_pool_water")));
         }
         if (cfg.saltPoolGenOptions.drySaltPools) {
             BiomeModifications.addFeature(ctx -> {
                 Biome biome = ctx.getBiome();
                 return biome.getPrecipitation() == Biome.Precipitation.NONE && biome.getTemperature() > 1.5f && biome.getScale() < 0.25 && !SALT_POOL_BLACKLIST.contains(biome.getCategory());
-            }, GenerationStep.Feature.LAKES, RegistryKey.of(Registry.CONFIGURED_FEATURE_WORLDGEN, Util.id("salty_pool_dry")));
+            }, GenerationStep.Feature.LAKES, RegistryKey.of(Registry.CONFIGURED_FEATURE_KEY, Util.id("salty_pool_dry")));
         }
     }
     
@@ -61,7 +62,7 @@ public class SandwichableWorldgen {
         
         SALTY_SAND_CONFIGURED = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salty_sand"), SALTY_SAND_FEATURE.configure(
                 new ExtraOreFeatureConfig(Blocks.SAND.getDefaultState(), BlocksRegistry.SALTY_SAND.getDefaultState(), config.saltySandGenOptions.veinSize)
-        ).rangeOf(config.saltySandGenOptions.maxGenHeight).spreadHorizontally().repeat(config.saltySandGenOptions.rarity));
+        ).uniformRange(YOffset.getBottom(), YOffset.fixed(config.saltySandGenOptions.maxGenHeight)).spreadHorizontally().repeat(config.saltySandGenOptions.rarity));
 
         SALT_POOL_WATER = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salt_pool_water"), SALT_POOL_FEATURE.configure(new SaltPoolFeatureConfig(true)).decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(426))));
         SALT_POOL_DRY = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salty_pool_dry"), SALT_POOL_FEATURE.configure(new SaltPoolFeatureConfig(false)).decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(442))));

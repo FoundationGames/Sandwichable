@@ -35,13 +35,13 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
     }
 
     public List<ItemStack> getFoodList(ItemStack stack) {
-        NbtCompound tag = stack.getOrCreateSubTag("BlockEntityTag");
+        NbtCompound tag = stack.getOrCreateSubNbt("BlockEntityTag");
         cache.setFromNbt(tag);
         return cache.getFoodList();
     }
 
     public Sandwich.DisplayValues getDisplayValues(ItemStack stack) {
-        NbtCompound tag = stack.getOrCreateSubTag("BlockEntityTag");
+        NbtCompound tag = stack.getOrCreateSubNbt("BlockEntityTag");
         cache.setFromNbt(tag);
         if(!tag.contains("DisplayValues")) {
             cache.putDisplayValues(tag);
@@ -51,8 +51,8 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
 
     @Override
     public Text getName(ItemStack stack) {
-        if(stack.getTag() != null) {
-            NbtCompound tag = stack.getSubTag("BlockEntityTag");
+        if(stack.getNbt() != null) {
+            NbtCompound tag = stack.getSubNbt("BlockEntityTag");
             cache.setFromNbt(tag);
             int size = cache.getSize();
             boolean hacked = false;
@@ -81,15 +81,15 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
     }
 
     public int getFoodListSize(ItemStack stack) {
-        cache.setFromNbt(stack.getOrCreateSubTag("BlockEntityTag"));
+        cache.setFromNbt(stack.getOrCreateSubNbt("BlockEntityTag"));
         return cache.getSize();
     }
 
     @Override
     public ItemStack finishUsing(ItemStack istack, World world, LivingEntity user) {
         ItemStack stack = istack.copy();
-        if(stack.getTag() != null) {
-            NbtCompound tag = stack.getSubTag("BlockEntityTag");
+        if(stack.getNbt() != null) {
+            NbtCompound tag = stack.getSubNbt("BlockEntityTag");
             cache.setFromNbt(tag);
             ItemStack finishStack;
             ItemCooldownManager cooldownManager = null;
@@ -115,7 +115,7 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
 
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
-        cache.setFromNbt(stack.getOrCreateSubTag("BlockEntityTag"));
+        cache.setFromNbt(stack.getOrCreateSubNbt("BlockEntityTag"));
         int size = cache.getSize();
         List<ItemStack> foods = cache.getFoodList();
         int i = 0; while(i < size && i < 5) {

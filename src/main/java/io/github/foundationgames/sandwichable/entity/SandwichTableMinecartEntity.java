@@ -1,6 +1,7 @@
 package io.github.foundationgames.sandwichable.entity;
 
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
+import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.Sandwich;
 import io.github.foundationgames.sandwichable.util.SandwichHolder;
 import io.github.foundationgames.sandwichable.util.Util;
@@ -12,6 +13,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
@@ -54,7 +56,7 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
     public void sync() {
         if(!world.isClient) {
             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-            buf.writeInt(getEntityId());
+            buf.writeInt(getId());
             NbtCompound t = new NbtCompound();
             writeSandwichTableData(t);
             buf.writeNbt(t);
@@ -67,7 +69,7 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
     public void clientSync() {
         if(world.isClient) {
             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-            buf.writeInt(getEntityId());
+            buf.writeInt(getId());
             ClientPlayNetworking.send(Util.id("request_sandwich_table_cart_sync"), buf);
         }
     }
@@ -90,8 +92,13 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
     }
 
     @Override
-    public void setEntityId(int id) {
-        super.setEntityId(id);
+    public ItemStack getPickBlockStack() {
+        return new ItemStack(ItemsRegistry.SANDWICH_TABLE_MINECART);
+    }
+
+    @Override
+    public void setId(int id) {
+        super.setId(id);
         clientSync();
     }
 

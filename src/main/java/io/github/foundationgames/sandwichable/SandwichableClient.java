@@ -11,8 +11,8 @@ import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
 import io.github.foundationgames.sandwichable.entity.render.SandwichTableMinecartEntityRenderer;
 import io.github.foundationgames.sandwichable.fluids.FluidsRegistry;
-import io.github.foundationgames.sandwichable.particle.Particles;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
+import io.github.foundationgames.sandwichable.particle.Particles;
 import io.github.foundationgames.sandwichable.util.RenderFlags;
 import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
@@ -21,16 +21,15 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.color.world.BiomeColors;
 import net.minecraft.client.color.world.FoliageColors;
@@ -47,7 +46,6 @@ import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
-import net.minecraft.util.CuboidBlockIterator;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
@@ -60,21 +58,21 @@ import java.util.function.Function;
 public class SandwichableClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        BlockEntityRendererRegistry.INSTANCE.register(BlocksRegistry.SANDWICHTABLE_BLOCKENTITY, SandwichTableBlockEntityRenderer::new);
-        BlockEntityRendererRegistry.INSTANCE.register(BlocksRegistry.SANDWICH_BLOCKENTITY, SandwichBlockEntityRenderer::new);
-        BlockEntityRendererRegistry.INSTANCE.register(BlocksRegistry.CUTTINGBOARD_BLOCKENTITY, CuttingBoardBlockEntityRenderer::new);
-        BlockEntityRendererRegistry.INSTANCE.register(BlocksRegistry.TOASTER_BLOCKENTITY, ToasterBlockEntityRenderer::new);
-        BlockEntityRendererRegistry.INSTANCE.register(BlocksRegistry.BASIN_BLOCKENTITY, BasinBlockEntityRenderer::new);
-        BlockEntityRendererRegistry.INSTANCE.register(BlocksRegistry.PICKLEJAR_BLOCKENTITY, PickleJarBlockEntityRenderer::new);
+        BlockEntityRendererRegistry.register(BlocksRegistry.SANDWICHTABLE_BLOCKENTITY, SandwichTableBlockEntityRenderer::new);
+        BlockEntityRendererRegistry.register(BlocksRegistry.SANDWICH_BLOCKENTITY, SandwichBlockEntityRenderer::new);
+        BlockEntityRendererRegistry.register(BlocksRegistry.CUTTINGBOARD_BLOCKENTITY, CuttingBoardBlockEntityRenderer::new);
+        BlockEntityRendererRegistry.register(BlocksRegistry.TOASTER_BLOCKENTITY, ToasterBlockEntityRenderer::new);
+        BlockEntityRendererRegistry.register(BlocksRegistry.BASIN_BLOCKENTITY, BasinBlockEntityRenderer::new);
+        BlockEntityRendererRegistry.register(BlocksRegistry.PICKLEJAR_BLOCKENTITY, PickleJarBlockEntityRenderer::new);
 
         ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> !state.get(ShrubBlock.SNIPPED) ? BiomeColors.getGrassColor(view, pos) : FoliageColors.getDefaultColor(), BlocksRegistry.SHRUB, BlocksRegistry.POTTED_SHRUB);
 
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> tintIndex > 0 ? -1 : GrassColors.getColor(0.5D, 1.0D), BlocksRegistry.SHRUB.asItem());
 
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
-            if(stack.getOrCreateTag().getString("spreadType") != null) {
-                if(SpreadRegistry.INSTANCE.fromString(stack.getOrCreateTag().getString("spreadType")) != null) {
-                    return SpreadRegistry.INSTANCE.fromString(stack.getOrCreateTag().getString("spreadType")).getColor(stack);
+            if(stack.getOrCreateNbt().getString("spreadType") != null) {
+                if(SpreadRegistry.INSTANCE.fromString(stack.getOrCreateNbt().getString("spreadType")) != null) {
+                    return SpreadRegistry.INSTANCE.fromString(stack.getOrCreateNbt().getString("spreadType")).getColor(stack);
                 }
             }
             return 0xFFFFFF;
@@ -92,7 +90,7 @@ public class SandwichableClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.ONIONS, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.PICKLE_JAR, RenderLayer.getCutout());
 
-        EntityRendererRegistry.INSTANCE.register(EntitiesRegistry.SANDWICH_TABLE_MINECART, (dispatcher, context) -> new SandwichTableMinecartEntityRenderer(dispatcher));
+        EntityRendererRegistry.register(EntitiesRegistry.SANDWICH_TABLE_MINECART, SandwichTableMinecartEntityRenderer::new);
 
         ClientPlayNetworking.registerGlobalReceiver(Util.id("sync_sandwich_table_cart"), (client, handler, buf, responseSender) -> {
             Entity e = client.player.getEntityWorld().getEntityById(buf.readInt());
@@ -123,12 +121,12 @@ public class SandwichableClient implements ClientModInitializer {
             });
         });
 
-        FabricModelPredicateProviderRegistry.register(ItemsRegistry.SPREAD, Util.id("loaf_shape"), (stack, world, entity) -> {
-            if(stack.getOrCreateTag().contains("onLoaf")) return stack.getOrCreateTag().getBoolean("onLoaf") ? 1 : 0;
+        FabricModelPredicateProviderRegistry.register(ItemsRegistry.SPREAD, Util.id("loaf_shape"), (stack, world, entity, seed) -> {
+            if(stack.getOrCreateNbt().contains("onLoaf")) return stack.getOrCreateNbt().getBoolean("onLoaf") ? 1 : 0;
             return 0;
         });
 
-        FabricModelPredicateProviderRegistry.register(Util.id("sandwich_state"), (stack, world, entity) -> {
+        FabricModelPredicateProviderRegistry.register(Util.id("sandwich_state"), (stack, world, entity, seed) -> {
             if(entity == null) return RenderFlags.RENDERING_SANDWICH_ITEM * 0.25f;
             return 0;
         });

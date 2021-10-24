@@ -10,6 +10,9 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.particle.BlockStateParticleEffect;
@@ -68,7 +71,7 @@ public class Util {
 
     public static void tryAddElementToPool(Identifier targetPool, StructurePool pool, String elementId, StructurePool.Projection projection, int weight) {
         if(targetPool.equals(pool.getId())) {
-            StructurePoolElement element = StructurePoolElement.method_30426(elementId, StructureProcessorLists.EMPTY).apply(projection);
+            StructurePoolElement element = StructurePoolElement.ofProcessedLegacySingle(elementId, StructureProcessorLists.EMPTY).apply(projection);
             for (int i = 0; i < weight; i++) {
                 ((StructurePoolAccess)pool).sandwichable$getElements().add(element);
             }

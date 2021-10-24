@@ -24,6 +24,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Sandwich {
     private final ArrayList<ItemStack> foods = new ArrayList<>();
@@ -60,8 +61,8 @@ public class Sandwich {
         if(SpreadRegistry.INSTANCE.itemHasSpread(stack.getItem())) {
             ItemStack spread = new ItemStack(ItemsRegistry.SPREAD, 1);
             SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem()).onPour(stack, spread);
-            spread.getOrCreateTag().putString("spreadType", SpreadRegistry.INSTANCE.asString(SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem())));
-            if(foods.size() > 0) spread.getOrCreateTag().putBoolean("onLoaf", Sandwichable.BREAD_LOAVES.contains(foods.get(0).getItem()));
+            spread.getOrCreateNbt().putString("spreadType", SpreadRegistry.INSTANCE.asString(SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem())));
+            if(foods.size() > 0) spread.getOrCreateNbt().putBoolean("onLoaf", Sandwichable.BREAD_LOAVES.contains(foods.get(0).getItem()));
             foods.add(spread);
             ItemStack r = SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem()).getResultItem();
             stack.decrement(1);
@@ -152,7 +153,7 @@ public class Sandwich {
      * to be removed in 1.17
      */
     private ItemStack fixForEject(ItemStack stack) {
-        if (stack.hasTag() && stack.getTag().contains("s")) stack.getTag().remove("s");
+        if (stack.hasNbt() && stack.getNbt().contains("s")) stack.getNbt().remove("s");
         return stack;
     }
 
@@ -178,7 +179,7 @@ public class Sandwich {
             NbtCompound tag = writeToNbt(new NbtCompound());
             putDisplayValues(tag);
             if(!tag.isEmpty()) {
-                item.putSubTag("BlockEntityTag", tag);
+                item.setSubNbt("BlockEntityTag", tag);
             }
             return item;
         }
@@ -216,8 +217,8 @@ public class Sandwich {
         ItemStack stack = player.getStackInHand(hand);
         int maxSize = world.getGameRules().getInt(Sandwichable.SANDWICH_SIZE_RULE);
         if(stack.getItem().equals(BlocksRegistry.SANDWICH.asItem())) {
-            if(stack.getTag() != null) {
-                NbtCompound tag = stack.getOrCreateSubTag("BlockEntityTag");
+            if(stack.getNbt() != null) {
+                NbtCompound tag = stack.getOrCreateSubNbt("BlockEntityTag");
                 if (maxSize >= 0) {
                     Sandwich toAdd = new Sandwich();
                     toAdd.addFromNbt(tag);
@@ -248,7 +249,7 @@ public class Sandwich {
         int i = 0;
         for (ItemStack food : foods) {
             RenderFlags.RENDERING_SANDWICH_ITEM = (i % 3) + 1;
-            MinecraftClient.getInstance().getItemRenderer().renderItem(food, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
+            MinecraftClient.getInstance().getItemRenderer().renderItem(food, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers, Objects.hash(i));
             matrices.translate(0.0, 0.0, -0.03124);
             i++;
         }

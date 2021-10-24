@@ -16,14 +16,14 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class KitchenKnifeItem extends InfoTooltipItem implements CustomDurabilityBar {
+public class KitchenKnifeItem extends InfoTooltipItem {
     public KitchenKnifeItem(Settings settings) {
         super(settings);
     }
 
     public static int getSharpness(ItemStack knife) {
         if (!(knife.getItem() instanceof KitchenKnifeItem)) return 0;
-        NbtCompound kData = knife.getOrCreateSubTag("KnifeData");
+        NbtCompound kData = knife.getOrCreateSubNbt("KnifeData");
         if (!kData.contains("sharpness")) {
             SandwichableConfig.KitchenKnifeOption opt = Util.getConfig().getKnifeOption(knife.getItem());
             if (opt != null) {
@@ -35,7 +35,7 @@ public class KitchenKnifeItem extends InfoTooltipItem implements CustomDurabilit
 
     public static int getMaxSharpness(ItemStack knife) {
         if (!(knife.getItem() instanceof KitchenKnifeItem)) return 0;
-        NbtCompound kData = knife.getOrCreateSubTag("KnifeData");
+        NbtCompound kData = knife.getOrCreateSubNbt("KnifeData");
         if (!kData.contains("maxSharpness")) {
             SandwichableConfig.KitchenKnifeOption opt = Util.getConfig().getKnifeOption(knife.getItem());
             if (opt != null) {
@@ -47,7 +47,7 @@ public class KitchenKnifeItem extends InfoTooltipItem implements CustomDurabilit
 
     public static void setSharpness(ItemStack knife, int amount) {
         if (!(knife.getItem() instanceof KitchenKnifeItem)) return;
-        NbtCompound kData = knife.getOrCreateSubTag("KnifeData");
+        NbtCompound kData = knife.getOrCreateSubNbt("KnifeData");
         SandwichableConfig.KitchenKnifeOption opt = Util.getConfig().getKnifeOption(knife.getItem());
         if (opt != null) kData.putInt("sharpness", MathHelper.clamp(amount, 0, getMaxSharpness(knife)));
     }
@@ -101,8 +101,8 @@ public class KitchenKnifeItem extends InfoTooltipItem implements CustomDurabilit
     }
 
     @Override
-    public float getBarLength(ItemStack stack) {
-        return getSharpnessF(stack);
+    public int getItemBarStep(ItemStack stack) {
+        return (int)(13 * getSharpnessF(stack));
     }
 
     public static final int[] COLORS = {
@@ -110,12 +110,12 @@ public class KitchenKnifeItem extends InfoTooltipItem implements CustomDurabilit
     };
 
     @Override
-    public int getBarColor(ItemStack stack) {
+    public int getItemBarColor(ItemStack stack) {
         return COLORS[Math.round(getSharpnessF(stack) * (COLORS.length - 1))];
     }
 
     @Override
-    public boolean showBar(ItemStack stack) {
+    public boolean isItemBarVisible(ItemStack stack) {
         return getSharpnessF(stack) < 1;
     }
 }

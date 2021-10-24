@@ -56,13 +56,13 @@ public class DesalinatorScreen extends HandledScreen<DesalinatorScreenHandler> {
     @Override
     protected void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
         this.textRenderer.draw(matrixStack, this.title, 20.0F, 6.0F, 4210752);
-        this.textRenderer.draw(matrixStack, this.playerInventory.getDisplayName(), 8.0F, (float)(this.backgroundHeight - 96 + 4), 4210752);
+        this.textRenderer.draw(matrixStack, this.playerInventoryTitle, 8.0F, (float)(this.backgroundHeight - 96 + 4), 4210752);
     }
 
     @Override
     protected void drawBackground(MatrixStack matrixStack, float delta, int mouseX, int mouseY) {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.client.getTextureManager().bindTexture(TEXTURE);
+        RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
         int x = this.x;

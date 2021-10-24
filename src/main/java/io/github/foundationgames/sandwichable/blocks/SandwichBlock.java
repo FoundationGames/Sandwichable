@@ -2,7 +2,10 @@ package io.github.foundationgames.sandwichable.blocks;
 
 
 import io.github.foundationgames.sandwichable.blocks.entity.SandwichBlockEntity;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -13,8 +16,9 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
+import org.jetbrains.annotations.Nullable;
 
-public class SandwichBlock extends Block implements BlockEntityProvider {
+public class SandwichBlock extends ModelBlockWithEntity {
 
     public SandwichBlock(Settings settings) {
         super(settings);
@@ -53,9 +57,10 @@ public class SandwichBlock extends Block implements BlockEntityProvider {
         return Block.createCuboidShape(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
     }
 
+    @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockView view) {
-        return new SandwichBlockEntity();
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new SandwichBlockEntity(pos, state);
     }
 
     @Override
@@ -83,7 +88,7 @@ public class SandwichBlock extends Block implements BlockEntityProvider {
             ItemStack item = new ItemStack(BlocksRegistry.SANDWICH);
             NbtCompound tag = blockEntity.getSandwich().writeToNbt(new NbtCompound());
             if(!tag.isEmpty()) {
-                item.putSubTag("BlockEntityTag", tag);
+                item.setSubNbt("BlockEntityTag", tag);
             }
             return item;
         }

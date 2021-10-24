@@ -19,15 +19,15 @@ public class FermentingMilkSpreadType extends SpreadType {
 
     @Override
     public void onPour(ItemStack container, ItemStack spread) {
-        if(container.getTag() != null) {
-            spread.getOrCreateTag().putInt("effectDuration", container.getTag().getInt("percentFermented")*4);
+        if(container.getNbt() != null) {
+            spread.getOrCreateNbt().putInt("effectDuration", container.getNbt().getInt("percentFermented")*4);
         }
     }
 
     @Override
     public void finishUsing(ItemStack stack, World world, LivingEntity user) {
-        if(stack.getTag() != null) {
-            NbtCompound tag = stack.getTag();
+        if(stack.getNbt() != null) {
+            NbtCompound tag = stack.getNbt();
             user.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, tag.getInt("effectDuration"), 5));
         }
     }

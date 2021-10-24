@@ -43,6 +43,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -90,6 +91,9 @@ public class Sandwichable implements ModInitializer {
         return null;
     });
 
+    public static final RecipeType<CuttingRecipe> CUTTING_RECIPE = Registry.register(Registry.RECIPE_TYPE, Util.id(CuttingRecipe.Type.ID), CuttingRecipe.Type.INSTANCE);
+    public static final RecipeType<ToastingRecipe> TOASTING_RECIPE = Registry.register(Registry.RECIPE_TYPE, Util.id(ToastingRecipe.Type.ID), ToastingRecipe.Type.INSTANCE);
+
     @Override
     public void onInitialize() {
         SandwichableWorldgen.init();
@@ -101,10 +105,7 @@ public class Sandwichable implements ModInitializer {
         SpreadType.init();
 
         Registry.register(Registry.RECIPE_SERIALIZER, CuttingRecipeSerializer.ID, CuttingRecipeSerializer.INSTANCE);
-        Registry.register(Registry.RECIPE_TYPE, Util.id(CuttingRecipe.Type.ID), CuttingRecipe.Type.INSTANCE);
-
         Registry.register(Registry.RECIPE_SERIALIZER, ToastingRecipeSerializer.ID, ToastingRecipeSerializer.INSTANCE);
-        Registry.register(Registry.RECIPE_TYPE, Util.id(ToastingRecipe.Type.ID), ToastingRecipe.Type.INSTANCE);
 
         ExtraDispenserBehaviorRegistry.initDefaults();
 
@@ -120,11 +121,11 @@ public class Sandwichable implements ModInitializer {
 
         DispenserBehavior defaultBehavior = new ItemDispenserBehavior();
         DispenserBlock.registerBehavior(ItemsRegistry.PICKLE_BRINE_BUCKET, (pointer, stack) -> {
-            BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
+            BlockPos pos = pointer.getPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
             BucketItem bucket = (BucketItem)stack.getItem();
             World world = pointer.getWorld();
             if (bucket.placeFluid(null, world, pos, null)) {
-                bucket.onEmptied(world, stack, pos);
+                bucket.onEmptied(null, world, stack, pos);
                 return new ItemStack(Items.BUCKET);
             } else {
                 return defaultBehavior.dispense(pointer, stack);

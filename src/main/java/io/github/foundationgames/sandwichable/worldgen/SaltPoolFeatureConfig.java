@@ -6,7 +6,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.world.gen.feature.FeatureConfig;
 
 public class SaltPoolFeatureConfig implements FeatureConfig {
-
     public final boolean hasWater;
 
     public static final Codec<SaltPoolFeatureConfig> CODEC = RecordCodecBuilder.create((instance) ->

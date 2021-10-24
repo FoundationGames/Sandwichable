@@ -28,6 +28,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -68,15 +69,17 @@ public class CustomBucketItem extends BucketItem {
                 BlockState state;
                 if (this.fluid == Fluids.EMPTY) {
                     state = world.getBlockState(pos);
-                    if (state.getBlock() instanceof FluidDrainable) {
-                        Fluid fluid = ((FluidDrainable) state.getBlock()).tryDrainFluid(world, pos, state);
-                        if (fluid != Fluids.EMPTY) {
+                    if (state.getBlock() instanceof FluidDrainable fluidBlock) {
+                        ItemStack bucket = fluidBlock.tryDrainFluid(world, pos, state);
+                        if (!bucket.isEmpty()) {
                             user.incrementStat(Stats.USED.getOrCreateStat(this));
-                            user.playSound(fluid.isIn(FluidTags.LAVA) ? SoundEvents.ITEM_BUCKET_FILL_LAVA : SoundEvents.ITEM_BUCKET_FILL, 1.0F, 1.0F);
-                            ItemStack used = ItemUsage.method_30012(stack, user, new ItemStack(fluid.getBucketItem()));
-                            if (!world.isClient)
-                                Criteria.FILLED_BUCKET.trigger((ServerPlayerEntity) user, new ItemStack(fluid.getBucketItem()));
-                            return TypedActionResult.success(used, world.isClient());
+                            fluidBlock.getBucketFillSound().ifPresent(sound -> user.playSound(sound, 1.0F, 1.0F));
+                            world.emitGameEvent(user, GameEvent.FLUID_PICKUP, pos);
+                            ItemStack bucketResult = ItemUsage.exchangeStack(stack, user, bucket);
+                            if (!world.isClient) {
+                                Criteria.FILLED_BUCKET.trigger((ServerPlayerEntity)user, bucket);
+                            }
+                            return TypedActionResult.success(bucketResult, world.isClient());
                         }
                     }
                     return TypedActionResult.fail(stack);
@@ -84,10 +87,10 @@ public class CustomBucketItem extends BucketItem {
                     state = world.getBlockState(pos);
                     BlockPos npos = state.getBlock() instanceof BucketFluidloggable && ((BucketFluidloggable)state.getBlock()).isFillableWith(this.fluid) ? pos : placePos;
                     if (this.placeFluid(user, world, npos, hit)) {
-                        this.onEmptied(world, stack, npos);
+                        this.onEmptied(user, world, stack, npos);
                         if (user instanceof ServerPlayerEntity) Criteria.PLACED_BLOCK.trigger((ServerPlayerEntity)user, npos, stack);
                         user.incrementStat(Stats.USED.getOrCreateStat(this));
-                        return TypedActionResult.success(this.getEmptiedStack(stack, user), world.isClient());
+                        return TypedActionResult.success(getEmptiedStack(stack, user), world.isClient());
                     } else return TypedActionResult.fail(stack);
                 }
             } else {

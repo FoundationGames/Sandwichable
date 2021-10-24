@@ -1,17 +1,10 @@
 package io.github.foundationgames.sandwichable.particle;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.foundationgames.sandwichable.util.BlockLeakParticleDuck;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
-import net.minecraft.client.texture.SpriteAtlasTexture;
-import net.minecraft.client.texture.TextureManager;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.util.registry.Registry;

@@ -8,10 +8,9 @@ import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Heightmap;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.util.FeatureContext;
 
 import java.util.Random;
 
@@ -22,10 +21,13 @@ public class ShrubsFeature extends Feature<DefaultFeatureConfig> {
     }
 
     @Override
-    public boolean generate(StructureWorldAccess world, ChunkGenerator chunkGenerator, Random random, BlockPos bpos, DefaultFeatureConfig featureConfig) {
+    public boolean generate(FeatureContext<DefaultFeatureConfig> ctx) {
+        var world = ctx.getWorld();
+        var random = ctx.getRandom();
+
         SandwichableConfig sconfig = Util.getConfig();
 
-        BlockPos pos = world.getTopPosition(Heightmap.Type.WORLD_SURFACE, bpos);
+        BlockPos pos = world.getTopPosition(Heightmap.Type.WORLD_SURFACE, ctx.getOrigin());
 
         BlockState blockState = BlocksRegistry.SHRUB.getDefaultState();
         int i = 0;

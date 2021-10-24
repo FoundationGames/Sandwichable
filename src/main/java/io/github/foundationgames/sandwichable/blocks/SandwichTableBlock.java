@@ -13,8 +13,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
@@ -23,9 +23,10 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider, Sn
         super(settings);
     }
 
+    @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockView view) {
-        return new SandwichTableBlockEntity();
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new SandwichTableBlockEntity(pos, state);
     }
 
     @Override

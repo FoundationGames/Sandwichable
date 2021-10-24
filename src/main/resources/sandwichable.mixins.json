@@ -1,7 +1,7 @@
 {
   "required": true,
   "package": "io.github.foundationgames.sandwichable.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_16",
   "mixins": [
     "ChickenEntityMixin",
     "ClientWorldMixin",
@@ -18,13 +18,10 @@
     "BackgroundRendererMixin",
     "BuiltinModelItemRendererMixin",
     "ClientPlayerInteractionManagerMixin",
-    "ClientPlayNetworkHandlerMixin",
     "ContinuousFallingParticleMixin",
-    "DrippingParticleMixin",
-    "ItemRendererMixin",
-    "MinecraftClientMixin"
+    "DrippingParticleMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-	}
+  }
 }

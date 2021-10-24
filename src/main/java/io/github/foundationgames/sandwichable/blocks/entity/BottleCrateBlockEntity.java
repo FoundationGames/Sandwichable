@@ -21,21 +21,22 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class BottleCrateBlockEntity extends LockableContainerBlockEntity implements Tickable, ExtendedScreenHandlerFactory, SidedInventory, BlockEntityClientSerializable {
+public class BottleCrateBlockEntity extends LockableContainerBlockEntity implements ExtendedScreenHandlerFactory, SidedInventory, BlockEntityClientSerializable {
     private DefaultedList<ItemStack> inventory;
     private final Random random = new Random();
     private int growthTicks = randomTime();
 
-    public BottleCrateBlockEntity() {
-        super(BlocksRegistry.BOTTLECRATE_BLOCKENTITY);
+    public BottleCrateBlockEntity(BlockPos pos, BlockState state) {
+        super(BlocksRegistry.BOTTLECRATE_BLOCKENTITY, pos, state);
         this.inventory = DefaultedList.ofSize(21, ItemStack.EMPTY);
     }
 
@@ -57,12 +58,11 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
         }
     }
 
-    @Override
-    public void tick() {
-        growthTicks--;
-        if(growthTicks <= 0) {
-            tickItems(this.random);
-            growthTicks = randomTime();
+    public static void tick(World world, BlockPos pos, BlockState state, BottleCrateBlockEntity self) {
+        self.growthTicks--;
+        if(self.growthTicks <= 0) {
+            self.tickItems(self.random);
+            self.growthTicks = self.randomTime();
         }
     }
 
@@ -71,20 +71,20 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     @Override
-    public void fromTag(BlockState state, NbtCompound tag) {
-        super.fromTag(state, tag);
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
         this.inventory = DefaultedList.ofSize(21, ItemStack.EMPTY);
-        this.growthTicks = tag.getInt("growthTicks");
-        Inventories.readNbt(tag, this.inventory);
+        this.growthTicks = nbt.getInt("growthTicks");
+        Inventories.readNbt(nbt, this.inventory);
         updateBlockState();
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag) {
-        super.writeNbt(tag);
-        Inventories.writeNbt(tag, this.inventory);
-        tag.putInt("growthTicks", growthTicks);
-        return tag;
+    public NbtCompound writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        Inventories.writeNbt(nbt, this.inventory);
+        nbt.putInt("growthTicks", growthTicks);
+        return nbt;
     }
 
     public void tickItems(Random random) {
@@ -182,13 +182,13 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     @Override
-    public void fromClientTag(NbtCompound NbtCompound) {
-        fromTag(this.getCachedState(), NbtCompound);
+    public void fromClientTag(NbtCompound nbt) {
+        readNbt(nbt);
     }
 
     @Override
-    public NbtCompound toClientTag(NbtCompound NbtCompound) {
-        return writeNbt(NbtCompound);
+    public NbtCompound toClientTag(NbtCompound nbt) {
+        return writeNbt(nbt);
     }
 
     @Override

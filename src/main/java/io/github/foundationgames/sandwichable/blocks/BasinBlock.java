@@ -4,10 +4,11 @@ import io.github.foundationgames.sandwichable.blocks.entity.BasinBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.BasinContentType;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,19 +21,27 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-public class BasinBlock extends Block implements BlockEntityProvider {
+public class BasinBlock extends ModelBlockWithEntity {
     public static final VoxelShape SHAPE;
 
     public BasinBlock(Settings settings) {
         super(settings);
     }
 
+    @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockView view) {
-        return new BasinBlockEntity();
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new BasinBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return checkType(type, BlocksRegistry.BASIN_BLOCKENTITY, BasinBlockEntity::tick);
     }
 
     @Override

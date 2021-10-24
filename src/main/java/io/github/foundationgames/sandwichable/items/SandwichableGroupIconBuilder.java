@@ -15,7 +15,7 @@ public class SandwichableGroupIconBuilder {
         sandwichlist.set(2, new ItemStack(ItemsRegistry.LETTUCE_LEAF));
         sandwichlist.set(3, new ItemStack(ItemsRegistry.TOMATO_SLICE));
         sandwichlist.set(4, new ItemStack(ItemsRegistry.TOASTED_BREAD_SLICE));
-        groupIcon.putSubTag("BlockEntityTag", Inventories.writeNbt(new NbtCompound(), sandwichlist));
+        groupIcon.setSubNbt("BlockEntityTag", Inventories.writeNbt(new NbtCompound(), sandwichlist));
         return groupIcon;
     }
 }

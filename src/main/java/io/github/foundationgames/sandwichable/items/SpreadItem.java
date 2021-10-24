@@ -18,8 +18,8 @@ public class SpreadItem extends Item {
 
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
-        if(user instanceof PlayerEntity && stack.getTag().contains("spreadType")) {
-            SpreadType type = SpreadRegistry.INSTANCE.fromString(stack.getTag().getString("spreadType"));
+        if(user instanceof PlayerEntity && stack.getNbt().contains("spreadType")) {
+            SpreadType type = SpreadRegistry.INSTANCE.fromString(stack.getNbt().getString("spreadType"));
             if(!((PlayerEntity)user).isCreative()) ((PlayerEntity)user).getHungerManager().add(type.getHunger(), type.getSaturationModifier());
             for(StatusEffectInstance effect : type.getStatusEffects(stack)) {
                 user.addStatusEffect(effect);
@@ -31,9 +31,9 @@ public class SpreadItem extends Item {
 
     @Override
     public String getTranslationKey(ItemStack stack) {
-        if(stack.getTag() != null) {
-            if(stack.getTag().getString("spreadType") != null) {
-                String stype = stack.getTag().getString("spreadType");
+        if(stack.getNbt() != null) {
+            if(stack.getNbt().getString("spreadType") != null) {
+                String stype = stack.getNbt().getString("spreadType");
                 if(SpreadRegistry.INSTANCE.fromString(stype) != null) {
                     return SpreadRegistry.INSTANCE.fromString(stype).getTranslationKey(stype, stack);
                 }
@@ -44,9 +44,9 @@ public class SpreadItem extends Item {
 
     @Override
     public boolean hasGlint(ItemStack stack) {
-        if(stack.getTag() != null) {
-            if(stack.getTag().getString("spreadType") != null) {
-                String stype = stack.getTag().getString("spreadType");
+        if(stack.getNbt() != null) {
+            if(stack.getNbt().getString("spreadType") != null) {
+                String stype = stack.getNbt().getString("spreadType");
                 if(SpreadRegistry.INSTANCE.fromString(stype) != null) {
                     return SpreadRegistry.INSTANCE.fromString(stype).hasGlint(stack);
                 }

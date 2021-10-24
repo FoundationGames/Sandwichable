@@ -179,7 +179,7 @@ public class SandwichMakerProfession {
         @Nullable
         public TradeOffer create(Entity entity, Random random) {
             ItemStack itemStack = new ItemStack(BlocksRegistry.SANDWICH, 1);
-            itemStack.putSubTag("BlockEntityTag", Inventories.writeNbt(new NbtCompound(), this.items));
+            itemStack.setSubNbt("BlockEntityTag", Inventories.writeNbt(new NbtCompound(), this.items));
             return new TradeOffer(new ItemStack(Items.EMERALD, this.price), itemStack, maxUses, this.experience, 0.2F);
         }
     }

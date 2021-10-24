@@ -18,13 +18,12 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class PickleJarBlockEntity extends BlockEntity implements SidedInventory, Tickable, BlockEntityClientSerializable {
+public class PickleJarBlockEntity extends BlockEntity implements SidedInventory, BlockEntityClientSerializable {
 
     private PickleJarFluid fluid = PickleJarFluid.AIR;
     private int numItems = 0;
@@ -33,34 +32,34 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
     public static final int pickleTime = 1200; //1200
     private static final int maxItems = 4;
 
-    public PickleJarBlockEntity() {
-        super(BlocksRegistry.PICKLEJAR_BLOCKENTITY);
+    public PickleJarBlockEntity(BlockPos pos, BlockState state) {
+        super(BlocksRegistry.PICKLEJAR_BLOCKENTITY, pos, state);
     }
 
     @Override
-    public void fromTag(BlockState state, NbtCompound tag) {
-        super.fromTag(state, tag);
-        this.fluid = PickleJarFluid.fromString(tag.getString("pickleJarFluid"));
-        this.numItems = tag.getInt("numItems");
-        this.areItemsPickled = tag.getBoolean("areItemsPickled");
-        this.pickleProgress = tag.getInt("pickleProgress");
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        this.fluid = PickleJarFluid.fromString(nbt.getString("pickleJarFluid"));
+        this.numItems = nbt.getInt("numItems");
+        this.areItemsPickled = nbt.getBoolean("areItemsPickled");
+        this.pickleProgress = nbt.getInt("pickleProgress");
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag) {
-        super.writeNbt(tag);
-        tag.putString("pickleJarFluid", fluid.toString());
-        tag.putInt("numItems", numItems);
-        tag.putBoolean("areItemsPickled", areItemsPickled);
-        tag.putInt("pickleProgress", pickleProgress);
-        return tag;
+    public NbtCompound writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        nbt.putString("pickleJarFluid", fluid.toString());
+        nbt.putInt("numItems", numItems);
+        nbt.putBoolean("areItemsPickled", areItemsPickled);
+        nbt.putInt("pickleProgress", pickleProgress);
+        return nbt;
     }
 
     public ActionResult onUse(World world, PlayerEntity player, Hand hand, BlockPos pos) {
         ItemStack playerStack = player.getStackInHand(hand);
         Item playerItem = playerStack.getItem();
         //add cucumber
-        if(playerItem.isIn(CommonTags.CUCUMBER) && this.fluid == PickleJarFluid.WATER && numItems < maxItems) {
+        if(CommonTags.CUCUMBER.contains(playerItem) && this.fluid == PickleJarFluid.WATER && numItems < maxItems) {
             if(!player.isCreative()) {
                 playerStack.decrement(1);
             }
@@ -70,7 +69,7 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
             return ActionResult.SUCCESS;
         }
         //add pickle
-        if(playerItem.isIn(CommonTags.PICKLED_CUCUMBER) && this.fluid == PickleJarFluid.PICKLED_BRINE && numItems < maxItems) {
+        if(CommonTags.PICKLED_CUCUMBER.contains(playerItem) && this.fluid == PickleJarFluid.PICKLED_BRINE && numItems < maxItems) {
             if(!player.isCreative()) {
                 playerStack.decrement(1);
             }
@@ -105,7 +104,7 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
             return ActionResult.SUCCESS;
         }
         //add salt
-        if(playerItem.isIn(CommonTags.SALT) && fluid == PickleJarFluid.WATER && numItems > 0) {
+        if(CommonTags.SALT.contains(playerItem) && fluid == PickleJarFluid.WATER && numItems > 0) {
             if(!player.isCreative()) {
                 playerStack.decrement(1);
             }
@@ -203,23 +202,22 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
         this.markDirty();
     }
 
-    @Override
-    public void tick() {
-        if(this.fluid == PickleJarFluid.PICKLING_BRINE && pickleProgress < pickleTime) {
-            this.pickleProgress++;
-        } else if(pickleProgress == pickleTime) {
-            this.finishPickling();
+    public static void tick(World world, BlockPos pos, BlockState state, PickleJarBlockEntity self) {
+        if(self.fluid == PickleJarFluid.PICKLING_BRINE && self.pickleProgress < pickleTime) {
+            self.pickleProgress++;
+        } else if(self.pickleProgress == pickleTime) {
+            self.finishPickling();
         }
     }
 
     @Override
-    public void fromClientTag(NbtCompound NbtCompound) {
-        this.fromTag(world.getBlockState(pos), NbtCompound);
+    public void fromClientTag(NbtCompound nbt) {
+        this.readNbt(nbt);
     }
 
     @Override
-    public NbtCompound toClientTag(NbtCompound NbtCompound) {
-        return this.writeNbt(NbtCompound);
+    public NbtCompound toClientTag(NbtCompound nbt) {
+        return this.writeNbt(nbt);
     }
 
     public void update() {

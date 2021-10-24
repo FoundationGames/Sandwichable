@@ -2,19 +2,16 @@ package io.github.foundationgames.sandwichable.items;
 
 import io.github.foundationgames.sandwichable.util.CheeseRegistry;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FoodComponent;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
@@ -31,13 +28,13 @@ public class FermentingMilkBucketItem extends InfoTooltipItem {
 
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
-        if(stack.getTag() != null) {
-            if(stack.getTag().contains("bucketData")) {
-                NbtCompound tag = stack.getTag().getCompound("bucketData");
+        if(stack.getNbt() != null) {
+            if(stack.getNbt().contains("bucketData")) {
+                NbtCompound tag = stack.getNbt().getCompound("bucketData");
                 user.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, tag.getInt("percentFermented") * 4, 5));
             }
         }
-        return user instanceof PlayerEntity && ((PlayerEntity)user).abilities.creativeMode ? super.finishUsing(stack, world, user) : new ItemStack(Items.BUCKET);
+        return user instanceof PlayerEntity && ((PlayerEntity)user).getAbilities().creativeMode ? super.finishUsing(stack, world, user) : new ItemStack(Items.BUCKET);
     }
 
     public UseAction getUseAction(ItemStack stack) {
@@ -54,9 +51,9 @@ public class FermentingMilkBucketItem extends InfoTooltipItem {
 
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
-        if(stack.getTag() != null) {
-            if(stack.getTag().getCompound("bucketData") != null) {
-                NbtCompound tag = stack.getTag().getCompound("bucketData").copy();
+        if(stack.getNbt() != null) {
+            if(stack.getNbt().getCompound("bucketData") != null) {
+                NbtCompound tag = stack.getNbt().getCompound("bucketData").copy();
                 int pct;
                 CheeseType type;
                 pct = tag.getInt("percentFermented");

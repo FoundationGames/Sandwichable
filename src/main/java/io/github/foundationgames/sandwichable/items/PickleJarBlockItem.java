@@ -3,16 +3,7 @@ package io.github.foundationgames.sandwichable.items;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.blocks.entity.PickleJarBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.PickleJarFluid;
-import net.fabricmc.fabric.api.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ComposterBlock;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
@@ -21,10 +12,8 @@ import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Objects;
 
 public class PickleJarBlockItem extends InfoTooltipBlockItem {
-
     private String tooltipKey;
     private boolean isDefault;
 
@@ -46,29 +35,24 @@ public class PickleJarBlockItem extends InfoTooltipBlockItem {
 
         if(fluid == PickleJarFluid.WATER && numItems > 0) {
             stack = new ItemStack(ItemsRegistry.CUCUMBER_FILLED_PICKLE_JAR, 1);
-            stack.putSubTag("BlockEntityTag", tag);
-        }
-        else if(fluid == PickleJarFluid.WATER && numItems == 0) {
+        } else if(fluid == PickleJarFluid.WATER && numItems == 0) {
             stack = new ItemStack(ItemsRegistry.WATER_FILLED_PICKLE_JAR, 1);
-            stack.putSubTag("BlockEntityTag", tag);
-        }
-        else if(fluid == PickleJarFluid.PICKLING_BRINE) {
+        } else if(fluid == PickleJarFluid.PICKLING_BRINE) {
             stack = new ItemStack(ItemsRegistry.PICKLING_PICKLE_JAR, 1);
-            stack.putSubTag("BlockEntityTag", tag);
-        }
-        else if(fluid == PickleJarFluid.PICKLED_BRINE) {
+        } else if(fluid == PickleJarFluid.PICKLED_BRINE) {
             stack = new ItemStack(ItemsRegistry.PICKLE_FILLED_PICKLE_JAR, 1);
-            stack.putSubTag("BlockEntityTag", tag);
         }
+        stack.setSubNbt("BlockEntityTag", tag);
+
         return stack;
     }
 
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
         tooltip.add(new TranslatableText("pickle_jar.tooltip.contents").formatted(Formatting.AQUA));
-        if(stack.getSubTag("BlockEntityTag") != null) {
+        if(stack.getSubNbt("BlockEntityTag") != null) {
             tooltip.add(new TranslatableText(this.tooltipKey).formatted(Formatting.BLUE));
-            NbtCompound tag = stack.getSubTag("BlockEntityTag");
+            NbtCompound tag = stack.getSubNbt("BlockEntityTag");
             PickleJarFluid fluid = PickleJarFluid.fromString(tag.getString("pickleJarFluid"));
             int numItems = tag.getInt("numItems");
             int pickleProgress = tag.getInt("pickleProgress");

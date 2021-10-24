@@ -1,6 +1,5 @@
 package io.github.foundationgames.sandwichable.items;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class EnchantedGlintItem extends InfoTooltipItem {

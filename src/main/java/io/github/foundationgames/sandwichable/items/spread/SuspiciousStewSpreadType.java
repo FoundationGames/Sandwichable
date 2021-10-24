@@ -16,7 +16,7 @@ public class SuspiciousStewSpreadType extends SpreadType {
 
     @Override
     public void finishUsing(ItemStack stack, World world, LivingEntity user) {
-        NbtCompound tag = stack.getOrCreateTag().getCompound("stewData");
+        NbtCompound tag = stack.getOrCreateNbt().getCompound("stewData");
         if (tag != null && tag.contains("Effects", 9)) {
             NbtList effects = tag.getList("Effects", 10);
             for(int i = 0; i < effects.size(); ++i) {
@@ -35,6 +35,6 @@ public class SuspiciousStewSpreadType extends SpreadType {
 
     @Override
     public void onPour(ItemStack container, ItemStack spread) {
-        spread.getOrCreateTag().put("stewData", container.getTag());
+        spread.getOrCreateNbt().put("stewData", container.getNbt());
     }
 }

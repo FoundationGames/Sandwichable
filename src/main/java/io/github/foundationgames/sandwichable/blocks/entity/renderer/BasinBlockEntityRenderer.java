@@ -10,13 +10,13 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
-public class BasinBlockEntityRenderer extends BlockEntityRenderer<BasinBlockEntity> {
+public class BasinBlockEntityRenderer implements BlockEntityRenderer<BasinBlockEntity> {
 
-    public BasinBlockEntityRenderer(BlockEntityRenderDispatcher dispatcher) {
-        super(dispatcher);
+    public BasinBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
     }
 
     @Override
@@ -24,22 +24,23 @@ public class BasinBlockEntityRenderer extends BlockEntityRenderer<BasinBlockEnti
         matrices.push();
         Identifier tex = new Identifier("sandwichable", "textures/entity/basin/milk.png");
         Identifier cheeseTex = blockEntity.getContent().getCheeseType().getTexture();
-        CheeseModel cheeseModel = new CheeseModel(64, 32);
-        MilkModel milkModel = new MilkModel(64, 32);
+        //CheeseModel cheeseModel = new CheeseModel(64, 32);
+        //MilkModel milkModel = new MilkModel(64, 32);
         if(blockEntity.getContent() == BasinContent.MILK) {
-            milkModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(tex)), light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+            //milkModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(tex)), light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
         }
         else if(blockEntity.getContent().getContentType() == BasinContentType.FERMENTING_MILK) {
             float progressToFloatInv = 1.0F - (float)blockEntity.getFermentProgress() / BasinBlockEntity.fermentTime;
-            cheeseModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(cheeseTex)), light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
-            milkModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(tex)), light, overlay, 1.0F, 1.0F, 1.0F, progressToFloatInv);
+            //cheeseModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(cheeseTex)), light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+            //milkModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(tex)), light, overlay, 1.0F, 1.0F, 1.0F, progressToFloatInv);
         }
         else if(blockEntity.getContent().getContentType() == BasinContentType.CHEESE) {
-            cheeseModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(cheeseTex)), light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+            //cheeseModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(cheeseTex)), light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
         }
         matrices.pop();
     }
 
+    /*
     private static class CheeseModel extends Model {
         ModelPart cheese;
 
@@ -73,4 +74,5 @@ public class BasinBlockEntityRenderer extends BlockEntityRenderer<BasinBlockEnti
             milk.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
         }
     }
+     */
 }

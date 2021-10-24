@@ -1,18 +1,16 @@
 package io.github.foundationgames.sandwichable.blocks;
 
-import io.github.foundationgames.sandwichable.blocks.entity.*;
+import io.github.foundationgames.sandwichable.blocks.entity.PickleJarBlockEntity;
 import io.github.foundationgames.sandwichable.items.PickleJarBlockItem;
-import io.github.foundationgames.sandwichable.particle.Particles;
-import io.github.foundationgames.sandwichable.util.CheeseRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -21,10 +19,9 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
-
-public class PickleJarBlock extends Block implements BlockEntityProvider {
+public class PickleJarBlock extends ModelBlockWithEntity {
     public static final VoxelShape SHAPE;
 
     public PickleJarBlock(Settings settings) {
@@ -80,9 +77,16 @@ public class PickleJarBlock extends Block implements BlockEntityProvider {
         return super.getComparatorOutput(state, world, pos);
     }
 
+    @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockView view) {
-        return new PickleJarBlockEntity();
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new PickleJarBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return checkType(type, BlocksRegistry.PICKLEJAR_BLOCKENTITY, PickleJarBlockEntity::tick);
     }
 
     static {

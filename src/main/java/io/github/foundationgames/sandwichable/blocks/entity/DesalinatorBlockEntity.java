@@ -22,15 +22,15 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-public class DesalinatorBlockEntity extends LockableContainerBlockEntity implements ExtendedScreenHandlerFactory, SidedInventory, Tickable, BlockEntityClientSerializable {
+public class DesalinatorBlockEntity extends LockableContainerBlockEntity implements ExtendedScreenHandlerFactory, SidedInventory, BlockEntityClientSerializable {
     private DefaultedList<ItemStack> inventory;
     private int fluidAmount = 0;
     private int evaporateProgress = 0;
@@ -43,29 +43,29 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     public static final int evaporateTime = 185;
     public static final int fuelBurnTime = 990;
 
-    public DesalinatorBlockEntity() {
-        super(BlocksRegistry.DESALINATOR_BLOCKENTITY);
+    public DesalinatorBlockEntity(BlockPos pos, BlockState state) {
+        super(BlocksRegistry.DESALINATOR_BLOCKENTITY, pos, state);
         this.inventory = DefaultedList.ofSize(2, ItemStack.EMPTY);
     }
 
     @Override
-    public void fromTag(BlockState state, NbtCompound tag) {
-        super.fromTag(state, tag);
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
         this.inventory = DefaultedList.ofSize(2, ItemStack.EMPTY);
-        fluidAmount = tag.getInt("waterAmount");
-        evaporateProgress = tag.getInt("evaporateProgress");
-        fuelBurnProgress = tag.getInt("fuelBurnProgress");
-        Inventories.readNbt(tag, this.inventory);
+        fluidAmount = nbt.getInt("waterAmount");
+        evaporateProgress = nbt.getInt("evaporateProgress");
+        fuelBurnProgress = nbt.getInt("fuelBurnProgress");
+        Inventories.readNbt(nbt, this.inventory);
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag) {
-        super.writeNbt(tag);
-        Inventories.writeNbt(tag, this.inventory);
-        tag.putInt("waterAmount", fluidAmount);
-        tag.putInt("evaporateProgress", evaporateProgress);
-        tag.putInt("fuelBurnProgress", fuelBurnProgress);
-        return tag;
+    public NbtCompound writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        Inventories.writeNbt(nbt, this.inventory);
+        nbt.putInt("waterAmount", fluidAmount);
+        nbt.putInt("evaporateProgress", evaporateProgress);
+        nbt.putInt("fuelBurnProgress", fuelBurnProgress);
+        return nbt;
     }
 
     private void finishEvaporating() {
@@ -108,59 +108,58 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
         }
     }
 
-    @Override
-    public void tick() {
+    public static void tick(World world, BlockPos pos, BlockState state, DesalinatorBlockEntity self) {
         if(world.getBlockState(pos).getBlock() == BlocksRegistry.DESALINATOR) {
-            if(this.inventory.get(0).getCount() > 0 && this.fluidAmount > 0) {
-                if(!burning) {
-                    this.inventory.get(0).decrement(1);
-                    startBurning();
+            if(self.inventory.get(0).getCount() > 0 && self.fluidAmount > 0) {
+                if(!self.burning) {
+                    self.inventory.get(0).decrement(1);
+                    self.startBurning();
                 }
-                this.markDirty();
+                self.markDirty();
             }
-            if(burning) {
-                fuelBurnProgress++;
-                if(fuelBurnProgress == fuelBurnTime) {
-                    this.stopBurning();
+            if(self.burning) {
+                self.fuelBurnProgress++;
+                if(self.fuelBurnProgress == fuelBurnTime) {
+                    self.stopBurning();
                 }
-                if(fluidAmount > 0) {
-                    if(!evaporating && this.inventory.get(1).getCount() < 64) {
-                        this.startEvaporating();
+                if(self.fluidAmount > 0) {
+                    if(!self.evaporating && self.inventory.get(1).getCount() < 64) {
+                        self.startEvaporating();
                     }
                 }
-                this.markDirty();
+                self.markDirty();
             }
-            if(evaporating && burning) {
-                evaporateProgress += isPickleBrine ? 1 : 2;
-                if(evaporateProgress >= evaporateTime) {
-                    finishEvaporating();
+            if(self.evaporating && self.burning) {
+                self.evaporateProgress += self.isPickleBrine ? 1 : 2;
+                if(self.evaporateProgress >= evaporateTime) {
+                    self.finishEvaporating();
                 }
                 world.addParticle(ParticleTypes.CLOUD, pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5, 0, 0.07, 0);
             }
-            if(evaporating && !burning) {
-                evaporating = false;
-                tryUpdateStateToOff();
+            if(self.evaporating && !self.burning) {
+                self.evaporating = false;
+                self.tryUpdateStateToOff();
             }
-            if(!evaporating && evaporateProgress > 0) {
-                evaporateProgress--;
+            if(!self.evaporating && self.evaporateProgress > 0) {
+                self.evaporateProgress--;
             }
             DesalinatorBlock.FluidType fluid = world.getBlockState(pos).get(DesalinatorBlock.FLUID);
-            if(fluid != DesalinatorBlock.FluidType.NONE && fluidAmount < maxFluidAmount && (((fluid == DesalinatorBlock.FluidType.PICKLE_BRINE) == isPickleBrine) || this.fluidAmount == 0)) {
-                this.isPickleBrine = fluid == DesalinatorBlock.FluidType.PICKLE_BRINE;
+            if(fluid != DesalinatorBlock.FluidType.NONE && self.fluidAmount < maxFluidAmount && (((fluid == DesalinatorBlock.FluidType.PICKLE_BRINE) == self.isPickleBrine) || self.fluidAmount == 0)) {
+                self.isPickleBrine = fluid == DesalinatorBlock.FluidType.PICKLE_BRINE;
                 world.setBlockState(pos, world.getBlockState(pos).with(DesalinatorBlock.FLUID, DesalinatorBlock.FluidType.NONE));
-                fluidAmount++;
+                self.fluidAmount++;
                 world.updateNeighbors(pos, world.getBlockState(pos).getBlock());
             }
         }
-        if(evaporateProgress % 6 == 0 || evaporating != wasEvaporating) {
+        if(self.evaporateProgress % 6 == 0 || self.evaporating != self.wasEvaporating) {
             SoundEvent sound= null;
-            if(evaporating && !wasEvaporating) sound = Sandwichable.DESALINATOR_START;
-            else if(!evaporating && wasEvaporating) sound = Sandwichable.DESALINATOR_STOP;
-            else if(evaporating) sound = Sandwichable.DESALINATOR_RUN;
+            if(self.evaporating && !self.wasEvaporating) sound = Sandwichable.DESALINATOR_START;
+            else if(!self.evaporating && self.wasEvaporating) sound = Sandwichable.DESALINATOR_STOP;
+            else if(self.evaporating) sound = Sandwichable.DESALINATOR_RUN;
 
             if(sound != null) world.playSound(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, sound, SoundCategory.BLOCKS, 0.4f, 1.0f, false);
         }
-        wasEvaporating = evaporating;
+        self.wasEvaporating = self.evaporating;
     }
 
     public int getEvaporateProgress() {
@@ -183,7 +182,7 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
         return isPickleBrine;
     }
 
-    public boolean isWaterSaline() { return isPickleBrine || world.getBiome(pos).getCategory() == Biome.Category.OCEAN || world.getBiome(pos).getCategory() == Biome.Category.BEACH || world.getBlockState(pos.down()).getBlock().isIn(Sandwichable.SALT_PRODUCING_BLOCKS); }
+    public boolean isWaterSaline() { return isPickleBrine || world.getBiome(pos).getCategory() == Biome.Category.OCEAN || world.getBiome(pos).getCategory() == Biome.Category.BEACH || Sandwichable.SALT_PRODUCING_BLOCKS.contains(world.getBlockState(pos.down()).getBlock()); }
 
     @Override
     protected Text getContainerName() {
@@ -260,13 +259,13 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     @Override
-    public void fromClientTag(NbtCompound NbtCompound) {
-        this.fromTag(world.getBlockState(pos), NbtCompound);
+    public void fromClientTag(NbtCompound nbt) {
+        this.readNbt(nbt);
     }
 
     @Override
-    public NbtCompound toClientTag(NbtCompound NbtCompound) {
-        return this.writeNbt(NbtCompound);
+    public NbtCompound toClientTag(NbtCompound nbt) {
+        return this.writeNbt(nbt);
     }
 
     @Override

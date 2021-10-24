@@ -11,5 +11,4 @@ public final class FluidsRegistry {
 
     public static void init() {
     }
-
 }

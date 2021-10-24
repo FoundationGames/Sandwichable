@@ -3,8 +3,8 @@ plugins {
 	id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -22,7 +22,7 @@ repositories {
 	maven { url = terraformers() }
 	maven { url = "https://maven.ryanliptak.com/" }
 	maven { url = "https://maven.shedaniel.me/" }
-	maven { url "https://api.modrinth.com/maven" }
+	maven { url = "https://api.modrinth.com/maven" }
 }
 
 // please stop making mod menu transitive
@@ -34,7 +34,7 @@ dependencies {
 	// Fabric API
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation("me.shedaniel:RoughlyEnoughItems:${project.rei_version}") {
+	modImplementation("me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}") {
 		exclude(group: "com.terraformersmc")
 		exclude(group: "io.github.prospector")
 	}
@@ -51,7 +51,7 @@ dependencies {
 		exclude(group: "io.github.prospector")
 	}
 
-	modRuntime("squeek.appleskin:appleskin-fabric:${project.appleskin_version}") {
+	modRuntimeOnly("squeek.appleskin:appleskin-fabric:${project.appleskin_version}") {
 		exclude(group: "com.terraformersmc")
 		exclude(group: "io.github.prospector")
 	}

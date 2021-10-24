@@ -25,9 +25,9 @@ public class BuiltinModelItemRendererMixin {
     private void sandwichable$renderSandwichGui(ItemStack stack, ModelTransformation.Mode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci) {
         if(stack.getItem() == (BlocksRegistry.SANDWICH).asItem()) {
             matrices.push();
-            if(stack.getTag() != null) {
-                if(stack.getTag().contains("BlockEntityTag")) {
-                    NbtCompound tag = stack.getSubTag("BlockEntityTag");
+            if(stack.getNbt() != null) {
+                if(stack.getNbt().contains("BlockEntityTag")) {
+                    NbtCompound tag = stack.getSubNbt("BlockEntityTag");
                     matrices.translate(0.5, 0.017, 0.4);
                     cache.setFromNbt(tag);
                     cache.render(matrices, vertexConsumers, light, overlay);
@@ -35,7 +35,7 @@ public class BuiltinModelItemRendererMixin {
             } else {
                 matrices.translate(0.5, 0.017, 0.4);
                 matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion((90)));
-                MinecraftClient.getInstance().getItemRenderer().renderItem(new ItemStack(Items.BARRIER), ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers);
+                MinecraftClient.getInstance().getItemRenderer().renderItem(new ItemStack(Items.BARRIER), ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers, 204874579);
             }
             matrices.pop();
         }

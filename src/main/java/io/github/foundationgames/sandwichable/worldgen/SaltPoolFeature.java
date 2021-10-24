@@ -9,6 +9,7 @@ import net.minecraft.world.Heightmap;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.util.FeatureContext;
 
 import java.util.Random;
 
@@ -18,14 +19,18 @@ public class SaltPoolFeature extends Feature<SaltPoolFeatureConfig> {
     }
 
     @Override
-    public boolean generate(StructureWorldAccess world, ChunkGenerator chunkGenerator, Random random, BlockPos spos, SaltPoolFeatureConfig config) {
+    public boolean generate(FeatureContext<SaltPoolFeatureConfig> ctx) {
+        var world = ctx.getWorld();
+        var origin = ctx.getOrigin();
+        var random = ctx.getRandom();
+        var config = ctx.getConfig();
         int yfs = 0;
-        int topY = Math.max(world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, spos.getX(), spos.getZ()), 64);
-        if(random.nextInt(2) == 2 && topY > 65) yfs = random.nextInt(3);
-        spos = new BlockPos(spos.getX(), topY - (1 + yfs), spos.getZ());
+        int topY = Math.max(world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, origin.getX(), origin.getZ()), 64);
+        if(random.nextInt(3) == 2 && topY > 65) yfs = random.nextInt(3);
+        origin = new BlockPos(origin.getX(), topY - (1 + yfs), origin.getZ());
         BlockState liquidState = config.hasWater ? Blocks.WATER.getDefaultState() : BlocksRegistry.SALTY_AIR.getDefaultState();
         for(int i = 0; i < 2 + random.nextInt(2); i++) {
-            BlockPos pos = spos.add(random.nextInt(10) - 5, 0, random.nextInt(10) - 5);
+            BlockPos pos = origin.add(random.nextInt(10) - 5, 0, random.nextInt(10) - 5);
             int rad = random.nextInt(3) + 3;
             CuboidBlockIterator iter = new CuboidBlockIterator(pos.getX() - (rad + 5), pos.getY(), pos.getZ() - (rad + 5), pos.getX() + (rad + 5), pos.getY(), pos.getZ() + (rad + 5));
             double sBorder = 2.3 + (random.nextDouble() * 1.73);
@@ -59,7 +64,7 @@ public class SaltPoolFeature extends Feature<SaltPoolFeatureConfig> {
             }
         }
         for(int j = 0; j < 10 + random.nextInt(6); j++) {
-            BlockPos pos = spos.add(random.nextInt(28) - 14, 1, random.nextInt(28) - 14);
+            BlockPos pos = origin.add(random.nextInt(28) - 14, 1, random.nextInt(28) - 14);
             CuboidBlockIterator iter = new CuboidBlockIterator(pos.getX() - 1, pos.getY(), pos.getZ() - 1, pos.getX() + 1, pos.getY(), pos.getZ() + 1);
             for(BlockPos.Mutable mpos = new BlockPos.Mutable(); iter.step();) {
                 mpos.set(iter.getX(), iter.getY(), iter.getZ());
