@@ -48,6 +48,7 @@ public final class ItemsRegistry {
     public static final FoodComponent CHOPPEDBEETROOT = (new FoodComponent.Builder()).hunger(3).saturationModifier(0.6F).snack().build();
     public static final FoodComponent COOKEDCHOPPEDBEETROOT = (new FoodComponent.Builder()).hunger(4).saturationModifier(0.7F).snack().build();
     public static final FoodComponent SWEETBERRYJAM = (new FoodComponent.Builder()).hunger(5).saturationModifier(0.5F).build();
+    public static final FoodComponent GLOWBERRYJAM = (new FoodComponent.Builder()).hunger(5).saturationModifier(0.5F).build();
     public static final FoodComponent MAYONNAISE_FOOD = (new FoodComponent.Builder()).hunger(4).saturationModifier(0.6F).build();
     public static final FoodComponent APPLESLICES = (new FoodComponent.Builder()).hunger(2).saturationModifier(0.5F).snack().build();
     public static final FoodComponent GOLDAPPLESLICES = (new FoodComponent.Builder()).hunger(3).saturationModifier(0.7F).snack().statusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 50, 1), 1.0F).statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 0), 1.0F).alwaysEdible().build();
@@ -96,6 +97,7 @@ public final class ItemsRegistry {
     public static final Item CHOPPED_BEETROOT = new InfoTooltipItem(new Item.Settings().food(CHOPPEDBEETROOT).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item COOKED_CHOPPED_BEETROOT = new InfoTooltipItem(new Item.Settings().food(COOKEDCHOPPEDBEETROOT).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item SWEET_BERRY_JAM = new BottledFoodItem(true, new Item.Settings().food(SWEETBERRYJAM).maxCount(16).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item GLOW_BERRY_JAM = new BottledFoodItem(true, new Item.Settings().food(GLOWBERRYJAM).maxCount(16).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item MAYONNAISE = new BottledFoodItem(true, new Item.Settings().food(MAYONNAISE_FOOD).maxCount(16).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item APPLE_SLICES = new InfoTooltipItem(new Item.Settings().food(APPLESLICES).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item GOLDEN_APPLE_SLICES = new InfoTooltipItem(new Item.Settings().food(GOLDAPPLESLICES).rarity(Rarity.RARE).group(Sandwichable.SANDWICHABLE_ITEMS));
@@ -187,6 +189,7 @@ public final class ItemsRegistry {
         addCompostable(0.3f, CHOPPED_BEETROOT);
         registerItem(COOKED_CHOPPED_BEETROOT, "cooked_chopped_beetroot");
         registerItem(SWEET_BERRY_JAM, "sweet_berry_jam_bottle");
+        registerItem(GLOW_BERRY_JAM, "glow_berry_jam_bottle");
         registerItem(MAYONNAISE, "mayonnaise_bottle");
         registerItem(APPLE_SLICES, "apple_slices");
         addCompostable(0.3f, APPLE_SLICES);

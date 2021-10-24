@@ -107,7 +107,7 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Blo
             update();
             return ActionResult.SUCCESS;
         }
-        if(playerStack.getItem().equals(Items.BUCKET) && this.getContent().getContentType().isLiquid) {
+        if(playerStack.getItem() == Items.BUCKET && this.getContent().getContentType().isLiquid) {
             ItemStack result = extractMilk();
             update();
             if(!result.isEmpty()) {

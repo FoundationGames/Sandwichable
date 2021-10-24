@@ -102,7 +102,7 @@ public class KitchenKnifeItem extends InfoTooltipItem {
 
     @Override
     public int getItemBarStep(ItemStack stack) {
-        return (int)(13 * getSharpnessF(stack));
+        return (int)(14 * getSharpnessF(stack));
     }
 
     public static final int[] COLORS = {

@@ -2,31 +2,37 @@ package io.github.foundationgames.sandwichable.blocks.entity.renderer;
 
 import io.github.foundationgames.sandwichable.blocks.entity.PickleJarBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.PickleJarFluid;
+import io.github.foundationgames.sandwichable.util.Util;
+import net.minecraft.client.model.*;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3f;
 
 public class PickleJarBlockEntityRenderer implements BlockEntityRenderer<PickleJarBlockEntity> {
-    //private final ModelPart fluid;
-    //private final ModelPart cucumberBottom;
-    //private final ModelPart cucumberTop;
+    public static final Identifier TEX_CUCUMBER = Util.id("textures/entity/pickle_jar/cucumber.png");
+    public static final Identifier TEX_FLUID = Util.id("textures/entity/pickle_jar/pickle_jar_fluid.png");
+
+    private final FluidModel fluid;
+    private final CucumberModel cucumber;
 
     public PickleJarBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
+        this.fluid = new FluidModel(context);
+        this.cucumber = new CucumberModel(context);
     }
 
     @Override
     public void render(PickleJarBlockEntity blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         matrices.push();
         matrices.translate(0.5F, -0.69F, 0.5F);
-        //CucumberModel cucumber = new CucumberModel(blockEntity.areItemsPickled());
-        Identifier cucumberTex = new Identifier("sandwichable", "textures/entity/pickle_jar/cucumber.png");
         for (int i = 0; i < blockEntity.getItemCount(); i++) {
             matrices.translate(0.0F, 0.0F, 0.17F);
-            //cucumber.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(cucumberTex)), light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+            this.cucumber.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(TEX_CUCUMBER)), light, overlay, blockEntity.areItemsPickled());
             matrices.translate(0.0F, 0.0F, -0.17F);
             matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
         }
@@ -35,8 +41,6 @@ public class PickleJarBlockEntityRenderer implements BlockEntityRenderer<PickleJ
         }
         matrices.pop();
         matrices.push();
-        Identifier fluidTex = new Identifier("sandwichable", "textures/entity/pickle_jar/pickle_jar_fluid.png");
-        //FluidModel fluidModel = new FluidModel(64, 32);
         float progressToFloat = (float)blockEntity.getPickleProgress() / PickleJarBlockEntity.pickleTime;
         float r = 1.0F;
         float g = 1.0F;
@@ -51,54 +55,91 @@ public class PickleJarBlockEntityRenderer implements BlockEntityRenderer<PickleJ
             r = 0.4F; g = 1.0F; b = 0.5F;
         }
         if(blockEntity.getFluid() != PickleJarFluid.AIR) {
-            //fluidModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentCull(fluidTex)), light, overlay, r, g, b, 0.69F);
+            this.fluid.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentCull(TEX_FLUID)), light, overlay, r, g, b, 0.69F);
         }
         matrices.pop();
     }
 
-    /*
-    private static class FluidModel extends Model {
-        private final ModelPart fluid;
+    public static class FluidModel extends Model {
+        public static final EntityModelLayer MODEL_LAYER = new EntityModelLayer(Util.id("pickle_jar/fluid"), "main");
 
-        public FluidModel(int texWidth, int texHeight) {
-            super(RenderLayer::getEntitySolid);
-            this.textureHeight=texHeight;
-            this.textureWidth=texWidth;
-            this.fluid = new ModelPart(this);
-            this.fluid.addCuboid(3.001F, 1.0F, 3.001F, 9.998F, 9.0F, 9.998F);
+        private final ModelPart part;
+
+        public FluidModel(BlockEntityRendererFactory.Context ctx) {
+            super(RenderLayer::getEntityTranslucent);
+            this.part = ctx.getLayerModelPart(MODEL_LAYER).getChild("main");
         }
 
         @Override
         public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
-            fluid.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+            part.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+        }
+
+        public static TexturedModelData createModelData() {
+            var data = new ModelData();
+            data.getRoot().addChild("main",
+                    ModelPartBuilder.create().cuboid(3.001f, 1f, 3.001f, 9.998f, 9f, 9.998f),
+                    ModelTransform.NONE
+            );
+            return TexturedModelData.of(data, 64, 32);
         }
     }
 
-    private static class CucumberModel extends Model {
-        private final ModelPart cucumberBottom;
+    public static class CucumberModel extends Model {
+        public static final EntityModelLayer MODEL_LAYER = new EntityModelLayer(Util.id("pickle_jar/cucumber"), "main");
+
         private final ModelPart cucumberTop;
+        private final ModelPart cucumberBottom;
+        private final ModelPart pickleTop;
+        private final ModelPart pickleBottom;
 
-        public CucumberModel(boolean isPickled) {
+        public CucumberModel(BlockEntityRendererFactory.Context ctx) {
             super(RenderLayer::getEntitySolid);
-            this.cucumberBottom = new ModelPart(textureWidth, textureHeight, 0, isPickled ? 9 : 0);
-            this.cucumberBottom.setPivot(-0.5F, 21.0F, 0.5F);
-            this.cucumberBottom.roll = 0.1745F;
-            this.cucumberBottom.addCuboid(-1.5F, -3.0F, -1.5F, 3, 6, 3);
-            this.cucumberTop = new ModelPart(textureWidth, textureHeight, 0, isPickled ? 9 : 0);
-            this.cucumberTop.setPivot(-0.5F, 15.65F, 0.5F);
-            this.cucumberTop.roll = -0.1745F;
-            this.cucumberTop.addCuboid(-1.5F, -3.0F, -1.475F, 3, 6, 2.99F);
+            var root = ctx.getLayerModelPart(MODEL_LAYER);
+            this.cucumberTop = root.getChild("cucumber_top");
+            this.cucumberBottom = root.getChild("cucumber_bottom");
+            this.pickleTop = root.getChild("pickle_top");
+            this.pickleBottom = root.getChild("pickle_bottom");
         }
 
+        /**
+         * Does not account for pickle state
+         */
         @Override
         public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
-            this.cucumberBottom.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
             this.cucumberTop.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+            this.cucumberBottom.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
         }
-    }
-     */
 
-    public static void setupModels() {
+        public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, boolean pickled) {
+            if (pickled) {
+                this.pickleTop.render(matrices, vertexConsumer, light, overlay);
+                this.pickleBottom.render(matrices, vertexConsumer, light, overlay);
+            } else {
+                this.cucumberTop.render(matrices, vertexConsumer, light, overlay);
+                this.cucumberBottom.render(matrices, vertexConsumer, light, overlay);
+            }
+        }
 
+        public static TexturedModelData createModelData() {
+            var data = new ModelData();
+            data.getRoot().addChild("cucumber_top",
+                    ModelPartBuilder.create().cuboid(-1.5F, -3.0F, -1.475F, 3, 6, 2.99F),
+                    ModelTransform.of(-0.5F, 15.65F, 0.5F, 0, 0, -0.1745F)
+            );
+            data.getRoot().addChild("cucumber_bottom",
+                    ModelPartBuilder.create().cuboid(-1.5F, -3.0F, -1.5F, 3, 6, 3),
+                    ModelTransform.of(-0.5F, 21.0F, 0.5F, 0, 0, 0.1745F)
+            );
+            data.getRoot().addChild("pickle_top",
+                    ModelPartBuilder.create().cuboid(-1.5F, -3.0F, -1.475F, 3, 6, 2.99F).uv(0, 9),
+                    ModelTransform.of(-0.5F, 15.65F, 0.5F, 0, 0, -0.1745F)
+            );
+            data.getRoot().addChild("pickle_bottom",
+                    ModelPartBuilder.create().cuboid(-1.5F, -3.0F, -1.5F, 3, 6, 3).uv(0, 9),
+                    ModelTransform.of(-0.5F, 21.0F, 0.5F, 0, 0, 0.1745F)
+            );
+            return TexturedModelData.of(data, 64, 32);
+        }
     }
 }

@@ -91,7 +91,7 @@ public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateSto
     @Override
     public int getItemBarStep(ItemStack stack) {
         int uses = stack.getOrCreateSubNbt("UsageData").getInt("uses");
-        return (int)(13 * ((float)uses / 10));
+        return (int)(14 * ((float)uses / 10));
     }
 
     @Override

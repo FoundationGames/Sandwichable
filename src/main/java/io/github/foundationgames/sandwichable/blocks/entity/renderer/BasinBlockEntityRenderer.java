@@ -3,76 +3,66 @@ package io.github.foundationgames.sandwichable.blocks.entity.renderer;
 import io.github.foundationgames.sandwichable.blocks.entity.BasinBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.BasinContent;
 import io.github.foundationgames.sandwichable.blocks.entity.BasinContentType;
-import net.minecraft.client.model.Model;
-import net.minecraft.client.model.ModelPart;
+import io.github.foundationgames.sandwichable.util.Util;
+import net.minecraft.client.model.*;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
 public class BasinBlockEntityRenderer implements BlockEntityRenderer<BasinBlockEntity> {
+    private static final Identifier TEX_MILK = Util.id("textures/entity/basin/milk.png");
+
+    private final BasinContentModel model;
 
     public BasinBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
+        model = new BasinContentModel(context);
     }
 
     @Override
     public void render(BasinBlockEntity blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         matrices.push();
-        Identifier tex = new Identifier("sandwichable", "textures/entity/basin/milk.png");
         Identifier cheeseTex = blockEntity.getContent().getCheeseType().getTexture();
-        //CheeseModel cheeseModel = new CheeseModel(64, 32);
-        //MilkModel milkModel = new MilkModel(64, 32);
         if(blockEntity.getContent() == BasinContent.MILK) {
-            //milkModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(tex)), light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+            this.model.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(TEX_MILK)), light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
         }
         else if(blockEntity.getContent().getContentType() == BasinContentType.FERMENTING_MILK) {
             float progressToFloatInv = 1.0F - (float)blockEntity.getFermentProgress() / BasinBlockEntity.fermentTime;
-            //cheeseModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(cheeseTex)), light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
-            //milkModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(tex)), light, overlay, 1.0F, 1.0F, 1.0F, progressToFloatInv);
+            this.model.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(cheeseTex)), light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+            this.model.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(TEX_MILK)), light, overlay, 1.0F, 1.0F, 1.0F, progressToFloatInv);
         }
         else if(blockEntity.getContent().getContentType() == BasinContentType.CHEESE) {
-            //cheeseModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(cheeseTex)), light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+            this.model.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(cheeseTex)), light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
         }
         matrices.pop();
     }
 
-    /*
-    private static class CheeseModel extends Model {
-        ModelPart cheese;
+    public static class BasinContentModel extends Model {
+        public static final EntityModelLayer MODEL_LAYER = new EntityModelLayer(Util.id("basin/content"), "main");
 
-        public CheeseModel(int texWidth, int texHeight) {
-            super(RenderLayer::getEntitySolid);
-            this.textureHeight=texHeight;
-            this.textureWidth=texWidth;
-            this.cheese = new ModelPart(this);
-            this.cheese.addCuboid(3.0F, 2.0F, 3.0F, 10, 4.0F, 10);
-        }
+        private final ModelPart part;
 
-        @Override
-        public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
-            cheese.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        }
-    }
-
-    private static class MilkModel extends Model {
-        ModelPart milk;
-
-        public MilkModel(int texWidth, int texHeight) {
+        public BasinContentModel(BlockEntityRendererFactory.Context ctx) {
             super(RenderLayer::getEntityTranslucent);
-            this.textureHeight=texHeight;
-            this.textureWidth=texWidth;
-            this.milk = new ModelPart(this);
-            this.milk.addCuboid(3.0F, 2.0F, 3.0F, 10, 4.0F, 10);
+            this.part = ctx.getLayerModelPart(MODEL_LAYER).getChild("main");
         }
 
         @Override
-        public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
-            milk.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+        public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
+            this.part.render(matrices, vertices, light, overlay, red, green, blue, alpha);
+        }
+
+        public static TexturedModelData createModelData() {
+            var data = new ModelData();
+            data.getRoot().addChild("main",
+                    ModelPartBuilder.create().cuboid(3, 2, 3, 10, 4, 10),
+                    ModelTransform.NONE
+            );
+            return TexturedModelData.of(data, 64, 32);
         }
     }
-     */
 }

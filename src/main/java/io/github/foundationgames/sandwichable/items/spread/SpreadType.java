@@ -3,20 +3,16 @@ package io.github.foundationgames.sandwichable.items.spread;
 import com.google.common.collect.ImmutableList;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.SpreadRegistry;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.List;
 
 public class SpreadType {
-
     public static final SpreadType MUSHROOM_STEW;
     public static final SpreadType RABBIT_STEW;
     public static final SpreadType BEETROOT_SOUP;
@@ -24,6 +20,7 @@ public class SpreadType {
     public static final SpreadType SUSPICIOUS_STEW;
     public static final SpreadType FERMENTING_MILK;
     public static final SpreadType SWEET_BERRY_JAM;
+    public static final SpreadType GLOW_BERRY_JAM;
     public static final SpreadType MAYONNAISE;
     public static final SpreadType POTION;
 
@@ -35,6 +32,7 @@ public class SpreadType {
         SpreadRegistry.INSTANCE.register("suspicious_stew", SUSPICIOUS_STEW);
         SpreadRegistry.INSTANCE.register("fermenting_milk", FERMENTING_MILK);
         SpreadRegistry.INSTANCE.register("sweet_berry_jam", SWEET_BERRY_JAM);
+        SpreadRegistry.INSTANCE.register("glow_berry_jam", GLOW_BERRY_JAM);
         SpreadRegistry.INSTANCE.register("mayonnaise", MAYONNAISE);
         SpreadRegistry.INSTANCE.register("potion", POTION);
     }
@@ -77,6 +75,7 @@ public class SpreadType {
         SUSPICIOUS_STEW = new SuspiciousStewSpreadType();
         FERMENTING_MILK = new FermentingMilkSpreadType();
         SWEET_BERRY_JAM = new SpreadType(5, 0.5F, 0xF00024, ItemsRegistry.SWEET_BERRY_JAM, Items.GLASS_BOTTLE);
+        GLOW_BERRY_JAM = new SpreadType(5, 0.5F, 0xFFCB54, ItemsRegistry.GLOW_BERRY_JAM, Items.GLASS_BOTTLE);
         MAYONNAISE = new SpreadType(4, 0.6F, 0xFFD5B5, ItemsRegistry.MAYONNAISE, Items.GLASS_BOTTLE);
         POTION = new PotionSpreadType();
     }

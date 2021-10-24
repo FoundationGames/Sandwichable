@@ -1,5 +1,6 @@
 package io.github.foundationgames.sandwichable.blocks;
 
+import com.google.common.collect.ImmutableBiMap;
 import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.entity.*;
 import io.github.foundationgames.sandwichable.fluids.FluidsRegistry;
@@ -14,13 +15,9 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.state.StateManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 
 public final class BlocksRegistry {
@@ -47,6 +44,14 @@ public final class BlocksRegistry {
     public static final Block GRANITE_BASIN = new BasinBlock(FabricBlockSettings.copy(Blocks.GRANITE));
     public static final Block BASALT_BASIN = new BasinBlock(FabricBlockSettings.copy(Blocks.POLISHED_BASALT));
     public static final Block BLACKSTONE_BASIN = new BasinBlock(FabricBlockSettings.copy(Blocks.POLISHED_BLACKSTONE));
+    public static final Block COPPER_BASIN = new OxidizableBasinBlock(Oxidizable.OxidizationLevel.UNAFFECTED, FabricBlockSettings.copy(Blocks.CUT_COPPER));
+    public static final Block EXPOSED_COPPER_BASIN = new OxidizableBasinBlock(Oxidizable.OxidizationLevel.EXPOSED, FabricBlockSettings.copy(Blocks.EXPOSED_CUT_COPPER));
+    public static final Block WEATHERED_COPPER_BASIN = new OxidizableBasinBlock(Oxidizable.OxidizationLevel.WEATHERED, FabricBlockSettings.copy(Blocks.WEATHERED_CUT_COPPER));
+    public static final Block OXIDIZED_COPPER_BASIN = new OxidizableBasinBlock(Oxidizable.OxidizationLevel.OXIDIZED, FabricBlockSettings.copy(Blocks.OXIDIZED_CUT_COPPER));
+    public static final Block WAXED_COPPER_BASIN = new BasinBlock(FabricBlockSettings.copy(Blocks.WAXED_CUT_COPPER));
+    public static final Block WAXED_EXPOSED_COPPER_BASIN = new BasinBlock(FabricBlockSettings.copy(Blocks.WAXED_EXPOSED_CUT_COPPER));
+    public static final Block WAXED_WEATHERED_COPPER_BASIN = new BasinBlock(FabricBlockSettings.copy(Blocks.WAXED_WEATHERED_CUT_COPPER));
+    public static final Block WAXED_OXIDIZED_COPPER_BASIN = new BasinBlock(FabricBlockSettings.copy(Blocks.WAXED_OXIDIZED_CUT_COPPER));
 
     public static final Block TOASTER = new ToasterBlock(FabricBlockSettings.copy(Blocks.STONECUTTER));
 
@@ -109,6 +114,14 @@ public final class BlocksRegistry {
         registerBlock(GRANITE_BASIN, "granite_basin", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(BASALT_BASIN, "basalt_basin", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(BLACKSTONE_BASIN, "blackstone_basin", Sandwichable.SANDWICHABLE_ITEMS);
+        registerBlock(COPPER_BASIN, "copper_basin", Sandwichable.SANDWICHABLE_ITEMS);
+        registerBlock(EXPOSED_COPPER_BASIN, "exposed_copper_basin", Sandwichable.SANDWICHABLE_ITEMS);
+        registerBlock(WEATHERED_COPPER_BASIN, "weathered_copper_basin", Sandwichable.SANDWICHABLE_ITEMS);
+        registerBlock(OXIDIZED_COPPER_BASIN, "oxidized_copper_basin", Sandwichable.SANDWICHABLE_ITEMS);
+        registerBlock(WAXED_COPPER_BASIN, "waxed_copper_basin", Sandwichable.SANDWICHABLE_ITEMS);
+        registerBlock(WAXED_EXPOSED_COPPER_BASIN, "waxed_exposed_copper_basin", Sandwichable.SANDWICHABLE_ITEMS);
+        registerBlock(WAXED_WEATHERED_COPPER_BASIN, "waxed_weathered_copper_basin", Sandwichable.SANDWICHABLE_ITEMS);
+        registerBlock(WAXED_OXIDIZED_COPPER_BASIN, "waxed_oxidized_copper_basin", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(OAK_CUTTING_BOARD, "oak_cutting_board", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(BIRCH_CUTTING_BOARD, "birch_cutting_board", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(SPRUCE_CUTTING_BOARD, "spruce_cutting_board", Sandwichable.SANDWICHABLE_ITEMS);
@@ -146,10 +159,20 @@ public final class BlocksRegistry {
         CUTTINGBOARD_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("cutting_board_ent"), FabricBlockEntityTypeBuilder.create(CuttingBoardBlockEntity::new, OAK_CUTTING_BOARD, BIRCH_CUTTING_BOARD, SPRUCE_CUTTING_BOARD, JUNGLE_CUTTING_BOARD, ACACIA_CUTTING_BOARD, DARK_OAK_CUTTING_BOARD, CRIMSON_CUTTING_BOARD, WARPED_CUTTING_BOARD).build(null));
         SANDWICH_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("sandwich_ent"), FabricBlockEntityTypeBuilder.create(SandwichBlockEntity::new, SANDWICH).build(null));
         TOASTER_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("toaster_ent"), FabricBlockEntityTypeBuilder.create(ToasterBlockEntity::new, TOASTER).build(null));
-        BASIN_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("basin_ent"), FabricBlockEntityTypeBuilder.create(BasinBlockEntity::new, ANDESITE_BASIN, GRANITE_BASIN, DIORITE_BASIN, BASALT_BASIN, BLACKSTONE_BASIN).build(null));
+        BASIN_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("basin_ent"), FabricBlockEntityTypeBuilder.create(BasinBlockEntity::new,
+                ANDESITE_BASIN, GRANITE_BASIN, DIORITE_BASIN, BASALT_BASIN, BLACKSTONE_BASIN, COPPER_BASIN, EXPOSED_COPPER_BASIN, WEATHERED_COPPER_BASIN, OXIDIZED_COPPER_BASIN, WAXED_COPPER_BASIN, WAXED_EXPOSED_COPPER_BASIN, WAXED_WEATHERED_COPPER_BASIN, WAXED_OXIDIZED_COPPER_BASIN
+        ).build(null));
         PICKLEJAR_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("pickle_jar_ent"), FabricBlockEntityTypeBuilder.create(PickleJarBlockEntity::new, PICKLE_JAR).build(null));
         DESALINATOR_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("desalinator_ent"), FabricBlockEntityTypeBuilder.create(DesalinatorBlockEntity::new, DESALINATOR).build(null));
         BOTTLECRATE_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("bottle_crate_ent"), FabricBlockEntityTypeBuilder.create(BottleCrateBlockEntity::new, BOTTLE_CRATE).build(null));
+    }
+
+    public static void initOxidizables(ImmutableBiMap.Builder<Block, Block> map) {
+        map.put(COPPER_BASIN, EXPOSED_COPPER_BASIN).put(EXPOSED_COPPER_BASIN, WEATHERED_COPPER_BASIN).put(WEATHERED_COPPER_BASIN, OXIDIZED_COPPER_BASIN);
+    }
+
+    public static void initWaxables(ImmutableBiMap.Builder<Block, Block> map) {
+        map.put(COPPER_BASIN, WAXED_COPPER_BASIN).put(EXPOSED_COPPER_BASIN, WAXED_EXPOSED_COPPER_BASIN).put(WEATHERED_COPPER_BASIN, WAXED_WEATHERED_COPPER_BASIN).put(OXIDIZED_COPPER_BASIN, WAXED_OXIDIZED_COPPER_BASIN);
     }
 
     public static void registerBlock(Block block, String name, ItemGroup group) {

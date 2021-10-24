@@ -21,6 +21,7 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
+import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -64,6 +65,10 @@ public class SandwichableClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(BlocksRegistry.TOASTER_BLOCKENTITY, ToasterBlockEntityRenderer::new);
         BlockEntityRendererRegistry.register(BlocksRegistry.BASIN_BLOCKENTITY, BasinBlockEntityRenderer::new);
         BlockEntityRendererRegistry.register(BlocksRegistry.PICKLEJAR_BLOCKENTITY, PickleJarBlockEntityRenderer::new);
+
+        EntityModelLayerRegistry.registerModelLayer(BasinBlockEntityRenderer.BasinContentModel.MODEL_LAYER, BasinBlockEntityRenderer.BasinContentModel::createModelData);
+        EntityModelLayerRegistry.registerModelLayer(PickleJarBlockEntityRenderer.CucumberModel.MODEL_LAYER, PickleJarBlockEntityRenderer.CucumberModel::createModelData);
+        EntityModelLayerRegistry.registerModelLayer(PickleJarBlockEntityRenderer.FluidModel.MODEL_LAYER, PickleJarBlockEntityRenderer.FluidModel::createModelData);
 
         ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> !state.get(ShrubBlock.SNIPPED) ? BiomeColors.getGrassColor(view, pos) : FoliageColors.getDefaultColor(), BlocksRegistry.SHRUB, BlocksRegistry.POTTED_SHRUB);
 

@@ -1,0 +1,9 @@
+{
+	"parent": "sandwichable:block/basin_base",
+	"textures": {
+		"bottom": "sandwichable:block/weathered_copper_basin_bottom",
+		"inside_bottom": "sandwichable:block/weathered_copper_basin_inside_bottom",
+		"side": "sandwichable:block/weathered_copper_basin_side",
+		"inside_side": "sandwichable:block/weathered_copper_basin_inside_side"
+	}
+}

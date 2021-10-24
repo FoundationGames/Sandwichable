@@ -51,10 +51,12 @@ dependencies {
 		exclude(group: "io.github.prospector")
 	}
 
+	/*
 	modRuntimeOnly("squeek.appleskin:appleskin-fabric:${project.appleskin_version}") {
 		exclude(group: "com.terraformersmc")
 		exclude(group: "io.github.prospector")
 	}
+	 */
 }
 
 processResources {
