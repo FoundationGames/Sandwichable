@@ -15,8 +15,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public class ClientPlayerInteractionManagerMixin {
     @ModifyVariable(
             method = "interactBlock",
-            at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/network/ClientPlayerEntity;shouldCancelInteraction()Z", shift = At.Shift.AFTER),
-            print = true
+            at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/network/ClientPlayerEntity;shouldCancelInteraction()Z", shift = At.Shift.AFTER)
     )
     private boolean sandwichable$modifyBlockInteractionCondition(boolean old, ClientPlayerEntity player, ClientWorld world, Hand hand, BlockHitResult hit) {
         BlockState state = world.getBlockState(hit.getBlockPos());
