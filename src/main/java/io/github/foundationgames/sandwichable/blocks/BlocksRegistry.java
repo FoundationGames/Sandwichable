@@ -1,5 +1,6 @@
 package io.github.foundationgames.sandwichable.blocks;
 
+import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.entity.*;
@@ -94,6 +95,9 @@ public final class BlocksRegistry {
         }
     };*/
 
+    public static final BiMap<Block, Block> OXIDIZABLES = ImmutableBiMap.<Block, Block>builder().put(COPPER_BASIN, EXPOSED_COPPER_BASIN).put(EXPOSED_COPPER_BASIN, WEATHERED_COPPER_BASIN).put(WEATHERED_COPPER_BASIN, OXIDIZED_COPPER_BASIN).build();
+    public static final BiMap<Block, Block> WAXABLES = ImmutableBiMap.<Block, Block>builder().put(COPPER_BASIN, WAXED_COPPER_BASIN).put(EXPOSED_COPPER_BASIN, WAXED_EXPOSED_COPPER_BASIN).put(WEATHERED_COPPER_BASIN, WAXED_WEATHERED_COPPER_BASIN).put(OXIDIZED_COPPER_BASIN, WAXED_OXIDIZED_COPPER_BASIN).build();
+
     public static BlockEntityType<SandwichTableBlockEntity> SANDWICHTABLE_BLOCKENTITY;
     public static BlockEntityType<SandwichBlockEntity> SANDWICH_BLOCKENTITY;
     public static BlockEntityType<CuttingBoardBlockEntity> CUTTINGBOARD_BLOCKENTITY;
@@ -165,14 +169,6 @@ public final class BlocksRegistry {
         PICKLEJAR_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("pickle_jar_ent"), FabricBlockEntityTypeBuilder.create(PickleJarBlockEntity::new, PICKLE_JAR).build(null));
         DESALINATOR_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("desalinator_ent"), FabricBlockEntityTypeBuilder.create(DesalinatorBlockEntity::new, DESALINATOR).build(null));
         BOTTLECRATE_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("bottle_crate_ent"), FabricBlockEntityTypeBuilder.create(BottleCrateBlockEntity::new, BOTTLE_CRATE).build(null));
-    }
-
-    public static void initOxidizables(ImmutableBiMap.Builder<Block, Block> map) {
-        map.put(COPPER_BASIN, EXPOSED_COPPER_BASIN).put(EXPOSED_COPPER_BASIN, WEATHERED_COPPER_BASIN).put(WEATHERED_COPPER_BASIN, OXIDIZED_COPPER_BASIN);
-    }
-
-    public static void initWaxables(ImmutableBiMap.Builder<Block, Block> map) {
-        map.put(COPPER_BASIN, WAXED_COPPER_BASIN).put(EXPOSED_COPPER_BASIN, WAXED_EXPOSED_COPPER_BASIN).put(WEATHERED_COPPER_BASIN, WAXED_WEATHERED_COPPER_BASIN).put(OXIDIZED_COPPER_BASIN, WAXED_OXIDIZED_COPPER_BASIN);
     }
 
     public static void registerBlock(Block block, String name, ItemGroup group) {

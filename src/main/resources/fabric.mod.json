@@ -44,7 +44,7 @@
 	"sandwichable.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.12.0",
+    "fabricloader": ">=0.11.0",
     "fabric": "*",
     "minecraft": "1.17.x"
   }
