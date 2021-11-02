@@ -1,4 +1,7 @@
 {
-  "variants": {
-  }
+    "variants": {
+        "": {
+            "model": "sandwichable:block/pickle_brine"
+        }
+    }
 }
