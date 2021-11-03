@@ -182,7 +182,7 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
     public void fillWater(boolean withBucket) {
         if(this.getFluid() == PickleJarFluid.AIR) {
             if(withBucket) world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 0.8F, 1.0F);
-            fluid = PickleJarFluid.WATER;
+            this.fluid = PickleJarFluid.WATER;
             update();
         }
     }
@@ -190,7 +190,9 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
     public void fillBrine(boolean withBucket) {
         if(this.getFluid() == PickleJarFluid.AIR) {
             if(withBucket) world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 0.8F, 1.0F);
-            fluid = PickleJarFluid.PICKLED_BRINE;
+            this.fluid = PickleJarFluid.PICKLED_BRINE;
+            this.areItemsPickled = true;
+            this.pickleProgress = 0;
             update();
         }
     }

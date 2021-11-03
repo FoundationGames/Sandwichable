@@ -100,6 +100,7 @@ public class PickleJarBlockEntityRenderer implements BlockEntityRenderer<PickleJ
             this.cucumberBottom = root.getChild("cucumber_bottom");
             this.pickleTop = root.getChild("pickle_top");
             this.pickleBottom = root.getChild("pickle_bottom");
+            System.out.println();
         }
 
         /**
@@ -132,14 +133,14 @@ public class PickleJarBlockEntityRenderer implements BlockEntityRenderer<PickleJ
                     ModelTransform.of(-0.5F, 21.0F, 0.5F, 0, 0, 0.1745F)
             );
             data.getRoot().addChild("pickle_top",
-                    ModelPartBuilder.create().cuboid(-1.5F, -3.0F, -1.475F, 3, 6, 2.99F).uv(0, 9),
+                    ModelPartBuilder.create().uv(0, 9).cuboid(-1.5F, -3.0F, -1.475F, 3, 6, 2.99F),
                     ModelTransform.of(-0.5F, 15.65F, 0.5F, 0, 0, -0.1745F)
             );
             data.getRoot().addChild("pickle_bottom",
-                    ModelPartBuilder.create().cuboid(-1.5F, -3.0F, -1.5F, 3, 6, 3).uv(0, 9),
+                    ModelPartBuilder.create().uv(0, 9).cuboid(-1.5F, -3.0F, -1.5F, 3, 6, 3),
                     ModelTransform.of(-0.5F, 21.0F, 0.5F, 0, 0, 0.1745F)
             );
-            return TexturedModelData.of(data, 64, 32);
+            return TexturedModelData.of(data, 32, 32);
         }
     }
 }
