@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"A A",
+    " A "
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:cut_copper_slab"
+    }
+  },
+  "result": {
+    "item": "sandwichable:copper_basin",
+	"count": 1
+  }
+}

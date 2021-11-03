@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"A A",
+    " A "
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:waxed_weathered_cut_copper_slab"
+    }
+  },
+  "result": {
+    "item": "sandwichable:waxed_weathered_copper_basin",
+	"count": 1
+  }
+}
