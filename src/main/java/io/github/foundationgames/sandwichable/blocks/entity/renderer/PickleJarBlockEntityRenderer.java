@@ -80,6 +80,8 @@ public class PickleJarBlockEntityRenderer extends BlockEntityRenderer<PickleJarB
 
         public CucumberModel(boolean isPickled) {
             super(RenderLayer::getEntitySolid);
+            this.textureWidth = 32;
+            this.textureHeight = 32;
             this.cucumberBottom = new ModelPart(textureWidth, textureHeight, 0, isPickled ? 9 : 0);
             this.cucumberBottom.setPivot(-0.5F, 21.0F, 0.5F);
             this.cucumberBottom.roll = 0.1745F;
