@@ -27,9 +27,6 @@
     "mealapi": [
       "io.github.foundationgames.sandwichable.plugin.SandwichableMealAPI"
     ],
-    "cloth-early-init": [
-      "io.github.foundationgames.sandwichable.worldgen.SandwichableWorldgen"
-    ],
 	"rei_plugins_v0": [
       "io.github.foundationgames.sandwichable.plugin.rei.SandwichableREI"
     ],
