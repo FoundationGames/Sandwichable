@@ -1,0 +1,5 @@
+accessWidener v1 named
+
+# TradeOffer Factories
+accessible    class    net/minecraft/village/TradeOffers$BuyForOneEmeraldFactory
+accessible    class    net/minecraft/village/TradeOffers$SellItemFactory
