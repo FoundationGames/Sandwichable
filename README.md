@@ -23,7 +23,7 @@ Available on ***[Modrinth](https://modrinth.com/mod/5g7OOxWC)***
 - [SimpleHarvest](https://www.curseforge.com/minecraft/mc-mods/simpleharvest) - Right-click harvest Sandwichable crops! (Must be configured manually in SimpleHarvest config)
 
 ## Forge? 1.12 - 1.15?
-No there will be no offical rewrite for forge.<br>
+No there will be no offical rewrite for forge.<br/>
 Reasons? It would be a lot of work to rewrite the entire mod for another platform/version, and the mod is already very well situated in the tools available for Fabric.
 <br>
 but there is an unoffical Forge version of this mod made by ochotonida called 
