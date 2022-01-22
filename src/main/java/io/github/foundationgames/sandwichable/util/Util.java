@@ -2,19 +2,18 @@ package io.github.foundationgames.sandwichable.util;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
+import io.github.foundationgames.sandwichable.config.ConfigInABarrel;
 import io.github.foundationgames.sandwichable.config.SandwichableConfig;
 import io.github.foundationgames.sandwichable.mixin.StructurePoolAccess;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.Block;
 import net.minecraft.client.resource.language.I18n;
-import net.minecraft.client.texture.Sprite;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.structure.pool.*;
+import net.minecraft.structure.pool.StructurePool;
+import net.minecraft.structure.pool.StructurePoolElement;
 import net.minecraft.structure.processor.StructureProcessorLists;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
@@ -80,19 +79,6 @@ public class Util {
         if(!world.isClient) be.sync();
     }
 
-    public static float pxToFlt(double d) {
-        return (float) 1 / (float) 16 * (float) d;
-    }
-    public static float getXFromU(Sprite sprite, float f) {
-        float g = sprite.getMaxU() - sprite.getMinU();
-        return (f - sprite.getMinU()) / g * 16.0F;
-    }
-
-    public static float getYFromV(Sprite sprite, float f) {
-        float g = sprite.getMaxV() - sprite.getMinV();
-        return (f - sprite.getMinV()) / g * 16.0F;
-    }
-
     public static int floatToIntWithBounds(float input, int bounds) {
         return (int)(input*bounds);
     }
@@ -132,13 +118,7 @@ public class Util {
         return 0x6ce0eb;
     }
 
-    private static boolean configRegistered = false;
-
     public static SandwichableConfig getConfig() {
-        if (!configRegistered) {
-            AutoConfig.register(SandwichableConfig.class, GsonConfigSerializer::new);
-            configRegistered = true;
-        }
-        return AutoConfig.getConfigHolder(SandwichableConfig.class).getConfig();
+        return ConfigInABarrel.config(MOD_ID, SandwichableConfig.class, SandwichableConfig::new);
     }
 }
