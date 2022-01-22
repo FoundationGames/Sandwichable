@@ -20,7 +20,7 @@
 			"trigger": "minecraft:inventory_changed",
 			"conditions": {
 				"items": [
-					{ "item": "sandwichable:kitchen_knife" }
+					{ "item": ["sandwichable:kitchen_knife"] }
 				]
 			}
 		}
