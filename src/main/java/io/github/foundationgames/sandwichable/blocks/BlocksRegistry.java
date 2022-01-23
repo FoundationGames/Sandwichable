@@ -45,6 +45,7 @@ public final class BlocksRegistry {
     public static final Block GRANITE_BASIN = new BasinBlock(FabricBlockSettings.copy(Blocks.GRANITE));
     public static final Block BASALT_BASIN = new BasinBlock(FabricBlockSettings.copy(Blocks.POLISHED_BASALT));
     public static final Block BLACKSTONE_BASIN = new BasinBlock(FabricBlockSettings.copy(Blocks.POLISHED_BLACKSTONE));
+    public static final Block DEEPSLATE_BASIN = new BasinBlock(FabricBlockSettings.copy(Blocks.POLISHED_DEEPSLATE));
     public static final Block COPPER_BASIN = new OxidizableBasinBlock(Oxidizable.OxidizationLevel.UNAFFECTED, FabricBlockSettings.copy(Blocks.CUT_COPPER));
     public static final Block EXPOSED_COPPER_BASIN = new OxidizableBasinBlock(Oxidizable.OxidizationLevel.EXPOSED, FabricBlockSettings.copy(Blocks.EXPOSED_CUT_COPPER));
     public static final Block WEATHERED_COPPER_BASIN = new OxidizableBasinBlock(Oxidizable.OxidizationLevel.WEATHERED, FabricBlockSettings.copy(Blocks.WEATHERED_CUT_COPPER));
@@ -118,6 +119,7 @@ public final class BlocksRegistry {
         registerBlock(GRANITE_BASIN, "granite_basin", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(BASALT_BASIN, "basalt_basin", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(BLACKSTONE_BASIN, "blackstone_basin", Sandwichable.SANDWICHABLE_ITEMS);
+        registerBlock(DEEPSLATE_BASIN, "deepslate_basin", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(COPPER_BASIN, "copper_basin", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(EXPOSED_COPPER_BASIN, "exposed_copper_basin", Sandwichable.SANDWICHABLE_ITEMS);
         registerBlock(WEATHERED_COPPER_BASIN, "weathered_copper_basin", Sandwichable.SANDWICHABLE_ITEMS);
@@ -164,7 +166,7 @@ public final class BlocksRegistry {
         SANDWICH_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("sandwich_ent"), FabricBlockEntityTypeBuilder.create(SandwichBlockEntity::new, SANDWICH).build(null));
         TOASTER_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("toaster_ent"), FabricBlockEntityTypeBuilder.create(ToasterBlockEntity::new, TOASTER).build(null));
         BASIN_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("basin_ent"), FabricBlockEntityTypeBuilder.create(BasinBlockEntity::new,
-                ANDESITE_BASIN, GRANITE_BASIN, DIORITE_BASIN, BASALT_BASIN, BLACKSTONE_BASIN, COPPER_BASIN, EXPOSED_COPPER_BASIN, WEATHERED_COPPER_BASIN, OXIDIZED_COPPER_BASIN, WAXED_COPPER_BASIN, WAXED_EXPOSED_COPPER_BASIN, WAXED_WEATHERED_COPPER_BASIN, WAXED_OXIDIZED_COPPER_BASIN
+                ANDESITE_BASIN, GRANITE_BASIN, DIORITE_BASIN, BASALT_BASIN, BLACKSTONE_BASIN, DEEPSLATE_BASIN, COPPER_BASIN, EXPOSED_COPPER_BASIN, WEATHERED_COPPER_BASIN, OXIDIZED_COPPER_BASIN, WAXED_COPPER_BASIN, WAXED_EXPOSED_COPPER_BASIN, WAXED_WEATHERED_COPPER_BASIN, WAXED_OXIDIZED_COPPER_BASIN
         ).build(null));
         PICKLEJAR_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("pickle_jar_ent"), FabricBlockEntityTypeBuilder.create(PickleJarBlockEntity::new, PICKLE_JAR).build(null));
         DESALINATOR_BLOCKENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, Util.id("desalinator_ent"), FabricBlockEntityTypeBuilder.create(DesalinatorBlockEntity::new, DESALINATOR).build(null));

@@ -1,0 +1,25 @@
+{
+    "replace": false,
+    "values": [
+        "sandwichable:sandwich_table",
+        "sandwichable:toaster",
+        "sandwichable:andesite_basin",
+        "sandwichable:diorite_basin",
+        "sandwichable:granite_basin",
+        "sandwichable:basalt_basin",
+        "sandwichable:blackstone_basin",
+        "sandwichable:deepslate_basin",
+        "sandwichable:copper_basin",
+        "sandwichable:exposed_copper_basin",
+        "sandwichable:weathered_copper_basin",
+        "sandwichable:oxidized_copper_basin",
+        "sandwichable:waxed_copper_basin",
+        "sandwichable:waxed_exposed_copper_basin",
+        "sandwichable:waxed_weathered_copper_basin",
+        "sandwichable:waxed_oxidized_copper_basin",
+        "sandwichable:salty_stone",
+        "sandwichable:salty_rocks",
+        "sandwichable:desalinator",
+        "sandwichable:pickle_jar"
+    ]
+}
