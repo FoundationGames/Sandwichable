@@ -1,0 +1,35 @@
+{
+  "parent": "sandwichable:sandwichable/salt",
+  "display": {
+    "icon": {
+      "item": "sandwichable:pickle_filled_pickle_jar"
+    },
+    "title": {
+      "translate": "advancements.sandwichable.pickled_cucumber.title"
+    },
+    "description": {
+      "translate": "advancements.sandwichable.pickled_cucumber.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "pickle": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "sandwichable:pickled_cucumber"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "pickle"
+    ]
+  ]
+}

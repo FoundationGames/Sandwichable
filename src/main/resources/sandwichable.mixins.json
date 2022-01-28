@@ -5,6 +5,7 @@
   "mixins": [
     "ChickenEntityMixin",
     "ClientWorldMixin",
+    "CriteriaAccess",
     "DispenserBlockMixin",
     "FishingBobberEntityMixin",
     "PistonBlockMixin",

@@ -1,0 +1,35 @@
+{
+  "parent": "sandwichable:sandwichable/bottle_crate",
+  "display": {
+    "icon": {
+      "item": "sandwichable:fermenting_milk_bucket"
+    },
+    "title": {
+      "translate": "advancements.sandwichable.fermenting_milk.title"
+    },
+    "description": {
+      "translate": "advancements.sandwichable.fermenting_milk.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "bucket": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "sandwichable:fermenting_milk_bucket"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "bucket"
+    ]
+  ]
+}

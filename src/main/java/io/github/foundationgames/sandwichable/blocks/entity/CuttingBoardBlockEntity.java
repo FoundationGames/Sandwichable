@@ -1,5 +1,6 @@
 package io.github.foundationgames.sandwichable.blocks.entity;
 
+import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.config.SandwichableConfig;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
@@ -9,6 +10,7 @@ import io.github.foundationgames.sandwichable.util.Util;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
@@ -20,6 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
@@ -38,7 +41,6 @@ import net.minecraft.world.World;
 import java.util.Optional;
 
 public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityClientSerializable, SidedInventory, Tickable {
-
     private ItemStack item = ItemStack.EMPTY;
     private ItemStack knife = ItemStack.EMPTY;
 
@@ -63,11 +65,11 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
         Hand knifeHand = null;
         Hand itemHand = hand;
         SandwichableConfig cfg = Util.getConfig();
-        for(SandwichableConfig.KitchenKnifeOption opt : cfg.itemOptions.knives) {
+        for (SandwichableConfig.KitchenKnifeOption opt : cfg.itemOptions.knives) {
             Identifier id = Identifier.tryParse(opt.itemId);
-            if(id != null) {
+            if (id != null) {
                 Item item = Registry.ITEM.get(id);
-                if(player.getStackInHand(Hand.MAIN_HAND).getItem() == item || player.getStackInHand(Hand.OFF_HAND).getItem() == item) {
+                if (player.getStackInHand(Hand.MAIN_HAND).getItem() == item || player.getStackInHand(Hand.OFF_HAND).getItem() == item) {
                     knifeHand = player.getStackInHand(Hand.MAIN_HAND).getItem() == item ? Hand.MAIN_HAND : Hand.OFF_HAND;
                     itemHand = knifeHand == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND;
                     cut = KitchenKnifeItem.getItemCutAmount(player.getStackInHand(knifeHand));
@@ -77,32 +79,35 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
         ItemStack iStack = player.getStackInHand(itemHand);
         boolean hasKnife = knifeHand != null;
         boolean hasItem = !iStack.isEmpty();
-        if(hasItem) {
-            if(getItem().getCount() < getItem().getMaxCount() && (!hasKnife || getItem().getCount() < cut) && (getItem().isEmpty() || getItem().isItemEqual(iStack))) {
-                if(!getItem().isEmpty()) {
+        if (hasItem) {
+            if (getItem().getCount() < getItem().getMaxCount() && (!hasKnife || getItem().getCount() < cut) && (getItem().isEmpty() || getItem().isItemEqual(iStack))) {
+                if (!getItem().isEmpty()) {
                     getItem().setCount(getItem().getCount() + 1);
-                    if(!player.isCreative()) iStack.decrement(1);
+                    if (!player.isCreative()) iStack.decrement(1);
                 }
-                else if(player.isCreative()) {
+                else if (player.isCreative()) {
                     item = iStack.copy();
                     item.setCount(1);
                 } else item = iStack.split(1);
-                if(itemHand == Hand.OFF_HAND) player.swingHand(Hand.OFF_HAND);
+                if (itemHand == Hand.OFF_HAND) player.swingHand(Hand.OFF_HAND);
                 return ActionResult.success(itemHand == Hand.MAIN_HAND && world.isClient());
             }
         }
-        if(hasKnife && !item.isEmpty() && knife.isEmpty()) {
+        if (hasKnife && !item.isEmpty() && knife.isEmpty()) {
             slice(cut);
+            if (cut > 0 && player instanceof ServerPlayerEntity) {
+                Sandwichable.CUT_ITEM.trigger((ServerPlayerEntity) player);
+            }
             if (!player.isCreative()) KitchenKnifeItem.processCut(player.getStackInHand(knifeHand), cut);
             if(knifeHand == Hand.OFF_HAND) player.swingHand(knifeHand);
             return ActionResult.success(knifeHand != Hand.OFF_HAND && world.isClient());
         }
-        if(hasKnife && knife.isEmpty()) {
+        if (hasKnife && knife.isEmpty()) {
             this.knife = player.getStackInHand(knifeHand).split(1);
             player.getStackInHand(knifeHand).decrement(1);
             return ActionResult.success(world.isClient());
         }
-        if(!getItem().isEmpty() && knife.isEmpty()) {
+        if (!getItem().isEmpty() && knife.isEmpty()) {
             ItemEntity entity = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.3, pos.getZ()+0.5, player.isSneaking() ? getItem() : getItem().split(1));
             if(player.isSneaking()) item = ItemStack.EMPTY;
             if(!player.isCreative()) {
@@ -111,7 +116,7 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
             }
             return ActionResult.success(world.isClient());
         }
-        if(!knife.isEmpty()) {
+        if (!knife.isEmpty()) {
             player.inventory.offerOrDrop(world, getKnife());
             knife = ItemStack.EMPTY;
             return ActionResult.success(world.isClient());
@@ -131,7 +136,7 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
     @Override
     public void fromTag(BlockState state, NbtCompound tag) {
         super.fromTag(state, tag);
-        if(tag.contains("Items")) {
+        if (tag.contains("Items")) {
             DefaultedList<ItemStack> list = DefaultedList.ofSize(1, ItemStack.EMPTY);
             Inventories.readNbt(tag, list);
             item = list.get(0);
@@ -162,7 +167,7 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
     }
 
     public void trySliceWithKnife() {
-        if(!this.knife.isEmpty()) {
+        if (!this.knife.isEmpty()) {
             this.knifeAnimationTicks = 10;
             int cut = 0;
             SandwichableConfig cfg = Util.getConfig();
@@ -184,7 +189,7 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
             final ItemStack output = match.get().getOutput().copy();
             int nc = output.getCount() * amount;
             int maxCount = output.getItem().getMaxCount();
-            for(int i = 0; i < Math.ceil((float)nc / maxCount); i++) {
+            for (int i = 0; i < Math.ceil((float)nc / maxCount); i++) {
                 ItemStack result = output.copy();
                 result.setCount(Math.min(maxCount, (nc - (i * maxCount)) % (maxCount)));
                 ItemEntity entity = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.3, pos.getZ()+0.5, result);
@@ -259,11 +264,11 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
 
     @Override
     public void tick() {
-        if(item.getCount() != lastItemCount) {
+        if (item.getCount() != lastItemCount) {
             update();
         }
         lastItemCount = item.getCount();
-        if(knifeAnimationTicks > 0) knifeAnimationTicks--;
+        if (knifeAnimationTicks > 0) knifeAnimationTicks--;
     }
 
     public int getKnifeAnimationTicks() {
@@ -271,15 +276,15 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
     }
 
     private void particles(ItemStack stack, int depth) {
-        if(!world.isClient()) {
+        if (!world.isClient()) {
             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
             buf.writeItemStack(stack);
             buf.writeInt(this.getItem().getCount());
             buf.writeInt(depth);
             buf.writeBlockPos(pos);
-            for(PlayerEntity player : world.getPlayers()) {
-                if(player.getPos().distanceTo(new Vec3d(pos.getX(), pos.getY(), pos.getZ())) < 100) {
-                    ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, Util.id("cutting_board_particles"), buf);
+            for (PlayerEntity player : world.getPlayers()) {
+                if (player instanceof ServerPlayerEntity && player.getPos().distanceTo(new Vec3d(pos.getX(), pos.getY(), pos.getZ())) < 100) {
+                    ServerPlayNetworking.send((ServerPlayerEntity)player, Util.id("cutting_board_particles"), buf);
                 }
             }
         }

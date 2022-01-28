@@ -1,0 +1,35 @@
+{
+  "parent": "sandwichable:sandwichable/desalinator",
+  "display": {
+    "icon": {
+      "item": "sandwichable:salt"
+    },
+    "title": {
+      "translate": "advancements.sandwichable.salt.title"
+    },
+    "description": {
+      "translate": "advancements.sandwichable.salt.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "salt": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "sandwichable:salt"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "salt"
+    ]
+  ]
+}

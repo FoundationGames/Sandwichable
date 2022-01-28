@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
@@ -25,11 +26,14 @@ import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.explosion.Explosion;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Optional;
+import java.util.UUID;
 
 public class ToasterBlockEntity extends BlockEntity implements SidedInventory, Tickable, BlockEntityClientSerializable {
-
     private DefaultedList<ItemStack> items = DefaultedList.ofSize(2, ItemStack.EMPTY);
+    private @Nullable UUID lastUser;
     private static int toastTime = 240;
     private int toastProgress = 0;
     private boolean toasting = false;
@@ -45,25 +49,31 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
     }
 
     @Override
-    public void fromTag(BlockState state, NbtCompound tag) {
-        super.fromTag(state, tag);
+    public void fromTag(BlockState state, NbtCompound nbt) {
+        super.fromTag(state, nbt);
         items = DefaultedList.ofSize(2, ItemStack.EMPTY);
-        toastProgress = tag.getInt("toastProgress");
-        toasting = tag.getBoolean("toasting");
-        smokeProgress = tag.getInt("smokeProgress");
-        smoking = tag.getBoolean("smoking");
-        Inventories.readNbt(tag, items);
+        toastProgress = nbt.getInt("toastProgress");
+        toasting = nbt.getBoolean("toasting");
+        smokeProgress = nbt.getInt("smokeProgress");
+        smoking = nbt.getBoolean("smoking");
+        if (nbt.contains("lastUser")) {
+            this.lastUser = nbt.getUuid("lastUser");
+        } else this.lastUser = null;
+        Inventories.readNbt(nbt, items);
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag) {
-        super.writeNbt(tag);
-        tag.putInt("toastProgress", toastProgress);
-        tag.putBoolean("toasting", toasting);
-        tag.putInt("smokeProgress", smokeProgress);
-        tag.putBoolean("smoking", smoking);
-        Inventories.writeNbt(tag, items);
-        return tag;
+    public NbtCompound writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        nbt.putInt("toastProgress", toastProgress);
+        nbt.putBoolean("toasting", toasting);
+        nbt.putInt("smokeProgress", smokeProgress);
+        nbt.putBoolean("smoking", smoking);
+        if (this.lastUser == null) {
+            nbt.remove("lastUser");
+        } else nbt.putUuid("lastUser", this.lastUser);
+        Inventories.writeNbt(nbt, items);
+        return nbt;
     }
 
     @Override
@@ -94,11 +104,12 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
         return items;
     }
 
-    public ItemStack takeItem() {
+    public ItemStack takeItem(@Nullable PlayerEntity player) {
         int index = !items.get(1).isEmpty() ? 1 : 0;
         ItemStack stack = items.get(index);
         items.set(index, ItemStack.EMPTY);
         updateNeighbors = true;
+        lastUser = player == null ? null : player.getUuid();
         return stack;
     }
 
@@ -115,6 +126,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
             int index = !items.get(0).isEmpty() ? 1 : 0;
             items.set(index, playerItem);
             updateNeighbors = true;
+            lastUser = player.getUuid();
             return true;
         } return false;
     }
@@ -128,18 +140,28 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
             SimpleInventory inv = new SimpleInventory(items.get(i));
             Optional<ToastingRecipe> match = world.getRecipeManager().getFirstMatch(ToastingRecipe.Type.INSTANCE, inv, world);
 
+            boolean changed = false;
             if(match.isPresent()) {
                 items.set(i, match.get().getOutput().copy());
+                changed = true;
             } else {
                 if(items.get(i).isFood()) {
                     Item item = Sandwichable.SMALL_FOODS.contains(items.get(i).getItem()) ? ItemsRegistry.BURNT_MORSEL : ItemsRegistry.BURNT_FOOD;
                     items.set(i, new ItemStack(item, 1));
+                    changed = true;
+                }
+            }
+
+            if (!world.isClient()) {
+                PlayerEntity player = world.getPlayerByUuid(this.lastUser);
+                if (player instanceof ServerPlayerEntity && changed) {
+                    Sandwichable.TOAST_ITEM.trigger((ServerPlayerEntity) player, items.get(i));
                 }
             }
         }
     }
 
-    public void startToasting() {
+    public void startToasting(@Nullable PlayerEntity player) {
         if(this.world.getBlockState(this.pos).getBlock() == BlocksRegistry.TOASTER) {
             this.world.setBlockState(pos, this.world.getBlockState(this.pos).with(ToasterBlock.ON, true));
         }
@@ -147,9 +169,10 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
         toastProgress = 0;
         toasting = true;
         updateNeighbors = true;
+        lastUser = player == null ? lastUser : player.getUuid();
     }
 
-    public void stopToasting() {
+    public void stopToasting(@Nullable PlayerEntity player) {
         if(this.world.getBlockState(this.pos).getBlock() == BlocksRegistry.TOASTER) {
             this.world.setBlockState(pos, this.world.getBlockState(this.pos).with(ToasterBlock.ON, false));
         }
@@ -157,6 +180,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
         toastProgress = 0;
         toasting = false;
         updateNeighbors = true;
+        lastUser = player == null ? lastUser : player.getUuid();
     }
 
     public int getComparatorOutput() {
@@ -198,7 +222,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
             }
         }
         if(toastProgress == toastTime) {
-            stopToasting();
+            stopToasting(null);
             toastItems();
             smoking = true;
         }
@@ -209,7 +233,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
             smokeProgress++;
         } if (smokeProgress == smokeTime) { smoking = false; smokeProgress = 0; }
         if(currentlyPowered && !previouslyPowered) {
-            if(!toasting) {startToasting(); }
+            if(!toasting) { startToasting(null); }
         }
     }
 
@@ -252,6 +276,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
     public ItemStack removeStack(int slot) {
         ItemStack stack = items.get(slot).copy();
         items.set(slot, ItemStack.EMPTY);
+        lastUser = null;
         Util.sync(this, world);
         return stack;
     }
@@ -259,6 +284,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, T
     @Override
     public void setStack(int slot, ItemStack stack) {
         items.set(slot, stack);
+        lastUser = null;
         Util.sync(this, world);
     }
 

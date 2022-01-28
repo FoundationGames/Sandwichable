@@ -1,5 +1,8 @@
 package io.github.foundationgames.sandwichable;
 
+import io.github.foundationgames.sandwichable.advancement.CutItemCriterion;
+import io.github.foundationgames.sandwichable.advancement.ToastItemCriterion;
+import io.github.foundationgames.sandwichable.advancement.UseBottleCrateCriterion;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.blocks.entity.BottleCrateBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.DesalinatorBlockEntity;
@@ -15,6 +18,7 @@ import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.items.KitchenKnifeItem;
 import io.github.foundationgames.sandwichable.items.SandwichableGroupIconBuilder;
 import io.github.foundationgames.sandwichable.items.spread.SpreadType;
+import io.github.foundationgames.sandwichable.mixin.CriteriaAccess;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipeSerializer;
 import io.github.foundationgames.sandwichable.recipe.ToastingRecipe;
@@ -60,15 +64,20 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Sandwichable implements ModInitializer {
-
     public static final ItemGroup SANDWICHABLE_ITEMS = FabricItemGroupBuilder.build(Util.id("sandwichable"), SandwichableGroupIconBuilder::getIcon);
 
     public static final Tag<Item> BREAD_SLICES = TagRegistry.item(Util.id("bread_slices"));
     public static final Tag<Item> BREAD_LOAVES = TagRegistry.item(Util.id("bread_loaves"));
     public static final Tag<Item> METAL_ITEMS = TagRegistry.item(Util.id("metal_items"));
     public static final Tag<Item> SMALL_FOODS = TagRegistry.item(Util.id("small_foods"));
+    public static final Tag<Item> CUTTING_BOARDS = TagRegistry.item(Util.id("cutting_boards"));
+    public static final Tag<Item> CHEESE_WHEELS = TagRegistry.item(Util.id("cheese_wheels"));
     public static final Tag<Block> SALT_PRODUCING_BLOCKS = TagRegistry.block(Util.id("salt_producing_blocks"));
     public static final Tag<Block> KNIFE_SHARPENING_SURFACES = TagRegistry.block(Util.id("knife_sharpening_surfaces"));
+
+    public static final CutItemCriterion CUT_ITEM = CriteriaAccess.sandwichable$register(new CutItemCriterion());
+    public static final ToastItemCriterion TOAST_ITEM = CriteriaAccess.sandwichable$register(new ToastItemCriterion());
+    public static final UseBottleCrateCriterion USE_BOTTLE_CRATE = CriteriaAccess.sandwichable$register(new UseBottleCrateCriterion());
 
     public static final SoundEvent DESALINATOR_START = Registry.register(Registry.SOUND_EVENT, Util.id("desalinator_start"), new SoundEvent(Util.id("desalinator_start")));
     public static final SoundEvent DESALINATOR_RUN = Registry.register(Registry.SOUND_EVENT, Util.id("desalinator_run"), new SoundEvent(Util.id("desalinator_run")));

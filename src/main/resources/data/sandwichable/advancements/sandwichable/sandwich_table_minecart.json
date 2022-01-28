@@ -1,0 +1,35 @@
+{
+  "parent": "sandwichable:sandwichable/sandwich_table",
+  "display": {
+    "icon": {
+      "item": "sandwichable:sandwich_table_minecart"
+    },
+    "title": {
+      "translate": "advancements.sandwichable.sandwich_table_minecart.title"
+    },
+    "description": {
+      "translate": "advancements.sandwichable.sandwich_table_minecart.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "cart": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "sandwichable:sandwich_table_minecart"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "cart"
+    ]
+  ]
+}

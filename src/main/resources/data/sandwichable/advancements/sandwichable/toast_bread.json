@@ -1,0 +1,33 @@
+{
+  "parent": "sandwichable:sandwichable/toaster",
+  "display": {
+    "icon": {
+      "item": "sandwichable:toasted_bread_slice"
+    },
+    "title": {
+      "translate": "advancements.sandwichable.toast_bread.title"
+    },
+    "description": {
+      "translate": "advancements.sandwichable.toast_bread.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "toast": {
+      "trigger": "sandwichable:toast_item",
+      "conditions": {
+        "result": {
+			"item": "sandwichable:toasted_bread_slice"
+		}
+      }
+    }
+  },
+  "requirements": [
+    [
+      "toast"
+    ]
+  ]
+}

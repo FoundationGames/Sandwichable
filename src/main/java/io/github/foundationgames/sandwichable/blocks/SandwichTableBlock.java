@@ -49,6 +49,7 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider, Sn
         BlockEntity be = world.getBlockEntity(pos);
         if(be instanceof SandwichTableBlockEntity) {
             SandwichTableBlockEntity blockEntity = (SandwichTableBlockEntity)be;
+            blockEntity.getSandwich().ejectSandwich(world, new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5));
             Util.sync(blockEntity, world);
         }
     }

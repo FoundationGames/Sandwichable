@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "sandwichable:cheese_wheel",
+    "sandwichable:creamy_cheese_wheel",
+    "sandwichable:sour_cheese_wheel",
+    "sandwichable:intoxicating_cheese_wheel",
+    "sandwichable:candescent_cheese_wheel",
+    "sandwichable:warped_bleu_cheese_wheel"
+  ]
+}

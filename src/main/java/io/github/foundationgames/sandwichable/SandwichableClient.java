@@ -104,14 +104,14 @@ public class SandwichableClient implements ClientModInitializer {
             });
         });
 
-        ClientSidePacketRegistry.INSTANCE.register(Util.id("cutting_board_particles"), (ctx, buf) -> {
+        ClientPlayNetworking.registerGlobalReceiver(Util.id("cutting_board_particles"), (client, handler, buf, responseSender) -> {
             ItemStack stack = buf.readItemStack();
             int top = buf.readInt();
             int layers = buf.readInt();
             BlockPos pos = buf.readBlockPos();
             Random random = new Random();
             World world = MinecraftClient.getInstance().world;
-            ctx.getTaskQueue().execute(() -> {
+            client.execute(() -> {
                 for (int i = 0; i < layers; i++) {
                     for (int j = 0; j < 2 + random.nextInt(2); j++) {
                         double x = pos.getX() + 0.5 + ((random.nextDouble() - 0.5) / 3);
