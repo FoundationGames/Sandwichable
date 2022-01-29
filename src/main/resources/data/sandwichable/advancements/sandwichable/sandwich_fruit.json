@@ -1,0 +1,46 @@
+{
+  "parent": "sandwichable:sandwichable/sandwich_meat",
+  "display": {
+    "icon": {
+      "item": "sandwichable:sandwich",
+	  "nbt": "{BlockEntityTag:{Items:[{id:\"sandwichable:apple_slices\",Count:1b},{id:\"minecraft:melon_slice\",Count:1b},{id:\"minecraft:sweet_berries\",Count:1b},{id:\"sandwichable:spread\",tag:{spreadType:\"honey\",onLoaf:1b},Count:1b},{id:\"minecraft:bread\",Count:1b}]}}"
+    },
+    "title": {
+      "translate": "advancements.sandwichable.sandwich_fruit.title"
+    },
+    "description": {
+      "translate": "advancements.sandwichable.sandwich_fruit.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "sandwich": {
+      "trigger": "sandwichable:collect_sandwich",
+      "conditions": {
+        "foods": [
+          {
+            "item": "sandwichable:apple_slices"
+          },
+		  {
+            "item": "minecraft:melon_slice"
+          },
+		  {
+            "item": "minecraft:sweet_berries"
+          },
+		  {
+            "item": "sandwichable:spread",
+			"nbt": "{spreadType:\"honey\"}"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "sandwich"
+    ]
+  ]
+}

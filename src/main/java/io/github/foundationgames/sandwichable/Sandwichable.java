@@ -1,5 +1,6 @@
 package io.github.foundationgames.sandwichable;
 
+import io.github.foundationgames.sandwichable.advancement.CollectSandwichCriterion;
 import io.github.foundationgames.sandwichable.advancement.CutItemCriterion;
 import io.github.foundationgames.sandwichable.advancement.ToastItemCriterion;
 import io.github.foundationgames.sandwichable.advancement.UseBottleCrateCriterion;
@@ -78,6 +79,7 @@ public class Sandwichable implements ModInitializer {
     public static final CutItemCriterion CUT_ITEM = CriteriaAccess.sandwichable$register(new CutItemCriterion());
     public static final ToastItemCriterion TOAST_ITEM = CriteriaAccess.sandwichable$register(new ToastItemCriterion());
     public static final UseBottleCrateCriterion USE_BOTTLE_CRATE = CriteriaAccess.sandwichable$register(new UseBottleCrateCriterion());
+    public static final CollectSandwichCriterion COLLECT_SANDWICH = CriteriaAccess.sandwichable$register(new CollectSandwichCriterion());
 
     public static final SoundEvent DESALINATOR_START = Registry.register(Registry.SOUND_EVENT, Util.id("desalinator_start"), new SoundEvent(Util.id("desalinator_start")));
     public static final SoundEvent DESALINATOR_RUN = Registry.register(Registry.SOUND_EVENT, Util.id("desalinator_run"), new SoundEvent(Util.id("desalinator_run")));

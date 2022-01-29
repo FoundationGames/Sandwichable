@@ -9,6 +9,7 @@
     "DispenserBlockMixin",
     "FishingBobberEntityMixin",
     "PistonBlockMixin",
+    "ServerPlayerEntityMixin",
     "ServerPlayerInteractionManagerMixin",
     "StructurePoolAccess",
     "StructurePoolsMixin",
