@@ -8,7 +8,6 @@ import io.github.foundationgames.sandwichable.items.CheeseType;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.CheeseRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
@@ -18,6 +17,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -27,17 +28,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Random;
 
-public class BasinBlockEntity extends BlockEntity implements SidedInventory, BlockEntityClientSerializable {
-
+public class BasinBlockEntity extends BlockEntity implements SidedInventory, SyncedBlockEntity {
     private int fermentProgress = 0;
     public static final int fermentTime = 3600;
     private BasinContent content = BasinContent.AIR;
 
-    private Random rng = new Random();
+    private final Random rng = new Random();
 
     public BasinBlockEntity(BlockPos pos, BlockState state) {
         super(BlocksRegistry.BASIN_BLOCKENTITY, pos, state);
@@ -62,21 +63,23 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Blo
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt) {
+    public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         nbt.putInt("fermentProgress", fermentProgress);
         nbt.putString("basinContent", content == null ? "air" : content.toString());
+    }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt() {
+        NbtCompound nbt = new NbtCompound();
+        this.writeNbt(nbt);
         return nbt;
     }
 
+    @Nullable
     @Override
-    public void fromClientTag(NbtCompound nbt) {
-        this.readNbt(nbt);
-    }
-
-    @Override
-    public NbtCompound toClientTag(NbtCompound nbt) {
-        return this.writeNbt(nbt);
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return this.getPacket();
     }
 
     public ActionResult onBlockUse(PlayerEntity player, Hand hand) {
@@ -229,7 +232,7 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Blo
 
     public void update() {
         world.updateComparators(pos, world.getBlockState(pos).getBlock());
-        Util.sync(this, world);
+        Util.sync(this);
         markDirty();
     }
 

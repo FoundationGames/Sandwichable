@@ -4,7 +4,6 @@ import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.common.CommonTags;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
@@ -14,6 +13,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
@@ -23,7 +24,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class PickleJarBlockEntity extends BlockEntity implements SidedInventory, BlockEntityClientSerializable {
+public class PickleJarBlockEntity extends BlockEntity implements SidedInventory, SyncedBlockEntity {
 
     private PickleJarFluid fluid = PickleJarFluid.AIR;
     private int numItems = 0;
@@ -46,13 +47,12 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt) {
+    public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         nbt.putString("pickleJarFluid", fluid.toString());
         nbt.putInt("numItems", numItems);
         nbt.putBoolean("areItemsPickled", areItemsPickled);
         nbt.putInt("pickleProgress", pickleProgress);
-        return nbt;
     }
 
     public ActionResult onUse(World world, PlayerEntity player, Hand hand, BlockPos pos) {
@@ -213,18 +213,21 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
     }
 
     @Override
-    public void fromClientTag(NbtCompound nbt) {
-        this.readNbt(nbt);
+    public NbtCompound toInitialChunkDataNbt() {
+        NbtCompound nbt = new NbtCompound();
+        this.writeNbt(nbt);
+        return nbt;
     }
 
+    @Nullable
     @Override
-    public NbtCompound toClientTag(NbtCompound nbt) {
-        return this.writeNbt(nbt);
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return this.getPacket();
     }
 
     public void update() {
         world.updateComparators(pos, world.getBlockState(pos).getBlock());
-        Util.sync(this, world);
+        Util.sync(this);
         markDirty();
     }
 

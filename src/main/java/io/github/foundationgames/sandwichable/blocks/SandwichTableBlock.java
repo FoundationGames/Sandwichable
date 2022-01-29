@@ -35,7 +35,7 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider, Sn
         if (!world.isClient() && blockEntity instanceof SandwichTableBlockEntity) {
             SandwichTableBlockEntity sBlockEntity = (SandwichTableBlockEntity)world.getBlockEntity(pos);
             sBlockEntity.getSandwich().interact(world, new Vec3d(pos.getX()+0.5, pos.getY(), pos.getZ()+0.5), player, hand, player.isSneaking());
-            Util.sync(sBlockEntity, world);
+            Util.sync(sBlockEntity);
         }
         return ActionResult.success(world.isClient());
     }
@@ -50,7 +50,7 @@ public class SandwichTableBlock extends Block implements BlockEntityProvider, Sn
         BlockEntity be = world.getBlockEntity(pos);
         if(be instanceof SandwichTableBlockEntity) {
             SandwichTableBlockEntity blockEntity = (SandwichTableBlockEntity)be;
-            Util.sync(blockEntity, world);
+            Util.sync(blockEntity);
         }
     }
 

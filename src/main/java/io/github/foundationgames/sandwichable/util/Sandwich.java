@@ -129,12 +129,12 @@ public class Sandwich {
                 list.add(NbtCompound);
             }
         }
-        if (!list.isEmpty()) nbt.put("Items", list);
+        nbt.put("Items", list);
         return nbt;
     }
 
     public void setFromNbt(NbtCompound nbt) {
-        foods.clear();
+        clearFoodList();
         addFromNbt(nbt);
     }
 

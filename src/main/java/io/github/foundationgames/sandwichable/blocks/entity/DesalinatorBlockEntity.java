@@ -5,9 +5,9 @@ import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.blocks.DesalinatorBlock;
 import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.LockableContainerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -16,7 +16,9 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -29,8 +31,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import org.jetbrains.annotations.Nullable;
 
-public class DesalinatorBlockEntity extends LockableContainerBlockEntity implements ExtendedScreenHandlerFactory, SidedInventory, BlockEntityClientSerializable {
+public class DesalinatorBlockEntity extends LockableContainerBlockEntity implements ExtendedScreenHandlerFactory, SidedInventory, SyncedBlockEntity {
     private DefaultedList<ItemStack> inventory;
     private int fluidAmount = 0;
     private int evaporateProgress = 0;
@@ -59,13 +62,12 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt) {
+    public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         Inventories.writeNbt(nbt, this.inventory);
         nbt.putInt("waterAmount", fluidAmount);
         nbt.putInt("evaporateProgress", evaporateProgress);
         nbt.putInt("fuelBurnProgress", fuelBurnProgress);
-        return nbt;
     }
 
     private void finishEvaporating() {
@@ -259,13 +261,16 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     @Override
-    public void fromClientTag(NbtCompound nbt) {
-        this.readNbt(nbt);
+    public NbtCompound toInitialChunkDataNbt() {
+        NbtCompound nbt = new NbtCompound();
+        this.writeNbt(nbt);
+        return nbt;
     }
 
+    @Nullable
     @Override
-    public NbtCompound toClientTag(NbtCompound nbt) {
-        return this.writeNbt(nbt);
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return this.getPacket();
     }
 
     @Override

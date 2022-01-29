@@ -131,7 +131,7 @@ public class ToasterBlock extends ModelBlockWithEntity implements Waterloggable,
                         world.spawnEntity(itemEntity);
                     }
                 }
-                Util.sync(blockEntity, world);
+                Util.sync(blockEntity);
             } else {
                 if (!blockEntity.isToasting()) { blockEntity.startToasting(); } else { blockEntity.stopToasting(); }
             }

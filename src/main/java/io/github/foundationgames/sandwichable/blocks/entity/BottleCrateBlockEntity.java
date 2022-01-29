@@ -5,7 +5,6 @@ import io.github.foundationgames.sandwichable.blocks.BottleCrateBlock;
 import io.github.foundationgames.sandwichable.blocks.entity.container.BottleCrateScreenHandler;
 import io.github.foundationgames.sandwichable.items.BottleCrateStorable;
 import io.github.foundationgames.sandwichable.util.Util;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.LockableContainerBlockEntity;
@@ -16,7 +15,9 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -25,12 +26,13 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class BottleCrateBlockEntity extends LockableContainerBlockEntity implements ExtendedScreenHandlerFactory, SidedInventory, BlockEntityClientSerializable {
+public class BottleCrateBlockEntity extends LockableContainerBlockEntity implements ExtendedScreenHandlerFactory, SidedInventory, SyncedBlockEntity {
     private DefaultedList<ItemStack> inventory;
     private final Random random = new Random();
     private int growthTicks = randomTime();
@@ -42,7 +44,7 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
 
     private void update() {
         world.updateComparators(pos, world.getBlockState(pos).getBlock());
-        Util.sync(this, world);
+        Util.sync(this);
         markDirty();
     }
 
@@ -80,11 +82,10 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt) {
+    public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         Inventories.writeNbt(nbt, this.inventory);
         nbt.putInt("growthTicks", growthTicks);
-        return nbt;
     }
 
     public void tickItems(Random random) {
@@ -182,13 +183,16 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     @Override
-    public void fromClientTag(NbtCompound nbt) {
-        readNbt(nbt);
+    public NbtCompound toInitialChunkDataNbt() {
+        NbtCompound nbt = new NbtCompound();
+        this.writeNbt(nbt);
+        return nbt;
     }
 
+    @Nullable
     @Override
-    public NbtCompound toClientTag(NbtCompound nbt) {
-        return writeNbt(nbt);
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return this.getPacket();
     }
 
     @Override

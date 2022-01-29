@@ -77,7 +77,7 @@ public class DesalinatorBlock extends ModelBlockWithEntity implements Waterlogga
         if (state.get(FLUID) == FluidType.NONE && (fluidState.getFluid() == Fluids.WATER || fluidState.getFluid() == FluidsRegistry.PICKLE_BRINE)) {
             if (!world.isClient()) {
                 world.setBlockState(pos, state.with(FLUID, fluidState.getFluid() == Fluids.WATER ? FluidType.WATER : FluidType.PICKLE_BRINE), 3);
-                world.getFluidTickScheduler().schedule(pos, fluidState.getFluid(), fluidState.getFluid().getTickRate(world));
+                world.createAndScheduleFluidTick(pos, fluidState.getFluid(), fluidState.getFluid().getTickRate(world));
             }
             return true;
         } else {

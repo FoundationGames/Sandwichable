@@ -2,16 +2,13 @@ package io.github.foundationgames.sandwichable.util;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
+import io.github.foundationgames.sandwichable.blocks.entity.SyncedBlockEntity;
 import io.github.foundationgames.sandwichable.config.ConfigInABarrel;
 import io.github.foundationgames.sandwichable.config.SandwichableConfig;
 import io.github.foundationgames.sandwichable.mixin.StructurePoolAccess;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.Block;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -78,8 +75,8 @@ public class Util {
         }
     }
 
-    public static void sync(BlockEntityClientSerializable be, World world) {
-        if(!world.isClient) be.sync();
+    public static void sync(SyncedBlockEntity be) {
+        be.sync();
     }
 
     public static int floatToIntWithBounds(float input, int bounds) {

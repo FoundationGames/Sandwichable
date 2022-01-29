@@ -8,9 +8,9 @@ import net.minecraft.util.math.BlockPos;
 import java.util.Random;
 
 public class OxidizableBasinBlock extends BasinBlock implements Oxidizable {
-    private final OxidizationLevel level;
+    private final OxidationLevel level;
 
-    public OxidizableBasinBlock(OxidizationLevel level, Settings settings) {
+    public OxidizableBasinBlock(OxidationLevel level, Settings settings) {
         super(settings);
         this.level = level;
     }
@@ -25,7 +25,7 @@ public class OxidizableBasinBlock extends BasinBlock implements Oxidizable {
         return Oxidizable.getIncreasedOxidationBlock(state.getBlock()).isPresent();
     }
 
-    public OxidizationLevel getDegradationLevel() {
+    public OxidationLevel getDegradationLevel() {
         return this.level;
     }
 }

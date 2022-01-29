@@ -6,7 +6,6 @@ import io.github.foundationgames.sandwichable.blocks.ToasterBlock;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.recipe.ToastingRecipe;
 import io.github.foundationgames.sandwichable.util.Util;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,6 +15,8 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -26,10 +27,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class ToasterBlockEntity extends BlockEntity implements SidedInventory, BlockEntityClientSerializable {
+public class ToasterBlockEntity extends BlockEntity implements SidedInventory, SyncedBlockEntity {
 
     private DefaultedList<ItemStack> items = DefaultedList.ofSize(2, ItemStack.EMPTY);
     private static int toastTime = 240;
@@ -58,24 +60,26 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, B
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt) {
+    public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         nbt.putInt("toastProgress", toastProgress);
         nbt.putBoolean("toasting", toasting);
         nbt.putInt("smokeProgress", smokeProgress);
         nbt.putBoolean("smoking", smoking);
         Inventories.writeNbt(nbt, items);
+    }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt() {
+        NbtCompound nbt = new NbtCompound();
+        this.writeNbt(nbt);
         return nbt;
     }
 
+    @Nullable
     @Override
-    public void fromClientTag(NbtCompound nbt) {
-        this.readNbt(nbt);
-    }
-
-    @Override
-    public NbtCompound toClientTag(NbtCompound nbt) {
-        return this.writeNbt(nbt);
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return this.getPacket();
     }
 
     private void explode() {
@@ -256,14 +260,14 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, B
     public ItemStack removeStack(int slot) {
         ItemStack stack = items.get(slot).copy();
         items.set(slot, ItemStack.EMPTY);
-        Util.sync(this, world);
+        Util.sync(this);
         return stack;
     }
 
     @Override
     public void setStack(int slot, ItemStack stack) {
         items.set(slot, stack);
-        Util.sync(this, world);
+        Util.sync(this);
     }
 
     @Override
@@ -274,6 +278,6 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, B
     @Override
     public void clear() {
         items.clear();
-        Util.sync(this, world);
+        Util.sync(this);
     }
 }

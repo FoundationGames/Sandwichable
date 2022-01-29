@@ -6,30 +6,36 @@ import io.github.foundationgames.sandwichable.config.SandwichableConfig;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.YOffset;
-import net.minecraft.world.gen.decorator.ChanceDecoratorConfig;
-import net.minecraft.world.gen.decorator.Decorator;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.decorator.CountPlacementModifier;
+import net.minecraft.world.gen.decorator.HeightRangePlacementModifier;
+import net.minecraft.world.gen.decorator.RarityFilterPlacementModifier;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.PlacedFeature;
 
 import java.util.List;
 
 public class SandwichableWorldgen {
+    public static final Identifier SALTY_SAND = Util.id("salty_sand");
+    public static final Identifier SHRUBS = Util.id("shrubs");
 
-    public static final Feature<DefaultFeatureConfig> SHRUBS_FEATURE = Registry.register(Registry.FEATURE, Util.id("shrubs"), new ShrubsFeature(DefaultFeatureConfig.CODEC));
-    public static final Feature<ExtraOreFeatureConfig> SALTY_SAND_FEATURE = Registry.register(Registry.FEATURE, Util.id("salty_sand"), new ExtraOreFeature(ExtraOreFeatureConfig.CODEC));
+    public static final Feature<DefaultFeatureConfig> SHRUBS_FEATURE = Registry.register(Registry.FEATURE, SHRUBS, new ShrubsFeature(DefaultFeatureConfig.CODEC));
+    public static final Feature<ExtraOreFeatureConfig> SALTY_SAND_FEATURE = Registry.register(Registry.FEATURE, SALTY_SAND, new ExtraOreFeature(ExtraOreFeatureConfig.CODEC));
     public static final Feature<SaltPoolFeatureConfig> SALT_POOL_FEATURE = Registry.register(Registry.FEATURE, Util.id("salt_pool"), new SaltPoolFeature());
 
-    public static ConfiguredFeature<DefaultFeatureConfig, ?> SHRUBS_CONFIGURED = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("shrubs"), SHRUBS_FEATURE.configure(new DefaultFeatureConfig()));
-    public static ConfiguredFeature<?, ?> SALTY_SAND_CONFIGURED;
-    public static ConfiguredFeature<?, ?> SALT_POOL_WATER;
-    public static ConfiguredFeature<?, ?> SALT_POOL_DRY;
+    public static PlacedFeature SHRUBS_PLACED = BuiltinRegistries.add(BuiltinRegistries.PLACED_FEATURE, SHRUBS,
+            BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, SHRUBS, SHRUBS_FEATURE.configure(new DefaultFeatureConfig())).withPlacement()
+    );
+    public static PlacedFeature SALTY_SAND_PLACED;
+    public static PlacedFeature SALT_POOL_WATER;
+    public static PlacedFeature SALT_POOL_DRY;
 
     private static final List<Biome.Category> SALT_POOL_BLACKLIST = Lists.newArrayList(Biome.Category.BEACH, Biome.Category.RIVER, Biome.Category.OCEAN, Biome.Category.NETHER, Biome.Category.THEEND);
 
@@ -38,33 +44,43 @@ public class SandwichableWorldgen {
         BiomeModifications.addFeature(ctx -> {
             Biome biome = ctx.getBiome();
             return biome.getCategory() == Biome.Category.OCEAN || biome.getCategory() == Biome.Category.BEACH;
-        }, GenerationStep.Feature.UNDERGROUND_ORES, RegistryKey.of(Registry.CONFIGURED_FEATURE_KEY, Util.id("salty_sand")));
+        }, GenerationStep.Feature.UNDERGROUND_ORES, RegistryKey.of(Registry.PLACED_FEATURE_KEY, SALTY_SAND));
         BiomeModifications.addFeature(ctx -> {
             Biome biome = ctx.getBiome();
             return biome.getCategory() != Biome.Category.NETHER && biome.getCategory() != Biome.Category.THEEND;
-        }, GenerationStep.Feature.VEGETAL_DECORATION, RegistryKey.of(Registry.CONFIGURED_FEATURE_KEY, Util.id("shrubs")));
+        }, GenerationStep.Feature.VEGETAL_DECORATION, RegistryKey.of(Registry.PLACED_FEATURE_KEY, SHRUBS));
         if (cfg.saltPoolGenOptions.saltPools) {
             BiomeModifications.addFeature(ctx -> {
                 Biome biome = ctx.getBiome();
-                return biome.getPrecipitation() == Biome.Precipitation.RAIN && !biome.hasHighHumidity() && biome.getScale() < 0.25 && !SALT_POOL_BLACKLIST.contains(biome.getCategory());
-            }, GenerationStep.Feature.LAKES, RegistryKey.of(Registry.CONFIGURED_FEATURE_KEY, Util.id("salt_pool_water")));
+                return biome.getCategory() != Biome.Category.RIVER && biome.getCategory() != Biome.Category.OCEAN &&
+                        biome.getPrecipitation() == Biome.Precipitation.RAIN && !biome.hasHighHumidity() && !SALT_POOL_BLACKLIST.contains(biome.getCategory());
+            }, GenerationStep.Feature.LAKES, RegistryKey.of(Registry.PLACED_FEATURE_KEY, Util.id("salt_pool_water")));
         }
         if (cfg.saltPoolGenOptions.drySaltPools) {
             BiomeModifications.addFeature(ctx -> {
                 Biome biome = ctx.getBiome();
-                return biome.getPrecipitation() == Biome.Precipitation.NONE && biome.getTemperature() > 1.5f && biome.getScale() < 0.25 && !SALT_POOL_BLACKLIST.contains(biome.getCategory());
-            }, GenerationStep.Feature.LAKES, RegistryKey.of(Registry.CONFIGURED_FEATURE_KEY, Util.id("salty_pool_dry")));
+                return biome.getCategory() != Biome.Category.RIVER && biome.getCategory() != Biome.Category.OCEAN &&
+                        biome.getPrecipitation() == Biome.Precipitation.NONE && biome.getTemperature() > 1.5f && !SALT_POOL_BLACKLIST.contains(biome.getCategory());
+            }, GenerationStep.Feature.LAKES, RegistryKey.of(Registry.PLACED_FEATURE_KEY, Util.id("salty_pool_dry")));
         }
     }
     
     static {
         SandwichableConfig config = Util.getConfig();
         
-        SALTY_SAND_CONFIGURED = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salty_sand"), SALTY_SAND_FEATURE.configure(
-                new ExtraOreFeatureConfig(Blocks.SAND.getDefaultState(), BlocksRegistry.SALTY_SAND.getDefaultState(), config.saltySandGenOptions.veinSize)
-        ).uniformRange(YOffset.getBottom(), YOffset.fixed(config.saltySandGenOptions.maxGenHeight)).spreadHorizontally().repeat(config.saltySandGenOptions.rarity));
+        SALTY_SAND_PLACED = BuiltinRegistries.add(BuiltinRegistries.PLACED_FEATURE, SALTY_SAND,
+            BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, SALTY_SAND, SALTY_SAND_FEATURE.configure(
+                    new ExtraOreFeatureConfig(Blocks.SAND.getDefaultState(), BlocksRegistry.SALTY_SAND.getDefaultState(), config.saltySandGenOptions.veinSize)
+            )).withPlacement(CountPlacementModifier.of(config.saltySandGenOptions.rarity), HeightRangePlacementModifier.uniform(YOffset.getBottom(), YOffset.fixed(config.saltySandGenOptions.maxGenHeight)))
+        );
 
-        SALT_POOL_WATER = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salt_pool_water"), SALT_POOL_FEATURE.configure(new SaltPoolFeatureConfig(true)).decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(426))));
-        SALT_POOL_DRY = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salty_pool_dry"), SALT_POOL_FEATURE.configure(new SaltPoolFeatureConfig(false)).decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(442))));
+        SALT_POOL_WATER = BuiltinRegistries.add(BuiltinRegistries.PLACED_FEATURE, Util.id("salt_pool_water"),
+                BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salt_pool_water"), SALT_POOL_FEATURE.configure(new SaltPoolFeatureConfig(true)))
+                        .withPlacement(RarityFilterPlacementModifier.of(426))
+        );
+        SALT_POOL_DRY = BuiltinRegistries.add(BuiltinRegistries.PLACED_FEATURE, Util.id("salty_pool_dry"),
+                BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salty_pool_dry"), SALT_POOL_FEATURE.configure(new SaltPoolFeatureConfig(false)))
+                        .withPlacement(RarityFilterPlacementModifier.of(442))
+        );
     }
 }

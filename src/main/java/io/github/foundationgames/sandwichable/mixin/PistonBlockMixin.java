@@ -24,7 +24,7 @@ public class PistonBlockMixin {
         Direction dir = state.get(PistonBlock.FACING);
         BlockPos tablePos = pos.offset(dir).down();
         if(world.getBlockState(tablePos).getBlock() == BlocksRegistry.SANDWICH_TABLE) {
-            world.getBlockTickScheduler().schedule(tablePos, BlocksRegistry.SANDWICH_TABLE, 1);
+            world.createAndScheduleBlockTick(tablePos, BlocksRegistry.SANDWICH_TABLE, 1);
         }
         List<SandwichTableMinecartEntity> list = world.getEntitiesByClass(SandwichTableMinecartEntity.class, new Box(tablePos), EntityPredicates.EXCEPT_SPECTATOR);
         if(list.size() > 0) {

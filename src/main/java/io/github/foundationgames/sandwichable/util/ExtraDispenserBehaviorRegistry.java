@@ -44,7 +44,7 @@ public class ExtraDispenserBehaviorRegistry {
                 Runnable sync = () -> {};
                 if(world.getBlockEntity(pos) instanceof SandwichTableBlockEntity) {
                     sandwich = ((SandwichTableBlockEntity)world.getBlockEntity(pos)).getSandwich();
-                    sync = () -> Util.sync(((SandwichTableBlockEntity)world.getBlockEntity(pos)), pointer.getWorld());
+                    sync = () -> Util.sync(((SandwichTableBlockEntity)world.getBlockEntity(pos)));
                 } else {
                     List<SandwichTableMinecartEntity> list = pointer.getWorld().getEntitiesByClass(SandwichTableMinecartEntity.class, new Box(pos), EntityPredicates.EXCEPT_SPECTATOR);
                     if(list.size() > 0) {

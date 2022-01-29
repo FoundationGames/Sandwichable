@@ -28,7 +28,8 @@ public class PickleJarBlockItem extends InfoTooltipBlockItem {
     }
 
     public static ItemStack createFromBlockEntity(PickleJarBlockEntity entity) {
-        NbtCompound tag = entity.writeNbt(new NbtCompound());
+        NbtCompound tag = new NbtCompound();
+        entity.writeNbt(tag);
         ItemStack stack = new ItemStack(ItemsRegistry.EMPTY_PICKLE_JAR, 1);
         PickleJarFluid fluid = PickleJarFluid.fromString(tag.getString("pickleJarFluid"));
         int numItems = tag.getInt("numItems");

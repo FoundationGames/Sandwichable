@@ -7,7 +7,6 @@ import io.github.foundationgames.sandwichable.items.KitchenKnifeItem;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
 import io.github.foundationgames.sandwichable.util.Util;
 import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -19,7 +18,9 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
@@ -33,10 +34,11 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityClientSerializable, SidedInventory {
+public class CuttingBoardBlockEntity extends BlockEntity implements SyncedBlockEntity, SidedInventory {
 
     private ItemStack item = ItemStack.EMPTY;
     private ItemStack knife = ItemStack.EMPTY;
@@ -123,7 +125,7 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
     }
 
     public void update() {
-        Util.sync(this, this.world);
+        Util.sync(this);
         world.updateComparators(pos, world.getBlockState(pos).getBlock());
     }
 
@@ -142,22 +144,24 @@ public class CuttingBoardBlockEntity extends BlockEntity implements BlockEntityC
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag) {
+    public void writeNbt(NbtCompound tag) {
         super.writeNbt(tag);
         tag.put("Item", item.writeNbt(new NbtCompound()));
         tag.put("Knife", knife.writeNbt(new NbtCompound()));
         tag.putInt("knifeAnim", knifeAnimationTicks);
-        return tag;
     }
 
     @Override
-    public void fromClientTag(NbtCompound nbt) {
-        this.readNbt(nbt);
+    public NbtCompound toInitialChunkDataNbt() {
+        NbtCompound nbt = new NbtCompound();
+        this.writeNbt(nbt);
+        return nbt;
     }
 
+    @Nullable
     @Override
-    public NbtCompound toClientTag(NbtCompound nbt) {
-        return this.writeNbt(nbt);
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return this.getPacket();
     }
 
     public void trySliceWithKnife() {

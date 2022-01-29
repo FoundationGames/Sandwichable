@@ -46,10 +46,10 @@ public final class BlocksRegistry {
     public static final Block BASALT_BASIN = new BasinBlock(FabricBlockSettings.copy(Blocks.POLISHED_BASALT));
     public static final Block BLACKSTONE_BASIN = new BasinBlock(FabricBlockSettings.copy(Blocks.POLISHED_BLACKSTONE));
     public static final Block DEEPSLATE_BASIN = new BasinBlock(FabricBlockSettings.copy(Blocks.POLISHED_DEEPSLATE));
-    public static final Block COPPER_BASIN = new OxidizableBasinBlock(Oxidizable.OxidizationLevel.UNAFFECTED, FabricBlockSettings.copy(Blocks.CUT_COPPER));
-    public static final Block EXPOSED_COPPER_BASIN = new OxidizableBasinBlock(Oxidizable.OxidizationLevel.EXPOSED, FabricBlockSettings.copy(Blocks.EXPOSED_CUT_COPPER));
-    public static final Block WEATHERED_COPPER_BASIN = new OxidizableBasinBlock(Oxidizable.OxidizationLevel.WEATHERED, FabricBlockSettings.copy(Blocks.WEATHERED_CUT_COPPER));
-    public static final Block OXIDIZED_COPPER_BASIN = new OxidizableBasinBlock(Oxidizable.OxidizationLevel.OXIDIZED, FabricBlockSettings.copy(Blocks.OXIDIZED_CUT_COPPER));
+    public static final Block COPPER_BASIN = new OxidizableBasinBlock(Oxidizable.OxidationLevel.UNAFFECTED, FabricBlockSettings.copy(Blocks.CUT_COPPER));
+    public static final Block EXPOSED_COPPER_BASIN = new OxidizableBasinBlock(Oxidizable.OxidationLevel.EXPOSED, FabricBlockSettings.copy(Blocks.EXPOSED_CUT_COPPER));
+    public static final Block WEATHERED_COPPER_BASIN = new OxidizableBasinBlock(Oxidizable.OxidationLevel.WEATHERED, FabricBlockSettings.copy(Blocks.WEATHERED_CUT_COPPER));
+    public static final Block OXIDIZED_COPPER_BASIN = new OxidizableBasinBlock(Oxidizable.OxidationLevel.OXIDIZED, FabricBlockSettings.copy(Blocks.OXIDIZED_CUT_COPPER));
     public static final Block WAXED_COPPER_BASIN = new BasinBlock(FabricBlockSettings.copy(Blocks.WAXED_CUT_COPPER));
     public static final Block WAXED_EXPOSED_COPPER_BASIN = new BasinBlock(FabricBlockSettings.copy(Blocks.WAXED_EXPOSED_CUT_COPPER));
     public static final Block WAXED_WEATHERED_COPPER_BASIN = new BasinBlock(FabricBlockSettings.copy(Blocks.WAXED_WEATHERED_CUT_COPPER));

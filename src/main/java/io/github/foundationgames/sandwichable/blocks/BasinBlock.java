@@ -98,7 +98,7 @@ public class BasinBlock extends ModelBlockWithEntity {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if(world.getBlockEntity(pos) instanceof BasinBlockEntity) {
-            Util.sync((BasinBlockEntity)world.getBlockEntity(pos), world);
+            Util.sync((BasinBlockEntity)world.getBlockEntity(pos));
             return ((BasinBlockEntity)world.getBlockEntity(pos)).onBlockUse(player, hand);
         }
         return ActionResult.FAIL;
