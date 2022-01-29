@@ -13,7 +13,6 @@ Available on ***[Modrinth](https://modrinth.com/mod/5g7OOxWC)***
 
 #### Requires:
 - [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api) - The core library for almost all Fabric mods. (You must put this in your mods folder like any other mod)
-- [Cloth Config](https://www.curseforge.com/minecraft/mc-mods/cloth-config) - A mod needed for Sandwichable to create its configuration menus.
 
 #### Supports:
 - [**Meal API [RECOMMENDED]**](https://www.curseforge.com/minecraft/mc-mods/meal-api) - Make sandwiches fill past the vanilla food bar's limits!
