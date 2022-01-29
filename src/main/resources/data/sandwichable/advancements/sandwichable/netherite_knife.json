@@ -1,0 +1,38 @@
+{
+  "parent": "sandwichable:sandwichable/cut_item",
+  "display": {
+    "icon": {
+      "item": "sandwichable:netherite_kitchen_knife"
+    },
+    "title": {
+      "translate": "advancements.sandwichable.netherite_knife.title"
+    },
+    "description": {
+      "translate": "advancements.sandwichable.netherite_knife.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 80
+  },
+  "criteria": {
+    "knife": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["sandwichable:netherite_kitchen_knife"]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "knife"
+    ]
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "parent": "sandwichable:sandwichable/sandwich_blt",
+  "display": {
+    "icon": {
+      "item": "sandwichable:sandwich",
+	  "nbt": "{BlockEntityTag:{Items:[{id:\"sandwichable:bacon_strips\",Count:1b},{id:\"sandwichable:cooked_pork_cuts\",Count:1b},{id:\"sandwichable:chicken_filet\",Count:1b},{id:\"sandwichable:toasted_bread_slice\",Count:1b}]}}"
+    },
+    "title": {
+      "translate": "advancements.sandwichable.sandwich_meat.title"
+    },
+    "description": {
+      "translate": "advancements.sandwichable.sandwich_meat.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "sandwich": {
+      "trigger": "sandwichable:collect_sandwich",
+      "conditions": {
+        "foods": [
+          {
+            "items": ["sandwichable:cooked_pork_cuts"]
+          },
+		  {
+            "items": ["sandwichable:bacon_strips"]
+          },
+		  {
+            "items": ["sandwichable:cooked_chicken_filet"]
+          },
+		  {
+            "items": ["sandwichable:cooked_cod_filet"]
+          },
+		  {
+            "items": ["sandwichable:cooked_salmon_filet"]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "sandwich"
+    ]
+  ]
+}

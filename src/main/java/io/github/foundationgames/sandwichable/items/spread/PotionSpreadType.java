@@ -1,15 +1,10 @@
 package io.github.foundationgames.sandwichable.items.spread;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.PotionItem;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 

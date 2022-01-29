@@ -1,0 +1,35 @@
+{
+  "parent": "sandwichable:sandwichable/root",
+  "display": {
+    "icon": {
+      "item": "sandwichable:desalinator"
+    },
+    "title": {
+      "translate": "advancements.sandwichable.desalinator.title"
+    },
+    "description": {
+      "translate": "advancements.sandwichable.desalinator.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "desalinator": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["sandwichable:desalinator"]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "desalinator"
+    ]
+  ]
+}

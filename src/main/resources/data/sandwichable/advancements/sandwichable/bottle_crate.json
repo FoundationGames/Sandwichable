@@ -1,0 +1,29 @@
+{
+  "parent": "sandwichable:sandwichable/root",
+  "display": {
+    "icon": {
+      "item": "sandwichable:bottle_crate"
+    },
+    "title": {
+      "translate": "advancements.sandwichable.bottle_crate.title"
+    },
+    "description": {
+      "translate": "advancements.sandwichable.bottle_crate.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "crate": {
+      "trigger": "sandwichable:use_bottle_crate",
+	  "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "crate"
+    ]
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "parent": "sandwichable:sandwichable/sandwich_table",
+  "display": {
+    "icon": {
+      "item": "sandwichable:sandwich",
+	  "nbt": "{BlockEntityTag:{Items:[{id:\"sandwichable:bacon_strips\",Count:1b},{id:\"sandwichable:lettuce_leaf\",Count:1b},{id:\"sandwichable:tomato_slice\",Count:1b},{id:\"sandwichable:bread_slice\",Count:1b}]}}"
+    },
+    "title": {
+      "translate": "advancements.sandwichable.sandwich_blt.title"
+    },
+    "description": {
+      "translate": "advancements.sandwichable.sandwich_blt.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "sandwich": {
+      "trigger": "sandwichable:collect_sandwich",
+      "conditions": {
+        "foods": [
+          {
+            "items": ["sandwichable:bacon_strips"]
+          },
+		  {
+            "items": ["sandwichable:lettuce_leaf"]
+          },
+		  {
+            "items": ["sandwichable:tomato_slice"]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "sandwich"
+    ]
+  ]
+}

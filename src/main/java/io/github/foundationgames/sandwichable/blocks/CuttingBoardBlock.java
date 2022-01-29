@@ -3,11 +3,14 @@ package io.github.foundationgames.sandwichable.blocks;
 import io.github.foundationgames.sandwichable.blocks.entity.BasinBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.BottleCrateBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.CuttingBoardBlockEntity;
+import io.github.foundationgames.sandwichable.blocks.entity.ToasterBlockEntity;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
@@ -113,6 +116,12 @@ public class CuttingBoardBlock extends ModelBlockWithEntity {
             if(!world.isClient()) world.setBlockState(pos, state.with(POWERED, pwr));
         }
         super.neighborUpdate(state, world, pos, block, fromPos, notify);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return checkType(type, BlocksRegistry.CUTTINGBOARD_BLOCKENTITY, CuttingBoardBlockEntity::tick);
     }
 
     public BlockState getPlacementState(ItemPlacementContext ctx) {

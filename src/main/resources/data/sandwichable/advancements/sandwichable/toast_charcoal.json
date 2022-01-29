@@ -1,0 +1,33 @@
+{
+  "parent": "sandwichable:sandwichable/toast_bread",
+  "display": {
+    "icon": {
+      "item": "sandwichable:burnt_food"
+    },
+    "title": {
+      "translate": "advancements.sandwichable.toast_charcoal.title"
+    },
+    "description": {
+      "translate": "advancements.sandwichable.toast_charcoal.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "charcoal": {
+      "trigger": "sandwichable:toast_item",
+      "conditions": {
+        "result": {
+			"items": ["minecraft:charcoal"]
+		}
+      }
+    }
+  },
+  "requirements": [
+    [
+      "charcoal"
+    ]
+  ]
+}

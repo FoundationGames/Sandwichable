@@ -9,6 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 public class BottleCrateScreenHandler extends ScreenHandler {
     public final Inventory inventory;
@@ -36,6 +38,21 @@ public class BottleCrateScreenHandler extends ScreenHandler {
     @Override
     public boolean canUse(PlayerEntity player) {
         return inventory.canPlayerUse(player);
+    }
+
+
+
+    @Override
+    public void onSlotClick(int i, int j, SlotActionType actionType, PlayerEntity playerEntity) {
+        if (i >= 0 && i < this.slots.size()) {
+            Slot slot = this.slots.get(i);
+            if (actionType == SlotActionType.PICKUP && slot instanceof BottleSlot &&
+                    slot.canInsert(getCursorStack()) && playerEntity instanceof ServerPlayerEntity) {
+                Sandwichable.USE_BOTTLE_CRATE.trigger((ServerPlayerEntity) playerEntity);
+            }
+        }
+
+        super.onSlotClick(i, j, actionType, playerEntity);
     }
 
     @Override

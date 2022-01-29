@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "sandwichable:oak_cutting_board",
+    "sandwichable:birch_cutting_board",
+    "sandwichable:spruce_cutting_board",
+    "sandwichable:acacia_cutting_board",
+    "sandwichable:jungle_cutting_board",
+    "sandwichable:dark_oak_cutting_board",
+    "sandwichable:crimson_cutting_board",
+    "sandwichable:warped_cutting_board"
+  ]
+}
