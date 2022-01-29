@@ -6,6 +6,8 @@ import io.github.foundationgames.sandwichable.config.SandwichableConfig;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.minecraft.block.Blocks;
+import net.minecraft.structure.rule.BlockMatchRuleTest;
+import net.minecraft.structure.rule.RuleTest;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
@@ -18,6 +20,8 @@ import net.minecraft.world.gen.decorator.HeightRangePlacementModifier;
 import net.minecraft.world.gen.decorator.RarityFilterPlacementModifier;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.OreFeature;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
 import net.minecraft.world.gen.feature.PlacedFeature;
 
 import java.util.List;
@@ -27,7 +31,7 @@ public class SandwichableWorldgen {
     public static final Identifier SHRUBS = Util.id("shrubs");
 
     public static final Feature<DefaultFeatureConfig> SHRUBS_FEATURE = Registry.register(Registry.FEATURE, SHRUBS, new ShrubsFeature(DefaultFeatureConfig.CODEC));
-    public static final Feature<ExtraOreFeatureConfig> SALTY_SAND_FEATURE = Registry.register(Registry.FEATURE, SALTY_SAND, new ExtraOreFeature(ExtraOreFeatureConfig.CODEC));
+    public static final Feature<OreFeatureConfig> SALTY_SAND_FEATURE = Registry.register(Registry.FEATURE, SALTY_SAND, new OreFeature(OreFeatureConfig.CODEC));
     public static final Feature<SaltPoolFeatureConfig> SALT_POOL_FEATURE = Registry.register(Registry.FEATURE, Util.id("salt_pool"), new SaltPoolFeature());
 
     public static PlacedFeature SHRUBS_PLACED = BuiltinRegistries.add(BuiltinRegistries.PLACED_FEATURE, SHRUBS,
@@ -70,7 +74,7 @@ public class SandwichableWorldgen {
         
         SALTY_SAND_PLACED = BuiltinRegistries.add(BuiltinRegistries.PLACED_FEATURE, SALTY_SAND,
             BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, SALTY_SAND, SALTY_SAND_FEATURE.configure(
-                    new ExtraOreFeatureConfig(Blocks.SAND.getDefaultState(), BlocksRegistry.SALTY_SAND.getDefaultState(), config.saltySandGenOptions.veinSize)
+                    new OreFeatureConfig(new BlockMatchRuleTest(Blocks.SAND), BlocksRegistry.SALTY_SAND.getDefaultState(), config.saltySandGenOptions.veinSize)
             )).withPlacement(CountPlacementModifier.of(config.saltySandGenOptions.rarity), HeightRangePlacementModifier.uniform(YOffset.getBottom(), YOffset.fixed(config.saltySandGenOptions.maxGenHeight)))
         );
 

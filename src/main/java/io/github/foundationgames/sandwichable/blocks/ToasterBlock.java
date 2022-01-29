@@ -123,17 +123,17 @@ public class ToasterBlock extends ModelBlockWithEntity implements Waterloggable,
                 if (!blockEntity.isToasting()) {
                     if (!player.getStackInHand(hand).isEmpty() && !player.getStackInHand(hand).getItem().equals(BlocksRegistry.SANDWICH.asItem())) {
                         if (!blockEntity.addItem(hand, player)) {
-                            ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, blockEntity.takeItem());
+                            ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, blockEntity.takeItem(player));
                             world.spawnEntity(itemEntity);
                         }
                     } else {
-                        ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, blockEntity.takeItem());
+                        ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, blockEntity.takeItem(player));
                         world.spawnEntity(itemEntity);
                     }
                 }
                 Util.sync(blockEntity);
             } else {
-                if (!blockEntity.isToasting()) { blockEntity.startToasting(); } else { blockEntity.stopToasting(); }
+                if (!blockEntity.isToasting()) { blockEntity.startToasting(player); } else { blockEntity.stopToasting(player); }
             }
         }
         return ActionResult.success(world.isClient());

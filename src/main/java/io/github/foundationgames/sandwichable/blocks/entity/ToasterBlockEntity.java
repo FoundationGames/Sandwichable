@@ -18,6 +18,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
@@ -30,10 +31,11 @@ import net.minecraft.world.explosion.Explosion;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public class ToasterBlockEntity extends BlockEntity implements SidedInventory, SyncedBlockEntity {
-
     private DefaultedList<ItemStack> items = DefaultedList.ofSize(2, ItemStack.EMPTY);
+    private @Nullable UUID lastUser;
     private static int toastTime = 240;
     private int toastProgress = 0;
     private boolean toasting = false;
@@ -56,6 +58,9 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, S
         toasting = nbt.getBoolean("toasting");
         smokeProgress = nbt.getInt("smokeProgress");
         smoking = nbt.getBoolean("smoking");
+        if (nbt.contains("lastUser")) {
+            this.lastUser = nbt.getUuid("lastUser");
+        } else this.lastUser = null;
         Inventories.readNbt(nbt, items);
     }
 
@@ -66,6 +71,9 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, S
         nbt.putBoolean("toasting", toasting);
         nbt.putInt("smokeProgress", smokeProgress);
         nbt.putBoolean("smoking", smoking);
+        if (this.lastUser == null) {
+            nbt.remove("lastUser");
+        } else nbt.putUuid("lastUser", this.lastUser);
         Inventories.writeNbt(nbt, items);
     }
 
@@ -100,11 +108,12 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, S
         return items;
     }
 
-    public ItemStack takeItem() {
+    public ItemStack takeItem(@Nullable PlayerEntity player) {
         int index = !items.get(1).isEmpty() ? 1 : 0;
         ItemStack stack = items.get(index);
         items.set(index, ItemStack.EMPTY);
         updateNeighbors = true;
+        lastUser = player == null ? null : player.getUuid();
         return stack;
     }
 
@@ -121,6 +130,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, S
             int index = !items.get(0).isEmpty() ? 1 : 0;
             items.set(index, playerItem);
             updateNeighbors = true;
+            lastUser = player.getUuid();
             return true;
         } return false;
     }
@@ -134,18 +144,28 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, S
             SimpleInventory inv = new SimpleInventory(items.get(i));
             Optional<ToastingRecipe> match = world.getRecipeManager().getFirstMatch(ToastingRecipe.Type.INSTANCE, inv, world);
 
+            boolean changed = false;
             if(match.isPresent()) {
                 items.set(i, match.get().getOutput().copy());
+                changed = true;
             } else {
                 if(items.get(i).isFood()) {
                     Item item = Sandwichable.SMALL_FOODS.contains(items.get(i).getItem()) ? ItemsRegistry.BURNT_MORSEL : ItemsRegistry.BURNT_FOOD;
                     items.set(i, new ItemStack(item, 1));
+                    changed = true;
+                }
+            }
+
+            if (!world.isClient()) {
+                PlayerEntity player = world.getPlayerByUuid(this.lastUser);
+                if (player instanceof ServerPlayerEntity && changed) {
+                    Sandwichable.TOAST_ITEM.trigger((ServerPlayerEntity) player, items.get(i));
                 }
             }
         }
     }
 
-    public void startToasting() {
+    public void startToasting(@Nullable PlayerEntity player) {
         if(this.world.getBlockState(this.pos).getBlock() == BlocksRegistry.TOASTER) {
             this.world.setBlockState(pos, this.world.getBlockState(this.pos).with(ToasterBlock.ON, true));
         }
@@ -153,9 +173,10 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, S
         toastProgress = 0;
         toasting = true;
         updateNeighbors = true;
+        lastUser = player == null ? lastUser : player.getUuid();
     }
 
-    public void stopToasting() {
+    public void stopToasting(@Nullable PlayerEntity player) {
         if(this.world.getBlockState(this.pos).getBlock() == BlocksRegistry.TOASTER) {
             this.world.setBlockState(pos, this.world.getBlockState(this.pos).with(ToasterBlock.ON, false));
         }
@@ -163,6 +184,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, S
         toastProgress = 0;
         toasting = false;
         updateNeighbors = true;
+        lastUser = player == null ? lastUser : player.getUuid();
     }
 
     public int getComparatorOutput() {
@@ -203,7 +225,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, S
             }
         }
         if(self.toastProgress == toastTime) {
-            self.stopToasting();
+            self.stopToasting(null);
             self.toastItems();
             self.smoking = true;
         }
@@ -217,7 +239,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, S
             self.smokeProgress = 0;
         }
         if(self.currentlyPowered && !self.previouslyPowered) {
-            if(!self.toasting) self.startToasting();
+            if(!self.toasting) self.startToasting(null);
         }
     }
 
@@ -260,6 +282,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, S
     public ItemStack removeStack(int slot) {
         ItemStack stack = items.get(slot).copy();
         items.set(slot, ItemStack.EMPTY);
+        lastUser = null;
         Util.sync(this);
         return stack;
     }
@@ -267,6 +290,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, S
     @Override
     public void setStack(int slot, ItemStack stack) {
         items.set(slot, stack);
+        lastUser = null;
         Util.sync(this);
     }
 

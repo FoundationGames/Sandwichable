@@ -1,0 +1,57 @@
+{
+  "display": {
+    "icon": {
+      "item": "sandwichable:sandwich",
+	  "nbt": "{BlockEntityTag:{Items:[{id:\"sandwichable:cheese_slice\",Count:1b},{id:\"sandwichable:bacon_strips\",Count:1b},{id:\"sandwichable:lettuce_leaf\",Count:1b},{id:\"sandwichable:tomato_slice\",Count:1b},{id:\"sandwichable:toasted_bread_slice\",Count:1b}]}}"
+    },
+    "title": {
+      "translate": "advancements.sandwichable.root.title"
+    },
+    "description": {
+      "translate": "advancements.sandwichable.root.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/block/spruce_planks.png"
+  },
+  "criteria": {
+    "sandwichable": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["sandwichable:sandwich"]
+          },
+		  {
+            "items": ["sandwichable:sandwich_table"]
+          },
+		  {
+            "items": ["sandwichable:tomato_seeds"]
+          },
+		  {
+            "items": ["sandwichable:lettuce_seeds"]
+          },
+		  {
+            "items": ["sandwichable:onion_seeds"]
+          },
+		  {
+            "items": ["sandwichable:cucumber_seeds"]
+          },
+		  {
+            "items": ["sandwichable:shrub"]
+          },
+		  {
+			"tag": "sandwichable:cutting_boards"
+		  }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "sandwichable"
+    ]
+  ]
+}

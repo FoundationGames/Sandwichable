@@ -6,11 +6,13 @@
   "mixins": [
     "ChickenEntityMixin",
     "ClientWorldMixin",
+    "CriteriaAccess",
     "DispenserBlockMixin",
     "FishingBobberEntityMixin",
     "HoneycombItemMixin",
     "OxidizableMixin",
     "PistonBlockMixin",
+    "ServerPlayerEntityScreenHandlerListenerMixin",
     "ServerPlayerInteractionManagerMixin",
     "StructurePoolAccess",
     "StructurePoolsMixin",

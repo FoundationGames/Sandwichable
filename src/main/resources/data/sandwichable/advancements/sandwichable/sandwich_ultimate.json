@@ -1,0 +1,43 @@
+{
+  "parent": "sandwichable:sandwichable/sandwich_fruit",
+  "display": {
+    "icon": {
+      "item": "sandwichable:sandwich",
+	  "nbt": "{BlockEntityTag:{Items:[{id:\"sandwichable:spread\",tag:{spreadType:\"potion\",Potion:\"minecraft:regeneration\"},Count:1b},{id:\"sandwichable:enchanted_golden_apple_slices\",Count:1b},{id:\"minecraft:chorus_fruit\",Count:1b},{id:\"sandwichable:toasted_bread_slice\",Count:1b}]}}"
+    },
+    "title": {
+      "translate": "advancements.sandwichable.sandwich_ultimate.title"
+    },
+    "description": {
+      "translate": "advancements.sandwichable.sandwich_ultimate.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "sandwich": {
+      "trigger": "sandwichable:collect_sandwich",
+      "conditions": {
+        "foods": [
+          {
+            "items": ["sandwichable:enchanted_golden_apple_slices"]
+          },
+		  {
+            "items": ["minecraft:chorus_fruit"]
+          },
+		  {
+            "items": ["sandwichable:spread"],
+			"nbt": "{spreadType:\"potion\"}"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "sandwich"
+    ]
+  ]
+}

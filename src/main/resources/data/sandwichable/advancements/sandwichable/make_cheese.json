@@ -1,0 +1,35 @@
+{
+  "parent": "sandwichable:sandwichable/fermenting_milk",
+  "display": {
+    "icon": {
+      "item": "sandwichable:cheese_wheel"
+    },
+    "title": {
+      "translate": "advancements.sandwichable.make_cheese.title"
+    },
+    "description": {
+      "translate": "advancements.sandwichable.make_cheese.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "cheese": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "sandwichable:cheese_wheels"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "cheese"
+    ]
+  ]
+}
