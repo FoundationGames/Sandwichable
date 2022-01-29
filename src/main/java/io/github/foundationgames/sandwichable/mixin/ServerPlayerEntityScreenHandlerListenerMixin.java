@@ -20,7 +20,7 @@ public class ServerPlayerEntityScreenHandlerListenerMixin {
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/advancement/criterion/InventoryChangedCriterion;trigger(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/item/ItemStack;)V",
                     shift = At.Shift.BEFORE
-            )
+            ), remap = true
     )
     private void sandwichable$triggerSandwichCollection(ScreenHandler handler, int slotId, ItemStack stack, CallbackInfo ci) {
         if (stack.getItem() == ItemsRegistry.SANDWICH) {
