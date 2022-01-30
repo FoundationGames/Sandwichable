@@ -7,7 +7,6 @@ import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.minecraft.block.Blocks;
 import net.minecraft.structure.rule.BlockMatchRuleTest;
-import net.minecraft.structure.rule.RuleTest;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
@@ -32,7 +31,7 @@ public class SandwichableWorldgen {
 
     public static final Feature<DefaultFeatureConfig> SHRUBS_FEATURE = Registry.register(Registry.FEATURE, SHRUBS, new ShrubsFeature(DefaultFeatureConfig.CODEC));
     public static final Feature<OreFeatureConfig> SALTY_SAND_FEATURE = Registry.register(Registry.FEATURE, SALTY_SAND, new OreFeature(OreFeatureConfig.CODEC));
-    public static final Feature<SaltPoolFeatureConfig> SALT_POOL_FEATURE = Registry.register(Registry.FEATURE, Util.id("salt_pool"), new SaltPoolFeature());
+    public static final Feature<CascadeFeatureConfig> CASCADE_FEATURE = Registry.register(Registry.FEATURE, Util.id("cascade"), new CascadeFeature());
 
     public static PlacedFeature SHRUBS_PLACED = BuiltinRegistries.add(BuiltinRegistries.PLACED_FEATURE, SHRUBS,
             BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, SHRUBS, SHRUBS_FEATURE.configure(new DefaultFeatureConfig())).withPlacement()
@@ -41,7 +40,7 @@ public class SandwichableWorldgen {
     public static PlacedFeature SALT_POOL_WATER;
     public static PlacedFeature SALT_POOL_DRY;
 
-    private static final List<Biome.Category> SALT_POOL_BLACKLIST = Lists.newArrayList(Biome.Category.BEACH, Biome.Category.RIVER, Biome.Category.OCEAN, Biome.Category.NETHER, Biome.Category.THEEND);
+    private static final List<Biome.Category> SALT_POOL_BLACKLIST = Lists.newArrayList(Biome.Category.NETHER, Biome.Category.THEEND);
 
     public static void init() {
         SandwichableConfig cfg = Util.getConfig();
@@ -79,11 +78,11 @@ public class SandwichableWorldgen {
         );
 
         SALT_POOL_WATER = BuiltinRegistries.add(BuiltinRegistries.PLACED_FEATURE, Util.id("salt_pool_water"),
-                BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salt_pool_water"), SALT_POOL_FEATURE.configure(new SaltPoolFeatureConfig(true)))
+                BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salt_pool_water"), CASCADE_FEATURE.configure(CascadeFeatureConfig.water()))
                         .withPlacement(RarityFilterPlacementModifier.of(426))
         );
         SALT_POOL_DRY = BuiltinRegistries.add(BuiltinRegistries.PLACED_FEATURE, Util.id("salty_pool_dry"),
-                BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salty_pool_dry"), SALT_POOL_FEATURE.configure(new SaltPoolFeatureConfig(false)))
+                BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salty_pool_dry"), CASCADE_FEATURE.configure(CascadeFeatureConfig.dry()))
                         .withPlacement(RarityFilterPlacementModifier.of(442))
         );
     }
