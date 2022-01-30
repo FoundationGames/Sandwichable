@@ -24,14 +24,14 @@ public class SandwichableWorldgen {
 
     public static final Feature<DefaultFeatureConfig> SHRUBS_FEATURE = Registry.register(Registry.FEATURE, Util.id("shrubs"), new ShrubsFeature(DefaultFeatureConfig.CODEC));
     public static final Feature<ExtraOreFeatureConfig> SALTY_SAND_FEATURE = Registry.register(Registry.FEATURE, Util.id("salty_sand"), new ExtraOreFeature(ExtraOreFeatureConfig.CODEC));
-    public static final Feature<SaltPoolFeatureConfig> SALT_POOL_FEATURE = Registry.register(Registry.FEATURE, Util.id("salt_pool"), new SaltPoolFeature());
+    public static final Feature<CascadeFeatureConfig> CASCADE_FEATURE = Registry.register(Registry.FEATURE, Util.id("cascade"), new CascadeFeature());
 
     public static ConfiguredFeature<DefaultFeatureConfig, ?> SHRUBS_CONFIGURED = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("shrubs"), SHRUBS_FEATURE.configure(new DefaultFeatureConfig()));
     public static ConfiguredFeature<?, ?> SALTY_SAND_CONFIGURED;
     public static ConfiguredFeature<?, ?> SALT_POOL_WATER;
     public static ConfiguredFeature<?, ?> SALT_POOL_DRY;
 
-    private static final List<Biome.Category> SALT_POOL_BLACKLIST = Lists.newArrayList(Biome.Category.BEACH, Biome.Category.RIVER, Biome.Category.OCEAN, Biome.Category.NETHER, Biome.Category.THEEND);
+    private static final List<Biome.Category> SALT_POOL_BLACKLIST = Lists.newArrayList(Biome.Category.NETHER, Biome.Category.THEEND);
 
     public static void init() {
         SandwichableConfig cfg = Util.getConfig();
@@ -64,7 +64,7 @@ public class SandwichableWorldgen {
                 new ExtraOreFeatureConfig(Blocks.SAND.getDefaultState(), BlocksRegistry.SALTY_SAND.getDefaultState(), config.saltySandGenOptions.veinSize)
         ).uniformRange(YOffset.getBottom(), YOffset.fixed(config.saltySandGenOptions.maxGenHeight)).spreadHorizontally().repeat(config.saltySandGenOptions.rarity));
 
-        SALT_POOL_WATER = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salt_pool_water"), SALT_POOL_FEATURE.configure(new SaltPoolFeatureConfig(true)).decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(426))));
-        SALT_POOL_DRY = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salty_pool_dry"), SALT_POOL_FEATURE.configure(new SaltPoolFeatureConfig(false)).decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(442))));
+        SALT_POOL_WATER = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salt_pool_water"), CASCADE_FEATURE.configure(CascadeFeatureConfig.water()).decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(426))));
+        SALT_POOL_DRY = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salty_pool_dry"), CASCADE_FEATURE.configure(CascadeFeatureConfig.dry()).decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(442))));
     }
 }

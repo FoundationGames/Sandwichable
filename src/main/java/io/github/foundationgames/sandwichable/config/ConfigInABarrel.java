@@ -42,6 +42,8 @@ import dev.lambdaurora.spruceui.widget.SpruceButtonWidget;
 import dev.lambdaurora.spruceui.widget.SpruceLabelWidget;
 import dev.lambdaurora.spruceui.widget.SpruceWidget;
 import dev.lambdaurora.spruceui.widget.container.SpruceOptionListWidget;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
@@ -119,19 +121,19 @@ public abstract class ConfigInABarrel {
      * @param parent the parent screen to open when this screen is closed
      * @param <T>    the type of the config class
      */
-    public static <T extends ConfigInABarrel> Screen screen(Class<T> cls, Screen parent) {
+    @Environment(EnvType.CLIENT) public static <T extends ConfigInABarrel> Screen screen(Class<T> cls, Screen parent) {
         return new ConfigScreen(parent, cls, CONFIGS.get(cls));
     }
     protected void afterLoad() {}
-    protected Background background() { return DirtTexturedBackground.DARKENED; }
-    private static class LabelOption extends SpruceOption {
+    @Environment(EnvType.CLIENT) protected Background background() { return DirtTexturedBackground.DARKENED; }
+    @Environment(EnvType.CLIENT) private static class LabelOption extends SpruceOption {
         public LabelOption(String key) { super(key); }
         @Override
         public SpruceWidget createWidget(Position position, int width) {
             return new SpruceLabelWidget(position, new TranslatableText(key), width, w -> {}, false);
         }
     }
-    private static class ConfigScreen extends SpruceScreen {
+    @Environment(EnvType.CLIENT) private static class ConfigScreen extends SpruceScreen {
         private final Screen parent;
         private final Class<? extends ConfigInABarrel> cfgCls;
         private final Config config;
