@@ -105,12 +105,20 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, B
         return items;
     }
 
+    public Optional<PlayerEntity> getLastUser() {
+        return Optional.ofNullable(this.lastUser).map(this.world::getPlayerByUuid);
+    }
+
+    public void setLastUser(@Nullable PlayerEntity player) {
+        this.lastUser = (player == null ? null : player.getUuid());
+    }
+
     public ItemStack takeItem(@Nullable PlayerEntity player) {
         int index = !items.get(1).isEmpty() ? 1 : 0;
         ItemStack stack = items.get(index);
         items.set(index, ItemStack.EMPTY);
         updateNeighbors = true;
-        lastUser = player == null ? null : player.getUuid();
+        this.setLastUser(player);
         return stack;
     }
 
@@ -127,7 +135,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, B
             int index = !items.get(0).isEmpty() ? 1 : 0;
             items.set(index, playerItem);
             updateNeighbors = true;
-            lastUser = player.getUuid();
+            this.setLastUser(player);
             return true;
         } return false;
     }
@@ -153,11 +161,13 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, B
                 }
             }
 
-            if (!world.isClient()) {
-                PlayerEntity player = world.getPlayerByUuid(this.lastUser);
-                if (player instanceof ServerPlayerEntity && changed) {
-                    Sandwichable.TOAST_ITEM.trigger((ServerPlayerEntity) player, items.get(i));
-                }
+            if (!world.isClient() && changed) {
+                ItemStack advStack = items.get(i);
+                this.getLastUser().ifPresent(player -> {
+                    if (player instanceof ServerPlayerEntity) {
+                        Sandwichable.TOAST_ITEM.trigger((ServerPlayerEntity) player, advStack);
+                    }
+                });
             }
         }
     }
@@ -170,7 +180,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, B
         toastProgress = 0;
         toasting = true;
         updateNeighbors = true;
-        lastUser = player == null ? lastUser : player.getUuid();
+        if (player != null) this.setLastUser(player);
     }
 
     public void stopToasting(@Nullable PlayerEntity player) {
@@ -181,7 +191,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, B
         toastProgress = 0;
         toasting = false;
         updateNeighbors = true;
-        lastUser = player == null ? lastUser : player.getUuid();
+        if (player != null) this.setLastUser(player);
     }
 
     public int getComparatorOutput() {
@@ -279,7 +289,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, B
     public ItemStack removeStack(int slot) {
         ItemStack stack = items.get(slot).copy();
         items.set(slot, ItemStack.EMPTY);
-        lastUser = null;
+        setLastUser(null);
         Util.sync(this, world);
         return stack;
     }
@@ -287,7 +297,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, B
     @Override
     public void setStack(int slot, ItemStack stack) {
         items.set(slot, stack);
-        lastUser = null;
+        setLastUser(null);
         Util.sync(this, world);
     }
 

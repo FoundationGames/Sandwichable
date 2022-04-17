@@ -3,6 +3,8 @@ package io.github.foundationgames.sandwichable.worldgen;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
+import io.github.foundationgames.sandwichable.config.SandwichableConfig;
+import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.collection.DataPool;
@@ -47,7 +49,8 @@ public class CascadeFeatureConfig implements FeatureConfig {
     }
 
     public static CascadeFeatureConfig water() {
-        return new CascadeFeatureConfig(
+        SandwichableConfig config = Util.getConfig();
+        return config.saltPoolGenOptions.waterSaltPoolConfig != null ? config.saltPoolGenOptions.waterSaltPoolConfig : new CascadeFeatureConfig(
                 new SimpleBlockStateProvider(BlocksRegistry.SALTY_ROCKS.getDefaultState()),
                 new WeightedBlockStateProvider(new DataPool.Builder<BlockState>().add(Blocks.SAND.getDefaultState(), 3).add(BlocksRegistry.SALTY_SAND.getDefaultState(), 1)),
                 4, 6,
@@ -58,7 +61,8 @@ public class CascadeFeatureConfig implements FeatureConfig {
     }
 
     public static CascadeFeatureConfig dry() {
-        return new CascadeFeatureConfig(
+        SandwichableConfig config = Util.getConfig();
+        return config.saltPoolGenOptions.drySaltPoolConfig != null ? config.saltPoolGenOptions.drySaltPoolConfig : new CascadeFeatureConfig(
                 new SimpleBlockStateProvider(BlocksRegistry.SALTY_ROCKS.getDefaultState()),
                 new WeightedBlockStateProvider(new DataPool.Builder<BlockState>().add(Blocks.SAND.getDefaultState(), 3).add(BlocksRegistry.SALTY_SAND.getDefaultState(), 1)),
                 4, 6,

@@ -110,8 +110,9 @@ public class CascadeFeature extends Feature<CascadeFeatureConfig> {
 
         // Generate the base block below every pool
         for (Pair<BlockPos, Integer> disc : discs) {
+            BlockPos offset = disc.getLeft().subtract(bottom.getLeft());
             makeDisc(world, random, salt, false, disc.getLeft().add(0, -1, 0), config.base, AIR, disc.getRight() + 4);
-            makeDisc(world, random, salt, false, disc.getLeft().add(0, -2, 0), config.base, AIR, disc.getRight() + 2);
+            makeDisc(world, random, salt, false, disc.getLeft().add(0, -2, 0), config.base, AIR, disc.getRight() + 2, disc.getRight() + 4, Math.atan2(-offset.getZ(), -offset.getX()));
             makeDisc(world, random, salt, false, disc.getLeft().add(0, -3, 0), config.base, AIR, disc.getRight() - 1);
         }
 
@@ -146,7 +147,7 @@ public class CascadeFeature extends Feature<CascadeFeatureConfig> {
                 if (maxRadius > radius) {
                     double cAngle = Math.atan2(z, x);
                     if (Math.abs(cAngle - extAngleRad) < (0.05 * radius)) {
-                        place = pos.isWithinDistance(center, maxRadius + variation);
+                        place = pos.isWithinDistance(center, maxRadius);
                     }
                 }
                 if (place) {

@@ -9,11 +9,14 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.YOffset;
 import net.minecraft.world.gen.decorator.ChanceDecoratorConfig;
 import net.minecraft.world.gen.decorator.Decorator;
+import net.minecraft.world.gen.decorator.DecoratorConfig;
+import net.minecraft.world.gen.decorator.HeightmapDecoratorConfig;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
@@ -21,7 +24,6 @@ import net.minecraft.world.gen.feature.Feature;
 import java.util.List;
 
 public class SandwichableWorldgen {
-
     public static final Feature<DefaultFeatureConfig> SHRUBS_FEATURE = Registry.register(Registry.FEATURE, Util.id("shrubs"), new ShrubsFeature(DefaultFeatureConfig.CODEC));
     public static final Feature<ExtraOreFeatureConfig> SALTY_SAND_FEATURE = Registry.register(Registry.FEATURE, Util.id("salty_sand"), new ExtraOreFeature(ExtraOreFeatureConfig.CODEC));
     public static final Feature<CascadeFeatureConfig> CASCADE_FEATURE = Registry.register(Registry.FEATURE, Util.id("cascade"), new CascadeFeature());
@@ -53,7 +55,7 @@ public class SandwichableWorldgen {
             BiomeModifications.addFeature(ctx -> {
                 Biome biome = ctx.getBiome();
                 return biome.getPrecipitation() == Biome.Precipitation.NONE && biome.getTemperature() > 1.5f && biome.getScale() < 0.25 && !SALT_POOL_BLACKLIST.contains(biome.getCategory());
-            }, GenerationStep.Feature.LAKES, RegistryKey.of(Registry.CONFIGURED_FEATURE_KEY, Util.id("salty_pool_dry")));
+            }, GenerationStep.Feature.LAKES, RegistryKey.of(Registry.CONFIGURED_FEATURE_KEY, Util.id("salt_pool_dry")));
         }
     }
     
@@ -64,7 +66,11 @@ public class SandwichableWorldgen {
                 new ExtraOreFeatureConfig(Blocks.SAND.getDefaultState(), BlocksRegistry.SALTY_SAND.getDefaultState(), config.saltySandGenOptions.veinSize)
         ).uniformRange(YOffset.getBottom(), YOffset.fixed(config.saltySandGenOptions.maxGenHeight)).spreadHorizontally().repeat(config.saltySandGenOptions.rarity));
 
-        SALT_POOL_WATER = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salt_pool_water"), CASCADE_FEATURE.configure(CascadeFeatureConfig.water()).decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(426))));
-        SALT_POOL_DRY = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salty_pool_dry"), CASCADE_FEATURE.configure(CascadeFeatureConfig.dry()).decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(442))));
+        SALT_POOL_WATER = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salt_pool_water"), CASCADE_FEATURE.configure(CascadeFeatureConfig.water())
+                .decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(426)))
+                .decorate(Decorator.HEIGHTMAP.configure(new HeightmapDecoratorConfig(Heightmap.Type.WORLD_SURFACE))));
+        SALT_POOL_DRY = BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salt_pool_dry"), CASCADE_FEATURE.configure(CascadeFeatureConfig.dry())
+                .decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(442)))
+                .decorate(Decorator.HEIGHTMAP.configure(new HeightmapDecoratorConfig(Heightmap.Type.WORLD_SURFACE))));
     }
 }
