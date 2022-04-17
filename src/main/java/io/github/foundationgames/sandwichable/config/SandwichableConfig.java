@@ -1,8 +1,16 @@
 package io.github.foundationgames.sandwichable.config;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
+import io.github.foundationgames.sandwichable.Sandwichable;
+import io.github.foundationgames.sandwichable.worldgen.CascadeFeatureConfig;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.Item;
 import net.minecraft.util.registry.Registry;
+import org.jetbrains.annotations.Nullable;
 
 public class SandwichableConfig extends ConfigInABarrel {
     public boolean showInfoTooltips = true;
@@ -29,6 +37,8 @@ public class SandwichableConfig extends ConfigInABarrel {
     public static class SaltPoolGenOptions {
         public boolean saltPools = true;
         public boolean drySaltPools = true;
+        public transient @Nullable CascadeFeatureConfig waterSaltPoolConfig = null;
+        public transient @Nullable CascadeFeatureConfig drySaltPoolConfig = null;
     }
 
     public static class ItemOptions {
@@ -67,6 +77,23 @@ public class SandwichableConfig extends ConfigInABarrel {
             KitchenKnifeOption opt = getKnifeOption(def.itemId);
             if (opt != null && opt.sharpness == 0) {
                 opt.sharpness = def.sharpness;
+            }
+        }
+    }
+
+    @Override
+    protected void loadExtraData(JsonObject file) {
+        this.saltPoolGenOptions.waterSaltPoolConfig = null;
+        this.saltPoolGenOptions.drySaltPoolConfig = null;
+        if (file.has("saltPoolGenOptions") && file.get("saltPoolGenOptions").isJsonObject()) {
+            JsonObject saltPools = file.getAsJsonObject("saltPoolGenOptions");
+            if (saltPools.has("waterSaltPoolConfig")) {
+                DataResult<Pair<CascadeFeatureConfig, JsonElement>> result = CascadeFeatureConfig.CODEC.decode(JsonOps.INSTANCE, saltPools.get("waterSaltPoolConfig"));
+                result.get().ifLeft(p -> this.saltPoolGenOptions.waterSaltPoolConfig = p.getFirst()).ifRight(p -> Sandwichable.LOG.error(p.message()));
+            }
+            if (saltPools.has("drySaltPoolConfig")) {
+                DataResult<Pair<CascadeFeatureConfig, JsonElement>> result = CascadeFeatureConfig.CODEC.decode(JsonOps.INSTANCE, saltPools.get("drySaltPoolConfig"));
+                result.get().ifLeft(p -> this.saltPoolGenOptions.drySaltPoolConfig = p.getFirst()).ifRight(p -> Sandwichable.LOG.error(p.message()));
             }
         }
     }
