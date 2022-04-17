@@ -64,7 +64,7 @@ public class SandwichableWorldgen {
                 Biome biome = ctx.getBiome();
                 return biome.getCategory() != Biome.Category.RIVER && biome.getCategory() != Biome.Category.OCEAN &&
                         biome.getPrecipitation() == Biome.Precipitation.NONE && biome.getTemperature() > 1.5f && !SALT_POOL_BLACKLIST.contains(biome.getCategory());
-            }, GenerationStep.Feature.LAKES, RegistryKey.of(Registry.PLACED_FEATURE_KEY, Util.id("salty_pool_dry")));
+            }, GenerationStep.Feature.LAKES, RegistryKey.of(Registry.PLACED_FEATURE_KEY, Util.id("salt_pool_dry")));
         }
     }
     
@@ -81,8 +81,8 @@ public class SandwichableWorldgen {
                 BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salt_pool_water"), CASCADE_FEATURE.configure(CascadeFeatureConfig.water()))
                         .withPlacement(RarityFilterPlacementModifier.of(426))
         );
-        SALT_POOL_DRY = BuiltinRegistries.add(BuiltinRegistries.PLACED_FEATURE, Util.id("salty_pool_dry"),
-                BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salty_pool_dry"), CASCADE_FEATURE.configure(CascadeFeatureConfig.dry()))
+        SALT_POOL_DRY = BuiltinRegistries.add(BuiltinRegistries.PLACED_FEATURE, Util.id("salt_pool_dry"),
+                BuiltinRegistries.add(BuiltinRegistries.CONFIGURED_FEATURE, Util.id("salt_pool_dry"), CASCADE_FEATURE.configure(CascadeFeatureConfig.dry()))
                         .withPlacement(RarityFilterPlacementModifier.of(442))
         );
     }

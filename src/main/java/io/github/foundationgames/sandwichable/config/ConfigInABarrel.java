@@ -25,6 +25,8 @@
 package io.github.foundationgames.sandwichable.config;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
 import dev.lambdaurora.spruceui.Position;
 import dev.lambdaurora.spruceui.background.Background;
@@ -87,16 +89,17 @@ public abstract class ConfigInABarrel {
     private static Config load(Class<? extends ConfigInABarrel> cls, Config config) {
         if (!Files.exists(config.path)) { save(cls, config); } else {
             try (BufferedReader reader = Files.newBufferedReader(config.path)) {
-                config.config = GSON.fromJson(reader, cls);
+                JsonObject json = GSON.fromJson(reader, JsonObject.class);
+                config.config = GSON.fromJson(json, cls); config.config.loadExtraData(json);
             } catch (IOException e) { LOG.error("Failed to load config \""+config.name+"\"", e); }
-        }
-        config.config.afterLoad();
+        } config.config.afterLoad();
         return config;
     }
     private static void save(Class<?> cls, Config config) {
         try (JsonWriter writer = GSON.newJsonWriter(Files.newBufferedWriter(config.path))) {
             writer.setIndent("    ");
-            GSON.toJson(GSON.toJsonTree(config.config, cls), writer);
+            JsonElement elem = GSON.toJsonTree(config.config, cls);
+            if (elem instanceof JsonObject) { config.config.saveExtraData((JsonObject) elem); } GSON.toJson(elem, writer);
         } catch (IOException e) { LOG.error("Failed to save config \""+config.name+"\"", e); }
     }
     /**
@@ -124,7 +127,7 @@ public abstract class ConfigInABarrel {
     @Environment(EnvType.CLIENT) public static <T extends ConfigInABarrel> Screen screen(Class<T> cls, Screen parent) {
         return new ConfigScreen(parent, cls, CONFIGS.get(cls));
     }
-    protected void afterLoad() {}
+    protected void afterLoad() {} protected void saveExtraData(JsonObject file) {} protected void loadExtraData(JsonObject file) {}
     @Environment(EnvType.CLIENT) protected Background background() { return DirtTexturedBackground.DARKENED; }
     @Environment(EnvType.CLIENT) private static class LabelOption extends SpruceOption {
         public LabelOption(String key) { super(key); }

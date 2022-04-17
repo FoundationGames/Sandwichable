@@ -102,13 +102,13 @@ public class Sandwichable implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        SandwichableWorldgen.init();
         FluidsRegistry.init();
         BlocksRegistry.init();
         ItemsRegistry.init();
         EntitiesRegistry.init();
         SandwichMakerProfession.init();
         SpreadType.init();
+        SandwichableWorldgen.init();
 
         Registry.register(Registry.RECIPE_SERIALIZER, CuttingRecipeSerializer.ID, CuttingRecipeSerializer.INSTANCE);
         Registry.register(Registry.RECIPE_SERIALIZER, ToastingRecipeSerializer.ID, ToastingRecipeSerializer.INSTANCE);
