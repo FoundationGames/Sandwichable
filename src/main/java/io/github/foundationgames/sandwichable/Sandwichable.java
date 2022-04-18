@@ -35,7 +35,6 @@ import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
-import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.DispenserBlock;
@@ -51,26 +50,32 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.tag.Tag;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Sandwichable implements ModInitializer {
     public static final ItemGroup SANDWICHABLE_ITEMS = FabricItemGroupBuilder.build(Util.id("sandwichable"), SandwichableGroupIconBuilder::getIcon);
 
-    public static final Tag<Item> BREAD_SLICES = TagRegistry.item(Util.id("bread_slices"));
-    public static final Tag<Item> BREAD_LOAVES = TagRegistry.item(Util.id("bread_loaves"));
-    public static final Tag<Item> METAL_ITEMS = TagRegistry.item(Util.id("metal_items"));
-    public static final Tag<Item> SMALL_FOODS = TagRegistry.item(Util.id("small_foods"));
-    public static final Tag<Item> CUTTING_BOARDS = TagRegistry.item(Util.id("cutting_boards"));
-    public static final Tag<Item> CHEESE_WHEELS = TagRegistry.item(Util.id("cheese_wheels"));
-    public static final Tag<Block> SALT_PRODUCING_BLOCKS = TagRegistry.block(Util.id("salt_producing_blocks"));
-    public static final Tag<Block> KNIFE_SHARPENING_SURFACES = TagRegistry.block(Util.id("knife_sharpening_surfaces"));
+    public static final TagKey<Item> BREAD_SLICES = TagKey.of(Registry.ITEM_KEY, Util.id("bread_slices"));
+    public static final TagKey<Item> BREAD_LOAVES = TagKey.of(Registry.ITEM_KEY, Util.id("bread_loaves"));
+    public static final TagKey<Item> METAL_ITEMS = TagKey.of(Registry.ITEM_KEY, Util.id("metal_items"));
+    public static final TagKey<Item> SMALL_FOODS = TagKey.of(Registry.ITEM_KEY, Util.id("small_foods"));
+    public static final TagKey<Item> CUTTING_BOARDS = TagKey.of(Registry.ITEM_KEY, Util.id("cutting_boards"));
+    public static final TagKey<Item> CHEESE_WHEELS = TagKey.of(Registry.ITEM_KEY, Util.id("cheese_wheels"));
+    public static final TagKey<Block> SALT_PRODUCING_BLOCKS = TagKey.of(Registry.BLOCK_KEY, Util.id("salt_producing_blocks"));
+    public static final TagKey<Block> KNIFE_SHARPENING_SURFACES = TagKey.of(Registry.BLOCK_KEY, Util.id("knife_sharpening_surfaces"));
+
+    public static final TagKey<Biome> SALT_WATER_BODIES = TagKey.of(Registry.BIOME_KEY, Util.id("salt_water_bodies"));
+    public static final TagKey<Biome> NO_SHRUBS = TagKey.of(Registry.BIOME_KEY, Util.id("no_shrubs"));
+    public static final TagKey<Biome> NO_SALT_POOLS = TagKey.of(Registry.BIOME_KEY, Util.id("no_salt_pools"));
 
     public static final CutItemCriterion CUT_ITEM = CriteriaAccess.sandwichable$register(new CutItemCriterion());
     public static final ToastItemCriterion TOAST_ITEM = CriteriaAccess.sandwichable$register(new ToastItemCriterion());
@@ -166,7 +171,7 @@ public class Sandwichable implements ModInitializer {
         CommonTags.init();
     }
 
-    public static boolean isBread(ItemConvertible item) {
-        return BREAD_SLICES.contains(item.asItem()) || BREAD_LOAVES.contains(item.asItem());
+    public static boolean isBread(ItemStack stack) {
+        return stack.isIn(BREAD_SLICES) || stack.isIn(BREAD_LOAVES);
     }
 }

@@ -53,7 +53,7 @@ public class ExtraDispenserBehaviorRegistry {
                     }
                 }
                 if(sandwich != null) {
-                    if(!sandwich.hasBreadBottom() && !Sandwichable.isBread(stack.getItem())) return null;
+                    if(!sandwich.hasBreadBottom() && !Sandwichable.isBread(stack)) return null;
                     ItemStack r = sandwich.tryAddTopFoodFrom(world, stack);
                     if(r != null) {
                         sync.run();

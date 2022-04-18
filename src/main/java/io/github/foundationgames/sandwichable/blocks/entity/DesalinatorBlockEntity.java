@@ -7,7 +7,6 @@ import io.github.foundationgames.sandwichable.blocks.entity.container.Desalinato
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.LockableContainerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -30,7 +29,6 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
 public class DesalinatorBlockEntity extends LockableContainerBlockEntity implements ExtendedScreenHandlerFactory, SidedInventory, SyncedBlockEntity {
@@ -184,7 +182,7 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
         return isPickleBrine;
     }
 
-    public boolean isWaterSaline() { return isPickleBrine || world.getBiome(pos).getCategory() == Biome.Category.OCEAN || world.getBiome(pos).getCategory() == Biome.Category.BEACH || Sandwichable.SALT_PRODUCING_BLOCKS.contains(world.getBlockState(pos.down()).getBlock()); }
+    public boolean isWaterSaline() { return isPickleBrine || world.getBiome(pos).isIn(Sandwichable.SALT_WATER_BODIES) || world.getBlockState(pos.down()).isIn(Sandwichable.SALT_PRODUCING_BLOCKS); }
 
     @Override
     protected Text getContainerName() {

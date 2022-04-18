@@ -59,7 +59,7 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
         ItemStack playerStack = player.getStackInHand(hand);
         Item playerItem = playerStack.getItem();
         //add cucumber
-        if(CommonTags.CUCUMBER.contains(playerItem) && this.fluid == PickleJarFluid.WATER && numItems < maxItems) {
+        if(playerStack.isIn(CommonTags.CUCUMBER) && this.fluid == PickleJarFluid.WATER && numItems < maxItems) {
             if(!player.isCreative()) {
                 playerStack.decrement(1);
             }
@@ -69,7 +69,7 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
             return ActionResult.SUCCESS;
         }
         //add pickle
-        if(CommonTags.PICKLED_CUCUMBER.contains(playerItem) && this.fluid == PickleJarFluid.PICKLED_BRINE && numItems < maxItems) {
+        if(playerStack.isIn(CommonTags.PICKLED_CUCUMBER) && this.fluid == PickleJarFluid.PICKLED_BRINE && numItems < maxItems) {
             if(!player.isCreative()) {
                 playerStack.decrement(1);
             }
@@ -104,7 +104,7 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
             return ActionResult.SUCCESS;
         }
         //add salt
-        if(CommonTags.SALT.contains(playerItem) && fluid == PickleJarFluid.WATER && numItems > 0) {
+        if(playerStack.isIn(CommonTags.SALT) && fluid == PickleJarFluid.WATER && numItems > 0) {
             if(!player.isCreative()) {
                 playerStack.decrement(1);
             }

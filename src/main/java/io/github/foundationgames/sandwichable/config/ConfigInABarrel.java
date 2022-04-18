@@ -197,7 +197,7 @@ public abstract class ConfigInABarrel {
             drawCenteredText(matrices, this.textRenderer, this.getTitle(), this.width / 2, 8, 0xFFFFFF);
         }
         @Override public void renderBackground(MatrixStack matrices) { RenderUtil.renderBackgroundTexture(0, 0, this.width, this.height, 0, 64, 64, 64, 255); }
-        @Override public void onClose() { this.client.setScreen(this.parent); }
+        @Override public void close() { this.client.setScreen(this.parent); }
         @Override protected void init() {
             super.init();
             this.optionsWidget = new SpruceOptionListWidget(Position.of(0, 22), this.width, this.height - (35 + 22));
@@ -205,8 +205,8 @@ public abstract class ConfigInABarrel {
             this.addFields(this.config.name, null, this.cfgCls, this.config.config);
             this.addDrawableChild(optionsWidget);
             int bottomCenter = this.width / 2 - 65;
-            this.addDrawableChild(new SpruceButtonWidget(Position.of(bottomCenter - 69, this.height - 27), 130, 20, ScreenTexts.CANCEL, button -> this.onClose()));
-            this.addDrawableChild(new SpruceButtonWidget(Position.of(bottomCenter + 69, this.height - 27), 130, 20, ScreenTexts.DONE, button -> { save(cfgCls, config); onClose(); }));
+            this.addDrawableChild(new SpruceButtonWidget(Position.of(bottomCenter - 69, this.height - 27), 130, 20, ScreenTexts.CANCEL, button -> this.close()));
+            this.addDrawableChild(new SpruceButtonWidget(Position.of(bottomCenter + 69, this.height - 27), 130, 20, ScreenTexts.DONE, button -> { save(cfgCls, config); close(); }));
         }
     }
     private static class Config {

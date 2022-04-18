@@ -62,7 +62,7 @@ public class Sandwich {
             ItemStack spread = new ItemStack(ItemsRegistry.SPREAD, 1);
             SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem()).onPour(stack, spread);
             spread.getOrCreateNbt().putString("spreadType", SpreadRegistry.INSTANCE.asString(SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem())));
-            if(foods.size() > 0) spread.getOrCreateNbt().putBoolean("onLoaf", Sandwichable.BREAD_LOAVES.contains(foods.get(0).getItem()));
+            if(foods.size() > 0) spread.getOrCreateNbt().putBoolean("onLoaf", foods.get(0).isIn(Sandwichable.BREAD_LOAVES));
             foods.add(spread);
             ItemStack r = SpreadRegistry.INSTANCE.getSpreadFromItem(stack.getItem()).getResultItem();
             stack.decrement(1);
@@ -166,11 +166,11 @@ public class Sandwich {
     }
 
     public boolean hasBreadBottom() {
-        return getSize() > 0 && Sandwichable.isBread(foods.get(0).getItem());
+        return getSize() > 0 && Sandwichable.isBread(foods.get(0));
     }
 
     public boolean hasBreadTop() {
-        return Sandwichable.isBread(getTopFood().getItem());
+        return Sandwichable.isBread(getTopFood());
     }
 
     public ItemStack createSandwich() {
@@ -230,7 +230,7 @@ public class Sandwich {
                 this.addFromNbt(tag);
                 stack.decrement(1);
             }
-        } else if(!this.hasBreadBottom() && !Sandwichable.isBread(stack.getItem())) {
+        } else if(!this.hasBreadBottom() && !Sandwichable.isBread(stack)) {
             if(stack.isFood()) player.sendMessage(new TranslatableText("message.sandwichtable.bottombread"), true);
         } else if(!this.addFood(player, stack) && stack.isEmpty()) {
             if(intendsRemoval) {
