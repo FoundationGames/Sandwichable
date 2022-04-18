@@ -37,8 +37,8 @@ public class SandwichableConfig extends ConfigInABarrel {
     public static class SaltPoolGenOptions {
         public boolean saltPools = true;
         public boolean drySaltPools = true;
-        public transient @Nullable CascadeFeatureConfig waterSaltPoolConfig = null;
-        public transient @Nullable CascadeFeatureConfig drySaltPoolConfig = null;
+        @Value(gui = false) public transient @Nullable CascadeFeatureConfig waterSaltPoolConfig = null;
+        @Value(gui = false) public transient @Nullable CascadeFeatureConfig drySaltPoolConfig = null;
     }
 
     public static class ItemOptions {
