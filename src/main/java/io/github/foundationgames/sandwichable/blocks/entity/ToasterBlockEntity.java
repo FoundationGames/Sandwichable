@@ -218,27 +218,32 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, S
 
     public static void tick(World world, BlockPos pos, BlockState state, ToasterBlockEntity self) {
         int smokeTime = 80;
-        if(self.updateNeighbors) {
-            world.updateNeighbors(pos, world.getBlockState(pos).getBlock());
-            self.updateNeighbors = false;
-        }
-        self.previouslyPowered = self.currentlyPowered;
-        self.currentlyPowered = world.isReceivingRedstonePower(pos);
-        if(self.toasting) {
-            self.toastProgress++;
-            if(self.toastProgress % 4 == 0 && self.toastProgress != toastTime) {
-                world.playSound(null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.05F, self.tickPitch ? 2.0F : 1.9F);
-                self.tickPitch = !self.tickPitch;
+        if (!world.isClient()) {
+            if(self.updateNeighbors) {
+                world.updateNeighbors(pos, world.getBlockState(pos).getBlock());
+                self.updateNeighbors = false;
             }
-            if(self.hasMetalInside() || world.getBlockState(pos).get(Properties.WATERLOGGED)) {
-                self.explode();
+            self.previouslyPowered = self.currentlyPowered;
+            self.currentlyPowered = world.isReceivingRedstonePower(pos);
+            if(self.toasting) {
+                self.toastProgress++;
+                if(self.toastProgress % 4 == 0 && self.toastProgress != toastTime) {
+                    world.playSound(null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.05F, self.tickPitch ? 2.0F : 1.9F);
+                    self.tickPitch = !self.tickPitch;
+                }
+                if(self.hasMetalInside() || world.getBlockState(pos).get(Properties.WATERLOGGED)) {
+                    self.explode();
+                }
+                Util.sync(self);
+            }
+            if(self.toastProgress == toastTime) {
+                self.stopToasting(null);
+                self.toastItems();
+                self.smoking = true;
+                Util.sync(self);
             }
         }
-        if(self.toastProgress == toastTime) {
-            self.stopToasting(null);
-            self.toastItems();
-            self.smoking = true;
-        }
+
         if(self.smoking) {
             if(self.smokeProgress % 3 == 0) {
                 world.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 0, 0.03, 0);

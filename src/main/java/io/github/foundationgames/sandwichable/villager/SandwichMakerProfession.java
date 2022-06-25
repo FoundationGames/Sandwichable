@@ -82,7 +82,7 @@ public class SandwichMakerProfession {
         );
     }
 
-    static class SellCheeseFactory implements TradeOffers.Factory {
+    public static class SellCheeseFactory implements TradeOffers.Factory {
         final int price;
         final int experience;
         final int maxUses;
@@ -101,7 +101,7 @@ public class SandwichMakerProfession {
         }
     }
 
-    static class SellSandwichFactory implements TradeOffers.Factory {
+    public static class SellSandwichFactory implements TradeOffers.Factory {
         final int price;
         final Item[] items;
         final int experience;
@@ -116,16 +116,15 @@ public class SandwichMakerProfession {
 
         @Nullable
         public TradeOffer create(Entity entity, Random random) {
-            ItemStack itemStack = new ItemStack(BlocksRegistry.SANDWICH, 1);
+            ItemStack stack = new ItemStack(BlocksRegistry.SANDWICH, 1);
             DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(items.length);
             defaultedList.addAll(Arrays.stream(items).map(ItemStack::new).toList());
-            itemStack.setSubNbt("BlockEntityTag", Inventories.writeNbt(new NbtCompound(), defaultedList));
-            return new TradeOffer(new ItemStack(Items.EMERALD, this.price), itemStack, maxUses, this.experience, 0.2F);
+            stack.setSubNbt("BlockEntityTag", Inventories.writeNbt(new NbtCompound(), defaultedList));
+            return new TradeOffer(new ItemStack(Items.EMERALD, this.price), stack, maxUses, this.experience, 0.2F);
         }
     }
 
-    enum SellableSandwiches {
-
+    public enum SellableSandwiches {
         APPLE(new Item[]{Items.BREAD, Items.APPLE, Items.BREAD}),
         BACON_LETTUCE_TOMATO(new Item[]{ItemsRegistry.BREAD_SLICE, ItemsRegistry.BACON_STRIPS, ItemsRegistry.LETTUCE_LEAF, ItemsRegistry.TOMATO_SLICE, ItemsRegistry.BREAD_SLICE}),
         CHICKEN_CHEESE(new Item[]{ItemsRegistry.TOASTED_BREAD_SLICE, ItemsRegistry.CHEESE_SLICE_REGULAR, Items.COOKED_CHICKEN, ItemsRegistry.LETTUCE_LEAF, ItemsRegistry.TOASTED_BREAD_SLICE}),
@@ -142,7 +141,5 @@ public class SandwichMakerProfession {
         public Item[] getItems() {
             return items;
         }
-
     }
-
 }

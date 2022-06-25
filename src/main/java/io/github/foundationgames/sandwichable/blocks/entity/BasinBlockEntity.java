@@ -38,6 +38,8 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Syn
     public static final int fermentTime = 3600;
     private BasinContent content = BasinContent.AIR;
 
+    private @Nullable ItemStack transferStack = null;
+
     private final Random rng = new Random();
 
     public BasinBlockEntity(BlockPos pos, BlockState state) {
@@ -66,7 +68,7 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Syn
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         nbt.putInt("fermentProgress", fermentProgress);
-        nbt.putString("basinContent", content == null ? "air" : content.toString());
+        nbt.putString("basinContent", getContent() == null ? "air" : getContent().toString());
     }
 
     @Override
@@ -84,10 +86,11 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Syn
 
     public ActionResult onBlockUse(PlayerEntity player, Hand hand) {
         ItemStack playerStack = player.getStackInHand(hand);
+        var content = getContent();
         if(content.getContentType() == BasinContentType.CHEESE) {
             ItemEntity cheese = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, new ItemStack(cheeseTypeToItem().get(content.getCheeseType()), 1));
             world.spawnEntity(cheese);
-            content = BasinContent.AIR;
+            this.content = BasinContent.AIR;
             update();
             return ActionResult.SUCCESS;
         }
@@ -127,12 +130,17 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Syn
     public int getFermentProgress() {
         return fermentProgress;
     }
+
     public BasinContent getContent() {
-        return content;
+        if (this.transferStack != null && this.transferStack.isEmpty()) {
+            this.content = BasinContent.AIR;
+        }
+
+        return this.content;
     }
 
     public void startFermenting(CheeseType type) {
-        if(content == BasinContent.MILK) {
+        if(getContent() == BasinContent.MILK) {
             content = CheeseRegistry.INSTANCE.fermentingMilkFromCheeseType(type);
             fermentProgress = 0;
         }
@@ -141,9 +149,9 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Syn
     }
 
     public void finishFermenting() {
-        if(content.getContentType() == BasinContentType.FERMENTING_MILK) {
+        if(getContent().getContentType() == BasinContentType.FERMENTING_MILK) {
             fermentProgress = 0;
-            content = CheeseRegistry.INSTANCE.cheeseFromCheeseType(content.getCheeseType());
+            content = CheeseRegistry.INSTANCE.cheeseFromCheeseType(getContent().getCheeseType());
         }
         update();
         markDirty();
@@ -169,6 +177,7 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Syn
     }
 
     public ItemStack extractMilk() {
+        var content = getContent();
         if(content == BasinContent.MILK) {
             emptyBasin();
             world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 0.8F, 1.0F);
@@ -192,11 +201,11 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Syn
     }
 
     public ItemStack addCheeseCulture(ItemStack stack) {
-        if(content.getContentType() == BasinContentType.MILK) {
+        if(getContent().getContentType() == BasinContentType.MILK) {
             if(stack.getItem() instanceof CheeseCultureItem) {
                 CheeseCultureItem culture = (CheeseCultureItem)stack.getItem();
                 this.startFermenting(culture.getCheeseType());
-                createCheeseParticle(this.world, this.pos, this.rng, 8, content.getCheeseType().getParticleColorRGB());
+                createCheeseParticle(this.world, this.pos, this.rng, 8, getContent().getCheeseType().getParticleColorRGB());
                 world.playSound(null, pos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 0.82F, 1.0F);
                 world.playSound(null, pos, SoundEvents.ITEM_HONEY_BOTTLE_DRINK, SoundCategory.BLOCKS, 1.0F, 1.5F);
                 return culture.deplete(stack, 1);
@@ -216,12 +225,13 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Syn
     public void emptyBasin() {
         content = BasinContent.AIR;
         fermentProgress = 0;
+        transferStack = null;
         update();
     }
 
     public static void tick(World world, BlockPos pos, BlockState state, BasinBlockEntity self) {
-        if(self.content != null) {
-            if (self.content.getContentType() == BasinContentType.FERMENTING_MILK) {
+        if(self.getContent() != null) {
+            if (self.getContent().getContentType() == BasinContentType.FERMENTING_MILK) {
                 self.fermentProgress++;
             }
         }
@@ -271,7 +281,16 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Syn
 
     @Override
     public ItemStack getStack(int slot) {
-        return this.getContent().getContentType() == BasinContentType.CHEESE ? new ItemStack(cheeseTypeToItem().get(this.content.getCheeseType())) : ItemStack.EMPTY;
+        var content = this.getContent();
+        if (this.transferStack == null) {
+            if (content.getContentType() == BasinContentType.CHEESE) {
+                this.transferStack = new ItemStack(cheeseTypeToItem().get(content.getCheeseType()));
+                return this.transferStack;
+            }
+            return ItemStack.EMPTY;
+        }
+
+        return this.transferStack;
     }
 
     @Override
