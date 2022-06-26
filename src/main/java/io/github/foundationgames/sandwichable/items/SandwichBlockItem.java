@@ -13,7 +13,7 @@ import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 
@@ -60,15 +60,15 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
                 if(!food.isFood() && !food.isEmpty()) { hacked = true; }
             }
             if(size <= 2 && hacked) {
-                return new TranslatableText("block.sandwichable.hackedzandwich");
+                return Text.translatable("block.sandwichable.hackedzandwich");
             } else if(size >= 127 && hacked) {
-                return new TranslatableText("block.sandwichable.hackedsandwich").formatted(Formatting.AQUA);
+                return Text.translatable("block.sandwichable.hackedsandwich").formatted(Formatting.AQUA);
             } else if(size >= 127) {
                 return ((MutableText)super.getName(stack)).formatted(Formatting.AQUA);
             } else if(size <= 2) {
-                return new TranslatableText("block.sandwichable.zandwich");
+                return Text.translatable("block.sandwichable.zandwich");
             } else if (hacked) {
-                return new TranslatableText("block.sandwichable.hackedsandwich");
+                return Text.translatable("block.sandwichable.hackedsandwich");
             }
         }
         return super.getName(stack);
@@ -122,7 +122,7 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
             if(i < 4) {
                 tooltip.add(((MutableText)foods.get(i).getName()).formatted(Formatting.BLUE));
             } else {
-                tooltip.add(new TranslatableText("sandwich.tooltip.ellipsis").formatted(Formatting.BLUE));
+                tooltip.add(Text.translatable("sandwich.tooltip.ellipsis").formatted(Formatting.BLUE));
             }
             i++;
         }
@@ -133,13 +133,13 @@ public class SandwichBlockItem extends InfoTooltipBlockItem {
             }
         }
         if(size <= 2) {
-            tooltip.add(new TranslatableText("sandwich.tooltip.zandwich").formatted(Formatting.BLUE));
+            tooltip.add(Text.translatable("sandwich.tooltip.zandwich").formatted(Formatting.BLUE));
         }
         if(size >= 127) {
-            tooltip.add(new TranslatableText("sandwich.tooltip.bigsandwich").formatted(Formatting.BLUE));
+            tooltip.add(Text.translatable("sandwich.tooltip.bigsandwich").formatted(Formatting.BLUE));
         }
         if(hacked) {
-            tooltip.add(new TranslatableText("sandwich.tooltip.hacked").formatted(Formatting.DARK_PURPLE));
+            tooltip.add(Text.translatable("sandwich.tooltip.hacked").formatted(Formatting.DARK_PURPLE));
         }
         super.appendTooltip(stack, world, tooltip, context);
     }

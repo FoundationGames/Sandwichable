@@ -10,7 +10,7 @@ import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 
@@ -38,10 +38,10 @@ public class CheeseItem extends InfoTooltipItem {
 
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(new TranslatableText("cheese.type."+type.toString()).formatted(Formatting.BLUE));
+        tooltip.add(Text.translatable("cheese.type."+type.toString()).formatted(Formatting.BLUE));
         LocalDate date = LocalDate.now();
         if(date.getMonth() == Month.APRIL && date.getDayOfMonth() == 1) {
-            tooltip.add(new TranslatableText("cheese.type.dairy_free").formatted(Formatting.AQUA));
+            tooltip.add(Text.translatable("cheese.type.dairy_free").formatted(Formatting.AQUA));
         }
         super.appendTooltip(stack, world, tooltip, context);
     }

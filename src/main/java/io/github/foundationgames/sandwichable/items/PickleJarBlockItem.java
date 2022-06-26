@@ -7,7 +7,7 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 
@@ -50,28 +50,28 @@ public class PickleJarBlockItem extends InfoTooltipBlockItem {
 
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(new TranslatableText("pickle_jar.tooltip.contents").formatted(Formatting.AQUA));
+        tooltip.add(Text.translatable("pickle_jar.tooltip.contents").formatted(Formatting.AQUA));
         if(stack.getSubNbt("BlockEntityTag") != null) {
-            tooltip.add(new TranslatableText(this.tooltipKey).formatted(Formatting.BLUE));
+            tooltip.add(Text.translatable(this.tooltipKey).formatted(Formatting.BLUE));
             NbtCompound tag = stack.getSubNbt("BlockEntityTag");
             PickleJarFluid fluid = PickleJarFluid.fromString(tag.getString("pickleJarFluid"));
             int numItems = tag.getInt("numItems");
             int pickleProgress = tag.getInt("pickleProgress");
 
             if(fluid == PickleJarFluid.WATER && numItems > 0) {
-                tooltip.add(new TranslatableText("pickle_jar.tooltip.cucumber_ct", numItems).formatted(Formatting.BLUE));
+                tooltip.add(Text.translatable("pickle_jar.tooltip.cucumber_ct", numItems).formatted(Formatting.BLUE));
             }
             else if((fluid == PickleJarFluid.PICKLED_BRINE || fluid == PickleJarFluid.PICKLING_BRINE) && numItems > 0) {
-                tooltip.add(new TranslatableText("pickle_jar.tooltip.pickle_ct", numItems).formatted(Formatting.BLUE));
+                tooltip.add(Text.translatable("pickle_jar.tooltip.pickle_ct", numItems).formatted(Formatting.BLUE));
             }
             if(fluid == PickleJarFluid.PICKLING_BRINE) {
                 int pct = (int)(((float)pickleProgress/PickleJarBlockEntity.pickleTime)*100);
-                tooltip.add(new TranslatableText("pickle_jar.tooltip.pct_pickled", pct).formatted(Formatting.BLUE));
+                tooltip.add(Text.translatable("pickle_jar.tooltip.pct_pickled", pct).formatted(Formatting.BLUE));
             }
         } else if(this.isDefault) {
-            tooltip.add(new TranslatableText(this.tooltipKey).formatted(Formatting.BLUE));
+            tooltip.add(Text.translatable(this.tooltipKey).formatted(Formatting.BLUE));
         } else {
-            tooltip.add(new TranslatableText("pickle_jar.content.null").formatted(Formatting.RED));
+            tooltip.add(Text.translatable("pickle_jar.content.null").formatted(Formatting.RED));
         }
         super.appendTooltip(stack, world, tooltip, context);
     }

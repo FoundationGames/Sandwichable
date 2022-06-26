@@ -21,20 +21,19 @@ import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class BottleCrateBlockEntity extends LockableContainerBlockEntity implements ExtendedScreenHandlerFactory, SidedInventory, SyncedBlockEntity {
     private DefaultedList<ItemStack> inventory;
-    private final Random random = new Random();
+    private final Random random = Random.create();
     private int growthTicks = randomTime();
 
     public BottleCrateBlockEntity(BlockPos pos, BlockState state) {
@@ -105,7 +104,7 @@ public class BottleCrateBlockEntity extends LockableContainerBlockEntity impleme
 
     @Override
     protected Text getContainerName() {
-        return new TranslatableText("container.sandwichable.bottle_crate");
+        return Text.translatable("container.sandwichable.bottle_crate");
     }
 
     @Override

@@ -8,7 +8,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+
 import net.minecraft.util.Formatting;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.MathHelper;
@@ -78,9 +78,9 @@ public class KitchenKnifeItem extends InfoTooltipItem {
         SandwichableConfig.KitchenKnifeOption opt = Util.getConfig().getKnifeOption(stack.getItem());
         if (opt != null) {
             float sharpness = getSharpnessF(stack);
-            tooltip.add(new TranslatableText("kitchen_knife.tooltip.sharpness", Math.round(sharpness * 100)).formatted(Formatting.DARK_GRAY));
+            tooltip.add(Text.translatable("kitchen_knife.tooltip.sharpness", Math.round(sharpness * 100)).formatted(Formatting.DARK_GRAY));
             int itemsCut = itemCutAmountFrom(sharpness, opt.value);
-            tooltip.add(new TranslatableText("kitchen_knife.tooltip.items_cut" + (itemsCut == 1 ? "_singular" : ""), itemsCut).formatted(Formatting.DARK_GRAY));
+            tooltip.add(Text.translatable("kitchen_knife.tooltip.items_cut" + (itemsCut == 1 ? "_singular" : ""), itemsCut).formatted(Formatting.DARK_GRAY));
         }
         super.appendTooltip(stack, world, tooltip, context);
     }

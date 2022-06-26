@@ -8,13 +8,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Random;
 
 public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateStorable {
     private final CheeseType type;
@@ -68,9 +67,9 @@ public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateSto
 
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(new TranslatableText("cheese.type."+type.toString()).formatted(Formatting.BLUE));
+        tooltip.add(Text.translatable("cheese.type."+type.toString()).formatted(Formatting.BLUE));
         int uses = stack.getOrCreateSubNbt("UsageData").getInt("uses");
-        tooltip.add(new TranslatableText("cheese_culture_bottle.tooltip.uses", uses).formatted(Formatting.DARK_GRAY));
+        tooltip.add(Text.translatable("cheese_culture_bottle.tooltip.uses", uses).formatted(Formatting.DARK_GRAY));
         super.appendTooltip(stack, world, tooltip, context);
     }
 

@@ -6,7 +6,12 @@ import io.github.foundationgames.sandwichable.blocks.entity.container.BottleCrat
 import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
 import io.github.foundationgames.sandwichable.blocks.entity.container.screen.BottleCrateScreen;
 import io.github.foundationgames.sandwichable.blocks.entity.container.screen.DesalinatorScreen;
-import io.github.foundationgames.sandwichable.blocks.entity.renderer.*;
+import io.github.foundationgames.sandwichable.blocks.entity.renderer.BasinBlockEntityRenderer;
+import io.github.foundationgames.sandwichable.blocks.entity.renderer.CuttingBoardBlockEntityRenderer;
+import io.github.foundationgames.sandwichable.blocks.entity.renderer.PickleJarBlockEntityRenderer;
+import io.github.foundationgames.sandwichable.blocks.entity.renderer.SandwichBlockEntityRenderer;
+import io.github.foundationgames.sandwichable.blocks.entity.renderer.SandwichTableBlockEntityRenderer;
+import io.github.foundationgames.sandwichable.blocks.entity.renderer.ToasterBlockEntityRenderer;
 import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
 import io.github.foundationgames.sandwichable.entity.render.SandwichTableMinecartEntityRenderer;
@@ -21,13 +26,12 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
@@ -49,11 +53,11 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 
-import java.util.Random;
 import java.util.function.Function;
 
 public class SandwichableClient implements ClientModInitializer {
@@ -112,7 +116,7 @@ public class SandwichableClient implements ClientModInitializer {
             int top = buf.readInt();
             int layers = buf.readInt();
             BlockPos pos = buf.readBlockPos();
-            Random random = new Random();
+            Random random = client.world.getRandom();
             World world = MinecraftClient.getInstance().world;
             client.execute(() -> {
                 for (int i = 0; i < layers; i++) {

@@ -13,7 +13,7 @@ import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class ToastingCategory implements DisplayCategory<ToastingDisplay> {
     public static final EntryStack<ItemStack> ICON = EntryStack.of(VanillaEntryTypes.ITEM, new ItemStack(BlocksRegistry.TOASTER));
     public static final CategoryIdentifier<ToastingDisplay> ID = CategoryIdentifier.of(SandwichableREI.TOASTING_CATEGORY);
 
-    public static final Text TOASTING_TIME = new TranslatableText("category.sandwichable.toasting.time");
+    public static final Text TOASTING_TIME = Text.translatable("category.sandwichable.toasting.time");
 
     @Override
     public Renderer getIcon() {
@@ -30,7 +30,7 @@ public class ToastingCategory implements DisplayCategory<ToastingDisplay> {
 
     @Override
     public Text getTitle() {
-        return new TranslatableText("category.sandwichable.toasting");
+        return Text.translatable("category.sandwichable.toasting");
     }
 
     @Override

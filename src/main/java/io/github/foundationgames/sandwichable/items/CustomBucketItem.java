@@ -40,7 +40,7 @@ public class CustomBucketItem extends BucketItem {
     private final Fluid fluid;
     private final Predicate<World> evaporates;
 
-    public static final Predicate<World> HOT_DIMENSION = world -> world.getDimension().isUltrawarm();
+    public static final Predicate<World> HOT_DIMENSION = world -> world.getDimension().ultrawarm();
 
     public CustomBucketItem(Fluid fluid, Settings settings, Predicate<World> evaporates) {
         super(fluid, settings);

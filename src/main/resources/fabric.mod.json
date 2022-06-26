@@ -27,7 +27,7 @@
     "mealapi": [
       "io.github.foundationgames.sandwichable.plugin.SandwichableMealAPI"
     ],
-	"rei_plugins_v0": [
+	"rei_client": [
       "io.github.foundationgames.sandwichable.plugin.rei.SandwichableREI"
     ],
     "modmenu": [
@@ -44,6 +44,6 @@
   "depends": {
     "fabricloader": ">=0.11.0",
     "fabric": ">=0.39.0",
-    "minecraft": "1.18.x"
+    "minecraft": "1.19.x"
   }
 }

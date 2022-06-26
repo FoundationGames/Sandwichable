@@ -14,7 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
@@ -35,7 +35,7 @@ public class Sandwich {
         int maxSize = player.world.getGameRules().getInt(Sandwichable.SANDWICH_SIZE_RULE);
         if(stack.getItem() == BlocksRegistry.SANDWICH.asItem()) return false;
         if (maxSize >= 0 && this.getSize() >= maxSize && canAdd(stack)) {
-            player.sendMessage(new TranslatableText("message.sandwichtable.maxSize", maxSize).formatted(Formatting.RED), true);
+            player.sendMessage(Text.translatable("message.sandwichtable.maxSize", maxSize).formatted(Formatting.RED), true);
             return false;
         }
         ItemStack g = addTopFoodFrom(player.isCreative() ? stack.copy() : stack);
@@ -223,7 +223,7 @@ public class Sandwich {
                     Sandwich toAdd = new Sandwich();
                     toAdd.addFromNbt(tag);
                     if (toAdd.getSize() + this.getSize() > maxSize) {
-                        player.sendMessage(new TranslatableText("message.sandwichtable.maxSize", maxSize).formatted(Formatting.RED), true);
+                        player.sendMessage(Text.translatable("message.sandwichtable.maxSize", maxSize).formatted(Formatting.RED), true);
                         return;
                     }
                 }
@@ -231,11 +231,11 @@ public class Sandwich {
                 stack.decrement(1);
             }
         } else if(!this.hasBreadBottom() && !Sandwichable.isBread(stack)) {
-            if(stack.isFood()) player.sendMessage(new TranslatableText("message.sandwichtable.bottombread"), true);
+            if(stack.isFood()) player.sendMessage(Text.translatable("message.sandwichtable.bottombread"), true);
         } else if(!this.addFood(player, stack) && stack.isEmpty()) {
             if(intendsRemoval) {
                 if(this.isComplete()) this.ejectSandwich(world, pos);
-                else player.sendMessage(new TranslatableText("message.sandwichtable.topbread"), true);
+                else player.sendMessage(Text.translatable("message.sandwichtable.topbread"), true);
             } else if(!this.isEmpty()) {
                 if(!player.isCreative()) ejectTopFood(world, pos);
                 else removeTopFood();

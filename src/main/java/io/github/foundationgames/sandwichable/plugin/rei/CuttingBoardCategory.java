@@ -17,7 +17,7 @@ import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -35,7 +35,7 @@ public class CuttingBoardCategory implements DisplayCategory<CuttingBoardDisplay
 
     @Override
     public Text getTitle() {
-        return new TranslatableText("category.sandwichable.cutting_board");
+        return Text.translatable("category.sandwichable.cutting_board");
     }
 
     @Override

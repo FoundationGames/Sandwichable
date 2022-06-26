@@ -17,13 +17,12 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Random;
 
 public abstract class PickleBrineFluid extends FlowableFluid {
     @Override
@@ -48,7 +47,7 @@ public abstract class PickleBrineFluid extends FlowableFluid {
 
     @Override
     public void randomDisplayTick(World world, BlockPos pos, FluidState state, Random random) {
-        ParticlesMode p = MinecraftClient.getInstance().options.particles;
+        ParticlesMode p = MinecraftClient.getInstance().options.getParticles().getValue();
         if (!state.isStill() && !state.get(FALLING)) {
             if (random.nextInt(64) == 0) {
                 world.playSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, SoundEvents.BLOCK_WATER_AMBIENT, SoundCategory.BLOCKS, random.nextFloat() * 0.25F + 0.75F, (random.nextFloat() * 0.5f) + 0.5F, false);

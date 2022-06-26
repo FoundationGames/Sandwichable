@@ -27,11 +27,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.Random;
 
 public class BasinBlockEntity extends BlockEntity implements SidedInventory, SyncedBlockEntity {
     private int fermentProgress = 0;
@@ -40,7 +40,7 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Syn
 
     private @Nullable ItemStack transferStack = null;
 
-    private final Random rng = new Random();
+    private final Random rng = Random.create();
 
     public BasinBlockEntity(BlockPos pos, BlockState state) {
         super(BlocksRegistry.BASIN_BLOCKENTITY, pos, state);

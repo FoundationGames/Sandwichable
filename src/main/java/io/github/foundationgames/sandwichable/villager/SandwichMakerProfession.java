@@ -13,8 +13,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
@@ -22,12 +25,12 @@ import net.minecraft.world.poi.PointOfInterestType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.Random;
 
 public class SandwichMakerProfession {
 
+    private static final Identifier SANDWICH_MAKER_POI_ID = Util.id("sandwich_maker_poi");
     public static final PointOfInterestType SANDWICH_MAKER_POI = PointOfInterestHelper.register(
-            Util.id("sandwich_maker_poi"),
+            SANDWICH_MAKER_POI_ID,
             1,
             1,
             BlocksRegistry.SANDWICH_TABLE
@@ -35,7 +38,7 @@ public class SandwichMakerProfession {
 
     public static final VillagerProfession SANDWICH_MAKER = VillagerProfessionBuilder.create()
             .id(Util.id("sandwich_maker"))
-            .workstation(SANDWICH_MAKER_POI)
+            .workstation(RegistryKey.of(Registry.POINT_OF_INTEREST_TYPE_KEY, SANDWICH_MAKER_POI_ID))
             .workSound(SoundEvents.ENTITY_ITEM_FRAME_REMOVE_ITEM)
             .build();
 

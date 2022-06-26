@@ -48,10 +48,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.screen.ScreenTexts;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -133,7 +132,7 @@ public abstract class ConfigInABarrel {
         public LabelOption(String key) { super(key); }
         @Override
         public SpruceWidget createWidget(Position position, int width) {
-            return new SpruceLabelWidget(position, new TranslatableText(key), width, w -> {}, false);
+            return new SpruceLabelWidget(position, Text.translatable(key), width, w -> {}, false);
         }
     }
     @Environment(EnvType.CLIENT) private static class ConfigScreen extends SpruceScreen {
@@ -142,7 +141,7 @@ public abstract class ConfigInABarrel {
         private final Config config;
         private SpruceOptionListWidget optionsWidget;
         protected <T extends ConfigInABarrel> ConfigScreen(Screen parent, Class<T> cls, Config config) {
-            super(new TranslatableText("cfgbarrel."+config.name+".screen"));
+            super(Text.translatable("cfgbarrel."+config.name+".screen"));
             this.cfgCls = cls; this.config = config;
             this.parent = parent;
         }
@@ -180,8 +179,8 @@ public abstract class ConfigInABarrel {
                                 field.set(obj, fc.getEnumConstants()[Math.floorMod(((Enum<?>) field.get(obj)).ordinal() + 1, s)]);
                             } catch (IllegalAccessException ignored) {} },
                             opt -> { try {
-                                return new TranslatableText("cfgbarrel."+namespace+".enum." + ((Enum<?>) field.get(obj)).name());
-                            } catch (IllegalAccessException ignored) {} return LiteralText.EMPTY; }, null));
+                                return Text.translatable("cfgbarrel."+namespace+".enum." + ((Enum<?>) field.get(obj)).name());
+                            } catch (IllegalAccessException ignored) {} return Text.empty(); }, null));
                 } else {
                     this.optionsWidget.addSingleOptionEntry(new SpruceSeparatorOption(key, true, null));
                     List<String> nParents = new ArrayList<>();

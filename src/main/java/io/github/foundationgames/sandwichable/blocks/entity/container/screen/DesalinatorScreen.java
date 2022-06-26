@@ -9,9 +9,7 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
@@ -39,14 +37,14 @@ public class DesalinatorScreen extends HandledScreen<DesalinatorScreenHandler> {
         this.drawMouseoverTooltip(matrixStack, mouseX, mouseY);
         if(waterTankBox.isMouseOver(mouseX, mouseY)) {
             List<Text> tooltip = Lists.newArrayList(
-                    new LiteralText(((DesalinatorBlockEntity) this.handler.inventory).getWaterAmount() +" B "+ I18n.translate("desalinator.tooltip.filled")),
-                    new LiteralText(I18n.translate("desalinator.tooltip.maxCapacity")+" "+DesalinatorBlockEntity.maxFluidAmount +" B")
+                    Text.literal(((DesalinatorBlockEntity) this.handler.inventory).getWaterAmount() +" B "+ I18n.translate("desalinator.tooltip.filled")),
+                    Text.literal(I18n.translate("desalinator.tooltip.maxCapacity")+" "+DesalinatorBlockEntity.maxFluidAmount +" B")
             );
             if(this.getScreenHandler().inventory instanceof DesalinatorBlockEntity) {
                 if(((DesalinatorBlockEntity)this.handler.inventory).getWaterAmount() > 0) {
                     boolean saline = ((DesalinatorBlockEntity) this.getScreenHandler().inventory).isWaterSaline();
-                    tooltip.add(saline ? new TranslatableText("desalinator.tooltip.saline").formatted(Formatting.GREEN) : new TranslatableText("desalinator.tooltip.notSaline").formatted(Formatting.RED));
-                    if (!saline) tooltip.add(new TranslatableText("desalinator.tooltip.moveToSaltyBiome").formatted(Formatting.GRAY));
+                    tooltip.add(saline ? Text.translatable("desalinator.tooltip.saline").formatted(Formatting.GREEN) : Text.translatable("desalinator.tooltip.notSaline").formatted(Formatting.RED));
+                    if (!saline) tooltip.add(Text.translatable("desalinator.tooltip.moveToSaltyBiome").formatted(Formatting.GRAY));
                 }
             }
             this.renderTooltip(matrixStack, tooltip, mouseX, mouseY);

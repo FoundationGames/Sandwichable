@@ -13,7 +13,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+
 import net.minecraft.util.Formatting;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
@@ -58,13 +58,13 @@ public class FermentingMilkBucketItem extends InfoTooltipItem {
                 CheeseType type;
                 pct = tag.getInt("percentFermented");
                 type = CheeseRegistry.INSTANCE.basinContentFromString(tag.getString("basinContent")).getCheeseType();
-                tooltip.add(new TranslatableText("fermenting_milk_bucket.tooltip.pct_fermented", pct).formatted(Formatting.BLUE));
+                tooltip.add(Text.translatable("fermenting_milk_bucket.tooltip.pct_fermented", pct).formatted(Formatting.BLUE));
                 if (type != null) {
-                    tooltip.add(new TranslatableText("cheese.type." + type.toString()).formatted(Formatting.BLUE));
+                    tooltip.add(Text.translatable("cheese.type." + type.toString()).formatted(Formatting.BLUE));
                 }
             }
         } else {
-            tooltip.add(new TranslatableText("fermenting_milk_bucket.tooltip.no_properties").formatted(Formatting.BLUE));
+            tooltip.add(Text.translatable("fermenting_milk_bucket.tooltip.no_properties").formatted(Formatting.BLUE));
         }
         super.appendTooltip(stack, world, tooltip, context);
     }

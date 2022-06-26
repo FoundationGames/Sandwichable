@@ -15,17 +15,17 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.structure.pool.StructurePoolElement;
 import net.minecraft.structure.processor.StructureProcessorLists;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Random;
 import java.util.function.Supplier;
 
 public class Util {
@@ -37,7 +37,7 @@ public class Util {
     }
 
     public static void scatterBlockDust(World world, BlockPos pos, Block block, int intensity, int density) {
-        Random random = new Random();
+        Random random = Random.create();
         for (int i = 0; i < density; i++) {
             double ox, oy, oz, vx, vy, vz;
             ox = (double)(random.nextInt(intensity * 2) - intensity) / 10;
@@ -51,9 +51,9 @@ public class Util {
     }
 
     public static void scatterDroppedBlockDust(World world, BlockPos pos, Block block, int intensity, int density) {
-        Random random = new Random();
+        Random random = Random.create();
         for (int i = 0; i < density; i++) {
-            double ox, oy, oz, vx, vy, vz;
+            double ox, oy, oz;
             ox = (double)(random.nextInt(intensity * 2) - intensity) / 10;
             oy = (double)(random.nextInt(intensity * 2) - intensity) / 10;
             oz = (double)(random.nextInt(intensity * 2) - intensity) / 10;
@@ -87,7 +87,7 @@ public class Util {
         SandwichableConfig config = Util.getConfig();
         if(config.showInfoTooltips) {
             if (config.infoTooltipKeyBind.isPressed()) {
-                tooltip.add(new TranslatableText("sandwichable.tooltip.infoheader").formatted(Formatting.GREEN));
+                tooltip.add(Text.translatable("sandwichable.tooltip.infoheader").formatted(Formatting.GREEN));
                 char[] infoChars = I18n.translate(itemTranslationKey + ".info").toCharArray();
                 int lineLength = I18n.translate(itemTranslationKey).length();
                 if (lineLength < Math.sqrt(infoChars.length) * 1.5) {
@@ -97,15 +97,15 @@ public class Util {
                 for (char c : infoChars) {
                     ln.append(c);
                     if (c == ' ' && ln.toString().length() > lineLength) {
-                        tooltip.add(new LiteralText(ln.toString()).formatted(Formatting.GRAY));
+                        tooltip.add(Text.literal(ln.toString()).formatted(Formatting.GRAY));
                         ln = new StringBuilder();
                     }
                 }
                 if (!ln.toString().isEmpty()) {
-                    tooltip.add(new LiteralText(ln.toString()).formatted(Formatting.GRAY));
+                    tooltip.add(Text.literal(ln.toString()).formatted(Formatting.GRAY));
                 }
             } else {
-                tooltip.add(new TranslatableText("sandwichable.tooltip."+config.infoTooltipKeyBind.getName()).formatted(Formatting.GREEN));
+                tooltip.add(Text.translatable("sandwichable.tooltip."+config.infoTooltipKeyBind.getName()).formatted(Formatting.GREEN));
             }
         }
     }

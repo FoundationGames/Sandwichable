@@ -4,9 +4,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 import net.minecraft.world.gen.stateprovider.BlockStateProvider;
@@ -15,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 
 public class CascadeFeature extends Feature<CascadeFeatureConfig> {
     private static final BlockState AIR = Blocks.AIR.getDefaultState();
@@ -137,7 +136,7 @@ public class CascadeFeature extends Feature<CascadeFeatureConfig> {
 
     private void makeDisc(StructureWorldAccess world, Random random, long salt, boolean vary, BlockPos center, @Nullable BlockStateProvider providedBlock, BlockState block, int radius, int maxRadius, double extAngleRad) {
         BlockPos.Mutable pos = new BlockPos.Mutable();
-        Random saltedRng = new Random(salt);
+        Random saltedRng = Random.create(salt);
         int r = maxRadius + 1;
         for (int x = -r; x <= r; x++) {
             for (int z = -r; z <= r; z++) {

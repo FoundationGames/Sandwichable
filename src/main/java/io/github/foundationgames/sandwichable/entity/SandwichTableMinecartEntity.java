@@ -13,7 +13,9 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
@@ -94,6 +96,11 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
     @Override
     public ItemStack getPickBlockStack() {
         return new ItemStack(ItemsRegistry.SANDWICH_TABLE_MINECART);
+    }
+
+    @Override
+    protected Item getItem() {
+        return ItemsRegistry.SANDWICH_TABLE_MINECART;
     }
 
     @Override

@@ -14,7 +14,7 @@ public class VillagerProfessionMixin {
             method = "<clinit>()V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/village/VillagerProfession;register(Ljava/lang/String;Lnet/minecraft/world/poi/PointOfInterestType;Lcom/google/common/collect/ImmutableSet;Lcom/google/common/collect/ImmutableSet;Lnet/minecraft/sound/SoundEvent;)Lnet/minecraft/village/VillagerProfession;"
+                    target = "Lnet/minecraft/village/VillagerProfession;register(Ljava/lang/String;Lnet/minecraft/util/registry/RegistryKey;Lcom/google/common/collect/ImmutableSet;Lcom/google/common/collect/ImmutableSet;Lnet/minecraft/sound/SoundEvent;)Lnet/minecraft/village/VillagerProfession;"
             ),
             index = 2
     )

@@ -1,6 +1,7 @@
 package io.github.foundationgames.sandwichable.mixin;
 
 import com.mojang.datafixers.util.Pair;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.structure.pool.StructurePoolElement;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,7 +12,7 @@ import java.util.List;
 @Mixin(StructurePool.class)
 public interface StructurePoolAccess {
     @Accessor(value = "elements")
-    List<StructurePoolElement> sandwichable$getElements();
+    ObjectArrayList<StructurePoolElement> sandwichable$getElements();
 
     @Accessor(value = "elementCounts")
     List<Pair<StructurePoolElement, Integer>> sandwichable$getElementCounts();
