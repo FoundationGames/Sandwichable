@@ -86,6 +86,7 @@
 		"minecraft:golden_carrot",
 		"minecraft:golden_horse_armor",
 		"minecraft:totem_of_undying",
+		"minecraft:recovery_compass",
 		{
 			"id": "croptopia:food_press",
 			"required": false

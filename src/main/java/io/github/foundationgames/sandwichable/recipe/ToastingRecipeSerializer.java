@@ -12,6 +12,8 @@ import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import java.util.function.Function;
+
 public class ToastingRecipeSerializer implements RecipeSerializer<ToastingRecipe> {
 
     private ToastingRecipeSerializer() {}

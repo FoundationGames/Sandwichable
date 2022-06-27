@@ -1,7 +1,7 @@
 package io.github.foundationgames.sandwichable.plugin.rei;
 
-import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
+import io.github.foundationgames.sandwichable.recipe.SandwichableRecipes;
 import io.github.foundationgames.sandwichable.recipe.ToastingRecipe;
 import io.github.foundationgames.sandwichable.util.Util;
 import me.shedaniel.rei.api.client.REIRuntime;
@@ -39,7 +39,7 @@ public class SandwichableREI implements REIClientPlugin {
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
-        registry.registerRecipeFiller(CuttingRecipe.class, Sandwichable.CUTTING_RECIPE, CuttingBoardDisplay::new);
-        registry.registerRecipeFiller(ToastingRecipe.class, Sandwichable.TOASTING_RECIPE, ToastingDisplay::new);
+        registry.registerRecipeFiller(CuttingRecipe.class, SandwichableRecipes.CUTTING_RECIPE, CuttingBoardDisplay::new);
+        registry.registerRecipeFiller(ToastingRecipe.class, SandwichableRecipes.TOASTING_RECIPE, ToastingDisplay::new);
     }
 }

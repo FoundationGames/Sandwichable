@@ -1,0 +1,49 @@
+package io.github.foundationgames.sandwichable.recipe.special;
+
+import io.github.foundationgames.sandwichable.items.BiomeVariantItem;
+import io.github.foundationgames.sandwichable.items.ItemsRegistry;
+import io.github.foundationgames.sandwichable.recipe.SandwichableRecipes;
+import io.github.foundationgames.sandwichable.recipe.ToastingRecipe;
+import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
+
+public class ToastedAncientGrainBreadSliceRecipe extends ToastingRecipe.Special {
+    public ToastedAncientGrainBreadSliceRecipe(Identifier id) {
+        super(id);
+    }
+
+    @Override
+    public ItemStack getOutput() {
+        return new ItemStack(ItemsRegistry.TOASTED_ANCIENT_GRAIN_BREAD_SLICE, 1);
+    }
+
+    @Override
+    public ItemStack craft(SimpleInventory inv) {
+        var stack = getOutput();
+        var biome = BiomeVariantItem.getBiome(inv.getStack(0));
+
+        if (biome != null) {
+            BiomeVariantItem.setBiome(stack, biome);
+        }
+
+        return stack;
+    }
+
+    @Override
+    public boolean matches(SimpleInventory inv, World world) {
+        return inv.getStack(0).isOf(ItemsRegistry.ANCIENT_GRAIN_BREAD_SLICE);
+    }
+
+    @Override
+    public boolean fits(int width, int height) {
+        return true;
+    }
+
+    @Override
+    public RecipeSerializer<?> getSerializer() {
+        return SandwichableRecipes.TOASTED_ANCIENT_GRAIN_BREAD_SLICE;
+    }
+}

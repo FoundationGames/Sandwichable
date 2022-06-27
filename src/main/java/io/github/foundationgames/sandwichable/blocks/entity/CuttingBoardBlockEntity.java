@@ -1,5 +1,6 @@
 package io.github.foundationgames.sandwichable.blocks.entity;
 
+import com.google.common.base.Objects;
 import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.config.SandwichableConfig;
@@ -80,7 +81,7 @@ public class CuttingBoardBlockEntity extends BlockEntity implements SyncedBlockE
         boolean hasKnife = knifeHand != null;
         boolean hasItem = !iStack.isEmpty();
         if (hasItem) {
-            if (getItem().getCount() < getItem().getMaxCount() && (!hasKnife || getItem().getCount() < cut) && (getItem().isEmpty() || getItem().isItemEqual(iStack))) {
+            if (getItem().getCount() < getItem().getMaxCount() && (!hasKnife || getItem().getCount() < cut) && (getItem().isEmpty() || (getItem().isItemEqual(iStack) && Objects.equal(getItem().getNbt(), iStack.getNbt())))) {
                 if (!getItem().isEmpty()) {
                     getItem().setCount(getItem().getCount() + 1);
                     if (!player.isCreative()) iStack.decrement(1);
@@ -188,7 +189,7 @@ public class CuttingBoardBlockEntity extends BlockEntity implements SyncedBlockE
         SimpleInventory inv = new SimpleInventory(getItem());
         Optional<CuttingRecipe> match = world.getRecipeManager().getFirstMatch(CuttingRecipe.Type.INSTANCE, inv, world);
         if (match.isPresent()) {
-            final ItemStack output = match.get().getOutput().copy();
+            final ItemStack output = match.get().craft(inv).copy();
             int nc = output.getCount() * amount;
             int maxCount = output.getItem().getMaxCount();
             for (int i = 0; i < Math.ceil((float)nc / maxCount); i++) {

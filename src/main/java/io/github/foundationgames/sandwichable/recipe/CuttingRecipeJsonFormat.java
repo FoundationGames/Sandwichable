@@ -3,7 +3,6 @@ package io.github.foundationgames.sandwichable.recipe;
 import com.google.gson.JsonObject;
 
 public class CuttingRecipeJsonFormat {
-
     JsonObject input;
     String outputItem;
     int outputCount;

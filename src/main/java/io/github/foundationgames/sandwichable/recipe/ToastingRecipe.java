@@ -42,7 +42,7 @@ public class ToastingRecipe implements Recipe<SimpleInventory> {
 
     @Override
     public ItemStack craft(SimpleInventory inv) {
-        return ItemStack.EMPTY;
+        return getOutput();
     }
 
     @Override
@@ -65,5 +65,27 @@ public class ToastingRecipe implements Recipe<SimpleInventory> {
         public static final ToastingRecipe.Type INSTANCE = new ToastingRecipe.Type();
 
         public static final String ID = "toasting_recipe";
+    }
+
+
+    public static abstract class Special extends ToastingRecipe {
+        public Special(Identifier id) {
+            super(Ingredient.EMPTY, ItemStack.EMPTY, id);
+        }
+
+        @Override
+        public abstract ItemStack getOutput();
+
+        @Override
+        public abstract ItemStack craft(SimpleInventory inv);
+
+        @Override
+        public abstract boolean matches(SimpleInventory inv, World world);
+
+        @Override
+        public abstract boolean fits(int width, int height);
+
+        @Override
+        public abstract RecipeSerializer<?> getSerializer();
     }
 }

@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "sandwichable:item/toasted_ancient_grain_bread_slice_inner",
+		"layer1": "sandwichable:item/toasted_ancient_grain_bread_slice_outer"
+    }
+}

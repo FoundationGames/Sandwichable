@@ -11,7 +11,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public class CuttingRecipe implements Recipe<SimpleInventory> {
-
     private final Ingredient input;
     private final ItemStack output;
     private final Identifier id;
@@ -66,5 +65,26 @@ public class CuttingRecipe implements Recipe<SimpleInventory> {
         public static final Type INSTANCE = new Type();
 
         public static final String ID = "cutting_recipe";
+    }
+
+    public static abstract class Special extends CuttingRecipe {
+        public Special(Identifier id) {
+            super(Ingredient.EMPTY, ItemStack.EMPTY, id);
+        }
+
+        @Override
+        public abstract ItemStack getOutput();
+
+        @Override
+        public abstract ItemStack craft(SimpleInventory inv);
+
+        @Override
+        public abstract boolean matches(SimpleInventory inv, World world);
+
+        @Override
+        public abstract boolean fits(int width, int height);
+
+        @Override
+        public abstract RecipeSerializer<?> getSerializer();
     }
 }

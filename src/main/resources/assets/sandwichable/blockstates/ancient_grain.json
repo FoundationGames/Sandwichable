@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "age=0": { "model": "sandwichable:block/ancient_grain_stage0" },
+        "age=1": { "model": "sandwichable:block/ancient_grain_stage1" },
+        "age=2": { "model": "sandwichable:block/ancient_grain_stage2" },
+        "age=3": { "model": "sandwichable:block/ancient_grain_stage3" },
+		"age=4": { "model": "sandwichable:block/ancient_grain_stage4" },
+        "age=5": { "model": "sandwichable:block/ancient_grain_stage5" }
+    }
+}

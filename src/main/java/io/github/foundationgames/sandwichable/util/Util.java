@@ -118,6 +118,22 @@ public class Util {
         return 0x6ce0eb;
     }
 
+    public static int getRed(int color) {
+        return (color >> 16) & 0xFF;
+    }
+
+    public static int getGreen(int color) {
+        return (color >> 8) & 0xFF;
+    }
+
+    public static int getBlue(int color) {
+        return color & 0xFF;
+    }
+
+    public static int getColor(int red, int green, int blue) {
+        return (red << 16) | (green << 8) | blue;
+    }
+
     public static SandwichableConfig getConfig() {
         return ConfigInABarrel.config(MOD_ID, SandwichableConfig.class, SandwichableConfig::new);
     }

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "minecraft:bread"
+    "minecraft:bread",
+    "sandwichable:ancient_grain_bread"
   ]
 }

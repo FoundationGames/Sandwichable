@@ -9,6 +9,7 @@ import io.github.foundationgames.sandwichable.blocks.entity.BottleCrateBlockEnti
 import io.github.foundationgames.sandwichable.blocks.entity.DesalinatorBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.container.BottleCrateScreenHandler;
 import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
+import io.github.foundationgames.sandwichable.blocks.loot.CopyWorldBiomeLootFunction;
 import io.github.foundationgames.sandwichable.common.CommonTags;
 import io.github.foundationgames.sandwichable.compat.CroptopiaCompat;
 import io.github.foundationgames.sandwichable.config.SandwichableConfig;
@@ -22,8 +23,10 @@ import io.github.foundationgames.sandwichable.items.spread.SpreadType;
 import io.github.foundationgames.sandwichable.mixin.CriteriaAccess;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipeSerializer;
+import io.github.foundationgames.sandwichable.recipe.SandwichableRecipes;
 import io.github.foundationgames.sandwichable.recipe.ToastingRecipe;
 import io.github.foundationgames.sandwichable.recipe.ToastingRecipeSerializer;
+import io.github.foundationgames.sandwichable.util.AncientGrainType;
 import io.github.foundationgames.sandwichable.util.ExtraDispenserBehaviorRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
 import io.github.foundationgames.sandwichable.villager.SandwichMakerProfession;
@@ -43,7 +46,9 @@ import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.*;
+import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.recipe.RecipeManager;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundCategory;
@@ -101,8 +106,7 @@ public class Sandwichable implements ModInitializer {
         return null;
     });
 
-    public static final RecipeType<CuttingRecipe> CUTTING_RECIPE = Registry.register(Registry.RECIPE_TYPE, Util.id(CuttingRecipe.Type.ID), CuttingRecipe.Type.INSTANCE);
-    public static final RecipeType<ToastingRecipe> TOASTING_RECIPE = Registry.register(Registry.RECIPE_TYPE, Util.id(ToastingRecipe.Type.ID), ToastingRecipe.Type.INSTANCE);
+    public static final LootFunctionType COPY_WORLD_BIOME = Registry.register(Registry.LOOT_FUNCTION_TYPE, Util.id("copy_world_biome"), new LootFunctionType(new CopyWorldBiomeLootFunction.Serializer()));
 
     @Override
     public void onInitialize() {
@@ -111,11 +115,10 @@ public class Sandwichable implements ModInitializer {
         ItemsRegistry.init();
         EntitiesRegistry.init();
         SandwichMakerProfession.init();
+        SandwichableRecipes.init();
         SpreadType.init();
         SandwichableWorldgen.init();
-
-        Registry.register(Registry.RECIPE_SERIALIZER, CuttingRecipeSerializer.ID, CuttingRecipeSerializer.INSTANCE);
-        Registry.register(Registry.RECIPE_SERIALIZER, ToastingRecipeSerializer.ID, ToastingRecipeSerializer.INSTANCE);
+        AncientGrainType.init();
 
         ExtraDispenserBehaviorRegistry.initDefaults();
 

@@ -16,8 +16,10 @@ import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
 import io.github.foundationgames.sandwichable.entity.render.SandwichTableMinecartEntityRenderer;
 import io.github.foundationgames.sandwichable.fluids.FluidsRegistry;
+import io.github.foundationgames.sandwichable.items.BiomeVariantItem;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.particle.Particles;
+import io.github.foundationgames.sandwichable.util.AncientGrainType;
 import io.github.foundationgames.sandwichable.util.RenderFlags;
 import io.github.foundationgames.sandwichable.util.SpreadRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
@@ -76,7 +78,35 @@ public class SandwichableClient implements ClientModInitializer {
 
         ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> !state.get(ShrubBlock.SNIPPED) ? BiomeColors.getGrassColor(view, pos) : FoliageColors.getDefaultColor(), BlocksRegistry.SHRUB, BlocksRegistry.POTTED_SHRUB);
 
+        ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
+            if (tintIndex != 0) {
+                return -1;
+            }
+
+            var world = MinecraftClient.getInstance().world;
+            if (world != null) {
+                return AncientGrainType.get(world.getBiome(pos)).color;
+            }
+            return FoliageColors.getDefaultColor();
+        }, BlocksRegistry.ANCIENT_GRAIN);
+
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> tintIndex > 0 ? -1 : GrassColors.getColor(0.5D, 1.0D), BlocksRegistry.SHRUB.asItem());
+
+        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
+            if (tintIndex <= 0) {
+                return -1;
+            }
+
+            return AncientGrainType.get(BiomeVariantItem.getBiome(stack)).color;
+        }, ItemsRegistry.ANCIENT_GRAIN);
+
+        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> AncientGrainType.get(BiomeVariantItem.getBiome(stack)).color, ItemsRegistry.ANCIENT_GRAIN_BREAD);
+
+        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
+            var type = AncientGrainType.get(BiomeVariantItem.getBiome(stack));
+
+            return tintIndex > 0 ? type.color : type.breadColor;
+        }, ItemsRegistry.ANCIENT_GRAIN_BREAD_SLICE, ItemsRegistry.TOASTED_ANCIENT_GRAIN_BREAD_SLICE);
 
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
             if(stack.getOrCreateNbt().getString("spreadType") != null) {
@@ -96,6 +126,7 @@ public class SandwichableClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.LETTUCE, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.TOMATOES, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.CUCUMBERS, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.ANCIENT_GRAIN, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.ONIONS, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlocksRegistry.PICKLE_JAR, RenderLayer.getCutout());
 

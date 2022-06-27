@@ -154,7 +154,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, S
 
             boolean changed = false;
             if(match.isPresent()) {
-                items.set(i, match.get().getOutput().copy());
+                items.set(i, match.get().craft(inv).copy());
                 changed = true;
             } else {
                 if(items.get(i).isFood()) {

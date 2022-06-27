@@ -1,0 +1,6 @@
+{
+    "parent": "sandwichable:block/double_cross",
+    "textures": {
+        "cross": "sandwichable:block/ancient_grain_stage2"
+    }
+}

@@ -18,6 +18,7 @@ import net.minecraft.util.registry.Registry;
 public final class ItemsRegistry {
     public static final FoodComponent BREADSLICE = (new FoodComponent.Builder()).hunger(2).saturationModifier(0.5F).build();
     public static final FoodComponent TOASTEDBREADSLICE = (new FoodComponent.Builder()).hunger(3).saturationModifier(0.6F).build();
+    public static final FoodComponent ANCIENTGRAINBREAD = (new FoodComponent.Builder()).build();
     public static final FoodComponent LETTUCEHEAD = (new FoodComponent.Builder()).hunger(5).saturationModifier(0.8F).snack().build();
     public static final FoodComponent LETTUCELEAF = (new FoodComponent.Builder()).hunger(1).saturationModifier(0.3F).snack().build();
     public static final FoodComponent TOMATO_FOOD = (new FoodComponent.Builder()).hunger(4).saturationModifier(0.42F).build();
@@ -91,6 +92,10 @@ public final class ItemsRegistry {
     public static final Item ONION = new InfoTooltipItem(new Item.Settings().food(ONION_FOOD).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item CHOPPED_ONION = new InfoTooltipItem(new Item.Settings().food(CHOPPEDONION).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item COOKED_CHOPPED_ONION = new InfoTooltipItem(new Item.Settings().food(COOKEDCHOPPEDONION).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item ANCIENT_GRAIN = new BiomeVariantItem(new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item ANCIENT_GRAIN_BREAD = new AncientGrainBreadItem(new Item.Settings().food(ANCIENTGRAINBREAD).group(Sandwichable.SANDWICHABLE_ITEMS), 1);
+    public static final Item ANCIENT_GRAIN_BREAD_SLICE = new AncientGrainBreadItem(new Item.Settings().food(ANCIENTGRAINBREAD).group(Sandwichable.SANDWICHABLE_ITEMS), 0.4f);
+    public static final Item TOASTED_ANCIENT_GRAIN_BREAD_SLICE = new AncientGrainBreadItem(new Item.Settings().food(ANCIENTGRAINBREAD).group(Sandwichable.SANDWICHABLE_ITEMS), 0.6f);
     public static final Item CHOPPED_CARROT = new InfoTooltipItem(new Item.Settings().food(CHOPPEDCARROT).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item COOKED_CHOPPED_CARROT = new InfoTooltipItem(new Item.Settings().food(COOKEDCHOPPEDCARROT).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item CHOPPED_GOLDEN_CARROT = new InfoTooltipItem(new Item.Settings().food(CHOPPEDGOLDCARROT).group(Sandwichable.SANDWICHABLE_ITEMS));
@@ -133,6 +138,7 @@ public final class ItemsRegistry {
     public static final Item TOMATO_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.TOMATOES, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item CUCUMBER_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.CUCUMBERS, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item ONION_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.ONIONS, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item ANCIENT_GRAIN_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.ANCIENT_GRAIN, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
 
     public static final Item EMPTY_PICKLE_JAR = new PickleJarBlockItem("pickle_jar.content.air", true, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item WATER_FILLED_PICKLE_JAR = new PickleJarBlockItem("pickle_jar.content.water", false, new Item.Settings().maxCount(1));
@@ -181,6 +187,10 @@ public final class ItemsRegistry {
         registerItem(CHOPPED_ONION, "chopped_onion");
         addCompostable(0.3f, CHOPPED_ONION);
         registerItem(COOKED_CHOPPED_ONION, "cooked_chopped_onion");
+        registerItem(ANCIENT_GRAIN, "ancient_grain");
+        registerItem(ANCIENT_GRAIN_BREAD, "ancient_grain_bread");
+        registerItem(ANCIENT_GRAIN_BREAD_SLICE, "ancient_grain_bread_slice");
+        registerItem(TOASTED_ANCIENT_GRAIN_BREAD_SLICE, "toasted_ancient_grain_bread_slice");
         registerItem(CHOPPED_CARROT, "chopped_carrot");
         addCompostable(0.3f, CHOPPED_CARROT);
         registerItem(COOKED_CHOPPED_CARROT, "cooked_chopped_carrot");
@@ -234,6 +244,8 @@ public final class ItemsRegistry {
         addCompostable(0.3f, CUCUMBER_SEEDS);
         registerItem(ONION_SEEDS, "onion_seeds");
         addCompostable(0.3f, ONION_SEEDS);
+        registerItem(ANCIENT_GRAIN_SEEDS, "ancient_grain_seeds");
+        addCompostable(0.4f, ANCIENT_GRAIN_SEEDS);
         registerItem(BURNT_FOOD, "burnt_food");
         registerItem(BURNT_MORSEL, "burnt_morsel");
         registerItem(CHARRED_MORSEL, "charred_morsel");

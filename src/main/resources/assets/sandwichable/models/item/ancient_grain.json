@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "sandwichable:item/ancient_grain",
+		"layer1": "sandwichable:item/ancient_grain_overlay"
+    }
+}

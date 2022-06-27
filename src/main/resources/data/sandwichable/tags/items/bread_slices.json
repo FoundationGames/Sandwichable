@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "#c:toasted_bread_slice",
-    "#c:bread_slice"
+    "#c:bread_slice",
+    "sandwichable:ancient_grain_bread_slice",
+    "sandwichable:toasted_ancient_grain_bread_slice"
   ]
 }

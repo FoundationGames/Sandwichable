@@ -28,6 +28,7 @@ public final class BlocksRegistry {
     public static final Block TOMATOES = new TomatoCropBlock(FabricBlockSettings.copy(Blocks.WHEAT));
     public static final Block ONIONS = new OnionCropBlock(FabricBlockSettings.copy(Blocks.WHEAT));
     public static final Block CUCUMBERS = new CucumberCropBlock(FabricBlockSettings.copy(Blocks.WHEAT));
+    public static final Block ANCIENT_GRAIN = new AncientGrainBlock(FabricBlockSettings.copy(Blocks.WHEAT).offsetType(AbstractBlock.OffsetType.XZ));
 
     public static final Block SANDWICH = new SandwichBlock(FabricBlockSettings.copy(Blocks.CAKE).nonOpaque());
 
@@ -145,6 +146,7 @@ public final class BlocksRegistry {
         registerBlock(TOMATOES, "tomatoes");
         registerBlock(CUCUMBERS, "cucumbers");
         registerBlock(ONIONS, "onions");
+        registerBlock(ANCIENT_GRAIN, "ancient_grain");
 
         registerBlock(PICKLE_BRINE, "pickle_brine");
 

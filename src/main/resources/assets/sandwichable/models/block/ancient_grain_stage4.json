@@ -1,0 +1,7 @@
+{
+    "parent": "sandwichable:block/double_cross_overlay",
+    "textures": {
+        "cross": "sandwichable:block/ancient_grain_stage4",
+        "overlay": "sandwichable:block/ancient_grain_stage4_overlay"
+    }
+}
