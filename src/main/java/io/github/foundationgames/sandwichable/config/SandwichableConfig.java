@@ -1,16 +1,22 @@
 package io.github.foundationgames.sandwichable.config;
 
+import com.google.common.base.Suppliers;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import io.github.foundationgames.sandwichable.Sandwichable;
+import io.github.foundationgames.sandwichable.items.ItemsRegistry;
+import io.github.foundationgames.sandwichable.util.Util;
 import io.github.foundationgames.sandwichable.worldgen.CascadeFeatureConfig;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Supplier;
 
 public class SandwichableConfig extends ConfigInABarrel {
     public boolean showInfoTooltips = true;
@@ -43,6 +49,22 @@ public class SandwichableConfig extends ConfigInABarrel {
 
     public static class ItemOptions {
         public KitchenKnifeOption[] knives = knivesDefault();
+        @Value(gui = false) public String saltItem = "sandwichable:salt";
+        @Value(gui = false) public String cucumberItem = "sandwichable:cucumber";
+        @Value(gui = false) public String pickledCucumberItem = "sandwichable:pickled_cucumber";
+        @Value(gui = false) public String burntFoodItem = "sandwichable:burnt_food";
+        @Value(gui = false) public String burntMorselItem = "sandwichable:burnt_morsel";
+
+        @Value(gui = false) public transient final Supplier<ItemStack> saltItemGetter = Suppliers.memoize(() ->
+                Util.itemFromString(saltItem, () -> new ItemStack(ItemsRegistry.SALT)));
+        @Value(gui = false) public transient final Supplier<ItemStack> cucumberItemGetter = Suppliers.memoize(() ->
+                Util.itemFromString(cucumberItem, () -> new ItemStack(ItemsRegistry.CUCUMBER)));
+        @Value(gui = false) public transient final Supplier<ItemStack> pickledCucumberItemGetter = Suppliers.memoize(() ->
+                Util.itemFromString(pickledCucumberItem, () -> new ItemStack(ItemsRegistry.PICKLED_CUCUMBER)));
+        @Value(gui = false) public transient final Supplier<ItemStack> burntFoodItemGetter = Suppliers.memoize(() ->
+                Util.itemFromString(burntFoodItem, () -> new ItemStack(ItemsRegistry.BURNT_FOOD)));
+        @Value(gui = false) public transient final Supplier<ItemStack> burntMorselItemGetter = Suppliers.memoize(() ->
+                Util.itemFromString(burntMorselItem, () -> new ItemStack(ItemsRegistry.BURNT_MORSEL)));
     }
 
     public static KitchenKnifeOption[] knivesDefault() {

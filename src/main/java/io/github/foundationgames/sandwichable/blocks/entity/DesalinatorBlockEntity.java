@@ -4,7 +4,7 @@ import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.blocks.DesalinatorBlock;
 import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
-import io.github.foundationgames.sandwichable.items.ItemsRegistry;
+import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.LockableContainerBlockEntity;
@@ -71,7 +71,8 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
         fluidAmount--;
         if(isWaterSaline()) {
             if(this.inventory.get(1).isEmpty()) {
-                this.inventory.set(1, new ItemStack(ItemsRegistry.SALT));
+                var config = Util.getConfig();
+                this.inventory.set(1, config.itemOptions.saltItemGetter.get().copy());
             } else {
                 this.inventory.get(1).increment(1);
             }
@@ -94,7 +95,9 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     }
 
     private void startEvaporating() {
-        if(this.inventory.get(1).isEmpty() || this.inventory.get(1).getItem() == ItemsRegistry.SALT) {
+        var salt = Util.getConfig().itemOptions.saltItemGetter.get();
+        var invStack = this.inventory.get(1);
+        if(invStack.isEmpty() || (invStack.isItemEqual(salt) && invStack.getCount() < salt.getItem().getMaxCount())) {
             evaporating = true;
             world.setBlockState(pos, world.getBlockState(pos).with(DesalinatorBlock.ON, true));
             this.markDirty();

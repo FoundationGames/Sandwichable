@@ -158,8 +158,10 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, S
                 changed = true;
             } else {
                 if(items.get(i).isFood()) {
-                    Item item = items.get(i).isIn(Sandwichable.SMALL_FOODS) ? ItemsRegistry.BURNT_MORSEL : ItemsRegistry.BURNT_FOOD;
-                    items.set(i, new ItemStack(item, 1));
+                    var config = Util.getConfig();
+                    ItemStack stack = items.get(i).isIn(Sandwichable.SMALL_FOODS) ?
+                            config.itemOptions.burntMorselItemGetter.get().copy() : config.itemOptions.burntFoodItemGetter.get().copy();
+                    items.set(i, stack);
                     changed = true;
                 }
             }

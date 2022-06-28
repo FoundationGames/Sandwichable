@@ -112,10 +112,7 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
     @Override
     public void dropItems(DamageSource damageSource) {
         super.dropItems(damageSource);
-        if (!damageSource.isExplosive() && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
-            this.dropItem(BlocksRegistry.SANDWICH_TABLE);
-            this.sandwich.ejectSandwich(world, getPos());
-        }
+        this.sandwich.ejectSandwich(world, getPos());
     }
 
     @Override

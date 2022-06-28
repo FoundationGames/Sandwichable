@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AncientGrainType {
-    public static final AncientGrainType DEFAULT = new AncientGrainType(0xD4B25D, 0xFFE7AB, 5, 0.6f);
+    public static final AncientGrainType DEFAULT = new AncientGrainType(0xD4B25D, 0xFFBA6B, 5, 0.65f);
     private static final Map<RegistryEntry<Biome>, AncientGrainType> CACHE = new HashMap<>();
 
     public final int color;
