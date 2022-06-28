@@ -118,6 +118,27 @@ public class Util {
         return 0x6ce0eb;
     }
 
+    public static String biomeName(Identifier id) {
+        var key = id.toTranslationKey("biome");
+        if (I18n.hasTranslation(key)) {
+            return I18n.translate(key);
+        }
+
+        var path = id.getPath();
+        path = path.substring(path.lastIndexOf("/") + 1);
+
+        var words = path.split("_");
+        for (int i = 0; i < words.length; i++) {
+            var word = new StringBuilder(words[i]);
+            if (word.length() > 0) {
+                word.setCharAt(0, Character.toUpperCase(word.charAt(0)));
+            }
+            words[i] = word.toString();
+        }
+
+        return String.join(" ", words);
+    }
+
     public static int getRed(int color) {
         return (color >> 16) & 0xFF;
     }

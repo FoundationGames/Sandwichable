@@ -5,7 +5,6 @@
   "plugin": "io.github.foundationgames.sandwichable.mixin.SandwichableMixinPlugin",
   "mixins": [
     "ChickenEntityMixin",
-    "ClientWorldMixin",
     "CriteriaAccess",
     "DispenserBlockMixin",
     "FishingBobberEntityMixin",
@@ -24,6 +23,8 @@
     "BackgroundRendererMixin",
     "BuiltinModelItemRendererMixin",
     "ClientPlayerInteractionManagerMixin",
+    "ClientWorldMixin",
+    "CrackParticleMixin",
     "ContinuousFallingParticleMixin",
     "DrippingParticleMixin"
   ],

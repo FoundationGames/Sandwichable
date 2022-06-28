@@ -68,12 +68,9 @@ public class AncientGrainBreadRecipe extends SpecialCraftingRecipe {
                 var stack = inventory.getStack((y * inventory.getWidth()) + x);
 
                 if (stack.isOf(ItemsRegistry.ANCIENT_GRAIN)) {
-                    var biome = BiomeVariantItem.getBiome(stack);
-                    if (biome != null) {
-                        BiomeVariantItem.setBiome(result, biome);
+                    BiomeVariantItem.copyBiome(stack, result);
 
-                        return result;
-                    }
+                    return result;
                 }
             }
         }

@@ -97,13 +97,13 @@ public class SandwichableClient implements ClientModInitializer {
                 return -1;
             }
 
-            return AncientGrainType.get(BiomeVariantItem.getBiome(stack)).color;
+            return AncientGrainType.get(BiomeVariantItem.getBiome(MinecraftClient.getInstance().world, stack)).color;
         }, ItemsRegistry.ANCIENT_GRAIN);
 
-        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> AncientGrainType.get(BiomeVariantItem.getBiome(stack)).color, ItemsRegistry.ANCIENT_GRAIN_BREAD);
+        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> AncientGrainType.get(BiomeVariantItem.getBiome(MinecraftClient.getInstance().world, stack)).color, ItemsRegistry.ANCIENT_GRAIN_BREAD);
 
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
-            var type = AncientGrainType.get(BiomeVariantItem.getBiome(stack));
+            var type = AncientGrainType.get(BiomeVariantItem.getBiome(MinecraftClient.getInstance().world, stack));
 
             return tintIndex > 0 ? type.color : type.breadColor;
         }, ItemsRegistry.ANCIENT_GRAIN_BREAD_SLICE, ItemsRegistry.TOASTED_ANCIENT_GRAIN_BREAD_SLICE);

@@ -23,11 +23,9 @@ public class ToastedAncientGrainBreadSliceRecipe extends ToastingRecipe.Special 
     @Override
     public ItemStack craft(SimpleInventory inv) {
         var stack = getOutput();
-        var biome = BiomeVariantItem.getBiome(inv.getStack(0));
 
-        if (biome != null) {
-            BiomeVariantItem.setBiome(stack, biome);
-        }
+        // The inventory is always a single slot inventory containing the ingredient, not the entire toaster
+        BiomeVariantItem.copyBiome(inv.getStack(0), stack);
 
         return stack;
     }

@@ -92,10 +92,10 @@ public final class ItemsRegistry {
     public static final Item ONION = new InfoTooltipItem(new Item.Settings().food(ONION_FOOD).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item CHOPPED_ONION = new InfoTooltipItem(new Item.Settings().food(CHOPPEDONION).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item COOKED_CHOPPED_ONION = new InfoTooltipItem(new Item.Settings().food(COOKEDCHOPPEDONION).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item ANCIENT_GRAIN = new BiomeVariantItem(new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item ANCIENT_GRAIN_BREAD = new AncientGrainBreadItem(new Item.Settings().food(ANCIENTGRAINBREAD).group(Sandwichable.SANDWICHABLE_ITEMS), 1);
-    public static final Item ANCIENT_GRAIN_BREAD_SLICE = new AncientGrainBreadItem(new Item.Settings().food(ANCIENTGRAINBREAD).group(Sandwichable.SANDWICHABLE_ITEMS), 0.4f);
-    public static final Item TOASTED_ANCIENT_GRAIN_BREAD_SLICE = new AncientGrainBreadItem(new Item.Settings().food(ANCIENTGRAINBREAD).group(Sandwichable.SANDWICHABLE_ITEMS), 0.6f);
+    public static final Item ANCIENT_GRAIN = new AncientGrainItem(new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item ANCIENT_GRAIN_BREAD = new AncientGrainBreadItem(new Item.Settings().food(ANCIENTGRAINBREAD).group(Sandwichable.SANDWICHABLE_ITEMS), 1, false);
+    public static final Item ANCIENT_GRAIN_BREAD_SLICE = new AncientGrainBreadItem(new Item.Settings().food(ANCIENTGRAINBREAD).group(Sandwichable.SANDWICHABLE_ITEMS), 0.4f, true);
+    public static final Item TOASTED_ANCIENT_GRAIN_BREAD_SLICE = new AncientGrainBreadItem(new Item.Settings().food(ANCIENTGRAINBREAD).group(Sandwichable.SANDWICHABLE_ITEMS), 0.6f, true);
     public static final Item CHOPPED_CARROT = new InfoTooltipItem(new Item.Settings().food(CHOPPEDCARROT).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item COOKED_CHOPPED_CARROT = new InfoTooltipItem(new Item.Settings().food(COOKEDCHOPPEDCARROT).group(Sandwichable.SANDWICHABLE_ITEMS));
     public static final Item CHOPPED_GOLDEN_CARROT = new InfoTooltipItem(new Item.Settings().food(CHOPPEDGOLDCARROT).group(Sandwichable.SANDWICHABLE_ITEMS));

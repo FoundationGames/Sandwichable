@@ -26,11 +26,11 @@ public class AncientGrainType {
 
     public static AncientGrainType from(RegistryEntry<Biome> entry) {
         var biome = entry.value();
-        var random = Random.create(((int)(biome.getTemperature() * ((float)0xFFFF)) << 16) | (int)(biome.getDownfall() * ((float)0xFFFF)));
+        var random = Random.create(((long)(biome.getTemperature() * ((float)0xFFFFFFFF)) << 32) | (long)(biome.getDownfall() * ((float)0xFFFFFFFF)));
 
         float magicFoodNumber = random.nextFloat();
         return new AncientGrainType(
-                createColor(biome), createBreadColor(biome), Math.round(5f + (magicFoodNumber * 4f)), 0.95f - ((magicFoodNumber * 0.25f) * (0.8f + (random.nextFloat()) * 0.2f))
+                createColor(biome), createBreadColor(biome), (int)Math.floor(5 + (magicFoodNumber * 4.2)), 0.95f - ((magicFoodNumber * 0.3f) * (0.8f + (random.nextFloat()) * 0.2f))
         );
     }
 
@@ -53,7 +53,7 @@ public class AncientGrainType {
         float sum = x + y;
         float dif = x - y;
 
-        float mul = (float)(0.5 * (0.95 + 0.13 * Math.sin(sum * 40))) * 255;
+        float mul = (float)(0.5 * (0.9 + 0.2 * Math.sin(sum * 90))) * 255;
 
         float grassR = (float)(Util.getRed(grassColor) + 200) / 500;
         float grassG = (float)(Util.getGreen(grassColor) + 255) / 500;
@@ -73,7 +73,7 @@ public class AncientGrainType {
         float g = 0.3f + (0.2f * (precipitation + temperature));
         float b = 0.3f * temperature - 0.1f;
 
-        float mul = 0.1f + (float)(0.05 * Math.sin((temperature + precipitation) * 90));
+        float mul = 0.1f + (float)(0.05 * Math.sin((temperature + precipitation) * 120));
 
         r = (r + 1) * 0.5f + mul;
         g = (g + 0.95f) * 0.5f + mul;
