@@ -2,14 +2,14 @@ package io.github.foundationgames.sandwichable.items;
 
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.BuiltinRegistries;
-import net.minecraft.util.registry.DynamicRegistryManager;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.registry.RegistryKey;
@@ -24,23 +24,20 @@ public class BiomeVariantItem extends InfoTooltipItem {
 
     @Override
     public Text getName(ItemStack stack) {
-        World world = null;
-
-        // VERY VERY BAD, hopes that this method isn't called on the server
-        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-            world = MinecraftClient.getInstance().world;
-        }
-
-        var biome = getBiome(world, stack);
-        if (biome != null) {
-            var key = biome.getKey();
-            if (key.isPresent()) {
-                var id = key.get().getValue();
-                return Text.translatable(this.getTranslationKey() + ".biome", Util.biomeName(id));
-            }
+        var biomeId = getBiomeId(stack);
+        if (biomeId != null) {
+            return Text.translatable(this.getTranslationKey() + ".biome", Util.biomeName(biomeId));
         }
 
         return super.getName(stack);
+    }
+
+    public static @Nullable Identifier getBiomeId(ItemStack stack) {
+        if (stack.hasNbt()) {
+            return Identifier.tryParse(stack.getNbt().getString("biome"));
+        }
+
+        return null;
     }
 
     public static void setBiome(ItemStack stack, RegistryEntry<Biome> biome) {
@@ -50,7 +47,7 @@ public class BiomeVariantItem extends InfoTooltipItem {
 
     public static @Nullable RegistryEntry<Biome> getBiome(@Nullable World world, ItemStack stack) {
         if (stack.hasNbt()) {
-            var id = Identifier.tryParse(stack.getNbt().getString("biome"));
+            var id = getBiomeId(stack);
 
             var registry = BuiltinRegistries.BIOME;
 
@@ -73,5 +70,10 @@ public class BiomeVariantItem extends InfoTooltipItem {
         if (from.hasNbt() && from.getNbt().contains("biome")) {
             to.getOrCreateNbt().putString("biome", from.getNbt().getString("biome"));
         }
+    }
+
+    @Environment(EnvType.CLIENT)
+    private static World getClientWorld() {
+        return MinecraftClient.getInstance().world;
     }
 }
