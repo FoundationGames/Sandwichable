@@ -1,6 +1,7 @@
 package io.github.foundationgames.sandwichable.util;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.datafixers.util.Pair;
 import io.github.foundationgames.sandwichable.blocks.entity.SyncedBlockEntity;
 import io.github.foundationgames.sandwichable.config.ConfigInABarrel;
@@ -10,6 +11,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.structure.pool.StructurePool;
@@ -21,6 +24,7 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.world.World;
 
@@ -108,6 +112,32 @@ public class Util {
                 tooltip.add(new TranslatableText("sandwichable.tooltip."+config.infoTooltipKeyBind.getName()).formatted(Formatting.GREEN));
             }
         }
+    }
+
+    public static ItemStack itemFromString(String str, Supplier<ItemStack> orElse) {
+        var nbtBegin = str.indexOf("{");
+        var itemStr = str.substring(0, nbtBegin > -1 ? nbtBegin : str.length());
+        var nbtStr = ((nbtBegin > -1) && str.contains("}")) ? str.substring(nbtBegin, str.lastIndexOf("}") + 1) : null;
+
+        var itemId = Identifier.tryParse(itemStr);
+        if (itemId != null) {
+            var entry = Registry.ITEM.getOrEmpty(itemId);
+            if (entry.isPresent()) {
+                var item = entry.get();
+
+                var stack = new ItemStack(item);
+                if (nbtStr != null) {
+                    try {
+                        var nbt = StringNbtReader.parse(nbtStr);
+                        stack.setNbt(nbt);
+                    } catch (CommandSyntaxException ignored) {}
+                }
+
+                return stack;
+            }
+        }
+
+        return orElse.get();
     }
 
     public static <T> T create(Supplier<T> creator) {

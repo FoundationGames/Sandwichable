@@ -115,9 +115,10 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
 
         //NON HELD-ITEM SPECIFIC CASES
         //take cucumber
+        var config = Util.getConfig();
         if(fluid == PickleJarFluid.WATER && !areItemsPickled && numItems > 0) {
             numItems--;
-            ItemEntity item = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, new ItemStack(ItemsRegistry.CUCUMBER));
+            ItemEntity item = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, config.itemOptions.cucumberItemGetter.get().copy());
             item.setToDefaultPickupDelay();
             world.spawnEntity(item);
             update();
@@ -126,7 +127,7 @@ public class PickleJarBlockEntity extends BlockEntity implements SidedInventory,
         //take pickle
         if(fluid == PickleJarFluid.PICKLED_BRINE && areItemsPickled && numItems > 0) {
             numItems--;
-            ItemEntity item = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.05, pos.getZ()+0.5, new ItemStack(ItemsRegistry.PICKLED_CUCUMBER));
+            ItemEntity item = new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.05, pos.getZ()+0.5, config.itemOptions.pickledCucumberItemGetter.get().copy());
             item.setToDefaultPickupDelay();
             world.spawnEntity(item);
             if(numItems == 0) {

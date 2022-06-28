@@ -107,7 +107,9 @@
 	"item.sandwichable.spread.honey": "Honey",
 	"item.sandwichable.spread.fermenting_milk": "Fermenting Milk",
 	"item.sandwichable.spread.sweet_berry_jam": "Sweet Berry Jam",
+	"item.sandwichable.spread.glow_berry_jam": "Glow Berry Jam",
 	"item.sandwichable.spread.mayonnaise": "Mayonnaise",
+	"item.sandwichable.spread.potion": "Potion",
 	
 	"block.sandwichable.sandwich_table": "Sandwich Table",
 	"block.sandwichable.sandwich": "Sandwich",
