@@ -1,12 +1,10 @@
 package io.github.foundationgames.sandwichable.plugin.rei;
 
-import com.google.common.collect.ImmutableList;
 import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.Display;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
-import me.shedaniel.rei.api.common.entry.EntryStack;
-import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
+import me.shedaniel.rei.api.common.util.EntryIngredients;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
 
@@ -23,10 +21,8 @@ public class CuttingBoardDisplay implements Display {
     }
 
     public CuttingBoardDisplay(Ingredient input, ItemStack result) {
-        ImmutableList.Builder<EntryIngredient> b = new ImmutableList.Builder<>();
-        for(ItemStack i : input.getMatchingStacks()) b.add(EntryIngredient.of(EntryStack.of(VanillaEntryTypes.ITEM, i)));
-        this.inputs = b.build();
-        this.results = Collections.singletonList(EntryIngredient.of(EntryStack.of(VanillaEntryTypes.ITEM, result)));
+        this.inputs = Collections.singletonList(EntryIngredients.ofIngredient(input));
+        this.results = Collections.singletonList(EntryIngredients.of(result));
     }
 
     @Override
