@@ -30,6 +30,9 @@
 	"rei_client": [
       "io.github.foundationgames.sandwichable.plugin.rei.SandwichableREI"
     ],
+	"emi": [
+      "io.github.foundationgames.sandwichable.plugin.emi.SandwichableEMI"
+    ],
     "modmenu": [
       "io.github.foundationgames.sandwichable.plugin.SandwichableModMenu"
     ],

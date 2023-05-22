@@ -39,6 +39,7 @@ dependencies {
 		exclude(group: "com.terraformersmc")
 		exclude(group: "io.github.prospector")
 	}
+	modCompileOnly "dev.emi:emi:${emi_version}:api"
 	modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
 
 	modApi("squeek.appleskin:appleskin-fabric:${project.appleskin_version}:api") {

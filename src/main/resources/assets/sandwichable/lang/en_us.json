@@ -339,5 +339,9 @@
 	"block.sandwichable.salty_sand.info": "An ore-like block found in beaches and oceans, which can be broken to obtain a Salt Rock and some sand.",
 	"block.sandwichable.salty_rocks.info": "An unobtainable block lining the edges of naturally generated salt pools. Water on top of this block will be saline, meaning a desalinator will work on top of this block.",
 	"block.sandwichable.salty_stone.info": "An unobtainable block lining the floor of naturally generated salt pools. Water on top of this block will be saline, meaning a desalinator will work on top of this block.",
-	"block.sandwichable.desalinator.info": "A machine used to extract salt from beach and ocean water. Is fueled by redstone dust as an item, unlike the Redstone Toaster, and can be waterlogged to fill its tank. Will produce salt if it is in a salty biome."
+	"block.sandwichable.desalinator.info": "A machine used to extract salt from beach and ocean water. Is fueled by redstone dust as an item, unlike the Redstone Toaster, and can be waterlogged to fill its tank. Will produce salt if it is in a salty biome.",
+
+	"emi.category.sandwichable.cutting": "Cutting",
+	"emi.category.sandwichable.toasting": "Toasting",
+	"tag.sandwichable.default_knives": "Kitchen Knives"
 }
