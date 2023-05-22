@@ -36,7 +36,6 @@ public class CommonTags {
     public static final TagKey<Item> COOKED_SALMON_FILET = t("cooked_salmon_filet");
     public static final TagKey<Item> DEFAULT_CHEESE_WHEEL = t("default_cheese_wheel");
     public static final TagKey<Item> DEFAULT_CHEESE_PIECE = t("default_cheese_piece");
-    public static final TagKey<Item> CUTTING_BOARDS = t("cutting_boards");
     /*public static final Map<Pair<CheeseType, Boolean>, TagKey<Item>> CHEESE_TAGS = Util.create(() -> {
         Map<Pair<CheeseType, Boolean>, TagKey<Item>> map = new HashMap<>();
         for(CheeseType type : CheeseType.values()) {
