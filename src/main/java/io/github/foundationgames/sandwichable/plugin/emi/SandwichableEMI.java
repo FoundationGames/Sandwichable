@@ -4,8 +4,10 @@ import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiCraftingRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
+import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
+import io.github.foundationgames.sandwichable.common.CommonTags;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.recipe.SandwichableRecipes;
 import io.github.foundationgames.sandwichable.recipe.special.AncientGrainBreadSliceRecipe;
@@ -24,7 +26,7 @@ public class SandwichableEMI implements EmiPlugin {
 	public void register(EmiRegistry registry) {
 		registry.addCategory(CUTTING_CATEGORY);
 		registry.addCategory(TOASTING_CATEGORY);
-		registry.addWorkstation(CUTTING_CATEGORY, EmiStack.of(new ItemStack(BlocksRegistry.OAK_CUTTING_BOARD).getItem()));
+		registry.addWorkstation(CUTTING_CATEGORY, EmiIngredient.of(CommonTags.CUTTING_BOARDS));
 		registry.addWorkstation(TOASTING_CATEGORY, EmiStack.of(new ItemStack(BlocksRegistry.TOASTER).getItem()));
 		registry.getRecipeManager().listAllOfType(SandwichableRecipes.CUTTING_RECIPE).forEach((cuttingRecipe -> {
 			if (!(cuttingRecipe instanceof AncientGrainBreadSliceRecipe)) {
