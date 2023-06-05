@@ -2,11 +2,9 @@ package io.github.foundationgames.sandwichable.util;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.datafixers.util.Pair;
 import io.github.foundationgames.sandwichable.blocks.entity.SyncedBlockEntity;
 import io.github.foundationgames.sandwichable.config.ConfigInABarrel;
 import io.github.foundationgames.sandwichable.config.SandwichableConfig;
-import io.github.foundationgames.sandwichable.mixin.StructurePoolAccess;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.block.Block;
@@ -15,12 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.structure.pool.StructurePool;
-import net.minecraft.structure.pool.StructurePoolElement;
-import net.minecraft.structure.processor.StructureProcessorLists;
-
 import net.minecraft.text.Text;
-
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -67,16 +60,6 @@ public class Util {
 
     public static Int2ObjectMap<TradeOffers.Factory[]> copyToFastUtilMap(ImmutableMap<Integer, TradeOffers.Factory[]> immutableMap) {
         return new Int2ObjectOpenHashMap(immutableMap);
-    }
-
-    public static void tryAddElementToPool(Identifier targetPool, StructurePool pool, String elementId, StructurePool.Projection projection, int weight) {
-        if(targetPool.equals(pool.getId())) {
-            StructurePoolElement element = StructurePoolElement.ofProcessedLegacySingle(elementId, StructureProcessorLists.EMPTY).apply(projection);
-            for (int i = 0; i < weight; i++) {
-                ((StructurePoolAccess)pool).sandwichable$getElements().add(element);
-            }
-            ((StructurePoolAccess)pool).sandwichable$getElementCounts().add(Pair.of(element, weight));
-        }
     }
 
     public static void sync(SyncedBlockEntity be) {

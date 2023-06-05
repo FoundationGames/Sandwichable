@@ -21,11 +21,8 @@ import io.github.foundationgames.sandwichable.items.KitchenKnifeItem;
 import io.github.foundationgames.sandwichable.items.SandwichableGroupIconBuilder;
 import io.github.foundationgames.sandwichable.items.spread.SpreadType;
 import io.github.foundationgames.sandwichable.mixin.CriteriaAccess;
-import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
-import io.github.foundationgames.sandwichable.recipe.CuttingRecipeSerializer;
 import io.github.foundationgames.sandwichable.recipe.SandwichableRecipes;
-import io.github.foundationgames.sandwichable.recipe.ToastingRecipe;
-import io.github.foundationgames.sandwichable.recipe.ToastingRecipeSerializer;
+import io.github.foundationgames.sandwichable.structure.SandwichableStructures;
 import io.github.foundationgames.sandwichable.util.AncientGrainType;
 import io.github.foundationgames.sandwichable.util.ExtraDispenserBehaviorRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
@@ -33,6 +30,7 @@ import io.github.foundationgames.sandwichable.villager.SandwichMakerProfession;
 import io.github.foundationgames.sandwichable.worldgen.SandwichableWorldgen;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
@@ -53,8 +51,6 @@ import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.loot.function.SetCountLootFunction;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.recipe.RecipeManager;
-import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -172,6 +168,8 @@ public class Sandwichable implements ModInitializer {
             }
             return ActionResult.PASS;
         });
+
+        ServerLifecycleEvents.SERVER_STARTING.register(SandwichableStructures::addStructures);
 
         LootTableEvents.MODIFY.register((resources, loot, id, table, source) -> {
             if (source.isBuiltin() && ANCIENT_CITY_LOOT.equals(id)) {
