@@ -13,11 +13,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
@@ -28,22 +26,17 @@ import java.util.Arrays;
 
 public class SandwichMakerProfession {
 
-    private static final Identifier SANDWICH_MAKER_POI_ID = Util.id("sandwich_maker_poi");
-    public static final PointOfInterestType SANDWICH_MAKER_POI = PointOfInterestHelper.register(
-            SANDWICH_MAKER_POI_ID,
-            1,
-            1,
-            BlocksRegistry.SANDWICH_TABLE
-    );
-
-    public static final VillagerProfession SANDWICH_MAKER = VillagerProfessionBuilder.create()
-            .id(Util.id("sandwich_maker"))
-            .workstation(RegistryKey.of(Registry.POINT_OF_INTEREST_TYPE_KEY, SANDWICH_MAKER_POI_ID))
-            .workSound(SoundEvents.ENTITY_ITEM_FRAME_REMOVE_ITEM)
-            .build();
+    public static PointOfInterestType SANDWICH_MAKER_POI;
+    public static VillagerProfession SANDWICH_MAKER;
 
     public static void init() {
-        Registry.register(Registry.VILLAGER_PROFESSION, Util.id("sandwich_maker"), SANDWICH_MAKER);
+        SANDWICH_MAKER_POI = PointOfInterestHelper.register(Util.id("sandwich_maker_poi"), 1, 1, BlocksRegistry.SANDWICH_TABLE);
+        SANDWICH_MAKER = Registry.register(Registry.VILLAGER_PROFESSION, Util.id("sandwich_maker"), VillagerProfessionBuilder.create()
+                .id(Util.id("sandwich_maker"))
+                .workstation(holder -> holder.value().equals(SANDWICH_MAKER_POI))
+                .jobSite(holder -> holder.value().equals(SANDWICH_MAKER_POI))
+                .workSound(SoundEvents.ENTITY_ITEM_FRAME_REMOVE_ITEM)
+                .build());
         TradeOfferHelper.registerVillagerOffers(SANDWICH_MAKER, 1, factories -> {
             factories.add(new TradeOffers.BuyForOneEmeraldFactory(Items.WHEAT, 20, 16, 2));
             factories.add(new TradeOffers.BuyForOneEmeraldFactory(Items.BREAD, 6, 12, 2));
@@ -126,7 +119,7 @@ public class SandwichMakerProfession {
         VEGETABLE(new Item[]{Items.BREAD, ItemsRegistry.LETTUCE_LEAF, Items.CARROT, Items.BEETROOT, Items.BAKED_POTATO, ItemsRegistry.TOMATO_SLICE, Items.BREAD}),
         GOLDEN_APPLE(new Item[]{Items.BREAD, Items.GOLDEN_APPLE, Items.BREAD});
 
-        Item[] items;
+        final Item[] items;
 
         SellableSandwiches(Item[] items) {
             this.items = items;
