@@ -2,16 +2,14 @@ package io.github.foundationgames.sandwichable.mixin;
 
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.FishingBobberEntity;
-import net.minecraft.loot.LootTable;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(FishingBobberEntity.class)
 public abstract class FishingBobberEntityMixin extends Entity {
@@ -22,13 +20,11 @@ public abstract class FishingBobberEntityMixin extends Entity {
         throw new AssertionError("accessed dummy constructor");
     }
 
-    @ModifyVariable(method = "use", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/loot/LootManager;getTable(Lnet/minecraft/util/Identifier;)Lnet/minecraft/loot/LootTable;", shift = At.Shift.AFTER, ordinal = 0), index = 5)
-    public LootTable sandwichable$changeLootTable(LootTable old) {
-        BlockState state = this.world.getBlockState(this.getBlockPos());
-        System.out.println(state);
-        if(state.isOf(BlocksRegistry.PICKLE_BRINE)) {
-            return this.world.getServer().getLootManager().getTable(BRINE_LOOT_FISHING);
+    @ModifyArg(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/loot/LootManager;getTable(Lnet/minecraft/util/Identifier;)Lnet/minecraft/loot/LootTable;"))
+    public Identifier sandwichable$changeLootTable(Identifier original) {
+        if(this.world.getBlockState(this.getBlockPos()).isOf(BlocksRegistry.PICKLE_BRINE)) {
+            return BRINE_LOOT_FISHING;
         }
-        return old;
+        return original;
     }
 }

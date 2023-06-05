@@ -14,8 +14,7 @@
     "PistonBlockMixin",
     "ServerPlayerEntityScreenHandlerListenerMixin",
     "ServerPlayerInteractionManagerMixin",
-    "StructurePoolAccess",
-    "StructurePoolsMixin",
+    "StructurePoolAccessor",
     "VillagerEntityMixin",
     "VillagerProfessionMixin"
   ],
