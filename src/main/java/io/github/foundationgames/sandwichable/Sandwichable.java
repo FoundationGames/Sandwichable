@@ -175,7 +175,14 @@ public class Sandwichable implements ModInitializer {
 
         ServerLifecycleEvents.SERVER_STARTING.register(SandwichableStructures::addStructures);
 
-        Set<Identifier> modifiedChests = Set.of(LootTables.ANCIENT_CITY_CHEST);
+        Set<Identifier> modifiedChests = Set.of(
+                LootTables.ANCIENT_CITY_CHEST,
+                LootTables.VILLAGE_PLAINS_CHEST,
+                LootTables.VILLAGE_SAVANNA_HOUSE_CHEST,
+                LootTables.VILLAGE_SNOWY_HOUSE_CHEST,
+                LootTables.VILLAGE_TAIGA_HOUSE_CHEST,
+                LootTables.VILLAGE_DESERT_HOUSE_CHEST
+        );
 
         LootTableEvents.MODIFY.register((resources, loot, id, table, source) -> {
             Identifier injectId = Util.id("inject/" + id.getPath());
