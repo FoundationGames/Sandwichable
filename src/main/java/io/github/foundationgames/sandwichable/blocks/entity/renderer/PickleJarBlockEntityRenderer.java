@@ -100,7 +100,6 @@ public class PickleJarBlockEntityRenderer implements BlockEntityRenderer<PickleJ
             this.cucumberBottom = root.getChild("cucumber_bottom");
             this.pickleTop = root.getChild("pickle_top");
             this.pickleBottom = root.getChild("pickle_bottom");
-            System.out.println();
         }
 
         /**
