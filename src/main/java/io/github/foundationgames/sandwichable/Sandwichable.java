@@ -36,6 +36,7 @@ import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
@@ -60,6 +61,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.village.TradeOffer;
+import net.minecraft.village.VillagerProfession;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -180,6 +183,19 @@ public class Sandwichable implements ModInitializer {
                 table.pool(LootPool.builder().with(LootTableEntry.builder(injectId).weight(1).quality(0)).build());
             }
         });
+
+        TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 1,
+                factories -> new TradeOffer(new ItemStack(ItemsRegistry.ONION, 26),
+                        new ItemStack(Items.EMERALD), 16, 2, .05f));
+        TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 1,
+                factories -> new TradeOffer(new ItemStack(ItemsRegistry.TOMATO, 22),
+                        new ItemStack(Items.EMERALD), 16, 2, .05f));
+        TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 1,
+                factories -> new TradeOffer(new ItemStack(ItemsRegistry.CUCUMBER, 15),
+                        new ItemStack(Items.EMERALD), 16, 2, .05f));
+        TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 1,
+                factories -> new TradeOffer(new ItemStack(ItemsRegistry.LETTUCE_HEAD, 15),
+                        new ItemStack(Items.EMERALD), 16, 2, .05f));
 
         if(FabricLoader.getInstance().isModLoaded("croptopia")) {
             CroptopiaCompat.init();
