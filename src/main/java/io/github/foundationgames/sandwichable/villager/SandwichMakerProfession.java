@@ -1,9 +1,9 @@
 package io.github.foundationgames.sandwichable.villager;
 
-import com.google.common.collect.ImmutableMap;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
+import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.object.builder.v1.villager.VillagerProfessionBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.entity.Entity;
@@ -44,45 +44,36 @@ public class SandwichMakerProfession {
 
     public static void init() {
         Registry.register(Registry.VILLAGER_PROFESSION, Util.id("sandwich_maker"), SANDWICH_MAKER);
-        TradeOffers.PROFESSION_TO_LEVELED_TRADE.put(
-                SANDWICH_MAKER, Util.copyToFastUtilMap(ImmutableMap.of(
-                        1,
-                        new TradeOffers.Factory[]{
-                                new TradeOffers.BuyForOneEmeraldFactory(Items.WHEAT, 20, 16, 2),
-                                new TradeOffers.BuyForOneEmeraldFactory(Items.BREAD, 6, 12, 2),
-                                new TradeOffers.BuyForOneEmeraldFactory(ItemsRegistry.TOMATO, 18, 16, 2),
-                                new TradeOffers.BuyForOneEmeraldFactory(ItemsRegistry.LETTUCE_HEAD, 14, 16, 2),
-                                new TradeOffers.SellItemFactory(ItemsRegistry.BREAD_SLICE, 1, 10, 16, 1)
-                        },
-                        2,
-                        new TradeOffers.Factory[]{
-                                new SandwichMakerProfession.SellSandwichFactory(5, SellableSandwiches.APPLE.getItems(), 6, 7),
-                                new TradeOffers.BuyForOneEmeraldFactory(Items.BUCKET, 1, 12, 5),
-                                new TradeOffers.BuyForOneEmeraldFactory(Items.PORKCHOP, 18, 12, 3),
-                                new TradeOffers.SellItemFactory(ItemsRegistry.CHEESE_SLICE_REGULAR, 2, 10, 4, 1),
-                        },
-                        3,
-                        new TradeOffers.Factory[]{
-                                new SandwichMakerProfession.SellSandwichFactory(10, SellableSandwiches.BACON_LETTUCE_TOMATO.getItems(), 6, 8),
-                                new SandwichMakerProfession.SellSandwichFactory(10, SellableSandwiches.CHICKEN_CHEESE.getItems(), 6, 8),
-                                new TradeOffers.SellItemFactory(ItemsRegistry.TOASTED_BREAD_SLICE, 1, 7, 16, 1),
-                                new TradeOffers.BuyForOneEmeraldFactory(Items.COOKED_BEEF, 14, 12, 5),
-                                new TradeOffers.BuyForOneEmeraldFactory(Items.POTATO, 20, 12, 4)
-                        },
-                        4,
-                        new TradeOffers.Factory[]{
-                                new SandwichMakerProfession.SellSandwichFactory(16, SellableSandwiches.MEAT_LOVERS.getItems(), 6, 12),
-                                new SandwichMakerProfession.SellSandwichFactory(16, SellableSandwiches.VEGETABLE.getItems(), 6, 12),
-                                new TradeOffers.SellItemFactory(Items.CHARCOAL, 1, 3, 12, 5),
-                                new TradeOffers.BuyForOneEmeraldFactory(Items.CARROT, 20, 16, 5)
-                        },
-                        5,
-                        new TradeOffers.Factory[]{
-                                new SandwichMakerProfession.SellSandwichFactory(25, SellableSandwiches.GOLDEN_APPLE.getItems(), 6, 17),
-                                new SandwichMakerProfession.SellCheeseFactory(4, 12, 6),
-                        }
-                ))
-        );
+        TradeOfferHelper.registerVillagerOffers(SANDWICH_MAKER, 1, factories -> {
+            factories.add(new TradeOffers.BuyForOneEmeraldFactory(Items.WHEAT, 20, 16, 2));
+            factories.add(new TradeOffers.BuyForOneEmeraldFactory(Items.BREAD, 6, 12, 2));
+            factories.add(new TradeOffers.BuyForOneEmeraldFactory(ItemsRegistry.TOMATO, 18, 16, 2));
+            factories.add(new TradeOffers.BuyForOneEmeraldFactory(ItemsRegistry.LETTUCE_HEAD, 14, 16, 2));
+            factories.add(new TradeOffers.SellItemFactory(ItemsRegistry.BREAD_SLICE, 1, 10, 16, 1));
+        });
+        TradeOfferHelper.registerVillagerOffers(SANDWICH_MAKER, 2, factories -> {
+            factories.add(new SandwichMakerProfession.SellSandwichFactory(5, SellableSandwiches.APPLE.getItems(), 6, 7));
+            factories.add(new TradeOffers.BuyForOneEmeraldFactory(Items.BUCKET, 1, 12, 5));
+            factories.add(new TradeOffers.BuyForOneEmeraldFactory(Items.PORKCHOP, 18, 12, 3));
+            factories.add(new TradeOffers.SellItemFactory(ItemsRegistry.CHEESE_SLICE_REGULAR, 2, 10, 4, 1));
+        });
+        TradeOfferHelper.registerVillagerOffers(SANDWICH_MAKER, 3, factories -> {
+            factories.add(new SandwichMakerProfession.SellSandwichFactory(10, SellableSandwiches.BACON_LETTUCE_TOMATO.getItems(), 6, 8));
+            factories.add(new SandwichMakerProfession.SellSandwichFactory(10, SellableSandwiches.CHICKEN_CHEESE.getItems(), 6, 8));
+            factories.add(new TradeOffers.SellItemFactory(ItemsRegistry.TOASTED_BREAD_SLICE, 1, 7, 16, 1));
+            factories.add(new TradeOffers.BuyForOneEmeraldFactory(Items.COOKED_BEEF, 14, 12, 5));
+            factories.add(new TradeOffers.BuyForOneEmeraldFactory(Items.POTATO, 20, 12, 4));
+        });
+        TradeOfferHelper.registerVillagerOffers(SANDWICH_MAKER, 4, factories -> {
+            factories.add(new SandwichMakerProfession.SellSandwichFactory(16, SellableSandwiches.MEAT_LOVERS.getItems(), 6, 12));
+            factories.add(new SandwichMakerProfession.SellSandwichFactory(16, SellableSandwiches.VEGETABLE.getItems(), 6, 12));
+            factories.add(new TradeOffers.SellItemFactory(Items.CHARCOAL, 1, 3, 12, 5));
+            factories.add(new TradeOffers.BuyForOneEmeraldFactory(Items.CARROT, 20, 16, 5));
+        });
+        TradeOfferHelper.registerVillagerOffers(SANDWICH_MAKER, 5, factories -> {
+            factories.add(new SandwichMakerProfession.SellSandwichFactory(25, SellableSandwiches.GOLDEN_APPLE.getItems(), 6, 17));
+            factories.add(new SandwichMakerProfession.SellCheeseFactory(4, 12, 6));
+        });
     }
 
     public static class SellCheeseFactory implements TradeOffers.Factory {
