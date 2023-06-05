@@ -46,10 +46,9 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.*;
 import net.minecraft.loot.LootPool;
-import net.minecraft.loot.entry.ItemEntry;
+import net.minecraft.loot.LootTables;
+import net.minecraft.loot.entry.LootTableEntry;
 import net.minecraft.loot.function.LootFunctionType;
-import net.minecraft.loot.function.SetCountLootFunction;
-import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundCategory;
@@ -66,6 +65,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Set;
 
 public class Sandwichable implements ModInitializer {
     public static final ItemGroup SANDWICHABLE_ITEMS = FabricItemGroupBuilder.build(Util.id("sandwichable"), SandwichableGroupIconBuilder::getIcon);
@@ -171,13 +172,12 @@ public class Sandwichable implements ModInitializer {
 
         ServerLifecycleEvents.SERVER_STARTING.register(SandwichableStructures::addStructures);
 
+        Set<Identifier> modifiedChests = Set.of(LootTables.ANCIENT_CITY_CHEST);
+
         LootTableEvents.MODIFY.register((resources, loot, id, table, source) -> {
-            if (source.isBuiltin() && ANCIENT_CITY_LOOT.equals(id)) {
-                table.pool(LootPool.builder().with(
-                        ItemEntry.builder(ItemsRegistry.ANCIENT_GRAIN_SEEDS)
-                                .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1, 3)))
-                        ).rolls(UniformLootNumberProvider.create(0, 2))
-                );
+            Identifier injectId = Util.id("inject/" + id.getPath());
+            if (modifiedChests.contains(id)) {
+                table.pool(LootPool.builder().with(LootTableEntry.builder(injectId).weight(1).quality(0)).build());
             }
         });
 
