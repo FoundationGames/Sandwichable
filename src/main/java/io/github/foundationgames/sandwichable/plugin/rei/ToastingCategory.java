@@ -14,7 +14,6 @@ import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 
-
 import java.util.List;
 
 public class ToastingCategory implements DisplayCategory<ToastingDisplay> {

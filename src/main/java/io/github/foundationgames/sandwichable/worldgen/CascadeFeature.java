@@ -36,7 +36,7 @@ public class CascadeFeature extends Feature<CascadeFeatureConfig> {
         List<Pair<BlockPos, Integer>> discs = new ArrayList<>();
         int discCt = 2 + random.nextInt(3);
         for (int d = 0; d < discCt; d++) {
-            BlockPos p = new BlockPos(
+            BlockPos p = BlockPos.ofFloored(
                     origin.getX() + (random.nextInt(config.minDiscSize * 3) - (config.minDiscSize * 1.5)),
                     0,
                     origin.getZ() + (random.nextInt(config.minDiscSize * 3) - (config.minDiscSize * 1.5)));
@@ -71,7 +71,7 @@ public class CascadeFeature extends Feature<CascadeFeatureConfig> {
                             random.nextInt(7) == 1
                     ) {
                         for (int h = 0; h < random.nextInt(3); h++) {
-                            world.setBlockState(mpos.up(h), config.rocks.getBlockState(random, mpos.up(h)), 2);
+                            world.setBlockState(mpos.up(h), config.rocks.get(random, mpos.up(h)), 2);
                         }
                     }
                 }
@@ -150,10 +150,10 @@ public class CascadeFeature extends Feature<CascadeFeatureConfig> {
                     }
                 }
                 if (place) {
-                    BlockState state = providedBlock == null ? block : providedBlock.getBlockState(random, pos);
+                    BlockState state = providedBlock == null ? block : providedBlock.get(random, pos);
                     world.setBlockState(pos, state, 2);
                     if (!state.getFluidState().isEmpty()) {
-                        world.createAndScheduleFluidTick(pos, state.getFluidState().getFluid(), 0);
+                        world.scheduleFluidTick(pos, state.getFluidState().getFluid(), 0);
                     }
                 }
             }

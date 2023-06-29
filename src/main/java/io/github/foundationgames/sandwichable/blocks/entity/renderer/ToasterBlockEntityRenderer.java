@@ -4,15 +4,14 @@ import io.github.foundationgames.sandwichable.blocks.ToasterBlock;
 import io.github.foundationgames.sandwichable.blocks.entity.ToasterBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 
 import java.util.Objects;
 
@@ -34,19 +33,19 @@ public class ToasterBlockEntityRenderer implements BlockEntityRenderer<ToasterBl
             }
         }
         matrices.translate(0.5, 0.46, 0.5);
-        int rot = 45;
-        switch (dir) {
-            case NORTH: rot = 270; break;
-            case SOUTH: rot = 90; break;
-            case WEST: rot = 0; break;
-            case EAST: rot = 180; break;
-        }
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(rot));
+        int rot = switch (dir) {
+            case NORTH -> 270;
+            case SOUTH -> 90;
+            case WEST -> 0;
+            case EAST -> 180;
+            default -> 45;
+        };
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(rot));
         matrices.translate(0, 0, -0.5);
         matrices.translate(0, 0, 0.41);
-        MinecraftClient.getInstance().getItemRenderer().renderItem(items.get(0), ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers, 346746554);
+        MinecraftClient.getInstance().getItemRenderer().renderItem(items.get(0), ModelTransformationMode.GROUND, light, overlay, matrices, vertexConsumers, blockEntity.getWorld(), 346746554);
         matrices.translate(0, 0, 0.18);
-        MinecraftClient.getInstance().getItemRenderer().renderItem(items.get(1), ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers, 834871346);
+        MinecraftClient.getInstance().getItemRenderer().renderItem(items.get(1), ModelTransformationMode.GROUND, light, overlay, matrices, vertexConsumers, blockEntity.getWorld(), 834871346);
 
         matrices.pop();
     }

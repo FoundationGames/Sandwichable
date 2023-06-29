@@ -1,9 +1,9 @@
 package io.github.foundationgames.sandwichable.common;
 
 import net.minecraft.item.Item;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class CommonTags {
     public static final TagKey<Item> BREAD_SLICE = t("bread_slice");
@@ -50,7 +50,7 @@ public class CommonTags {
     public static void init() {}
 
     private static TagKey<Item> t(String name) {
-        return TagKey.of(Registry.ITEM_KEY, new Identifier("c", name));
+        return TagKey.of(RegistryKeys.ITEM, new Identifier("c", name));
     }
 
     /*public static Tag<Item> getCheeseTag(CheeseType type, boolean isSliceTag) {

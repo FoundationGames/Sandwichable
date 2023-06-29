@@ -1,8 +1,8 @@
 package io.github.foundationgames.sandwichable.blocks.entity;
 
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.server.world.ServerWorld;
 

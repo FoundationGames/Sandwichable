@@ -3,16 +3,13 @@ package io.github.foundationgames.sandwichable.items;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.BuiltinRegistries;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
@@ -46,17 +43,12 @@ public class BiomeVariantItem extends InfoTooltipItem {
     }
 
     public static @Nullable RegistryEntry<Biome> getBiome(@Nullable World world, ItemStack stack) {
-        if (stack.hasNbt()) {
+        if (stack.hasNbt() && world != null) {
+            var registry = world.getRegistryManager().get(RegistryKeys.BIOME);
             var id = getBiomeId(stack);
 
-            var registry = BuiltinRegistries.BIOME;
-
-            if (world != null) {
-                registry = world.getRegistryManager().get(Registry.BIOME_KEY);
-            }
-
             if (id != null) {
-                var entry = registry.getEntry(RegistryKey.of(BuiltinRegistries.BIOME.getKey(), id));
+                var entry = registry.getEntry(RegistryKey.of(RegistryKeys.BIOME, id));
                 if (entry.isPresent()) {
                     return entry.get();
                 }

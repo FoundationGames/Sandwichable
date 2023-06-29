@@ -1,5 +1,6 @@
 package io.github.foundationgames.sandwichable.fluids;
 
+import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.particle.Particles;
@@ -36,8 +37,8 @@ public abstract class PickleBrineFluid extends FlowableFluid {
     }
 
     @Override
-    protected boolean isInfinite() {
-        return false;
+    protected boolean isInfinite(World world) {
+        return world.getGameRules().getBoolean(Sandwichable.PICKLE_BRINE_SOURCE_CONVERSION_RULE);
     }
 
     @Override

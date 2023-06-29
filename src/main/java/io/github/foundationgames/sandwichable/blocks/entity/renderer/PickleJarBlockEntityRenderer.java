@@ -3,7 +3,12 @@ package io.github.foundationgames.sandwichable.blocks.entity.renderer;
 import io.github.foundationgames.sandwichable.blocks.entity.PickleJarBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.PickleJarFluid;
 import io.github.foundationgames.sandwichable.util.Util;
-import net.minecraft.client.model.*;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.model.ModelData;
+import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.model.ModelPartBuilder;
+import net.minecraft.client.model.ModelTransform;
+import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -12,7 +17,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 
 public class PickleJarBlockEntityRenderer implements BlockEntityRenderer<PickleJarBlockEntity> {
     public static final Identifier TEX_CUCUMBER = Util.id("textures/entity/pickle_jar/cucumber.png");
@@ -34,10 +39,7 @@ public class PickleJarBlockEntityRenderer implements BlockEntityRenderer<PickleJ
             matrices.translate(0.0F, 0.0F, 0.17F);
             this.cucumber.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(TEX_CUCUMBER)), light, overlay, blockEntity.areItemsPickled());
             matrices.translate(0.0F, 0.0F, -0.17F);
-            matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
-        }
-        for (int i = 0; i < blockEntity.getItemCount(); i++) {
-            matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(90));
+            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
         }
         matrices.pop();
         matrices.push();

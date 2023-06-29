@@ -33,7 +33,6 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class ToasterBlock extends ModelBlockWithEntity implements Waterloggable, SneakInteractable {
-
     public static final BooleanProperty ON;
     public static final BooleanProperty WATERLOGGED;
 
@@ -155,7 +154,7 @@ public class ToasterBlock extends ModelBlockWithEntity implements Waterloggable,
     }
 
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getPlayerFacing().getOpposite());
+        return this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite());
     }
 
     public BlockState rotate(BlockState state, BlockRotation rotation) {

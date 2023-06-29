@@ -1,8 +1,8 @@
 package io.github.foundationgames.sandwichable.util;
 
 import net.fabricmc.fabric.api.event.registry.DynamicRegistrySetupCallback;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.biome.Biome;
 
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class AncientGrainType {
 
     public static AncientGrainType from(RegistryEntry<Biome> entry) {
         var biome = entry.value();
-        var random = Random.create(((long)(biome.getTemperature() * ((float)0xFFFFFFFF)) << 32) | (long)(biome.getDownfall() * ((float)0xFFFFFFFF)));
+        var random = Random.create(((long)(biome.getTemperature() * ((float)0xFFFFFFFF)) << 32) | (long)(biome.weather.downfall() * ((float)0xFFFFFFFF)));
 
         float magicFoodNumber = random.nextFloat();
         return new AncientGrainType(
@@ -35,11 +35,11 @@ public class AncientGrainType {
     }
 
     private static int createColor(Biome biome) {
-        return createColor(biome.getTemperature(), biome.getDownfall(), biome.getGrassColorAt(0, 0));
+        return createColor(biome.getTemperature(), biome.weather.downfall(), biome.getGrassColorAt(0, 0));
     }
 
     private static int createBreadColor(Biome biome) {
-        return createBreadColor(biome.getTemperature(), biome.getDownfall());
+        return createBreadColor(biome.getTemperature(), biome.weather.downfall());
     }
 
     private static int createColor(float temperature, float precipitation, int grassColor) {

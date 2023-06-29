@@ -1,29 +1,32 @@
 package io.github.foundationgames.sandwichable.mixin;
 
+import com.google.common.collect.ImmutableSet;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.item.Item;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Mixin(VillagerEntity.class)
 public class VillagerEntityMixin {
-    @ModifyArg(
-            method = "<clinit>()V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lcom/google/common/collect/ImmutableSet;of(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;[Ljava/lang/Object;)Lcom/google/common/collect/ImmutableSet;"
-            ),
-            index = 6
-    )
-    private static Object[] sandwichable$addSeeds(Object[] old) {
-        Object[] items = new Object[old.length + 5];
-        System.arraycopy(old, 0, items, 0, old.length);
-        items[items.length - 1] = ItemsRegistry.TOMATO_SEEDS;
-        items[items.length - 2] = ItemsRegistry.LETTUCE_SEEDS;
-        items[items.length - 3] = ItemsRegistry.CUCUMBER_SEEDS;
-        items[items.length - 4] = ItemsRegistry.ONION_SEEDS;
-        items[items.length - 5] = ItemsRegistry.ANCIENT_GRAIN_SEEDS;
-        return items;
+    @Mutable @Shadow @Final private static Set<Item> GATHERABLE_ITEMS;
+
+    static {
+        var items = new HashSet<>(GATHERABLE_ITEMS);
+        items.add(ItemsRegistry.TOMATO_SEEDS);
+        items.add(ItemsRegistry.TOMATO);
+        items.add(ItemsRegistry.LETTUCE_SEEDS);
+        items.add(ItemsRegistry.LETTUCE_HEAD);
+        items.add(ItemsRegistry.CUCUMBER_SEEDS);
+        items.add(ItemsRegistry.CUCUMBER);
+        items.add(ItemsRegistry.ONION_SEEDS);
+        items.add(ItemsRegistry.ONION);
+        items.add(ItemsRegistry.ANCIENT_GRAIN_SEEDS);
+        GATHERABLE_ITEMS = ImmutableSet.copyOf(items);
     }
 }

@@ -22,7 +22,7 @@ public class CopyWorldBiomeLootFunction extends ConditionalLootFunction {
     protected ItemStack process(ItemStack stack, LootContext context) {
         if (context.hasParameter(LootContextParameters.ORIGIN)) {
             var origin = context.get(LootContextParameters.ORIGIN);
-            BiomeVariantItem.setBiome(stack, context.getWorld().getBiome(new BlockPos(origin.x, origin.y, origin.z)));
+            BiomeVariantItem.setBiome(stack, context.getWorld().getBiome(BlockPos.ofFloored(origin)));
         }
 
         return stack;

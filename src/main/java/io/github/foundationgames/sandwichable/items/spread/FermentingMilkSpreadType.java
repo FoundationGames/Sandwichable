@@ -4,13 +4,10 @@ import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public class FermentingMilkSpreadType extends SpreadType {
     public FermentingMilkSpreadType() {

@@ -1,9 +1,11 @@
 package io.github.foundationgames.sandwichable.blocks;
 
-
-
 import io.github.foundationgames.sandwichable.util.Util;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.FlowerPotBlock;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,6 +17,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -39,7 +42,7 @@ public class PottedShrubBlock extends FlowerPotBlock {
         Item item = itemStack.getItem();
         if(item instanceof ShearsItem && !state.get(SNIPPED)) {
             itemStack.damage(1, player, (playerEntity) -> playerEntity.sendToolBreakStatus(hand));
-            Util.scatterBlockDust(world, pos.add(0.5, 0.5, 0.5), BlocksRegistry.SHRUB, 1, 30);
+            Util.scatterBlockDust(world, BlockPos.ofFloored(Vec3d.ofCenter(pos).add(0.5, 0.5, 0.5)), BlocksRegistry.SHRUB, 1, 30);
             world.setBlockState(pos, world.getBlockState(pos).with(SNIPPED, true));
             return ActionResult.SUCCESS;
         }

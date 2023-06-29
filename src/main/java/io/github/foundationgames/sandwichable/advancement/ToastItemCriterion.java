@@ -7,7 +7,7 @@ import net.minecraft.advancement.criterion.AbstractCriterionConditions;
 import net.minecraft.item.ItemStack;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateSerializer;
-import net.minecraft.predicate.entity.EntityPredicate;
+import net.minecraft.predicate.entity.LootContextPredicate;
 import net.minecraft.predicate.item.ItemPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -17,7 +17,7 @@ public class ToastItemCriterion extends AbstractCriterion<ToastItemCriterion.Con
     public static final Identifier ID = Util.id("toast_item");
 
     @Override
-    protected Conditions conditionsFromJson(JsonObject obj, EntityPredicate.Extended playerPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
+    protected Conditions conditionsFromJson(JsonObject obj, LootContextPredicate playerPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
         if (obj.has("result")) {
             return new Conditions(playerPredicate, ItemPredicate.fromJson(obj.get("result")));
         }
@@ -36,7 +36,7 @@ public class ToastItemCriterion extends AbstractCriterion<ToastItemCriterion.Con
     public static class Conditions extends AbstractCriterionConditions {
         @Nullable private final ItemPredicate result;
 
-        public Conditions(EntityPredicate.Extended playerPredicate, @Nullable ItemPredicate result) {
+        public Conditions(LootContextPredicate playerPredicate, @Nullable ItemPredicate result) {
             super(ID, playerPredicate);
             this.result = result;
         }

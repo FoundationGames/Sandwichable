@@ -2,15 +2,9 @@ package io.github.foundationgames.sandwichable.worldgen;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
-import io.github.foundationgames.sandwichable.config.SandwichableConfig;
-import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.collection.DataPool;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.stateprovider.BlockStateProvider;
-import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider;
 
 public class CascadeFeatureConfig implements FeatureConfig {
     public final BlockStateProvider innerDisc;
@@ -45,29 +39,5 @@ public class CascadeFeatureConfig implements FeatureConfig {
         this.floor = floor;
         this.base = base;
         this.rocks = rocks;
-    }
-
-    public static CascadeFeatureConfig water() {
-        SandwichableConfig config = Util.getConfig();
-        return config.saltPoolGenOptions.waterSaltPoolConfig != null ? config.saltPoolGenOptions.waterSaltPoolConfig : new CascadeFeatureConfig(
-                new SimpleBlockStateProviderExt(BlocksRegistry.SALTY_ROCKS.getDefaultState()),
-                new WeightedBlockStateProvider(new DataPool.Builder<BlockState>().add(Blocks.SAND.getDefaultState(), 3).add(BlocksRegistry.SALTY_SAND.getDefaultState(), 1)),
-                4, 6,
-                Blocks.WATER.getDefaultState(), BlocksRegistry.SALTY_STONE.getDefaultState(),
-                new SimpleBlockStateProviderExt(Blocks.SANDSTONE.getDefaultState()),
-                new WeightedBlockStateProvider(new DataPool.Builder<BlockState>().add(Blocks.STONE.getDefaultState(), 1).add(Blocks.COBBLESTONE.getDefaultState(), 1))
-        );
-    }
-
-    public static CascadeFeatureConfig dry() {
-        SandwichableConfig config = Util.getConfig();
-        return config.saltPoolGenOptions.drySaltPoolConfig != null ? config.saltPoolGenOptions.drySaltPoolConfig : new CascadeFeatureConfig(
-                new SimpleBlockStateProviderExt(BlocksRegistry.SALTY_ROCKS.getDefaultState()),
-                new WeightedBlockStateProvider(new DataPool.Builder<BlockState>().add(Blocks.SAND.getDefaultState(), 3).add(BlocksRegistry.SALTY_SAND.getDefaultState(), 1)),
-                4, 6,
-                BlocksRegistry.SALTY_AIR.getDefaultState(), BlocksRegistry.SALTY_STONE.getDefaultState(),
-                new SimpleBlockStateProviderExt(Blocks.SANDSTONE.getDefaultState()),
-                new WeightedBlockStateProvider(new DataPool.Builder<BlockState>().add(Blocks.STONE.getDefaultState(), 1).add(Blocks.COBBLESTONE.getDefaultState(), 1))
-        );
     }
 }

@@ -1,14 +1,10 @@
 package io.github.foundationgames.sandwichable.items.spread;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public class HoneySpreadType extends SpreadType{
     public HoneySpreadType() {

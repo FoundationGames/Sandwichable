@@ -12,12 +12,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
@@ -38,12 +40,12 @@ public class SandwichMakerProfession {
 
     public static final VillagerProfession SANDWICH_MAKER = VillagerProfessionBuilder.create()
             .id(Util.id("sandwich_maker"))
-            .workstation(RegistryKey.of(Registry.POINT_OF_INTEREST_TYPE_KEY, SANDWICH_MAKER_POI_ID))
+            .workstation(RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE, SANDWICH_MAKER_POI_ID))
             .workSound(SoundEvents.ENTITY_ITEM_FRAME_REMOVE_ITEM)
             .build();
 
     public static void init() {
-        Registry.register(Registry.VILLAGER_PROFESSION, Util.id("sandwich_maker"), SANDWICH_MAKER);
+        Registry.register(Registries.VILLAGER_PROFESSION, Util.id("sandwich_maker"), SANDWICH_MAKER);
         TradeOffers.PROFESSION_TO_LEVELED_TRADE.put(
                 SANDWICH_MAKER, Util.copyToFastUtilMap(ImmutableMap.of(
                         1,

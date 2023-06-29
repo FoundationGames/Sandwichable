@@ -2,15 +2,10 @@ package io.github.foundationgames.sandwichable.items;
 
 import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.block.Block;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.AliasedBlockItem;
 import net.minecraft.item.ItemStack;
-
 import net.minecraft.text.Text;
-
-import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 
 import java.util.List;

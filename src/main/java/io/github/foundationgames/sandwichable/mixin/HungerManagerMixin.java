@@ -28,6 +28,6 @@ public abstract class HungerManagerMixin {
 
     @Inject(method = "update", at = @At("HEAD"))
     private void sandwichable$cachePlayer(PlayerEntity player, CallbackInfo ci) {
-        this.lastWorld = player.world;
+        this.lastWorld = player.getWorld();
     }
 }

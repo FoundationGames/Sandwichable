@@ -3,21 +3,31 @@ package io.github.foundationgames.sandwichable.mixin;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.recipe.Ingredient;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
+
+import java.util.ArrayList;
 
 @Mixin(ChickenEntity.class)
 public class ChickenEntityMixin {
-    @ModifyArg(method = "<clinit>()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/recipe/Ingredient;ofItems([Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/recipe/Ingredient;"), index = 0)
-    private static ItemConvertible[] sandwichable$addSeeds(ItemConvertible[] old) {
-        ItemConvertible[] items = new ItemConvertible[old.length + 5];
-        System.arraycopy(old, 0, items, 0, old.length);
-        items[items.length - 1] = ItemsRegistry.TOMATO_SEEDS;
-        items[items.length - 2] = ItemsRegistry.LETTUCE_SEEDS;
-        items[items.length - 3] = ItemsRegistry.CUCUMBER_SEEDS;
-        items[items.length - 4] = ItemsRegistry.ONION_SEEDS;
-        items[items.length - 5] = ItemsRegistry.ANCIENT_GRAIN_SEEDS;
-        return items;
+    @Mutable @Shadow @Final private static Ingredient BREEDING_INGREDIENT;
+
+    static {
+        var items = new ArrayList<ItemConvertible>();
+        for (var stack : BREEDING_INGREDIENT.getMatchingStacks()) {
+            items.add(stack.getItem());
+        }
+        items.add(ItemsRegistry.TOMATO_SEEDS);
+        items.add(ItemsRegistry.LETTUCE_SEEDS);
+        items.add(ItemsRegistry.CUCUMBER_SEEDS);
+        items.add(ItemsRegistry.ONION_SEEDS);
+        items.add(ItemsRegistry.ANCIENT_GRAIN_SEEDS);
+
+        var itemArray = new ItemConvertible[items.size()];
+        items.toArray(itemArray);
+        BREEDING_INGREDIENT = Ingredient.ofItems(itemArray);
     }
 }

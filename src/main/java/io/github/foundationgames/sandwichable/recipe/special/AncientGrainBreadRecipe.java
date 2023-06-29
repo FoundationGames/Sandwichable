@@ -4,10 +4,12 @@ import com.google.common.base.Objects;
 import io.github.foundationgames.sandwichable.items.BiomeVariantItem;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.recipe.SandwichableRecipes;
-import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
+import net.minecraft.recipe.book.CraftingRecipeCategory;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -15,12 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AncientGrainBreadRecipe extends SpecialCraftingRecipe {
-    public AncientGrainBreadRecipe(Identifier id) {
-        super(id);
+    public AncientGrainBreadRecipe(Identifier id, CraftingRecipeCategory category) {
+        super(id, category);
     }
 
     @Override
-    public boolean matches(CraftingInventory inventory, World world) {
+    public boolean matches(RecipeInputInventory inventory, World world) {
         List<ItemStack> matches = new ArrayList<>();
         for (int y = 0; y < inventory.getHeight(); y++) {
             if (matches.size() > 0 && matches.size() < 3) {
@@ -60,7 +62,7 @@ public class AncientGrainBreadRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
-    public ItemStack craft(CraftingInventory inventory) {
+    public ItemStack craft(RecipeInputInventory inventory, DynamicRegistryManager registryManager) {
         var result = new ItemStack(ItemsRegistry.ANCIENT_GRAIN_BREAD);
 
         for (int y = 0; y < inventory.getHeight(); y++) {

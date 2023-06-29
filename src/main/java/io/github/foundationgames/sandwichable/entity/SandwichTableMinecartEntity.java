@@ -15,15 +15,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 public class SandwichTableMinecartEntity extends AbstractMinecartEntity implements SandwichHolder {
@@ -50,26 +49,26 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
     public void onActivatorRail(int x, int y, int z, boolean powered) {
         super.onActivatorRail(x, y, z, powered);
         if(powered) {
-            sandwich.ejectSandwich(world, getPos());
+            sandwich.ejectSandwich(getWorld(), getPos());
             sync();
         }
     }
 
     public void sync() {
-        if(!world.isClient) {
+        if(!getWorld().isClient) {
             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
             buf.writeInt(getId());
             NbtCompound t = new NbtCompound();
             writeSandwichTableData(t);
             buf.writeNbt(t);
-            for(PlayerEntity player : world.getPlayers()) {
+            for(PlayerEntity player : getWorld().getPlayers()) {
                 if (player instanceof ServerPlayerEntity) ServerPlayNetworking.send((ServerPlayerEntity)player, Util.id("sync_sandwich_table_cart"), buf);
             }
         }
     }
 
     public void clientSync() {
-        if(world.isClient) {
+        if(getWorld().isClient) {
             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
             buf.writeInt(getId());
             ClientPlayNetworking.send(Util.id("request_sandwich_table_cart_sync"), buf);
@@ -86,11 +85,11 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
 
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
-        if (!world.isClient()) {
-            sandwich.interact(world, getPos(), player, hand, player.isSneaking());
+        if (!getWorld().isClient()) {
+            sandwich.interact(getWorld(), getPos(), player, hand, player.isSneaking());
             sync();
         }
-        return ActionResult.success(world.isClient());
+        return ActionResult.success(getWorld().isClient());
     }
 
     @Override
@@ -112,7 +111,7 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
     @Override
     public void dropItems(DamageSource damageSource) {
         super.dropItems(damageSource);
-        this.sandwich.ejectSandwich(world, getPos());
+        this.sandwich.ejectSandwich(getWorld(), getPos());
     }
 
     @Override
@@ -128,7 +127,7 @@ public class SandwichTableMinecartEntity extends AbstractMinecartEntity implemen
     }
 
     @Override
-    public Packet<?> createSpawnPacket() {
+    public Packet<ClientPlayPacketListener> createSpawnPacket() {
         return new EntitySpawnS2CPacket(this);
     }
 

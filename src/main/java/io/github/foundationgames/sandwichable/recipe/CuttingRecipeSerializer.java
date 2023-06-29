@@ -8,10 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-
-import java.util.function.Function;
 
 public class CuttingRecipeSerializer implements RecipeSerializer<CuttingRecipe> {
 
@@ -26,7 +24,7 @@ public class CuttingRecipeSerializer implements RecipeSerializer<CuttingRecipe> 
 
         if(recipeJson.input == null || recipeJson.outputItem == null) { throw new JsonSyntaxException("Missing Attributes in Cutting Recipe!"); }
         Ingredient input = Ingredient.fromJson(recipeJson.getInput());
-        Item outputItem = Registry.ITEM.getOrEmpty(new Identifier(recipeJson.getOutputItemId())).orElseThrow(() -> new JsonSyntaxException("The Item " + recipeJson.outputItem + " does not exist!"));
+        Item outputItem = Registries.ITEM.getOrEmpty(new Identifier(recipeJson.getOutputItemId())).orElseThrow(() -> new JsonSyntaxException("The Item " + recipeJson.outputItem + " does not exist!"));
         ItemStack outputStack = new ItemStack(outputItem, recipeJson.getOutputCount());
 
         return new CuttingRecipe(input, outputStack, id);
@@ -44,6 +42,6 @@ public class CuttingRecipeSerializer implements RecipeSerializer<CuttingRecipe> 
     @Override
     public void write(PacketByteBuf buf, CuttingRecipe recipe) {
         recipe.getInput().write(buf);
-        buf.writeItemStack(recipe.getOutput());
+        buf.writeItemStack(recipe.getOutputStack());
     }
 }

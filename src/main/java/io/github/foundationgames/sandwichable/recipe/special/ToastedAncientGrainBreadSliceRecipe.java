@@ -7,6 +7,7 @@ import io.github.foundationgames.sandwichable.recipe.ToastingRecipe;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -16,13 +17,13 @@ public class ToastedAncientGrainBreadSliceRecipe extends ToastingRecipe.Special 
     }
 
     @Override
-    public ItemStack getOutput() {
+    public ItemStack getOutput(DynamicRegistryManager registryManager) {
         return new ItemStack(ItemsRegistry.TOASTED_ANCIENT_GRAIN_BREAD_SLICE, 1);
     }
 
     @Override
-    public ItemStack craft(SimpleInventory inv) {
-        var stack = getOutput();
+    public ItemStack craft(SimpleInventory inv, DynamicRegistryManager registryManager) {
+        var stack = getOutput(registryManager);
 
         // The inventory is always a single slot inventory containing the ingredient, not the entire toaster
         BiomeVariantItem.copyBiome(inv.getStack(0), stack);

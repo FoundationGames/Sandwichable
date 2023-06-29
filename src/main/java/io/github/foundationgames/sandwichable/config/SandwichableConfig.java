@@ -1,20 +1,13 @@
 package io.github.foundationgames.sandwichable.config;
 
 import com.google.common.base.Suppliers;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.JsonOps;
-import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
-import io.github.foundationgames.sandwichable.worldgen.CascadeFeatureConfig;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.registry.Registry;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.registry.Registries;
 
 import java.util.function.Supplier;
 
@@ -31,9 +24,7 @@ public class SandwichableConfig extends ConfigInABarrel {
     public SaltPoolGenOptions saltPoolGenOptions = new SaltPoolGenOptions();
 
     public static class SaltySandGenOptions {
-        public int rarity = 18;
-        public int veinSize = 5;
-        public int maxGenHeight = 128;
+        public boolean saltySand = true;
     }
 
     public static class ShrubGenOptions {
@@ -43,8 +34,6 @@ public class SandwichableConfig extends ConfigInABarrel {
     public static class SaltPoolGenOptions {
         public boolean saltPools = true;
         public boolean drySaltPools = true;
-        @Value(gui = false) public transient @Nullable CascadeFeatureConfig waterSaltPoolConfig = null;
-        @Value(gui = false) public transient @Nullable CascadeFeatureConfig drySaltPoolConfig = null;
     }
 
     public static class ItemOptions {
@@ -88,7 +77,7 @@ public class SandwichableConfig extends ConfigInABarrel {
     }
 
     public KitchenKnifeOption getKnifeOption(Item knife) {
-        return this.getKnifeOption(Registry.ITEM.getId(knife).toString());
+        return this.getKnifeOption(Registries.ITEM.getId(knife).toString());
     }
 
     @Override
@@ -105,19 +94,6 @@ public class SandwichableConfig extends ConfigInABarrel {
 
     @Override
     protected void loadExtraData(JsonObject file) {
-        this.saltPoolGenOptions.waterSaltPoolConfig = null;
-        this.saltPoolGenOptions.drySaltPoolConfig = null;
-        if (file.has("saltPoolGenOptions") && file.get("saltPoolGenOptions").isJsonObject()) {
-            JsonObject saltPools = file.getAsJsonObject("saltPoolGenOptions");
-            if (saltPools.has("waterSaltPoolConfig")) {
-                DataResult<Pair<CascadeFeatureConfig, JsonElement>> result = CascadeFeatureConfig.CODEC.decode(JsonOps.INSTANCE, saltPools.get("waterSaltPoolConfig"));
-                result.get().ifLeft(p -> this.saltPoolGenOptions.waterSaltPoolConfig = p.getFirst()).ifRight(p -> Sandwichable.LOG.error(p.message()));
-            }
-            if (saltPools.has("drySaltPoolConfig")) {
-                DataResult<Pair<CascadeFeatureConfig, JsonElement>> result = CascadeFeatureConfig.CODEC.decode(JsonOps.INSTANCE, saltPools.get("drySaltPoolConfig"));
-                result.get().ifLeft(p -> this.saltPoolGenOptions.drySaltPoolConfig = p.getFirst()).ifRight(p -> Sandwichable.LOG.error(p.message()));
-            }
-        }
     }
 
     public static class KitchenKnifeOption {

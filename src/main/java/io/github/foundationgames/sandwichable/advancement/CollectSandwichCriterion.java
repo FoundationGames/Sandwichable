@@ -10,7 +10,7 @@ import net.minecraft.advancement.criterion.AbstractCriterionConditions;
 import net.minecraft.item.ItemStack;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateSerializer;
-import net.minecraft.predicate.entity.EntityPredicate;
+import net.minecraft.predicate.entity.LootContextPredicate;
 import net.minecraft.predicate.item.ItemPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -24,7 +24,7 @@ public class CollectSandwichCriterion extends AbstractCriterion<CollectSandwichC
     private static final Sandwich cache = new Sandwich();
 
     @Override
-    protected CollectSandwichCriterion.Conditions conditionsFromJson(JsonObject obj, EntityPredicate.Extended playerPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
+    protected CollectSandwichCriterion.Conditions conditionsFromJson(JsonObject obj, LootContextPredicate playerPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
        JsonArray arr = JsonHelper.getArray(obj, "foods");
        List<ItemPredicate> foods = new ArrayList<>();
        for (JsonElement e : arr) {
@@ -48,7 +48,7 @@ public class CollectSandwichCriterion extends AbstractCriterion<CollectSandwichC
     public static class Conditions extends AbstractCriterionConditions {
         private final List<ItemPredicate> foods;
 
-        public Conditions(EntityPredicate.Extended playerPredicate, List<ItemPredicate> foods) {
+        public Conditions(LootContextPredicate playerPredicate, List<ItemPredicate> foods) {
             super(ID, playerPredicate);
             this.foods = foods;
         }

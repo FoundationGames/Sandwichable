@@ -1,16 +1,12 @@
 package io.github.foundationgames.sandwichable.items;
 
-import io.github.foundationgames.sandwichable.Sandwichable;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 
@@ -31,7 +27,7 @@ public class CheeseItem extends InfoTooltipItem {
     }
 
     public CheeseItem(CheeseType type, boolean isSlice) {
-        super(new Item.Settings().food(isSlice ? CheeseItem.sliceComponent(type) : CheeseItem.wheelComponent(type)).group(Sandwichable.SANDWICHABLE_ITEMS));
+        super(new Item.Settings().food(isSlice ? CheeseItem.sliceComponent(type) : CheeseItem.wheelComponent(type)));
         this.type = type;
         this.isSlice = isSlice;
     }

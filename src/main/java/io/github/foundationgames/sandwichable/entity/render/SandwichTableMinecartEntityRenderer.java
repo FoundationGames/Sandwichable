@@ -1,18 +1,15 @@
 package io.github.foundationgames.sandwichable.entity.render;
 
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
-import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MinecartEntityRenderer;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 
 public class SandwichTableMinecartEntityRenderer extends MinecartEntityRenderer<SandwichTableMinecartEntity> {
@@ -50,10 +47,10 @@ public class SandwichTableMinecartEntityRenderer extends MinecartEntityRenderer<
             }
         }
 
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-yaw));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-yaw));
         matrices.translate(o * 0.0061, Math.abs(o) * 0.00269, 0);
 
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(o));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(o));
 
         int lightAbove = WorldRenderer.getLightmapCoordinates(entity.getEntityWorld(), entity.getBlockPos().up());
         matrices.translate(0, 1.048, -0.125);

@@ -2,7 +2,12 @@ package io.github.foundationgames.sandwichable.util;
 
 import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
-import io.github.foundationgames.sandwichable.blocks.entity.*;
+import io.github.foundationgames.sandwichable.blocks.entity.BasinBlockEntity;
+import io.github.foundationgames.sandwichable.blocks.entity.BasinContent;
+import io.github.foundationgames.sandwichable.blocks.entity.BasinContentType;
+import io.github.foundationgames.sandwichable.blocks.entity.PickleJarBlockEntity;
+import io.github.foundationgames.sandwichable.blocks.entity.PickleJarFluid;
+import io.github.foundationgames.sandwichable.blocks.entity.SandwichTableBlockEntity;
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
 import io.github.foundationgames.sandwichable.items.CheeseCultureItem;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
@@ -14,11 +19,11 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -68,7 +73,7 @@ public class ExtraDispenserBehaviorRegistry {
                 return null;
             }
         };
-        for(ItemConvertible item : Registry.ITEM) {
+        Util.forEveryEntryEver(Registries.ITEM, item -> {
             if((item.asItem().isFood() || SpreadRegistry.INSTANCE.itemHasSpread(item)) && item.asItem() != BlocksRegistry.SANDWICH.asItem()) {
                 register(item, foodBehavior);
             }
@@ -85,7 +90,7 @@ public class ExtraDispenserBehaviorRegistry {
                     return null;
                 });
             }
-        }
+        });
         ItemDispenserBehavior milkBehavior = new ItemDispenserBehavior() {
             @Override
             protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {

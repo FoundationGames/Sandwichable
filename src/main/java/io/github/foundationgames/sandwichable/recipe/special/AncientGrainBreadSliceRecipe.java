@@ -7,6 +7,7 @@ import io.github.foundationgames.sandwichable.recipe.SandwichableRecipes;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -16,13 +17,13 @@ public class AncientGrainBreadSliceRecipe extends CuttingRecipe.Special {
     }
 
     @Override
-    public ItemStack getOutput() {
+    public ItemStack getOutput(DynamicRegistryManager registryManager) {
         return new ItemStack(ItemsRegistry.ANCIENT_GRAIN_BREAD_SLICE, 4);
     }
 
     @Override
-    public ItemStack craft(SimpleInventory inv) {
-        var stack = getOutput();
+    public ItemStack craft(SimpleInventory inv, DynamicRegistryManager registryManager) {
+        var stack = getOutput(registryManager);
         BiomeVariantItem.copyBiome(inv.getStack(0), stack);
 
         return stack;

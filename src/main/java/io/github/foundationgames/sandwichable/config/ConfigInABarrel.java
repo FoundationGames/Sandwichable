@@ -47,8 +47,8 @@ import dev.lambdaurora.spruceui.widget.container.SpruceOptionListWidget;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
@@ -191,11 +191,11 @@ public abstract class ConfigInABarrel {
                 }
             }
         }
-        @Override public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            super.render(matrices, mouseX, mouseY, delta);
-            drawCenteredText(matrices, this.textRenderer, this.getTitle(), this.width / 2, 8, 0xFFFFFF);
+        @Override public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+            super.render(context, mouseX, mouseY, delta);
+            context.drawCenteredTextWithShadow(this.textRenderer, this.getTitle(), this.width / 2, 8, 0xFFFFFF);
         }
-        @Override public void renderBackground(MatrixStack matrices) { RenderUtil.renderBackgroundTexture(0, 0, this.width, this.height, 0, 64, 64, 64, 255); }
+        @Override public void renderBackground(DrawContext context) { RenderUtil.renderBackgroundTexture(0, 0, this.width, this.height, 0, 64, 64, 64, 255); }
         @Override public void close() { this.client.setScreen(this.parent); }
         @Override protected void init() {
             super.init();
@@ -215,10 +215,7 @@ public abstract class ConfigInABarrel {
             this.path = FabricLoader.getInstance().getConfigDir().toAbsolutePath().resolve(name + ".json");
         }
     }
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Value {
-        int min() default 0;
-        int max() default 0;
-        boolean gui() default true;
+    @Retention(RetentionPolicy.RUNTIME) public @interface Value {
+        int min() default 0; int max() default 0; boolean gui() default true;
     }
 }

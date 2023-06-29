@@ -3,7 +3,6 @@ package io.github.foundationgames.sandwichable.blocks.entity;
 import io.github.foundationgames.sandwichable.Sandwichable;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.blocks.ToasterBlock;
-import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.recipe.ToastingRecipe;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.block.BlockState;
@@ -12,11 +11,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -27,7 +25,6 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import net.minecraft.world.explosion.Explosion;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -93,7 +90,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, S
     private void explode() {
         if(!world.isClient) {
             world.removeBlock(pos, true);
-            world.createExplosion(world.getClosestPlayer(pos.getX(), pos.getZ(), 8, 10, false), pos.getX(), pos.getY(), pos.getZ(), 2.2F, true, Explosion.DestructionType.DESTROY);
+            world.createExplosion(world.getClosestPlayer(pos.getX(), pos.getZ(), 8, 10, false), pos.getX(), pos.getY(), pos.getZ(), 2.2F, true, World.ExplosionSourceType.BLOCK);
         }
     }
 
@@ -154,7 +151,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, S
 
             boolean changed = false;
             if(match.isPresent()) {
-                items.set(i, match.get().craft(inv).copy());
+                items.set(i, match.get().craft(inv, world.getRegistryManager()).copy());
                 changed = true;
             } else {
                 if(items.get(i).isFood()) {
@@ -192,7 +189,7 @@ public class ToasterBlockEntity extends BlockEntity implements SidedInventory, S
         if(this.world.getBlockState(this.pos).getBlock() == BlocksRegistry.TOASTER) {
             this.world.setBlockState(pos, this.world.getBlockState(this.pos).with(ToasterBlock.ON, false));
         }
-        world.playSound(null, pos, SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.BLOCKS, 0.8F, 4);
+        world.playSound(null, pos, SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(), SoundCategory.BLOCKS, 0.8F, 4);
         toastProgress = 0;
         toasting = false;
         updateNeighbors = true;

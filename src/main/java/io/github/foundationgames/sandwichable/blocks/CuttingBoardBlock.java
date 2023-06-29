@@ -1,30 +1,23 @@
 package io.github.foundationgames.sandwichable.blocks;
 
-import io.github.foundationgames.sandwichable.blocks.entity.BasinBlockEntity;
-import io.github.foundationgames.sandwichable.blocks.entity.BottleCrateBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.CuttingBoardBlockEntity;
-import io.github.foundationgames.sandwichable.blocks.entity.ToasterBlockEntity;
-import io.github.foundationgames.sandwichable.items.ItemsRegistry;
-import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
-import io.github.foundationgames.sandwichable.util.Util;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ItemStackParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.BlockMirror;
+import net.minecraft.util.BlockRotation;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -32,10 +25,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public class CuttingBoardBlock extends ModelBlockWithEntity {
     public static final VoxelShape[] SHAPES;
@@ -125,7 +115,7 @@ public class CuttingBoardBlock extends ModelBlockWithEntity {
     }
 
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getPlayerFacing());
+        return this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing());
     }
 
     public BlockState rotate(BlockState state, BlockRotation rotation) {

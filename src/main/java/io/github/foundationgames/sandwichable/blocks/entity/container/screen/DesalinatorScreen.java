@@ -5,9 +5,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.foundationgames.sandwichable.blocks.entity.DesalinatorBlockEntity;
 import io.github.foundationgames.sandwichable.blocks.entity.container.DesalinatorScreenHandler;
 import io.github.foundationgames.sandwichable.util.Util;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.resource.language.I18n;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -31,10 +31,10 @@ public class DesalinatorScreen extends HandledScreen<DesalinatorScreenHandler> {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, delta);
-        this.drawMouseoverTooltip(matrixStack, mouseX, mouseY);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        this.renderBackground(context);
+        super.render(context, mouseX, mouseY, delta);
+        this.drawMouseoverTooltip(context, mouseX, mouseY);
         if(waterTankBox.isMouseOver(mouseX, mouseY)) {
             List<Text> tooltip = Lists.newArrayList(
                     Text.literal(((DesalinatorBlockEntity) this.handler.inventory).getWaterAmount() +" B "+ I18n.translate("desalinator.tooltip.filled")),
@@ -47,39 +47,39 @@ public class DesalinatorScreen extends HandledScreen<DesalinatorScreenHandler> {
                     if (!saline) tooltip.add(Text.translatable("desalinator.tooltip.moveToSaltyBiome").formatted(Formatting.GRAY));
                 }
             }
-            this.renderTooltip(matrixStack, tooltip, mouseX, mouseY);
+            context.drawTooltip(this.textRenderer, tooltip, mouseX, mouseY);
         }
     }
 
     @Override
-    protected void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
-        this.textRenderer.draw(matrixStack, this.title, 20.0F, 6.0F, 4210752);
-        this.textRenderer.draw(matrixStack, this.playerInventoryTitle, 8.0F, (float)(this.backgroundHeight - 96 + 4), 4210752);
+    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
+        context.drawText(this.textRenderer, this.title, 20, 6, 4210752, false);
+        context.drawText(this.textRenderer, this.playerInventoryTitle, 8, this.backgroundHeight - 96 + 4, 4210752, false);
     }
 
     @Override
-    protected void drawBackground(MatrixStack matrixStack, float delta, int mouseX, int mouseY) {
+    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
         int x = this.x;
         int y = this.y;
-        this.drawTexture(matrixStack, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
-        this.drawTexture(matrixStack, x + 79, y + 18, 176, 0, Util.floatToIntWithBounds((float)((DesalinatorBlockEntity)this.handler.inventory).getEvaporateProgress()/DesalinatorBlockEntity.evaporateTime, 19), 10);
+        context.drawTexture(TEXTURE, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        context.drawTexture(TEXTURE, x + 79, y + 18, 176, 0, Util.floatToIntWithBounds((float)((DesalinatorBlockEntity)this.handler.inventory).getEvaporateProgress()/DesalinatorBlockEntity.evaporateTime, 19), 10);
         int fireSize =  14 - Util.floatToIntWithBounds((float)((DesalinatorBlockEntity)this.handler.inventory).getFuelBurnProgress()/DesalinatorBlockEntity.fuelBurnTime, 14);
         if(((DesalinatorBlockEntity)this.handler.inventory).isBurning()) {
-            this.drawTexture(matrixStack, x + 58, y + 45-fireSize, 176, 40-fireSize, 14, fireSize+1);
+            context.drawTexture(TEXTURE, x + 58, y + 45-fireSize, 176, 40-fireSize, 14, fireSize+1);
         }
         int fluidSize =  Util.floatToIntWithBounds((float)((DesalinatorBlockEntity)this.handler.inventory).getWaterAmount()/DesalinatorBlockEntity.maxFluidAmount, 17);
-        this.drawTexture(matrixStack, x + 56, y + 32-fluidSize, ((DesalinatorBlockEntity)this.handler.inventory).isPickleBrine() ? 196 : 176, 27-fluidSize, 20, fluidSize);
+        context.drawTexture(TEXTURE, x + 56, y + 32-fluidSize, ((DesalinatorBlockEntity)this.handler.inventory).isPickleBrine() ? 196 : 176, 27-fluidSize, 20, fluidSize);
         if(!this.handler.inventory.getStack(0).isEmpty()) {
-            this.drawTexture(matrixStack, x + 64, y + 47, 176, 41, 15, 12);
+            context.drawTexture(TEXTURE, x + 64, y + 47, 176, 41, 15, 12);
         }
         if(((DesalinatorBlockEntity)this.handler.inventory).getWaterAmount() > 0) {
-            this.drawTexture(matrixStack, x + 43, y + 21, 176, 53 + (((DesalinatorBlockEntity)this.handler.inventory).isWaterSaline() ? 0 : 1) * 7, 12, 7);
+            context.drawTexture(TEXTURE, x + 43, y + 21, 176, 53 + (((DesalinatorBlockEntity)this.handler.inventory).isWaterSaline() ? 0 : 1) * 7, 12, 7);
         } else {
-            this.drawTexture(matrixStack, x + 43, y + 21, 176, 67, 12, 7);
+            context.drawTexture(TEXTURE, x + 43, y + 21, 176, 67, 12, 7);
         }
     }
 

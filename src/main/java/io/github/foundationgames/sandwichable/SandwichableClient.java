@@ -33,7 +33,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
-import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
@@ -51,12 +50,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registries;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 
@@ -182,11 +181,16 @@ public class SandwichableClient implements ClientModInitializer {
         Identifier fluidTexture = Util.id("pickle_brine");
         Identifier stillId = new Identifier(fluidTexture.getNamespace(), "block/" + fluidTexture.getPath());
         Identifier flowingId = new Identifier(fluidTexture.getNamespace(), "block/" + fluidTexture.getPath() + "_flow");
+
+        /*
         ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) -> {
             registry.register(stillId);
             registry.register(flowingId);
         });
-        Identifier fluidId = Registry.FLUID.getId(still);
+
+         */
+
+        Identifier fluidId = Registries.FLUID.getId(still);
         Identifier listenerId = new Identifier(fluidId.getNamespace(), fluidId.getPath() + "_reload_listener");
 
         Sprite[] sprites = { null, null };

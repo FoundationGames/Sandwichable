@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AA"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:stripped_bamboo_block"
+    }
+  },
+  "result": {
+    "item": "sandwichable:bamboo_cutting_board",
+	"count": 2
+  }
+}

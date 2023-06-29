@@ -19,7 +19,7 @@ public class CuttingBoardDisplay implements Display {
     private final List<EntryIngredient> results;
 
     public CuttingBoardDisplay(CuttingRecipe recipe) {
-        this(recipe.getInput(), recipe.getOutput());
+        this(recipe.getInput(), recipe.getOutputStack());
     }
 
     public CuttingBoardDisplay(Ingredient input, ItemStack result) {

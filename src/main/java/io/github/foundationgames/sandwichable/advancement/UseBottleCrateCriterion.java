@@ -5,7 +5,7 @@ import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.advancement.criterion.AbstractCriterion;
 import net.minecraft.advancement.criterion.AbstractCriterionConditions;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
-import net.minecraft.predicate.entity.EntityPredicate;
+import net.minecraft.predicate.entity.LootContextPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
@@ -13,7 +13,7 @@ public class UseBottleCrateCriterion extends AbstractCriterion<UseBottleCrateCri
     public static final Identifier ID = Util.id("use_bottle_crate");
 
     @Override
-    protected UseBottleCrateCriterion.Conditions conditionsFromJson(JsonObject obj, EntityPredicate.Extended playerPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
+    protected UseBottleCrateCriterion.Conditions conditionsFromJson(JsonObject obj, LootContextPredicate playerPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
         return new UseBottleCrateCriterion.Conditions(playerPredicate);
     }
 
@@ -27,7 +27,7 @@ public class UseBottleCrateCriterion extends AbstractCriterion<UseBottleCrateCri
     }
 
     public static class Conditions extends AbstractCriterionConditions {
-        public Conditions(EntityPredicate.Extended playerPredicate) {
+        public Conditions(LootContextPredicate playerPredicate) {
             super(ID, playerPredicate);
         }
     }

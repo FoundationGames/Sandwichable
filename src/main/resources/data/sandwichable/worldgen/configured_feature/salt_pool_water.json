@@ -1,0 +1,59 @@
+{
+  "type": "sandwichable:cascade",
+  "config": {
+    "inner_disc": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "sandwichable:salty_rocks"
+      }
+    },
+    "outer_disc": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "minecraft:sand"
+          },
+          "weight": 3
+        },
+        {
+          "data": {
+            "Name": "sandwichable:salty_sand"
+          },
+          "weight": 1
+        }
+      ]
+    },
+    "min_disc_size": 4,
+    "max_disc_size": 6,
+    "pool": {
+      "Name": "minecraft:water"
+    },
+    "floor": {
+      "Name": "sandwichable:salty_stone"
+    },
+    "base": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:sandstone"
+      }
+    },
+    "rocks": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "minecraft:stone"
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "minecraft:cobblestone"
+          },
+          "weight": 1
+        }
+      ]
+    }
+  }
+}

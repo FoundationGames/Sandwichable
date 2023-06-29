@@ -3,13 +3,11 @@ package io.github.foundationgames.sandwichable.items;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
@@ -57,12 +55,10 @@ public class CheeseCultureItem extends InfoTooltipItem implements BottleCrateSto
     }
 
     @Override
-    public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
-        if(this.isIn(group)) {
-            ItemStack stack = new ItemStack(this);
-            stack.getOrCreateSubNbt("UsageData").putInt("uses", 10);
-            stacks.add(stack);
-        }
+    public ItemStack getDefaultStack() {
+        var stack = super.getDefaultStack();
+        stack.getOrCreateSubNbt("UsageData").putInt("uses", 10);
+        return stack;
     }
 
     @Override

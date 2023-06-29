@@ -2,22 +2,18 @@
   "required": true,
   "package": "io.github.foundationgames.sandwichable.mixin",
   "compatibilityLevel": "JAVA_17",
-  "plugin": "io.github.foundationgames.sandwichable.mixin.SandwichableMixinPlugin",
   "mixins": [
     "ChickenEntityMixin",
     "CriteriaAccess",
     "DispenserBlockMixin",
     "FishingBobberEntityMixin",
-    "HoneycombItemMixin",
     "HungerManagerMixin",
-    "OxidizableMixin",
     "PistonBlockMixin",
     "ServerPlayerEntityScreenHandlerListenerMixin",
     "ServerPlayerInteractionManagerMixin",
     "StructurePoolAccess",
     "StructurePoolsMixin",
-    "VillagerEntityMixin",
-    "VillagerProfessionMixin"
+    "VillagerEntityMixin"
   ],
   "client": [
     "BackgroundRendererMixin",

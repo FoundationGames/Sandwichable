@@ -20,9 +20,10 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -35,7 +36,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,7 +69,7 @@ public class CuttingBoardBlockEntity extends BlockEntity implements SyncedBlockE
         for (SandwichableConfig.KitchenKnifeOption opt : cfg.itemOptions.knives) {
             Identifier id = Identifier.tryParse(opt.itemId);
             if (id != null) {
-                Item item = Registry.ITEM.get(id);
+                Item item = Registries.ITEM.get(id);
                 if (player.getStackInHand(Hand.MAIN_HAND).getItem() == item || player.getStackInHand(Hand.OFF_HAND).getItem() == item) {
                     knifeHand = player.getStackInHand(Hand.MAIN_HAND).getItem() == item ? Hand.MAIN_HAND : Hand.OFF_HAND;
                     itemHand = knifeHand == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND;
@@ -81,7 +81,7 @@ public class CuttingBoardBlockEntity extends BlockEntity implements SyncedBlockE
         boolean hasKnife = knifeHand != null;
         boolean hasItem = !iStack.isEmpty();
         if (hasItem) {
-            if (getItem().getCount() < getItem().getMaxCount() && (!hasKnife || getItem().getCount() < cut) && (getItem().isEmpty() || (getItem().isItemEqual(iStack) && Objects.equal(getItem().getNbt(), iStack.getNbt())))) {
+            if (getItem().getCount() < getItem().getMaxCount() && (!hasKnife || getItem().getCount() < cut) && (getItem().isEmpty() || (ItemStack.areItemsEqual(getItem(), iStack) && Objects.equal(getItem().getNbt(), iStack.getNbt())))) {
                 if (!getItem().isEmpty()) {
                     getItem().setCount(getItem().getCount() + 1);
                     if (!player.isCreative()) iStack.decrement(1);
@@ -189,7 +189,7 @@ public class CuttingBoardBlockEntity extends BlockEntity implements SyncedBlockE
         SimpleInventory inv = new SimpleInventory(getItem());
         Optional<CuttingRecipe> match = world.getRecipeManager().getFirstMatch(CuttingRecipe.Type.INSTANCE, inv, world);
         if (match.isPresent()) {
-            final ItemStack output = match.get().craft(inv).copy();
+            final ItemStack output = match.get().craft(inv, world.getRegistryManager()).copy();
             int nc = output.getCount() * amount;
             int maxCount = output.getItem().getMaxCount();
             for (int i = 0; i < Math.ceil((float)nc / maxCount); i++) {

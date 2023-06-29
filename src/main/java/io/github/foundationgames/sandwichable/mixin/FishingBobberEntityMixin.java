@@ -22,12 +22,12 @@ public abstract class FishingBobberEntityMixin extends Entity {
         throw new AssertionError("accessed dummy constructor");
     }
 
-    @ModifyVariable(method = "use", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/loot/LootManager;getTable(Lnet/minecraft/util/Identifier;)Lnet/minecraft/loot/LootTable;", shift = At.Shift.AFTER, ordinal = 0), index = 5)
+    @ModifyVariable(method = "use", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/loot/LootManager;getLootTable(Lnet/minecraft/util/Identifier;)Lnet/minecraft/loot/LootTable;", shift = At.Shift.AFTER, ordinal = 0), index = 5)
     public LootTable sandwichable$changeLootTable(LootTable old) {
-        BlockState state = this.world.getBlockState(this.getBlockPos());
+        BlockState state = this.getWorld().getBlockState(this.getBlockPos());
         System.out.println(state);
         if(state.isOf(BlocksRegistry.PICKLE_BRINE)) {
-            return this.world.getServer().getLootManager().getTable(BRINE_LOOT_FISHING);
+            return this.getWorld().getServer().getLootManager().getLootTable(BRINE_LOOT_FISHING);
         }
         return old;
     }

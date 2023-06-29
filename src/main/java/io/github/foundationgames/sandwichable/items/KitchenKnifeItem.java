@@ -4,13 +4,10 @@ import io.github.foundationgames.sandwichable.config.SandwichableConfig;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
-
 import net.minecraft.util.Formatting;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -86,12 +83,10 @@ public class KitchenKnifeItem extends InfoTooltipItem {
     }
 
     @Override
-    public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
-        if (group == this.getGroup() || group == ItemGroup.SEARCH) {
-            ItemStack stack = new ItemStack(this);
-            getSharpness(stack);
-            stacks.add(stack);
-        }
+    public ItemStack getDefaultStack() {
+        ItemStack stack = super.getDefaultStack();
+        getSharpness(stack);
+        return stack;
     }
 
     @Override

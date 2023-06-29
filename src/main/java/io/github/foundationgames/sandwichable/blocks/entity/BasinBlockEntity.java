@@ -17,8 +17,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -26,10 +26,10 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.Map;
 
@@ -250,7 +250,7 @@ public class BasinBlockEntity extends BlockEntity implements SidedInventory, Syn
         for (int i = 0; i < count; i++) {
             double ox = ((double) random.nextInt(10) / 16);
             double oz = ((double) random.nextInt(10) / 16);
-            world.addParticle(new DustParticleEffect(new Vec3f(color[0], color[1], color[2]), 1.0F), pos.getX() + ox + 0.2, pos.getY() + 0.4, pos.getZ() + oz + 0.2, 0.0D, 0.09D, 0.0D);
+            world.addParticle(new DustParticleEffect(new Vector3f(color[0], color[1], color[2]), 1.0F), pos.getX() + ox + 0.2, pos.getY() + 0.4, pos.getZ() + oz + 0.2, 0.0D, 0.09D, 0.0D);
         }
     }
 

@@ -12,8 +12,9 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Rarity;
-import net.minecraft.util.registry.Registry;
 
 public final class ItemsRegistry {
     public static final FoodComponent BREADSLICE = (new FoodComponent.Builder()).hunger(2).saturationModifier(0.5F).build();
@@ -59,10 +60,10 @@ public final class ItemsRegistry {
 
     public static final Item SANDWICH = new SandwichBlockItem(BlocksRegistry.SANDWICH);
 
-    public static final Item BREAD_SLICE = new InfoTooltipItem(new Item.Settings().food(BREADSLICE).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item TOASTED_BREAD_SLICE = new InfoTooltipItem(new Item.Settings().food(TOASTEDBREADSLICE).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item LETTUCE_HEAD = new InfoTooltipItem(new Item.Settings().food(LETTUCEHEAD).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item LETTUCE_LEAF = new InfoTooltipItem(new Item.Settings().food(LETTUCELEAF).group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item BREAD_SLICE = new InfoTooltipItem(new Item.Settings().food(BREADSLICE));
+    public static final Item TOASTED_BREAD_SLICE = new InfoTooltipItem(new Item.Settings().food(TOASTEDBREADSLICE));
+    public static final Item LETTUCE_HEAD = new InfoTooltipItem(new Item.Settings().food(LETTUCEHEAD));
+    public static final Item LETTUCE_LEAF = new InfoTooltipItem(new Item.Settings().food(LETTUCELEAF));
     public static final Item CHEESE_WHEEL_REGULAR = new CheeseItem(CheeseType.REGULAR, false);
     public static final Item CHEESE_SLICE_REGULAR = new CheeseItem(CheeseType.REGULAR, true);
     public static final Item CHEESE_WHEEL_CREAMY = new CheeseItem(CheeseType.CREAMY, false);
@@ -75,72 +76,72 @@ public final class ItemsRegistry {
     public static final Item CHEESE_SLICE_CANDESCENT = new CheeseItem(CheeseType.CANDESCENT, true);
     public static final Item CHEESE_WHEEL_WARPED_BLEU = new CheeseItem(CheeseType.WARPED_BLEU, false);
     public static final Item CHEESE_SLICE_WARPED_BLEU = new CheeseItem(CheeseType.WARPED_BLEU, true);
-    public static final Item CHEESE_CULTURE_REGULAR = new CheeseCultureItem(CheeseType.REGULAR, 4, 0.9f, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS).recipeRemainder(Items.GLASS_BOTTLE).maxCount(1));
-    public static final Item CHEESE_CULTURE_CREAMY = new CheeseCultureItem(CheeseType.CREAMY, 8, 1f, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS).recipeRemainder(Items.GLASS_BOTTLE).maxCount(1));
-    public static final Item CHEESE_CULTURE_INTOXICATING = new CheeseCultureItem(CheeseType.INTOXICATING, 4, 0.9f, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS).recipeRemainder(Items.GLASS_BOTTLE).maxCount(1));
-    public static final Item CHEESE_CULTURE_SOUR = new CheeseCultureItem(CheeseType.SOUR, 6, 0.77f, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS).recipeRemainder(Items.GLASS_BOTTLE).maxCount(1));
-    public static final Item CHEESE_CULTURE_CANDESCENT = new CheeseCultureItem(CheeseType.CANDESCENT, 5, 0.63f, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS).recipeRemainder(Items.GLASS_BOTTLE).maxCount(1));
-    public static final Item CHEESE_CULTURE_WARPED_BLEU = new CheeseCultureItem(CheeseType.WARPED_BLEU, 5, 0.6f, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS).recipeRemainder(Items.GLASS_BOTTLE).maxCount(1));
-    public static final Item TOMATO = new InfoTooltipItem(new Item.Settings().food(TOMATO_FOOD).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item TOMATO_SLICE = new InfoTooltipItem(new Item.Settings().food(TOMATOSLICE).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item COOKED_TOMATO_SLICE = new InfoTooltipItem(new Item.Settings().food(COOKEDTOMATOSLICE).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item CUCUMBER = new InfoTooltipItem(new Item.Settings().food(CUCUMBER_FOOD).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item PICKLED_CUCUMBER = new InfoTooltipItem(new Item.Settings().food(PICKLEDCUCUMBER).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item PICKLE_CHIPS = new InfoTooltipItem(new Item.Settings().food(PICKLECHIPS).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item SALT_ROCK = new InfoTooltipItem(new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item SALT = new InfoTooltipItem(new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item ONION = new InfoTooltipItem(new Item.Settings().food(ONION_FOOD).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item CHOPPED_ONION = new InfoTooltipItem(new Item.Settings().food(CHOPPEDONION).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item COOKED_CHOPPED_ONION = new InfoTooltipItem(new Item.Settings().food(COOKEDCHOPPEDONION).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item ANCIENT_GRAIN = new AncientGrainItem(new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item ANCIENT_GRAIN_BREAD = new AncientGrainBreadItem(new Item.Settings().food(ANCIENTGRAINBREAD).group(Sandwichable.SANDWICHABLE_ITEMS), 1, false);
-    public static final Item ANCIENT_GRAIN_BREAD_SLICE = new AncientGrainBreadItem(new Item.Settings().food(ANCIENTGRAINBREAD).group(Sandwichable.SANDWICHABLE_ITEMS), 0.4f, true);
-    public static final Item TOASTED_ANCIENT_GRAIN_BREAD_SLICE = new AncientGrainBreadItem(new Item.Settings().food(ANCIENTGRAINBREAD).group(Sandwichable.SANDWICHABLE_ITEMS), 0.6f, true);
-    public static final Item CHOPPED_CARROT = new InfoTooltipItem(new Item.Settings().food(CHOPPEDCARROT).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item COOKED_CHOPPED_CARROT = new InfoTooltipItem(new Item.Settings().food(COOKEDCHOPPEDCARROT).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item CHOPPED_GOLDEN_CARROT = new InfoTooltipItem(new Item.Settings().food(CHOPPEDGOLDCARROT).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item CHOPPED_BEETROOT = new InfoTooltipItem(new Item.Settings().food(CHOPPEDBEETROOT).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item COOKED_CHOPPED_BEETROOT = new InfoTooltipItem(new Item.Settings().food(COOKEDCHOPPEDBEETROOT).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item SWEET_BERRY_JAM = new BottledFoodItem(true, new Item.Settings().food(SWEETBERRYJAM).maxCount(16).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item GLOW_BERRY_JAM = new BottledFoodItem(true, new Item.Settings().food(GLOWBERRYJAM).maxCount(16).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item MAYONNAISE = new BottledFoodItem(true, new Item.Settings().food(MAYONNAISE_FOOD).maxCount(16).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item APPLE_SLICES = new InfoTooltipItem(new Item.Settings().food(APPLESLICES).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item GOLDEN_APPLE_SLICES = new InfoTooltipItem(new Item.Settings().food(GOLDAPPLESLICES).rarity(Rarity.RARE).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item ENCHANTED_GOLDEN_APPLE_SLICES = new EnchantedGlintItem(new Item.Settings().food(ENCHANTEDGOLDAPPLESLICES).rarity(Rarity.EPIC).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item TOASTED_CRIMSON_FUNGUS = new InfoTooltipItem(new Item.Settings().food(CRIMSONFUNGUS).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item TOASTED_WARPED_FUNGUS = new InfoTooltipItem(new Item.Settings().food(WARPEDFUNGUS).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item SLICED_TOASTED_CRIMSON_FUNGUS = new InfoTooltipItem(new Item.Settings().food(SLICEDCRIMSONFUNGUS).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item SLICED_TOASTED_WARPED_FUNGUS = new InfoTooltipItem(new Item.Settings().food(SLICEDWARPEDFUNGUS).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item PORK_CUTS = new InfoTooltipItem(new Item.Settings().food(PORKCUTS).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item COOKED_PORK_CUTS = new InfoTooltipItem(new Item.Settings().food(COOKEDPORKCUTS).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item BACON_STRIPS = new InfoTooltipItem(new Item.Settings().food(BACON).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item CHICKEN_FILET = new InfoTooltipItem(new Item.Settings().food(RAWCHICKFILET).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item COOKED_CHICKEN_FILET = new InfoTooltipItem(new Item.Settings().food(COOKEDCHICKFILET).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item COD_FILET = new InfoTooltipItem(new Item.Settings().food(RAWCODFILET).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item COOKED_COD_FILET = new InfoTooltipItem(new Item.Settings().food(COOKEDCODFILET).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item SALMON_FILET = new InfoTooltipItem(new Item.Settings().food(RAWSALMONFILET).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item COOKED_SALMON_FILET = new InfoTooltipItem(new Item.Settings().food(COOKEDSALMONFILET).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item BURNT_FOOD = new InfoTooltipItem(new Item.Settings().food(BURNTFOOD).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item BURNT_MORSEL = new InfoTooltipItem(new Item.Settings().food(BURNTMORSEL).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item CHARRED_MORSEL = new InfoTooltipItem(new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item CHEESE_CULTURE_REGULAR = new CheeseCultureItem(CheeseType.REGULAR, 4, 0.9f, new Item.Settings().recipeRemainder(Items.GLASS_BOTTLE).maxCount(1));
+    public static final Item CHEESE_CULTURE_CREAMY = new CheeseCultureItem(CheeseType.CREAMY, 8, 1f, new Item.Settings().recipeRemainder(Items.GLASS_BOTTLE).maxCount(1));
+    public static final Item CHEESE_CULTURE_INTOXICATING = new CheeseCultureItem(CheeseType.INTOXICATING, 4, 0.9f, new Item.Settings().recipeRemainder(Items.GLASS_BOTTLE).maxCount(1));
+    public static final Item CHEESE_CULTURE_SOUR = new CheeseCultureItem(CheeseType.SOUR, 6, 0.77f, new Item.Settings().recipeRemainder(Items.GLASS_BOTTLE).maxCount(1));
+    public static final Item CHEESE_CULTURE_CANDESCENT = new CheeseCultureItem(CheeseType.CANDESCENT, 5, 0.63f, new Item.Settings().recipeRemainder(Items.GLASS_BOTTLE).maxCount(1));
+    public static final Item CHEESE_CULTURE_WARPED_BLEU = new CheeseCultureItem(CheeseType.WARPED_BLEU, 5, 0.6f, new Item.Settings().recipeRemainder(Items.GLASS_BOTTLE).maxCount(1));
+    public static final Item TOMATO = new InfoTooltipItem(new Item.Settings().food(TOMATO_FOOD));
+    public static final Item TOMATO_SLICE = new InfoTooltipItem(new Item.Settings().food(TOMATOSLICE));
+    public static final Item COOKED_TOMATO_SLICE = new InfoTooltipItem(new Item.Settings().food(COOKEDTOMATOSLICE));
+    public static final Item CUCUMBER = new InfoTooltipItem(new Item.Settings().food(CUCUMBER_FOOD));
+    public static final Item PICKLED_CUCUMBER = new InfoTooltipItem(new Item.Settings().food(PICKLEDCUCUMBER));
+    public static final Item PICKLE_CHIPS = new InfoTooltipItem(new Item.Settings().food(PICKLECHIPS));
+    public static final Item SALT_ROCK = new InfoTooltipItem(new Item.Settings());
+    public static final Item SALT = new InfoTooltipItem(new Item.Settings());
+    public static final Item ONION = new InfoTooltipItem(new Item.Settings().food(ONION_FOOD));
+    public static final Item CHOPPED_ONION = new InfoTooltipItem(new Item.Settings().food(CHOPPEDONION));
+    public static final Item COOKED_CHOPPED_ONION = new InfoTooltipItem(new Item.Settings().food(COOKEDCHOPPEDONION));
+    public static final Item ANCIENT_GRAIN = new AncientGrainItem(new Item.Settings());
+    public static final Item ANCIENT_GRAIN_BREAD = new AncientGrainBreadItem(new Item.Settings().food(ANCIENTGRAINBREAD), 1, false);
+    public static final Item ANCIENT_GRAIN_BREAD_SLICE = new AncientGrainBreadItem(new Item.Settings().food(ANCIENTGRAINBREAD), 0.4f, true);
+    public static final Item TOASTED_ANCIENT_GRAIN_BREAD_SLICE = new AncientGrainBreadItem(new Item.Settings().food(ANCIENTGRAINBREAD), 0.6f, true);
+    public static final Item CHOPPED_CARROT = new InfoTooltipItem(new Item.Settings().food(CHOPPEDCARROT));
+    public static final Item COOKED_CHOPPED_CARROT = new InfoTooltipItem(new Item.Settings().food(COOKEDCHOPPEDCARROT));
+    public static final Item CHOPPED_GOLDEN_CARROT = new InfoTooltipItem(new Item.Settings().food(CHOPPEDGOLDCARROT));
+    public static final Item CHOPPED_BEETROOT = new InfoTooltipItem(new Item.Settings().food(CHOPPEDBEETROOT));
+    public static final Item COOKED_CHOPPED_BEETROOT = new InfoTooltipItem(new Item.Settings().food(COOKEDCHOPPEDBEETROOT));
+    public static final Item SWEET_BERRY_JAM = new BottledFoodItem(true, new Item.Settings().food(SWEETBERRYJAM).maxCount(16));
+    public static final Item GLOW_BERRY_JAM = new BottledFoodItem(true, new Item.Settings().food(GLOWBERRYJAM).maxCount(16));
+    public static final Item MAYONNAISE = new BottledFoodItem(true, new Item.Settings().food(MAYONNAISE_FOOD).maxCount(16));
+    public static final Item APPLE_SLICES = new InfoTooltipItem(new Item.Settings().food(APPLESLICES));
+    public static final Item GOLDEN_APPLE_SLICES = new InfoTooltipItem(new Item.Settings().food(GOLDAPPLESLICES).rarity(Rarity.RARE));
+    public static final Item ENCHANTED_GOLDEN_APPLE_SLICES = new EnchantedGlintItem(new Item.Settings().food(ENCHANTEDGOLDAPPLESLICES).rarity(Rarity.EPIC));
+    public static final Item TOASTED_CRIMSON_FUNGUS = new InfoTooltipItem(new Item.Settings().food(CRIMSONFUNGUS));
+    public static final Item TOASTED_WARPED_FUNGUS = new InfoTooltipItem(new Item.Settings().food(WARPEDFUNGUS));
+    public static final Item SLICED_TOASTED_CRIMSON_FUNGUS = new InfoTooltipItem(new Item.Settings().food(SLICEDCRIMSONFUNGUS));
+    public static final Item SLICED_TOASTED_WARPED_FUNGUS = new InfoTooltipItem(new Item.Settings().food(SLICEDWARPEDFUNGUS));
+    public static final Item PORK_CUTS = new InfoTooltipItem(new Item.Settings().food(PORKCUTS));
+    public static final Item COOKED_PORK_CUTS = new InfoTooltipItem(new Item.Settings().food(COOKEDPORKCUTS));
+    public static final Item BACON_STRIPS = new InfoTooltipItem(new Item.Settings().food(BACON));
+    public static final Item CHICKEN_FILET = new InfoTooltipItem(new Item.Settings().food(RAWCHICKFILET));
+    public static final Item COOKED_CHICKEN_FILET = new InfoTooltipItem(new Item.Settings().food(COOKEDCHICKFILET));
+    public static final Item COD_FILET = new InfoTooltipItem(new Item.Settings().food(RAWCODFILET));
+    public static final Item COOKED_COD_FILET = new InfoTooltipItem(new Item.Settings().food(COOKEDCODFILET));
+    public static final Item SALMON_FILET = new InfoTooltipItem(new Item.Settings().food(RAWSALMONFILET));
+    public static final Item COOKED_SALMON_FILET = new InfoTooltipItem(new Item.Settings().food(COOKEDSALMONFILET));
+    public static final Item BURNT_FOOD = new InfoTooltipItem(new Item.Settings().food(BURNTFOOD));
+    public static final Item BURNT_MORSEL = new InfoTooltipItem(new Item.Settings().food(BURNTMORSEL));
+    public static final Item CHARRED_MORSEL = new InfoTooltipItem(new Item.Settings());
 
-    public static final Item STONE_KITCHEN_KNIFE = new KitchenKnifeItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item IRON_KITCHEN_KNIFE = new KitchenKnifeItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item GOLDEN_KITCHEN_KNIFE = new KitchenKnifeItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item DIAMOND_KITCHEN_KNIFE = new KitchenKnifeItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item NETHERITE_KITCHEN_KNIFE = new KitchenKnifeItem(new Item.Settings().maxCount(1).fireproof().group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item GLASS_KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item SANDWICH_TABLE_MINECART = new CustomMinecartItem(EntitiesRegistry.SANDWICH_TABLE_MINECART, new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item FERMENTING_MILK_BUCKET = new FermentingMilkBucketItem(new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item PICKLE_BRINE_BUCKET = new CustomBucketItem(FluidsRegistry.PICKLE_BRINE, new Item.Settings().maxCount(1).group(Sandwichable.SANDWICHABLE_ITEMS), world -> false);
+    public static final Item STONE_KITCHEN_KNIFE = new KitchenKnifeItem(new Item.Settings().maxCount(1));
+    public static final Item IRON_KITCHEN_KNIFE = new KitchenKnifeItem(new Item.Settings().maxCount(1));
+    public static final Item GOLDEN_KITCHEN_KNIFE = new KitchenKnifeItem(new Item.Settings().maxCount(1));
+    public static final Item DIAMOND_KITCHEN_KNIFE = new KitchenKnifeItem(new Item.Settings().maxCount(1));
+    public static final Item NETHERITE_KITCHEN_KNIFE = new KitchenKnifeItem(new Item.Settings().maxCount(1).fireproof());
+    public static final Item GLASS_KITCHEN_KNIFE = new InfoTooltipItem(new Item.Settings().maxCount(1));
+    public static final Item SANDWICH_TABLE_MINECART = new CustomMinecartItem(EntitiesRegistry.SANDWICH_TABLE_MINECART, new Item.Settings().maxCount(1));
+    public static final Item FERMENTING_MILK_BUCKET = new FermentingMilkBucketItem(new Item.Settings().maxCount(1));
+    public static final Item PICKLE_BRINE_BUCKET = new CustomBucketItem(FluidsRegistry.PICKLE_BRINE, new Item.Settings().maxCount(1), world -> false);
 
-    public static final Item LETTUCE_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.LETTUCE, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item TOMATO_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.TOMATOES, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item CUCUMBER_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.CUCUMBERS, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item ONION_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.ONIONS, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
-    public static final Item ANCIENT_GRAIN_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.ANCIENT_GRAIN, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item LETTUCE_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.LETTUCE, new Item.Settings());
+    public static final Item TOMATO_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.TOMATOES, new Item.Settings());
+    public static final Item CUCUMBER_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.CUCUMBERS, new Item.Settings());
+    public static final Item ONION_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.ONIONS, new Item.Settings());
+    public static final Item ANCIENT_GRAIN_SEEDS = new InfoTooltipAliasedBlockItem(BlocksRegistry.ANCIENT_GRAIN, new Item.Settings());
 
-    public static final Item EMPTY_PICKLE_JAR = new PickleJarBlockItem("pickle_jar.content.air", true, new Item.Settings().group(Sandwichable.SANDWICHABLE_ITEMS));
+    public static final Item EMPTY_PICKLE_JAR = new PickleJarBlockItem("pickle_jar.content.air", true, new Item.Settings());
     public static final Item WATER_FILLED_PICKLE_JAR = new PickleJarBlockItem("pickle_jar.content.water", false, new Item.Settings().maxCount(1));
     public static final Item CUCUMBER_FILLED_PICKLE_JAR = new PickleJarBlockItem("pickle_jar.content.water", false, new Item.Settings().maxCount(1));
     public static final Item PICKLING_PICKLE_JAR = new PickleJarBlockItem("pickle_jar.content.brine", false, new Item.Settings().maxCount(1));
@@ -153,7 +154,7 @@ public final class ItemsRegistry {
     }
 
     public static void init() {
-        registerItem(SANDWICH, "sandwich");
+        registerInternalItem(SANDWICH, "sandwich");
         registerItem(STONE_KITCHEN_KNIFE, "stone_kitchen_knife");
         registerItem(IRON_KITCHEN_KNIFE, "kitchen_knife");
         registerItem(GOLDEN_KITCHEN_KNIFE, "golden_kitchen_knife");
@@ -177,10 +178,10 @@ public final class ItemsRegistry {
         registerItem(PICKLE_CHIPS, "pickle_chips");
         registerItem(SALT_ROCK, "salt_rock");
         registerItem(SALT, "salt");
-        registerItem(WATER_FILLED_PICKLE_JAR, "water_filled_pickle_jar");
-        registerItem(CUCUMBER_FILLED_PICKLE_JAR, "cucumber_filled_pickle_jar");
-        registerItem(PICKLING_PICKLE_JAR, "pickling_pickle_jar");
-        registerItem(PICKLE_FILLED_PICKLE_JAR, "pickle_filled_pickle_jar");
+        registerInternalItem(WATER_FILLED_PICKLE_JAR, "water_filled_pickle_jar");
+        registerInternalItem(CUCUMBER_FILLED_PICKLE_JAR, "cucumber_filled_pickle_jar");
+        registerInternalItem(PICKLING_PICKLE_JAR, "pickling_pickle_jar");
+        registerInternalItem(PICKLE_FILLED_PICKLE_JAR, "pickle_filled_pickle_jar");
         registerItem(EMPTY_PICKLE_JAR, "empty_pickle_jar");
         registerItem(ONION, "onion");
         addCompostable(0.5f, ONION);
@@ -253,10 +254,15 @@ public final class ItemsRegistry {
         registerItem(SANDWICH_TABLE_MINECART, "sandwich_table_minecart");
         registerItem(FERMENTING_MILK_BUCKET, "fermenting_milk_bucket");
         registerItem(PICKLE_BRINE_BUCKET, "pickle_brine_bucket");
-        registerItem(SPREAD, "spread");
+        registerInternalItem(SPREAD, "spread");
     }
 
     private static void registerItem(Item item, String name) {
-        Registry.register(Registry.ITEM, Util.id(name), item);
+        registerInternalItem(item, name);
+        Sandwichable.SANDWICHABLE_ITEMS.queue(item);
+    }
+
+    private static void registerInternalItem(Item item, String name) {
+        Registry.register(Registries.ITEM, Util.id(name), item);
     }
 }

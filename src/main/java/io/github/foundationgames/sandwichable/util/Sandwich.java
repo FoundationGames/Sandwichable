@@ -7,7 +7,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,10 +17,9 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,7 @@ public class Sandwich {
     public Sandwich() {}
 
     public boolean addFood(PlayerEntity player, ItemStack stack) {
-        int maxSize = player.world.getGameRules().getInt(Sandwichable.SANDWICH_SIZE_RULE);
+        int maxSize = player.getWorld().getGameRules().getInt(Sandwichable.SANDWICH_SIZE_RULE);
         if(stack.getItem() == BlocksRegistry.SANDWICH.asItem()) return false;
         if (maxSize >= 0 && this.getSize() >= maxSize && canAdd(stack)) {
             player.sendMessage(Text.translatable("message.sandwichtable.maxSize", maxSize).formatted(Formatting.RED), true);
@@ -245,11 +244,11 @@ public class Sandwich {
 
     @Environment(EnvType.CLIENT)
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion((90)));
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees((90)));
         int i = 0;
         for (ItemStack food : foods) {
             RenderFlags.RENDERING_SANDWICH_ITEM = (i % 3) + 1;
-            MinecraftClient.getInstance().getItemRenderer().renderItem(food, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers, Objects.hash(i));
+            MinecraftClient.getInstance().getItemRenderer().renderItem(food, ModelTransformationMode.GROUND, light, overlay, matrices, vertexConsumers, null, Objects.hash(i));
             matrices.translate(0.0, 0.0, -0.03124);
             i++;
         }

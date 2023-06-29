@@ -3,7 +3,10 @@ package io.github.foundationgames.sandwichable.items;
 import io.github.foundationgames.sandwichable.blocks.BucketFluidloggable;
 import io.github.foundationgames.sandwichable.util.Util;
 import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.FluidDrainable;
+import net.minecraft.block.FluidFillable;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FlowableFluid;
@@ -17,7 +20,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
-import net.minecraft.tag.FluidTags;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -25,14 +27,11 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -101,12 +100,11 @@ public class CustomBucketItem extends BucketItem {
 
     @Override
     public boolean placeFluid(@Nullable PlayerEntity player, World world, BlockPos pos, @Nullable BlockHitResult blockHitResult) {
-        if (this.fluid instanceof FlowableFluid) {
+        if (this.fluid instanceof FlowableFluid flowable) {
             BlockState state = world.getBlockState(pos);
             Block block = state.getBlock();
-            Material material = state.getMaterial();
             boolean canPour = state.canBucketPlace(this.fluid);
-            boolean canPlace = state.isAir() || canPour || block instanceof FluidFillable && ((FluidFillable)block).canFillWithFluid(world, pos, state, this.fluid);
+            boolean canPlace = state.isAir() || canPour || block instanceof FluidFillable fillable && fillable.canFillWithFluid(world, pos, state, this.fluid);
             if (!canPlace) {
                 return blockHitResult != null && this.placeFluid(player, world, blockHitResult.getBlockPos().offset(blockHitResult.getSide()), null);
             } else if (evaporates.test(world)) {
@@ -118,12 +116,12 @@ public class CustomBucketItem extends BucketItem {
                     world.addParticle(ParticleTypes.LARGE_SMOKE, (double)x + Math.random(), (double)y + Math.random(), (double)z + Math.random(), 0.0D, 0.0D, 0.0D);
                 }
                 return true;
-            } else if (block instanceof BucketFluidloggable && ((BucketFluidloggable)block).isFillableWith(this.fluid)) {
-                ((FluidFillable)block).tryFillWithFluid(world, pos, state, ((FlowableFluid)this.fluid).getStill(false));
+            } else if (block instanceof BucketFluidloggable bucketFL && bucketFL.isFillableWith(this.fluid)) {
+                ((FluidFillable)block).tryFillWithFluid(world, pos, state, flowable.getStill(false));
                 this.playEmptyingSound(player, world, pos);
                 return true;
             } else {
-                if (!world.isClient && canPour && !material.isLiquid()) {
+                if (!world.isClient && canPour && !state.isLiquid()) {
                     world.breakBlock(pos, true);
                 }
                 if (!world.setBlockState(pos, this.fluid.getDefaultState().getBlockState(), 11) && !state.getFluidState().isStill()) {

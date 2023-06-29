@@ -1,16 +1,12 @@
 package io.github.foundationgames.sandwichable.compat;
 
-import com.google.common.collect.ImmutableList;
 import io.github.foundationgames.sandwichable.items.spread.SpreadType;
 import io.github.foundationgames.sandwichable.util.SpreadRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
-import java.util.List;
 import java.util.Optional;
 
 public class CroptopiaCompat {
@@ -27,7 +23,7 @@ public class CroptopiaCompat {
     }
 
     private static void addJamSpread(String itemId, int color) {
-        Optional<Item> oitem = Registry.ITEM.getOrEmpty(new Identifier("croptopia", itemId));
+        Optional<Item> oitem = Registries.ITEM.getOrEmpty(new Identifier("croptopia", itemId));
         if(oitem.isPresent()) {
             Item item = oitem.get();
             int h = 0;

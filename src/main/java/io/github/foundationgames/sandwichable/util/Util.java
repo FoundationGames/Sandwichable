@@ -9,27 +9,27 @@ import io.github.foundationgames.sandwichable.config.SandwichableConfig;
 import io.github.foundationgames.sandwichable.mixin.StructurePoolAccess;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
 import net.minecraft.block.Block;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.structure.pool.StructurePoolElement;
-import net.minecraft.structure.processor.StructureProcessorLists;
-
 import net.minecraft.text.Text;
-
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class Util {
@@ -69,9 +69,9 @@ public class Util {
         return new Int2ObjectOpenHashMap(immutableMap);
     }
 
-    public static void tryAddElementToPool(Identifier targetPool, StructurePool pool, String elementId, StructurePool.Projection projection, int weight) {
-        if(targetPool.equals(pool.getId())) {
-            StructurePoolElement element = StructurePoolElement.ofProcessedLegacySingle(elementId, StructureProcessorLists.EMPTY).apply(projection);
+    public static void tryAddElementToPool(String targetPool, String currentPool, StructurePool pool, String elementId, StructurePool.Projection projection, int weight) {
+        if(targetPool.equals(currentPool)) {
+            StructurePoolElement element = StructurePoolElement.ofLegacySingle(elementId).apply(projection);
             for (int i = 0; i < weight; i++) {
                 ((StructurePoolAccess)pool).sandwichable$getElements().add(element);
             }
@@ -121,7 +121,7 @@ public class Util {
 
         var itemId = Identifier.tryParse(itemStr);
         if (itemId != null) {
-            var entry = Registry.ITEM.getOrEmpty(itemId);
+            var entry = Registries.ITEM.getOrEmpty(itemId);
             if (entry.isPresent()) {
                 var item = entry.get();
 
@@ -167,6 +167,11 @@ public class Util {
         }
 
         return String.join(" ", words);
+    }
+
+    public static <V> void forEveryEntryEver(Registry<V> registry, Consumer<V> action) {
+        registry.forEach(action);
+        RegistryEntryAddedCallback.event(registry).register((rawId, id, object) -> action.accept(object));
     }
 
     public static int getRed(int color) {

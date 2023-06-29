@@ -1,0 +1,9 @@
+{
+  "feature": "sandwichable:salt_pool_dry",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 442
+    }
+  ]
+}

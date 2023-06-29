@@ -16,10 +16,9 @@ import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
-
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +46,7 @@ public class CuttingBoardCategory implements DisplayCategory<CuttingBoardDisplay
         for(SandwichableConfig.KitchenKnifeOption p : cfg.itemOptions.knives) {
             Identifier itemId = Identifier.tryParse(p.itemId);
             if(itemId != null) {
-                Optional<Item> item = Registry.ITEM.getOrEmpty(itemId);
+                Optional<Item> item = Registries.ITEM.getOrEmpty(itemId);
                 item.ifPresent(value -> knives.add(EntryStack.of(VanillaEntryTypes.ITEM, new ItemStack(value))));
             }
         }

@@ -14,12 +14,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class ToastingDisplay implements Display {
-
     private List<EntryIngredient> inputs;
     private List<EntryIngredient> results;
 
     public ToastingDisplay(ToastingRecipe recipe) {
-        this(recipe.getInput(), recipe.getOutput());
+        this(recipe.getInput(), recipe.getOutputStack());
     }
 
     public ToastingDisplay(Ingredient input, ItemStack result) {

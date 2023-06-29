@@ -16,26 +16,23 @@ import io.github.foundationgames.sandwichable.config.SandwichableConfig;
 import io.github.foundationgames.sandwichable.entity.EntitiesRegistry;
 import io.github.foundationgames.sandwichable.entity.SandwichTableMinecartEntity;
 import io.github.foundationgames.sandwichable.fluids.FluidsRegistry;
+import io.github.foundationgames.sandwichable.items.ItemGroupQueue;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.items.KitchenKnifeItem;
 import io.github.foundationgames.sandwichable.items.SandwichableGroupIconBuilder;
 import io.github.foundationgames.sandwichable.items.spread.SpreadType;
 import io.github.foundationgames.sandwichable.mixin.CriteriaAccess;
-import io.github.foundationgames.sandwichable.recipe.CuttingRecipe;
-import io.github.foundationgames.sandwichable.recipe.CuttingRecipeSerializer;
 import io.github.foundationgames.sandwichable.recipe.SandwichableRecipes;
-import io.github.foundationgames.sandwichable.recipe.ToastingRecipe;
-import io.github.foundationgames.sandwichable.recipe.ToastingRecipeSerializer;
 import io.github.foundationgames.sandwichable.util.AncientGrainType;
 import io.github.foundationgames.sandwichable.util.ExtraDispenserBehaviorRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
 import io.github.foundationgames.sandwichable.villager.SandwichMakerProfession;
 import io.github.foundationgames.sandwichable.worldgen.SandwichableWorldgen;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
@@ -46,25 +43,30 @@ import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.*;
+import net.minecraft.item.BucketItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.loot.function.SetCountLootFunction;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.recipe.RecipeManager;
-import net.minecraft.recipe.RecipeType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.tag.TagKey;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -72,31 +74,37 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Sandwichable implements ModInitializer {
-    public static final ItemGroup SANDWICHABLE_ITEMS = FabricItemGroupBuilder.build(Util.id("sandwichable"), SandwichableGroupIconBuilder::getIcon);
+    public static final ItemGroupQueue SANDWICHABLE_ITEMS = new ItemGroupQueue(Util.id("sandwichable"));
+    public static final ItemGroup SANDWICHABLE_GROUP = FabricItemGroup.builder()
+            .icon(SandwichableGroupIconBuilder::getIcon)
+            .displayName(Text.translatable(net.minecraft.util.Util.createTranslationKey("itemGroup", SANDWICHABLE_ITEMS.id)))
+            .entries(SANDWICHABLE_ITEMS)
+            .build();
 
-    public static final TagKey<Item> BREAD_SLICES = TagKey.of(Registry.ITEM_KEY, Util.id("bread_slices"));
-    public static final TagKey<Item> BREAD_LOAVES = TagKey.of(Registry.ITEM_KEY, Util.id("bread_loaves"));
-    public static final TagKey<Item> METAL_ITEMS = TagKey.of(Registry.ITEM_KEY, Util.id("metal_items"));
-    public static final TagKey<Item> SMALL_FOODS = TagKey.of(Registry.ITEM_KEY, Util.id("small_foods"));
-    public static final TagKey<Item> CUTTING_BOARDS = TagKey.of(Registry.ITEM_KEY, Util.id("cutting_boards"));
-    public static final TagKey<Item> CHEESE_WHEELS = TagKey.of(Registry.ITEM_KEY, Util.id("cheese_wheels"));
-    public static final TagKey<Block> SALT_PRODUCING_BLOCKS = TagKey.of(Registry.BLOCK_KEY, Util.id("salt_producing_blocks"));
-    public static final TagKey<Block> KNIFE_SHARPENING_SURFACES = TagKey.of(Registry.BLOCK_KEY, Util.id("knife_sharpening_surfaces"));
+    public static final TagKey<Item> BREAD_SLICES = TagKey.of(RegistryKeys.ITEM, Util.id("bread_slices"));
+    public static final TagKey<Item> BREAD_LOAVES = TagKey.of(RegistryKeys.ITEM, Util.id("bread_loaves"));
+    public static final TagKey<Item> METAL_ITEMS = TagKey.of(RegistryKeys.ITEM, Util.id("metal_items"));
+    public static final TagKey<Item> SMALL_FOODS = TagKey.of(RegistryKeys.ITEM, Util.id("small_foods"));
+    public static final TagKey<Item> CUTTING_BOARDS = TagKey.of(RegistryKeys.ITEM, Util.id("cutting_boards"));
+    public static final TagKey<Item> CHEESE_WHEELS = TagKey.of(RegistryKeys.ITEM, Util.id("cheese_wheels"));
+    public static final TagKey<Block> SALT_PRODUCING_BLOCKS = TagKey.of(RegistryKeys.BLOCK, Util.id("salt_producing_blocks"));
+    public static final TagKey<Block> KNIFE_SHARPENING_SURFACES = TagKey.of(RegistryKeys.BLOCK, Util.id("knife_sharpening_surfaces"));
 
-    public static final TagKey<Biome> SALT_WATER_BODIES = TagKey.of(Registry.BIOME_KEY, Util.id("salt_water_bodies"));
-    public static final TagKey<Biome> NO_SHRUBS = TagKey.of(Registry.BIOME_KEY, Util.id("no_shrubs"));
-    public static final TagKey<Biome> NO_SALT_POOLS = TagKey.of(Registry.BIOME_KEY, Util.id("no_salt_pools"));
+    public static final TagKey<Biome> SALT_WATER_BODIES = TagKey.of(RegistryKeys.BIOME, Util.id("salt_water_bodies"));
+    public static final TagKey<Biome> NO_SHRUBS = TagKey.of(RegistryKeys.BIOME, Util.id("no_shrubs"));
+    public static final TagKey<Biome> NO_SALT_POOLS = TagKey.of(RegistryKeys.BIOME, Util.id("no_salt_pools"));
 
     public static final CutItemCriterion CUT_ITEM = CriteriaAccess.sandwichable$register(new CutItemCriterion());
     public static final ToastItemCriterion TOAST_ITEM = CriteriaAccess.sandwichable$register(new ToastItemCriterion());
     public static final UseBottleCrateCriterion USE_BOTTLE_CRATE = CriteriaAccess.sandwichable$register(new UseBottleCrateCriterion());
     public static final CollectSandwichCriterion COLLECT_SANDWICH = CriteriaAccess.sandwichable$register(new CollectSandwichCriterion());
 
-    public static final SoundEvent DESALINATOR_START = Registry.register(Registry.SOUND_EVENT, Util.id("desalinator_start"), new SoundEvent(Util.id("desalinator_start")));
-    public static final SoundEvent DESALINATOR_RUN = Registry.register(Registry.SOUND_EVENT, Util.id("desalinator_run"), new SoundEvent(Util.id("desalinator_run")));
-    public static final SoundEvent DESALINATOR_STOP = Registry.register(Registry.SOUND_EVENT, Util.id("desalinator_stop"), new SoundEvent(Util.id("desalinator_stop")));
+    public static final SoundEvent DESALINATOR_START = Registry.register(Registries.SOUND_EVENT, Util.id("desalinator_start"), SoundEvent.of(Util.id("desalinator_start")));
+    public static final SoundEvent DESALINATOR_RUN = Registry.register(Registries.SOUND_EVENT, Util.id("desalinator_run"), SoundEvent.of(Util.id("desalinator_run")));
+    public static final SoundEvent DESALINATOR_STOP = Registry.register(Registries.SOUND_EVENT, Util.id("desalinator_stop"), SoundEvent.of(Util.id("desalinator_stop")));
 
     public static final GameRules.Key<GameRules.IntRule> SANDWICH_SIZE_RULE = GameRuleRegistry.register("maxSandwichSize", GameRules.Category.PLAYER, GameRuleFactory.createIntRule(-1, -1));
+    public static final GameRules.Key<GameRules.BooleanRule> PICKLE_BRINE_SOURCE_CONVERSION_RULE = GameRuleRegistry.register("pickleBrineSourceConversion", GameRules.Category.UPDATES, GameRuleFactory.createBooleanRule(false));
 
     public static final Logger LOG = LogManager.getLogger("Sandwichable");
 
@@ -112,11 +120,13 @@ public class Sandwichable implements ModInitializer {
         return null;
     });
 
-    public static final LootFunctionType COPY_WORLD_BIOME = Registry.register(Registry.LOOT_FUNCTION_TYPE, Util.id("copy_world_biome"), new LootFunctionType(new CopyWorldBiomeLootFunction.Serializer()));
+    public static final LootFunctionType COPY_WORLD_BIOME = Registry.register(Registries.LOOT_FUNCTION_TYPE, Util.id("copy_world_biome"), new LootFunctionType(new CopyWorldBiomeLootFunction.Serializer()));
     private static final Identifier ANCIENT_CITY_LOOT = new Identifier("chests/ancient_city");
 
     @Override
     public void onInitialize() {
+        Registry.register(Registries.ITEM_GROUP, SANDWICHABLE_ITEMS.id, SANDWICHABLE_GROUP);
+
         FluidsRegistry.init();
         BlocksRegistry.init();
         ItemsRegistry.init();

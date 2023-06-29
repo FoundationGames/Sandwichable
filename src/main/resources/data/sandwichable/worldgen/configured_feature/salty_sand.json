@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:ore",
+  "config": {
+    "discard_chance_on_air_exposure": 0.0,
+    "size": 5,
+    "targets": [
+      {
+        "state": {
+          "Name": "sandwichable:salty_sand"
+        },
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "minecraft:sand"
+        }
+      }
+    ]
+  }
+}

@@ -6,6 +6,7 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -26,7 +27,11 @@ public class ToastingRecipe implements Recipe<SimpleInventory> {
     }
 
     @Override
-    public ItemStack getOutput() {
+    public ItemStack getOutput(DynamicRegistryManager registryManager) {
+        return output;
+    }
+
+    public ItemStack getOutputStack() {
         return output;
     }
 
@@ -41,8 +46,8 @@ public class ToastingRecipe implements Recipe<SimpleInventory> {
     }
 
     @Override
-    public ItemStack craft(SimpleInventory inv) {
-        return getOutput();
+    public ItemStack craft(SimpleInventory inv, DynamicRegistryManager registryManager) {
+        return getOutput(registryManager);
     }
 
     @Override
@@ -74,10 +79,10 @@ public class ToastingRecipe implements Recipe<SimpleInventory> {
         }
 
         @Override
-        public abstract ItemStack getOutput();
+        public abstract ItemStack getOutput(DynamicRegistryManager registryManager);
 
         @Override
-        public abstract ItemStack craft(SimpleInventory inv);
+        public abstract ItemStack craft(SimpleInventory inv, DynamicRegistryManager registryManager);
 
         @Override
         public abstract boolean matches(SimpleInventory inv, World world);

@@ -15,9 +15,9 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -97,7 +97,7 @@ public class DesalinatorBlockEntity extends LockableContainerBlockEntity impleme
     private void startEvaporating() {
         var salt = Util.getConfig().itemOptions.saltItemGetter.get();
         var invStack = this.inventory.get(1);
-        if(invStack.isEmpty() || (invStack.isItemEqual(salt) && invStack.getCount() < salt.getItem().getMaxCount())) {
+        if(invStack.isEmpty() || (ItemStack.areItemsEqual(invStack, salt) && invStack.getCount() < salt.getItem().getMaxCount())) {
             evaporating = true;
             world.setBlockState(pos, world.getBlockState(pos).with(DesalinatorBlock.ON, true));
             this.markDirty();
