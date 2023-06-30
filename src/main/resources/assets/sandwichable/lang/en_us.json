@@ -236,6 +236,9 @@
 	"cfgbarrel.sandwichable.option.saltPoolGenOptions": "Salt Pool Generation",
 	"cfgbarrel.sandwichable.option.saltPoolGenOptions.saltPools": "Generate Salt Water Pools",
 	"cfgbarrel.sandwichable.option.saltPoolGenOptions.drySaltPools": "Generate Dry Salt Pools",
+
+	"gamerule.maxSandwichSize": "Maximum Sandwich size",
+	"gamerule.pickleBrineSourceConversion": "Pickle Brine converts to source",
 	
 	"subtitles.sandwichable.desalinator_start": "Desalinator powers up",
 	"subtitles.sandwichable.desalinator_stop": "Desalinator powers down",

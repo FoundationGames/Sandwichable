@@ -1,6 +1,7 @@
 package io.github.foundationgames.sandwichable.villager;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import io.github.foundationgames.sandwichable.blocks.BlocksRegistry;
 import io.github.foundationgames.sandwichable.items.ItemsRegistry;
 import io.github.foundationgames.sandwichable.util.Util;
@@ -29,23 +30,22 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 
 public class SandwichMakerProfession {
-
     private static final Identifier SANDWICH_MAKER_POI_ID = Util.id("sandwich_maker_poi");
-    public static final PointOfInterestType SANDWICH_MAKER_POI = PointOfInterestHelper.register(
-            SANDWICH_MAKER_POI_ID,
-            1,
-            1,
-            BlocksRegistry.SANDWICH_TABLE
+    private static final RegistryKey<PointOfInterestType> SANDWICH_MAKER_POI_KEY = RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE, SANDWICH_MAKER_POI_ID);
+
+    public static final VillagerProfession SANDWICH_MAKER = new VillagerProfession(
+            "sandwichable:sandwich_maker",
+            poi -> poi.matchesKey(SANDWICH_MAKER_POI_KEY),
+            poi -> poi.matchesKey(SANDWICH_MAKER_POI_KEY),
+            ImmutableSet.of(),
+            ImmutableSet.of(),
+            SoundEvents.ENTITY_ITEM_FRAME_REMOVE_ITEM
     );
 
-    public static final VillagerProfession SANDWICH_MAKER = VillagerProfessionBuilder.create()
-            .id(Util.id("sandwich_maker"))
-            .workstation(RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE, SANDWICH_MAKER_POI_ID))
-            .workSound(SoundEvents.ENTITY_ITEM_FRAME_REMOVE_ITEM)
-            .build();
-
     public static void init() {
+        PointOfInterestHelper.register(SANDWICH_MAKER_POI_ID, 1, 1, BlocksRegistry.SANDWICH_TABLE);
         Registry.register(Registries.VILLAGER_PROFESSION, Util.id("sandwich_maker"), SANDWICH_MAKER);
+
         TradeOffers.PROFESSION_TO_LEVELED_TRADE.put(
                 SANDWICH_MAKER, Util.copyToFastUtilMap(ImmutableMap.of(
                         1,

@@ -69,13 +69,12 @@ public class Util {
         return new Int2ObjectOpenHashMap(immutableMap);
     }
 
-    public static void tryAddElementToPool(String targetPool, String currentPool, StructurePool pool, String elementId, StructurePool.Projection projection, int weight) {
-        if(targetPool.equals(currentPool)) {
+    public static void tryAddElementToPool(String targetPool, Identifier currentPool, StructurePool pool, String elementId, StructurePool.Projection projection, int weight) {
+        if (new Identifier(targetPool).equals(currentPool)) {
             StructurePoolElement element = StructurePoolElement.ofLegacySingle(elementId).apply(projection);
             for (int i = 0; i < weight; i++) {
                 ((StructurePoolAccess)pool).sandwichable$getElements().add(element);
             }
-            ((StructurePoolAccess)pool).sandwichable$getElementCounts().add(Pair.of(element, weight));
         }
     }
 

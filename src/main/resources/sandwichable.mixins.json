@@ -8,11 +8,11 @@
     "DispenserBlockMixin",
     "FishingBobberEntityMixin",
     "HungerManagerMixin",
+    "MinecraftServerMixin",
     "PistonBlockMixin",
     "ServerPlayerEntityScreenHandlerListenerMixin",
     "ServerPlayerInteractionManagerMixin",
     "StructurePoolAccess",
-    "StructurePoolsMixin",
     "VillagerEntityMixin"
   ],
   "client": [
@@ -20,8 +20,8 @@
     "BuiltinModelItemRendererMixin",
     "ClientPlayerInteractionManagerMixin",
     "ClientWorldMixin",
-    "CrackParticleMixin",
     "ContinuousFallingParticleMixin",
+    "CrackParticleMixin",
     "DrippingParticleMixin"
   ],
   "injectors": {
