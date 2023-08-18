@@ -23,6 +23,7 @@ import net.minecraft.structure.pool.StructurePoolElement;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Language;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffers;
@@ -149,8 +150,9 @@ public class Util {
 
     public static String biomeName(Identifier id) {
         var key = id.toTranslationKey("biome");
-        if (I18n.hasTranslation(key)) {
-            return I18n.translate(key);
+        var lang = Language.getInstance();
+        if (lang != null && lang.hasTranslation(key)) {
+            return lang.get(key);
         }
 
         var path = id.getPath();

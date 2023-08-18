@@ -139,8 +139,8 @@
 
 	"cheese_culture_bottle.tooltip.uses": "剩余：%d/10",
 
-	"desalinator.tooltip.filled": "已装满",
-	"desalinator.tooltip.maxCapacity": "最大容量：",
+	"desalinator.tooltip.bucketsFilled": "%s B 已装满",
+	"desalinator.tooltip.bucketsMaxCapacity": "最大容量：%s B",
 	"desalinator.tooltip.saline": "盐分含量：高",
 	"desalinator.tooltip.notSaline": "盐分含量：低",
 	"desalinator.tooltip.moveToSaltyBiome": "请移至咸水区域/生物群系！",
